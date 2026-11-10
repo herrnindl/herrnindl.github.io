@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MN. — Markus Nindl</title>
-<meta name="description" content="my life in colours. Photos of Markus Nindl, model from Pinzgau.">
+<title>MN.</title>
+<meta name="description" content="coming soon.">
+<meta name="robots" content="noindex">
 <meta name="theme-color" content="#FFF8BB">
 <link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -468,6 +469,7 @@ $("gateForm").addEventListener("submit", async e => {
     try { localStorage.setItem("mn-key", h); } catch (err) {}
     document.documentElement.classList.remove("locked");
     window.scrollTo(0, 0);
+    loadData();
   } else {
     $("gateMsg").textContent = "not yet.";
     const f = $("gateForm"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
@@ -475,8 +477,14 @@ $("gateForm").addEventListener("submit", async e => {
 });
 
 render();
-fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); if (view === "colours") renderColours(); renderChips(); }).catch(() => {});
-fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [] }; render(); }).catch(() => {});
+/* Photos only load once the site is unlocked, so nothing is downloaded behind the coming-soon page. */
+let loaded = false;
+function loadData() {
+  if (loaded) return; loaded = true;
+  fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); render(); }).catch(() => {});
+  fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [] }; render(); }).catch(() => {});
+}
+if (!document.documentElement.classList.contains("locked")) loadData();
 </script>
 </body>
 </html>
