@@ -61,6 +61,7 @@ header { padding-block: 32px 20px; }
 .lb .cap { text-align: center; }
 .lb .cap b { display: block; color: var(--fg); font-weight: 500; }
 .lb .cap small { color: var(--muted); }
+.lb .cap a { color: var(--fg); text-decoration: none; border-bottom: 1px solid currentColor; }
 .close { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; width: 40px; height: 40px; font-size: 18px; }
 .nav { position: absolute; top: 50%; transform: translateY(-50%); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; width: 40px; height: 40px; }
 .prev { left: 12px; } .next { right: 12px; }
@@ -173,8 +174,19 @@ function open(i) {
   idx = (i + list.length) % list.length; const p = list[idx];
   $("lbImg").src = p.src; $("lbImg").alt = p.caption || "";
   $("lbCap").textContent = p.caption || byId[p.chapter].name;
-  const sub = []; if (p.caption) sub.push(byId[p.chapter].name); if (p.credit) sub.push("photo: " + p.credit);
-  $("lbSub").textContent = sub.join("  ·  ");
+  const subEl = $("lbSub"); subEl.textContent = "";
+  if (p.caption) subEl.append(byId[p.chapter].name);
+  if (p.credit) {
+    if (p.caption) subEl.append("  ·  ");
+    subEl.append("photo: ");
+    p.credit.split(/(@[A-Za-z0-9._]+)/).forEach(part => {
+      if (/^@[A-Za-z0-9._]+$/.test(part)) {
+        const a = document.createElement("a");
+        a.href = "https://instagram.com/" + part.slice(1); a.target = "_blank"; a.rel = "noopener";
+        a.textContent = part; subEl.append(a);
+      } else if (part) subEl.append(part);
+    });
+  }
   $("prev").hidden = $("next").hidden = list.length < 2;
   $("lb").hidden = false;
 }
