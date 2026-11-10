@@ -12,6 +12,10 @@
 <script>
 /* Coming-soon gate. Not real security: it keeps casual visitors out until launch. */
 window.MN_KEY = "7c362ae2f50e8da10d4c1c903cfb236edc7d09f40cc5eb2f749f9d0fb78aebd4";
+if (location.hash === "#lock") {
+  try { localStorage.removeItem("mn-key"); } catch (e) {}
+  history.replaceState(null, "", location.pathname);
+}
 try { if (localStorage.getItem("mn-key") !== window.MN_KEY) document.documentElement.classList.add("locked"); }
 catch (e) { document.documentElement.classList.add("locked"); }
 </script>
@@ -391,6 +395,12 @@ document.querySelectorAll(".view").forEach(v => v.onclick = () => { view = v.dat
 $("home").onclick = e => { e.preventDefault(); select("all"); window.scrollTo({ top: 0 }); };
 window.addEventListener("hashchange", () => {
   const h = location.hash.slice(1);
+  if (h === "lock") {
+    try { localStorage.removeItem("mn-key"); } catch (e) {}
+    history.replaceState(null, "", location.pathname);
+    document.documentElement.classList.add("locked"); $("gatePw").value = ""; $("gateMsg").textContent = "";
+    window.scrollTo(0, 0); return;
+  }
   if (h === "recaps" || h === "posts") view = h; else { view = "colours"; filter = byId[h] ? h : "all"; }
   render();
 });
