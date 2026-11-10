@@ -149,7 +149,7 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
 html.locked body > :not(.gate) { display: none !important; }
 html.locked .gate { display: flex; }
 html.locked body { background: #FFF8BB; color: #1C1C14; }
-.gate { position: fixed; inset: 0; z-index: 30; overflow-y: auto; background: #FFF8BB; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 22px; padding: calc(24px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
+.gate { position: fixed; inset: 0; z-index: 30; overflow-y: auto; background: #FFF8BB; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; gap: 0; padding: calc(24px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
 .gate .gmark { font-family: var(--serif); font-weight: 500; font-size: clamp(72px, 20vw, 140px); letter-spacing: .06em; line-height: 1; }
 .gate h1 { margin: 0; font-weight: 800; font-size: clamp(40px, 11vw, 88px); letter-spacing: -.055em; line-height: .9; }
 .gate .soon { margin: 6px 0 0; font-size: clamp(18px, 4vw, 26px); letter-spacing: -.02em; }
@@ -162,13 +162,17 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
 .gate .msg { min-height: 1.2em; font-size: 13px; letter-spacing: .14em; color: rgba(28,28,20,.6); }
 .gate .shake { animation: shake .35s; }
 @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-.gate .glinks { font-size: 12px; letter-spacing: .2em; color: rgba(28,28,20,.6); }
+.gate .gcenter { display: flex; flex-direction: column; align-items: center; gap: 22px; width: 100%; padding-block: 24px; }
+.gate .gspace, .gate .glinks { height: 20px; flex: none; }
+.gate .glinks { font-size: 13px; color: rgba(28,28,20,.62); }
 .gate .glinks a { text-decoration: none; border-bottom: 1px solid rgba(28,28,20,.25); }
 @media (prefers-reduced-motion: reduce) { .gate .gdots i, .gate .shake { animation: none; } }
 </style>
 </head>
 <body>
 <section class="gate" aria-label="Coming soon">
+  <div class="gspace" aria-hidden="true"></div>
+  <div class="gcenter">
   <div class="gmark">MN.</div>
   <div class="gdots" aria-hidden="true"><i style="background:#000000;animation-delay:0.00s"></i><i style="background:#FFFFFF;animation-delay:0.12s"></i><i style="background:#91B2EB;animation-delay:0.24s"></i><i style="background:#BAB6DE;animation-delay:0.36s"></i><i style="background:#343A4E;animation-delay:0.48s"></i><i style="background:#A9A9A9;animation-delay:0.60s"></i><i style="background:#FFF8BB;animation-delay:0.72s"></i><i style="background:#B8B05F;animation-delay:0.84s"></i><i style="background:#B8C98B;animation-delay:0.96s"></i><i style="background:#E9A283;animation-delay:1.08s"></i></div>
   <form id="gateForm" autocomplete="off">
@@ -176,6 +180,7 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
     <button type="submit">enter</button>
   </form>
   <div class="msg" id="gateMsg" aria-live="polite"></div>
+  </div>
   <div class="glinks"><a href="impressum.html">impressum</a></div>
 </section>
 <div class="wrap">
