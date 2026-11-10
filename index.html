@@ -6,6 +6,8 @@
 <title>MN. — Markus Nindl</title>
 <meta name="description" content="my life in colours. Photos of Markus Nindl, model from Pinzgau.">
 <meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preload" href="fonts/inter-800.woff" as="font" type="font/woff" crossorigin>
 <style>
 @font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("fonts/inter-400.woff") format("woff"); }
@@ -106,7 +108,19 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .sheet .imgs button { padding: 0; border: 0; background: none; display: block; }
 .sheet .imgs img { width: 100%; display: block; border-radius: 3px; }
 
-.booking { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+.about { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+.about h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
+.about h2 .dot { color: var(--dot); }
+.about .text { margin: 0; font-size: clamp(18px, 2.6vw, 22px); letter-spacing: -.015em; max-width: 34ch; text-wrap: pretty; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; letter-spacing: .22em; color: var(--soft); }
+.press { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 0; max-width: 560px; }
+.press li { display: grid; grid-template-columns: 4.5em 1fr; gap: 12px; padding-block: 10px; border-top: 1px solid var(--line); }
+.press li:last-child { border-bottom: 1px solid var(--line); }
+.press .when { font-size: 12px; letter-spacing: .14em; color: var(--soft); padding-top: 2px; font-variant-numeric: tabular-nums; }
+.press b { font-weight: 500; }
+.press span { color: var(--soft); }
+.plabel { font-size: 12px; letter-spacing: .24em; color: var(--soft); margin-top: 10px; }
+.booking { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
 .booking h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
 .booking h2 .dot { color: var(--dot); }
 .booking p { margin: 0; color: var(--soft); max-width: 46ch; }
@@ -148,6 +162,18 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
   <div class="grid3" id="postGrid" hidden></div>
   <div class="empty" id="empty" hidden></div>
 
+  <section class="about" id="about">
+    <h2>about<span class="dot">.</span></h2>
+    <p class="text">model from pinzgau, austria. MN. started on 01.01.2025, and since then it's been shoots, a first runway with s.Oliver, a few pages in print, and a life told in colours.</p>
+    <div class="facts"><span>based in pinzgau</span><span>german · english</span></div>
+    <div class="plabel">PRESS</div>
+    <ul class="press">
+      <li><span class="when">11/26</span><div><b>Bezirkszeitung</b> <span>· s.Oliver fashion show at INTERSPORT Harms</span></div></li>
+      <li><span class="when">11/24</span><div><b>Platzhirsch</b> <span>· Single des Monats</span></div></li>
+      <li><span class="when">08/24</span><div><b>Platzhirsch</b> <span>· Mächtige Mähnen</span></div></li>
+    </ul>
+  </section>
+
   <section class="booking" id="booking">
     <h2>booking<span class="dot">.</span></h2>
     <p>Shootings, campaigns, fashion shows and collaborations.</p>
@@ -157,7 +183,7 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
     </div>
   </section>
 
-  <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span>pinzgau · austria · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
+  <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span><a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
 </div>
 
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true">
