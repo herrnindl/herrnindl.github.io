@@ -129,6 +129,16 @@ if os.path.isdir("posts"):
             s["date"] = day.strftime("%d.%m.%y")
             sets["posts"].append(s)
 
+# press/2024-08-platzhirsch/ etc.: scans or photos of an article, shown when its press entry is tapped
+sets["press"] = {}
+if os.path.isdir("press"):
+    for name in sorted(os.listdir("press")):
+        folder = os.path.join("press", name)
+        if os.path.isdir(folder):
+            imgs = sorted(n for n in os.listdir(folder) if n.lower().endswith(EXT))
+            if imgs:
+                sets["press"][name] = [f"press/{name}/{n}" for n in imgs]
+
 with open("sets.json", "w", encoding="utf-8") as f:
     json.dump(sets, f, ensure_ascii=False, indent=1)
 print(f"{len(sets['recaps'])} recaps, {len(sets['posts'])} posts")
