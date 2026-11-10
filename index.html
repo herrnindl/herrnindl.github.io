@@ -221,6 +221,7 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
     <div class="plabel">PRESS</div>
     <ul class="press">
       <li data-press="2026-11-bezirkszeitung"><span class="when">11/26</span><div><b>Bezirkszeitung</b> <span>· s.Oliver fashion show at INTERSPORT Harms</span></div></li>
+      <li data-press="2025-02-platzhirsch"><span class="when">02/25</span><div><b>Platzhirsch</b> <span>· Leserecho</span></div></li>
       <li data-press="2024-11-platzhirsch"><span class="when">11/24</span><div><b>Platzhirsch</b> <span>· Single des Monats</span></div></li>
       <li data-press="2024-08-platzhirsch"><span class="when">08/24</span><div><b>Platzhirsch</b> <span>· Mächtige Mähnen</span></div></li>
     </ul>
@@ -365,10 +366,7 @@ function renderRecaps() {
   const g = $("recapGrid"); g.textContent = "";
   $("empty").textContent = "No recaps yet.";
   $("empty").hidden = sets.recaps.length > 0;
-  sets.recaps.forEach(r => g.append(setTile(r, b => {
-    const l = el("div", "rlabel"); l.append(el("b", null, r.number), el("span", null, r.title || (byId[r.chapter] ? byId[r.chapter].label : "")));
-    b.append(l);
-  })));
+  sets.recaps.forEach(r => g.append(setTile(r)));
 }
 
 function renderPosts() {
