@@ -55,7 +55,7 @@ print(f"{len(out)} photos")
 #   caption: text        (the post or recap text; use \n for a new line)
 #   credit: Daniel Breuer @alpindis
 #   chapter: ber         (only if the automatic chapter by date is wrong)
-# A file called cover.jpg (or .png/.webp) is used as the cover, otherwise the first image.
+# A file called cover.jpg (or .png/.webp) is the cover and the first image inside, otherwise the first image is the cover.
 import datetime
 import re
 
@@ -100,7 +100,7 @@ def read_set(base, name, day):
         "id": name,
         "chapter": info.get("chapter") or chapter_for(day),
         "cover": url(covers[0] if covers else rest[0]),
-        "images": [url(n) for n in (rest or covers)],
+        "images": [url(n) for n in covers[:1] + rest],
         "title": info.get("title", ""),
         "big": info.get("big", ""),
         "caption": info.get("caption", ""),
