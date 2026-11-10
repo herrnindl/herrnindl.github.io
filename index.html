@@ -4,127 +4,171 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>MN. — Markus Nindl</title>
-<meta name="description" content="MN. Photos of Markus Nindl, model from Pinzgau, sorted by colour chapter.">
+<meta name="description" content="my life in colours. Photos of Markus Nindl, model from Pinzgau.">
+<meta name="theme-color" content="#FFF8BB">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&family=Bodoni+Moda:opsz,wght@6..96,500&display=swap">
 <style>
+/* The page takes on each chapter's colour, like the "my life in colours." video. */
 :root {
-  --bg: #0E0E0D; --surface: #191917; --line: #2B2A26;
-  --fg: #FFF8BB; --muted: #A8A385; --ink: #F2F0E6; --chap: #FFF8BB;
-  --display: "Syncopate", "Arial Black", system-ui, sans-serif;
-  --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
-  color-scheme: dark;
+  --bg: #FFF8BB;   /* vanilla. */
+  --fg: #1C1C14;
+  --soft: rgba(28,28,20,.62);
+  --line: rgba(28,28,20,.16);
+  --dot: #B8C98B;
+  --sans: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --serif: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
-  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5;
-  padding: env(safe-area-inset-top, 0px) max(16px, env(safe-area-inset-right, 0px)) calc(48px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.45;
+  padding: env(safe-area-inset-top, 0px) max(18px, env(safe-area-inset-right, 0px)) calc(48px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+  transition: background-color .5s ease, color .5s ease;
 }
 img { max-width: 100%; }
 [hidden] { display: none !important; }
 .wrap { max-width: 1200px; margin: 0 auto; }
 button { font: inherit; color: inherit; cursor: pointer; }
+a { color: inherit; }
 :focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
 
-header { padding-block: 32px 20px; }
-.mark { font-family: var(--display); font-weight: 700; font-size: clamp(44px, 10vw, 84px); line-height: .9; color: var(--fg); }
-.name { font-family: var(--display); font-size: 11px; letter-spacing: .55em; color: var(--muted); margin-top: 8px; white-space: nowrap; }
+header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-block: 22px 8px; }
+.mark { font-family: var(--serif); font-weight: 500; font-size: 30px; letter-spacing: .06em; text-decoration: none; }
+.name { font-size: 10px; letter-spacing: .5em; color: var(--soft); white-space: nowrap; }
 
-.strip { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 10px max(16px, env(safe-area-inset-left, 0px)); border-bottom: 1px solid var(--line); }
-.chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.card { padding-block: clamp(48px, 12vw, 120px) clamp(32px, 7vw, 64px); }
+.dates { font-size: 12px; letter-spacing: .28em; color: var(--soft); margin-bottom: 10px; min-height: 1em; }
+.card h1 { margin: 0; font-weight: 800; font-size: clamp(56px, 13vw, 132px); line-height: .9; letter-spacing: -.055em; text-wrap: balance; }
+.card h1 .dot { color: var(--dot); }
+.line { margin: 10px 0 0; font-size: clamp(20px, 3.4vw, 30px); letter-spacing: -.02em; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 14px; }
+.place { font-size: 12px; letter-spacing: .24em; color: var(--soft); }
+.pill { font-size: 12px; letter-spacing: .14em; background: #FFF8BB; color: #3A3624; padding: 2px 10px; border-radius: 999px; }
+.mnline { font-size: 12px; letter-spacing: .24em; color: var(--soft); }
+.mnline b { font-family: var(--serif); font-weight: 500; font-size: 22px; letter-spacing: .06em; color: var(--fg); vertical-align: -2px; margin-left: 4px; }
+
+.strip { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); margin-inline: calc(-1 * max(18px, env(safe-area-inset-left, 0px))); padding: 10px max(18px, env(safe-area-inset-left, 0px)); border-block: 1px solid var(--line); transition: background-color .5s ease; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
 .chips::-webkit-scrollbar { display: none; }
-.chip { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px 7px 10px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 13px; white-space: nowrap; }
-.chip[aria-pressed="true"] { border-color: var(--fg); background: var(--surface); color: var(--fg); }
-.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--c, transparent); box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); }
-.dot.hollow { box-shadow: inset 0 0 0 1.5px var(--muted); }
-.count { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.chip { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px 6px 9px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 13px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.sw { width: 11px; height: 11px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+.count { font-size: 11px; opacity: .6; }
 
-.intro { display: grid; grid-template-columns: 6px 1fr; gap: 16px; padding-block: 28px 24px; }
-.band { border-radius: 3px; background: var(--band, var(--chap)); }
-.intro h1 { margin: 0; font-family: var(--display); font-weight: 700; font-size: clamp(24px, 5vw, 40px); color: var(--chap); line-height: 1.1; text-wrap: balance; }
-.intro p { margin: 6px 0 0; color: var(--muted); }
-.hex { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-
-.wall { columns: 3 260px; column-gap: 12px; }
-.tile { break-inside: avoid; margin: 0 0 12px; display: block; width: 100%; padding: 0; border: 0; background: var(--surface); border-radius: 4px; overflow: hidden; position: relative; }
-.tile img { display: block; width: 100%; height: auto; transition: transform .4s ease; }
+.wall { columns: 3 260px; column-gap: 10px; margin-top: 18px; }
+.tile { break-inside: avoid; margin: 0 0 10px; display: block; width: 100%; padding: 0; border: 0; background: var(--line); border-radius: 3px; overflow: hidden; position: relative; }
+.tile img { display: block; width: 100%; height: auto; transition: transform .5s ease; }
 .tile:hover img { transform: scale(1.02); }
-.tag { position: absolute; left: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(14,14,13,.72); font-size: 11px; padding: 3px 9px 3px 6px; border-radius: 999px; }
-.tag .dot { width: 9px; height: 9px; }
-.empty { border: 1px dashed var(--line); border-radius: 6px; padding: 48px 20px; text-align: center; color: var(--muted); }
+.tag { position: absolute; left: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.86); color: #1C1C14; font-size: 11px; font-weight: 500; padding: 3px 9px 3px 6px; border-radius: 999px; }
+.tag .sw { width: 9px; height: 9px; }
+.empty { border: 1px dashed var(--line); border-radius: 4px; padding: 44px 20px; text-align: center; color: var(--soft); margin-top: 18px; }
 
-.lb { position: fixed; inset: 0; z-index: 20; background: rgba(8,8,7,.94); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
-.lb img { max-height: calc(100% - 90px); object-fit: contain; border-radius: 4px; }
-.lb .cap { text-align: center; }
-.lb .cap b { display: block; color: var(--fg); font-weight: 500; }
-.lb .cap small { color: var(--muted); }
-.lb .cap a { color: var(--fg); text-decoration: none; border-bottom: 1px solid currentColor; }
-.close { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; width: 40px; height: 40px; font-size: 18px; }
-.nav { position: absolute; top: 50%; transform: translateY(-50%); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; width: 40px; height: 40px; }
+.lb { position: fixed; inset: 0; z-index: 20; background: rgba(10,10,8,.95); color: #F2F0E6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
+.lb img { max-height: calc(100% - 90px); object-fit: contain; border-radius: 3px; }
+.cap { text-align: center; }
+.cap b { display: block; font-weight: 500; }
+.cap small { color: rgba(242,240,230,.65); }
+.cap a { color: #FFF8BB; text-decoration: none; border-bottom: 1px solid currentColor; }
+.lbtn { position: absolute; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); color: #F2F0E6; border-radius: 999px; width: 42px; height: 42px; font-size: 18px; }
+.close { top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; }
+.prev, .next { top: 50%; transform: translateY(-50%); }
 .prev { left: 12px; } .next { right: 12px; }
 
-footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 12px; font-family: var(--mono); }
-@media (prefers-reduced-motion: reduce) { .tile img { transition: none; } .tile:hover img { transform: none; } }
+footer { margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 11px; letter-spacing: .24em; color: var(--soft); }
+footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-spacing: .06em; color: var(--fg); }
+
+@media (prefers-reduced-motion: reduce) { body, .strip, .tile img { transition: none; } .tile:hover img { transform: none; } }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="mark">MN.</div>
-    <div class="name">M A R K U S&nbsp;&nbsp;N I N D L</div>
+    <a class="mark" href="#" id="home">MN.</a>
+    <span class="name">M A R K U S&nbsp;&nbsp;N I N D L</span>
   </header>
 
-  <nav class="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
-
-  <section class="intro">
-    <div class="band"></div>
-    <div>
-      <h1 id="title">all chapters.</h1>
-      <p id="line">Every photo, newest chapter first.</p>
-      <div class="hex" id="hex"></div>
-    </div>
+  <section class="card" aria-live="polite">
+    <div class="dates" id="dates"></div>
+    <h1 id="title"></h1>
+    <p class="line" id="line"></p>
+    <div class="meta" id="meta"></div>
   </section>
+
+  <nav class="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
 
   <div class="wall" id="wall"></div>
   <div class="empty" id="empty" hidden>No photos in this chapter yet.</div>
 
-  <footer><span>MN. — EST. 01.01.2025</span><span>Pinzgau, Austria</span></footer>
+  <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span>pinzgau · austria</span></footer>
 </div>
 
 <div class="lb" id="lb" hidden>
-  <button class="close" id="close" aria-label="Close">✕</button>
-  <button class="nav prev" id="prev" aria-label="Previous">‹</button>
+  <button class="lbtn close" id="close" aria-label="Close">✕</button>
+  <button class="lbtn prev" id="prev" aria-label="Previous">‹</button>
   <img id="lbImg" alt="">
   <div class="cap"><b id="lbCap"></b><small id="lbSub"></small></div>
-  <button class="nav next" id="next" aria-label="Next">›</button>
+  <button class="lbtn next" id="next" aria-label="Next">›</button>
 </div>
 
 <script>
+/* Order, words, dates and places follow the final "my life in colours." video. */
 const CHAPTERS = [
-  { id: "red", name: "red.", hex: "#B3202A", line: "coming 2027." },
-  { id: "ember", name: "ember.", hex: "#E9A283", line: "the spark." },
-  { id: "ber", name: "ber.", hex: "#B8C98B", line: "finding my color." },
-  { id: "vanilla-2", name: "vanilla. II", hex: "#B8B05F", line: "trying it anyway, part two." },
-  { id: "vanilla", name: "vanilla.", hex: "#FFF8BB", line: "trying it anyway." },
-  { id: "grey", name: "grey.", hex: "#A9A9A9", line: "who am i?" },
-  { id: "navy-blue", name: "navy blue.", hex: "#343A4E", line: "the end.", text: "#91A0C8" },
-  { id: "lavendel", name: "lavendel.", hex: "#BAB6DE", line: "love." },
-  { id: "baby-blue", name: "baby blue.", hex: "#91B2EB", line: "the beginning." },
-  { id: "white", name: "white.", hex: "#FFFFFF", line: "the first pictures." },
-  { id: "origin", name: "origin.", hex: null, line: "where it started." },
+  { id: "origin",    name: "origin",     bg: "#000000", fg: "#FFFFFF", dates: "26.08.24 – 02.03.25", line: "my 22nd birthday", place: "pinzgau",
+    notes: ["instagram opened", "3 platzhirsch articles", "MN. 01.01.25", "the first pictures"] },
+  { id: "white",     name: "white",      bg: "#FFFFFF", fg: "#1A1A1A", dates: "03.03. – 22.05.25", line: "my first photoshoot", place: "neukirchen" },
+  { id: "baby-blue", name: "baby blue",  bg: "#91B2EB", fg: "#1D2547", dates: "23.05. – 23.06.25", line: "the beginning", place: "fürstenfeld · graz" },
+  { id: "lavendel",  name: "lavendel",   bg: "#BAB6DE", fg: "#2A2342", dates: "07.07. – 07.09.25", line: "love", place: "italia" },
+  { id: "navy-blue", name: "navy blue",  bg: "#343A4E", fg: "#E8EAF0", dates: "21.10. – 21.12.25", line: "the end?", place: "dublin" },
+  { id: "grey",      name: "grey",       bg: "#A9A9A9", fg: "#262626", dates: "01.01. – 31.03.26", line: "searching for vanilla", place: "munich" },
+  { id: "vanilla",   name: "vanilla",    bg: "#FFF8BB", fg: "#1C1C14", dates: "01.04. – 22.06.26", line: "a new colour", place: "france" },
+  { id: "vanilla-2", name: "vanilla",    suffix: " II", bg: "#B8B05F", fg: "#24220F", dates: "23.06. – 31.08.26", line: "i mog di", place: "königsleiten · salzburg" },
+  { id: "ber",       name: "ber",        bg: "#B8C98B", fg: "#234C3D", dates: "01.09. – 31.10.26", line: "septem·ber to decem·ber", vanilla: true },
+  { id: "ember",     name: "ember",      bg: "#E9A283", fg: "#3A1E14", dates: "01.11. – 31.12.26", line: "the spark", place: "wildkogel", vanilla: true },
+  { id: "red",       name: "red",        bg: "#B3202A", fg: "#FFF8BB", dates: "2027 · all year", line: "is coming", vanilla: true, mn: true },
 ];
+/* The dot after each name is the colour of the next chapter, as in the video. */
+CHAPTERS.forEach((c, i) => { c.dot = i < CHAPTERS.length - 1 ? CHAPTERS[i + 1].bg : "#FFF8BB"; c.label = c.name + (c.suffix ? "." + c.suffix : "."); });
+const ALL = { id: "all", bg: "#FFF8BB", fg: "#1C1C14", dot: "#B3202A" };
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
 let photos = [], filter = byId[location.hash.slice(1)] ? location.hash.slice(1) : "all", list = [], idx = -1;
 
-function dot(c) {
-  const d = document.createElement("span");
-  d.className = "dot" + (c && c.hex ? "" : " hollow");
-  if (c && c.hex) d.style.setProperty("--c", c.hex);
-  return d;
+function sw(c) { const s = document.createElement("span"); s.className = "sw"; s.style.setProperty("--c", c.bg); return s; }
+function soften(hex, a) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
+}
+
+function setTheme(c) {
+  const r = document.documentElement.style;
+  r.setProperty("--bg", c.bg); r.setProperty("--fg", c.fg); r.setProperty("--dot", c.dot);
+  r.setProperty("--soft", soften(c.fg, .62)); r.setProperty("--line", soften(c.fg, .16));
+  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = c.bg;
+}
+
+function renderCard() {
+  const title = $("title"), meta = $("meta");
+  title.textContent = ""; meta.textContent = "";
+  if (filter === "all") {
+    setTheme(ALL);
+    $("dates").textContent = "";
+    title.append("my life");
+    $("line").textContent = "in colours.";
+    return;
+  }
+  const c = byId[filter];
+  setTheme(c);
+  $("dates").textContent = c.dates;
+  title.append(c.name);
+  const dot = document.createElement("span"); dot.className = "dot"; dot.textContent = "."; title.append(dot);
+  if (c.suffix) title.append(c.suffix);
+  $("line").textContent = c.line + (c.id === "red" ? "." : "");
+  if (c.place) { const p = document.createElement("span"); p.className = "place"; p.textContent = c.place; meta.append(p); }
+  if (c.vanilla) { const p = document.createElement("span"); p.className = "pill"; p.textContent = "with vanilla"; meta.append(p); }
+  if (c.notes) c.notes.forEach(n => { const p = document.createElement("span"); p.className = "place"; p.textContent = n; meta.append(p); });
+  if (c.mn) { const p = document.createElement("span"); p.className = "mnline"; p.append("2 years of"); const b = document.createElement("b"); b.textContent = "MN."; p.append(b); meta.append(p); }
 }
 
 function render() {
@@ -133,25 +177,15 @@ function render() {
   const make = (id, label, c, n) => {
     const b = document.createElement("button"); b.className = "chip";
     b.setAttribute("aria-pressed", String(filter === id));
-    if (c) b.append(dot(c));
+    if (c) b.append(sw(c));
     const t = document.createElement("span"); t.textContent = label; b.append(t);
     if (n) { const k = document.createElement("span"); k.className = "count"; k.textContent = n; b.append(k); }
-    b.onclick = () => { filter = id; history.replaceState(null, "", id === "all" ? location.pathname : "#" + id); render(); };
+    b.onclick = () => select(id);
     chips.append(b);
   };
   make("all", "all", null, photos.length);
-  CHAPTERS.forEach(c => make(c.id, c.name, c, counts[c.id]));
-
-  const root = document.documentElement.style;
-  if (filter === "all") {
-    $("title").textContent = "all chapters."; $("line").textContent = "Every photo, newest chapter first."; $("hex").textContent = "";
-    root.setProperty("--chap", "#FFF8BB"); root.removeProperty("--band");
-  } else {
-    const c = byId[filter];
-    $("title").textContent = c.name; $("line").textContent = c.line; $("hex").textContent = c.hex || "";
-    root.setProperty("--chap", c.text || c.hex || "#A8A385");
-    root.setProperty("--band", c.hex || "#A8A385");
-  }
+  CHAPTERS.forEach(c => make(c.id, c.label, c, counts[c.id]));
+  renderCard();
 
   list = filter === "all" ? photos : photos.filter(p => p.chapter === filter);
   const wall = $("wall"); wall.textContent = "";
@@ -159,23 +193,31 @@ function render() {
   list.forEach((p, i) => {
     const b = document.createElement("button"); b.className = "tile";
     const img = document.createElement("img"); img.src = p.src; img.loading = "lazy";
-    img.alt = p.caption || (byId[p.chapter].name + " photo");
+    img.alt = p.caption || (byId[p.chapter].label + " photo");
     b.append(img);
     if (filter === "all") {
-      const t = document.createElement("span"); t.className = "tag"; t.append(dot(byId[p.chapter]));
-      const s = document.createElement("span"); s.textContent = byId[p.chapter].name; t.append(s); b.append(t);
+      const t = document.createElement("span"); t.className = "tag"; t.append(sw(byId[p.chapter]));
+      const s = document.createElement("span"); s.textContent = byId[p.chapter].label; t.append(s); b.append(t);
     }
     b.onclick = () => open(i);
     wall.append(b);
   });
 }
 
+function select(id) {
+  filter = id;
+  history.replaceState(null, "", id === "all" ? location.pathname : "#" + id);
+  render();
+}
+$("home").onclick = e => { e.preventDefault(); select("all"); window.scrollTo({ top: 0 }); };
+window.addEventListener("hashchange", () => { const h = location.hash.slice(1); filter = byId[h] ? h : "all"; render(); });
+
 function open(i) {
   idx = (i + list.length) % list.length; const p = list[idx];
   $("lbImg").src = p.src; $("lbImg").alt = p.caption || "";
-  $("lbCap").textContent = p.caption || byId[p.chapter].name;
+  $("lbCap").textContent = p.caption || byId[p.chapter].label;
   const subEl = $("lbSub"); subEl.textContent = "";
-  if (p.caption) subEl.append(byId[p.chapter].name);
+  if (p.caption) subEl.append(byId[p.chapter].label);
   if (p.credit) {
     if (p.caption) subEl.append("  ·  ");
     subEl.append("photo: ");
