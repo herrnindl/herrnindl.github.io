@@ -3,9 +3,10 @@
 Runs automatically on GitHub every time something changes.
 Optional captions/credits: put an info.txt in a chapter folder with lines like
     IMG_1234.jpg | Caption text | Photographer name
-Use * instead of a file name to set a credit for every photo in the chapter:
+Use * for every photo, or a pattern like name* for some of them:
     * | | Daniel Breuer @alpindis
 """
+import fnmatch
 import json
 import os
 
@@ -26,10 +27,11 @@ for ch in CHAPTERS:
                 parts = [p.strip() for p in line.split("|")]
                 if parts and parts[0]:
                     info[parts[0].lower()] = parts
-    files = sorted((n for n in os.listdir(folder) if n.lower().endswith(EXT)), reverse=True)
+    files = sorted(n for n in os.listdir(folder) if n.lower().endswith(EXT))
+    patterns = [k for k in info if "*" in k]
     for name in files:
         meta = info.get(name.lower(), [])
-        default = info.get("*", [])
+        default = next((info[k] for k in patterns if fnmatch.fnmatch(name.lower(), k)), [])
         def pick(i):
             if len(meta) > i and meta[i]:
                 return meta[i]
