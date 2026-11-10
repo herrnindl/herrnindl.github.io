@@ -78,6 +78,34 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .prev, .next { top: 50%; transform: translateY(-50%); }
 .prev { left: 12px; } .next { right: 12px; }
 
+.views { display: flex; gap: 18px; padding-block: 4px 0; }
+.view { background: none; border: 0; padding: 4px 0; font-size: 15px; font-weight: 500; letter-spacing: -.01em; color: var(--soft); border-bottom: 2px solid transparent; }
+.view[aria-current="true"] { color: var(--fg); border-color: var(--fg); }
+
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-top: 18px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 12px; margin-top: 18px; }
+.set { position: relative; display: block; width: 100%; padding: 0; border: 0; overflow: hidden; background: var(--c, var(--line)); text-align: left; }
+.grid3 .set { aspect-ratio: 4 / 5; }
+.grid2 .set { aspect-ratio: 4 / 5; border-radius: 3px; }
+.set img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+.set:hover img { transform: scale(1.02); }
+.multi { position: absolute; top: 8px; right: 8px; width: 16px; height: 16px; border-radius: 3px; border: 2px solid #fff; box-shadow: 3px -3px 0 -1px rgba(255,255,255,.85); }
+.rlabel { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 12px 10px; background: linear-gradient(transparent, rgba(0,0,0,.55)); color: #fff; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.rlabel b { font-weight: 800; font-size: 22px; letter-spacing: -.04em; }
+.rlabel span { font-size: 12px; letter-spacing: .14em; }
+
+.sheet { position: fixed; inset: 0; z-index: 15; background: var(--sbg); color: var(--sfg); overflow-y: auto; padding: calc(16px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
+.sheet .inner { max-width: 720px; margin: 0 auto; }
+.sheet .top { display: flex; justify-content: space-between; align-items: center; padding-block: 6px 28px; }
+.sheet .x { background: none; border: 1px solid currentColor; border-radius: 999px; width: 40px; height: 40px; font-size: 16px; opacity: .8; }
+.sheet .num { font-size: 12px; letter-spacing: .28em; opacity: .65; }
+.sheet h2 { margin: 6px 0 0; font-weight: 800; font-size: clamp(48px, 12vw, 96px); letter-spacing: -.055em; line-height: .9; }
+.sheet .big { font-weight: 800; font-size: clamp(80px, 22vw, 180px); letter-spacing: -.06em; line-height: .85; opacity: .9; }
+.sheet .txt { margin: 16px 0 24px; font-size: 17px; white-space: pre-line; opacity: .85; }
+.sheet .imgs { display: grid; gap: 10px; }
+.sheet .imgs button { padding: 0; border: 0; background: none; display: block; }
+.sheet .imgs img { width: 100%; display: block; border-radius: 3px; }
+
 .booking { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
 .booking h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
 .booking h2 .dot { color: var(--dot); }
@@ -100,6 +128,12 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
     <span class="name">M A R K U S&nbsp;&nbsp;N I N D L</span>
   </header>
 
+  <nav class="views" aria-label="Sections">
+    <button class="view" data-view="colours">colours.</button>
+    <button class="view" data-view="recaps">recaps.</button>
+    <button class="view" data-view="posts">posts.</button>
+  </nav>
+
   <section class="card" aria-live="polite">
     <div class="dates" id="dates"></div>
     <h1 id="title"></h1>
@@ -107,10 +141,12 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
     <div class="meta" id="meta"></div>
   </section>
 
-  <nav class="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
+  <nav class="strip" id="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
 
   <div class="wall" id="wall"></div>
-  <div class="empty" id="empty" hidden>No photos in this chapter yet.</div>
+  <div class="grid2" id="recapGrid" hidden></div>
+  <div class="grid3" id="postGrid" hidden></div>
+  <div class="empty" id="empty" hidden></div>
 
   <section class="booking" id="booking">
     <h2>booking<span class="dot">.</span></h2>
@@ -122,6 +158,16 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
   </section>
 
   <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span>pinzgau · austria · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
+</div>
+
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true">
+  <div class="inner">
+    <div class="top"><span class="num" id="sNum"></span><button class="x" id="sClose" aria-label="Close">✕</button></div>
+    <div class="big" id="sBig"></div>
+    <h2 id="sTitle"></h2>
+    <p class="txt" id="sText"></p>
+    <div class="imgs" id="sImgs"></div>
+  </div>
 </div>
 
 <div class="lb" id="lb" hidden>
@@ -153,13 +199,19 @@ CHAPTERS.forEach((c, i) => { c.dot = i < CHAPTERS.length - 1 ? CHAPTERS[i + 1].b
 const ALL = { id: "all", bg: "#FFF8BB", fg: "#1C1C14", dot: "#B3202A" };
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
-let photos = [], filter = byId[location.hash.slice(1)] ? location.hash.slice(1) : "all", list = [], idx = -1;
+let photos = [], sets = { recaps: [], posts: [] }, view = "colours", filter = "all", list = [], idx = -1;
+(function readHash() {
+  const h = location.hash.slice(1);
+  if (h === "recaps" || h === "posts") view = h;
+  else if (byId[h]) filter = h;
+})();
 
 function sw(c) { const s = document.createElement("span"); s.className = "sw"; s.style.setProperty("--c", c.bg); return s; }
 function soften(hex, a) {
   const n = parseInt(hex.slice(1), 16);
   return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
 }
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
 function setTheme(c) {
   const r = document.documentElement.style;
@@ -170,82 +222,145 @@ function setTheme(c) {
 
 function renderCard() {
   const title = $("title"), meta = $("meta");
-  title.textContent = ""; meta.textContent = "";
-  if (filter === "all") {
-    setTheme(ALL);
-    $("dates").textContent = "";
-    title.append("my life");
-    $("line").textContent = "in colours.";
-    return;
-  }
+  title.textContent = ""; meta.textContent = ""; $("dates").textContent = "";
+  const dot = () => el("span", "dot", ".");
+  if (view === "recaps") { setTheme(ALL); title.append("recaps", dot()); $("line").textContent = "month by month."; return; }
+  if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
+  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; return; }
   const c = byId[filter];
   setTheme(c);
   $("dates").textContent = c.dates;
-  title.append(c.name);
-  const dot = document.createElement("span"); dot.className = "dot"; dot.textContent = "."; title.append(dot);
+  title.append(c.name, dot());
   if (c.suffix) title.append(c.suffix);
   $("line").textContent = c.line + (c.id === "red" ? "." : "");
-  if (c.place) { const p = document.createElement("span"); p.className = "place"; p.textContent = c.place; meta.append(p); }
-  if (c.vanilla) { const p = document.createElement("span"); p.className = "pill"; p.textContent = "with vanilla"; meta.append(p); }
-  if (c.notes) c.notes.forEach(n => { const p = document.createElement("span"); p.className = "place"; p.textContent = n; meta.append(p); });
-  if (c.mn) { const p = document.createElement("span"); p.className = "mnline"; p.append("2 years of"); const b = document.createElement("b"); b.textContent = "MN."; p.append(b); meta.append(p); }
+  if (c.place) meta.append(el("span", "place", c.place));
+  if (c.vanilla) meta.append(el("span", "pill", "with vanilla"));
+  if (c.notes) c.notes.forEach(n => meta.append(el("span", "place", n)));
+  if (c.mn) { const p = el("span", "mnline", "2 years of"); p.append(el("b", null, "MN.")); meta.append(p); }
 }
 
-function render() {
+function renderChips() {
   const counts = {}; photos.forEach(p => counts[p.chapter] = (counts[p.chapter] || 0) + 1);
   const chips = $("chips"); chips.textContent = "";
   const make = (id, label, c, n) => {
-    const b = document.createElement("button"); b.className = "chip";
+    const b = el("button", "chip");
     b.setAttribute("aria-pressed", String(filter === id));
     if (c) b.append(sw(c));
-    const t = document.createElement("span"); t.textContent = label; b.append(t);
-    if (n) { const k = document.createElement("span"); k.className = "count"; k.textContent = n; b.append(k); }
+    b.append(el("span", null, label));
+    if (n) b.append(el("span", "count", n));
     b.onclick = () => select(id);
     chips.append(b);
   };
   make("all", "all", null, photos.length);
   CHAPTERS.forEach(c => make(c.id, c.label, c, counts[c.id]));
-  renderCard();
+}
 
-  list = filter === "all" ? photos : photos.filter(p => p.chapter === filter);
+function renderColours() {
+  list = (filter === "all" ? photos : photos.filter(p => p.chapter === filter));
   const wall = $("wall"); wall.textContent = "";
+  $("empty").textContent = "No photos in this chapter yet.";
   $("empty").hidden = list.length > 0;
   list.forEach((p, i) => {
-    const b = document.createElement("button"); b.className = "tile";
-    const img = document.createElement("img"); img.src = p.src; img.loading = "lazy";
+    const b = el("button", "tile");
+    const img = el("img"); img.src = p.src; img.loading = "lazy";
     img.alt = p.caption || (byId[p.chapter].label + " photo");
     b.append(img);
     if (filter === "all") {
-      const t = document.createElement("span"); t.className = "tag"; t.append(sw(byId[p.chapter]));
-      const s = document.createElement("span"); s.textContent = byId[p.chapter].label; t.append(s); b.append(t);
+      const t = el("span", "tag"); t.append(sw(byId[p.chapter]), el("span", null, byId[p.chapter].label)); b.append(t);
     }
-    b.onclick = () => open(i);
+    b.onclick = () => open(list, i);
     wall.append(b);
   });
 }
 
-function select(id) {
-  filter = id;
-  history.replaceState(null, "", id === "all" ? location.pathname : "#" + id);
-  render();
+function setTile(s, extra) {
+  const c = byId[s.chapter];
+  const b = el("button", "set");
+  if (c) b.style.setProperty("--c", c.bg);
+  if (s.cover) { const img = el("img"); img.src = s.cover; img.loading = "lazy"; img.alt = s.title || s.caption || ""; b.append(img); }
+  if (extra) extra(b);
+  b.onclick = () => openSet(s);
+  return b;
 }
-$("home").onclick = e => { e.preventDefault(); select("all"); window.scrollTo({ top: 0 }); };
-window.addEventListener("hashchange", () => { const h = location.hash.slice(1); filter = byId[h] ? h : "all"; render(); });
 
-function open(i) {
-  idx = (i + list.length) % list.length; const p = list[idx];
+function renderRecaps() {
+  const g = $("recapGrid"); g.textContent = "";
+  $("empty").textContent = "No recaps yet.";
+  $("empty").hidden = sets.recaps.length > 0;
+  sets.recaps.forEach(r => g.append(setTile(r, b => {
+    const l = el("div", "rlabel"); l.append(el("b", null, r.number), el("span", null, r.title || (byId[r.chapter] ? byId[r.chapter].label : "")));
+    b.append(l);
+  })));
+}
+
+function renderPosts() {
+  const g = $("postGrid"); g.textContent = "";
+  $("empty").textContent = "No posts yet.";
+  $("empty").hidden = sets.posts.length > 0;
+  sets.posts.forEach(p => g.append(setTile(p, b => { if (p.images.length > 1) b.append(el("span", "multi")); })));
+}
+
+function render() {
+  document.querySelectorAll(".view").forEach(v => v.setAttribute("aria-current", String(v.dataset.view === view)));
+  $("strip").hidden = view !== "colours";
+  $("wall").hidden = view !== "colours";
+  $("recapGrid").hidden = view !== "recaps";
+  $("postGrid").hidden = view !== "posts";
+  renderChips();
+  renderCard();
+  if (view === "colours") renderColours();
+  if (view === "recaps") renderRecaps();
+  if (view === "posts") renderPosts();
+}
+
+function updateHash() {
+  const h = view !== "colours" ? view : (filter !== "all" ? filter : "");
+  history.replaceState(null, "", h ? "#" + h : location.pathname);
+}
+function select(id) { view = "colours"; filter = id; updateHash(); render(); }
+document.querySelectorAll(".view").forEach(v => v.onclick = () => { view = v.dataset.view; if (view === "colours") filter = "all"; updateHash(); render(); });
+$("home").onclick = e => { e.preventDefault(); select("all"); window.scrollTo({ top: 0 }); };
+window.addEventListener("hashchange", () => {
+  const h = location.hash.slice(1);
+  if (h === "recaps" || h === "posts") view = h; else { view = "colours"; filter = byId[h] ? h : "all"; }
+  render();
+});
+
+/* A recap or post opens as a full-screen sheet in its chapter's colour. */
+function openSet(s) {
+  const c = byId[s.chapter] || ALL;
+  const sh = $("sheet");
+  sh.style.setProperty("--sbg", c.bg); sh.style.setProperty("--sfg", c.fg);
+  $("sNum").textContent = s.number || s.date || "";
+  $("sBig").textContent = s.big || ""; $("sBig").hidden = !s.big;
+  $("sTitle").textContent = s.title || ""; $("sTitle").hidden = !s.title;
+  $("sText").textContent = s.caption || ""; $("sText").hidden = !s.caption;
+  const box = $("sImgs"); box.textContent = "";
+  const items = s.images.map(src => ({ src, chapter: s.chapter, caption: s.title || "", credit: s.credit || "" }));
+  items.forEach((it, i) => {
+    const b = el("button"); const img = el("img"); img.src = it.src; img.loading = "lazy"; img.alt = s.title || s.caption || "";
+    b.append(img); b.onclick = () => open(items, i); box.append(b);
+  });
+  sh.scrollTop = 0; sh.hidden = false; document.body.style.overflow = "hidden";
+}
+function closeSet() { $("sheet").hidden = true; document.body.style.overflow = ""; }
+$("sClose").onclick = closeSet;
+
+function open(arr, i) {
+  list = arr; idx = (i + list.length) % list.length; const p = list[idx];
+  const label = byId[p.chapter] ? byId[p.chapter].label : "";
   $("lbImg").src = p.src; $("lbImg").alt = p.caption || "";
-  $("lbCap").textContent = p.caption || byId[p.chapter].label;
+  $("lbCap").textContent = p.caption || label;
   const subEl = $("lbSub"); subEl.textContent = "";
-  if (p.caption) subEl.append(byId[p.chapter].label);
+  if (p.caption && label) subEl.append(label);
   if (p.credit) {
-    if (p.caption) subEl.append("  ·  ");
+    if (p.caption && label) subEl.append("  ·  ");
     subEl.append("photo: ");
     p.credit.split(/(@[A-Za-z0-9._]+)/).forEach(part => {
       if (/^@[A-Za-z0-9._]+$/.test(part)) {
-        const a = document.createElement("a");
+        const a = el("a", null, part);
         a.href = "https://instagram.com/" + part.slice(1); a.target = "_blank"; a.rel = "noopener";
-        a.textContent = part; subEl.append(a);
+        subEl.append(a);
       } else if (part) subEl.append(part);
     });
   }
@@ -254,18 +369,20 @@ function open(i) {
 }
 const closeLb = () => { $("lb").hidden = true; };
 $("close").onclick = closeLb;
-$("prev").onclick = () => open(idx - 1);
-$("next").onclick = () => open(idx + 1);
+$("prev").onclick = () => open(list, idx - 1);
+$("next").onclick = () => open(list, idx + 1);
 $("lb").onclick = e => { if (e.target === $("lb")) closeLb(); };
 document.onkeydown = e => {
-  if ($("lb").hidden) return;
-  if (e.key === "Escape") closeLb();
-  if (e.key === "ArrowLeft") open(idx - 1);
-  if (e.key === "ArrowRight") open(idx + 1);
+  if (!$("lb").hidden) {
+    if (e.key === "Escape") closeLb();
+    if (e.key === "ArrowLeft") open(list, idx - 1);
+    if (e.key === "ArrowRight") open(list, idx + 1);
+  } else if (!$("sheet").hidden && e.key === "Escape") closeSet();
 };
 
 render();
-fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); render(); }).catch(() => render());
+fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); if (view === "colours") renderColours(); renderChips(); }).catch(() => {});
+fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [] }; render(); }).catch(() => {});
 </script>
 </body>
 </html>
