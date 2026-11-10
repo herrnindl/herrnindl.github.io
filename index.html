@@ -6,10 +6,12 @@
 <title>MN. — Markus Nindl</title>
 <meta name="description" content="my life in colours. Photos of Markus Nindl, model from Pinzgau.">
 <meta name="theme-color" content="#FFF8BB">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&family=Bodoni+Moda:opsz,wght@6..96,500&display=swap">
+<link rel="preload" href="fonts/inter-800.woff" as="font" type="font/woff" crossorigin>
 <style>
+@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("fonts/inter-400.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-display: swap; src: url("fonts/inter-500.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 800; font-display: swap; src: url("fonts/inter-800.woff") format("woff"); }
+@font-face { font-family: "Bodoni Moda"; font-weight: 500; font-display: swap; src: url("fonts/bodoni-500.woff") format("woff"); }
 /* The page takes on each chapter's colour, like the "my life in colours." video. */
 :root {
   --bg: #FFF8BB;   /* vanilla. */
@@ -76,7 +78,15 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .prev, .next { top: 50%; transform: translateY(-50%); }
 .prev { left: 12px; } .next { right: 12px; }
 
-footer { margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 11px; letter-spacing: .24em; color: var(--soft); }
+.booking { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+.booking h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
+.booking h2 .dot { color: var(--dot); }
+.booking p { margin: 0; color: var(--soft); max-width: 46ch; }
+.contacts { display: flex; flex-wrap: wrap; gap: 10px; }
+.contact { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--fg); text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
+.contact.primary { background: var(--fg); color: var(--bg); }
+.contact small { font-size: 11px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 11px; letter-spacing: .24em; color: var(--soft); }
 footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-spacing: .06em; color: var(--fg); }
 
 @media (prefers-reduced-motion: reduce) { body, .strip, .tile img { transition: none; } .tile:hover img { transform: none; } }
@@ -100,6 +110,15 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
 
   <div class="wall" id="wall"></div>
   <div class="empty" id="empty" hidden>No photos in this chapter yet.</div>
+
+  <section class="booking" id="booking">
+    <h2>booking<span class="dot">.</span></h2>
+    <p>Shootings, campaigns, fashion shows and collaborations.</p>
+    <div class="contacts">
+      <a class="contact primary" href="mailto:booking@herrnindl.com"><small>MAIL</small> booking@herrnindl.com</a>
+      <a class="contact" href="https://instagram.com/herrnindl" target="_blank" rel="noopener"><small>IG</small> @herrnindl</a>
+    </div>
+  </section>
 
   <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span>pinzgau · austria</span></footer>
 </div>
