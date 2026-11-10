@@ -22,3 +22,4 @@ section { padding-block: 18px; border-top: 1px solid var(--line); }
 h2 { margin: 0 0 6px; font-size: 12px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); }
 p { margin: 0 0 10px; text-wrap: pretty; hyphens: manual; }
 footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--soft); }
+.addr { font-size: 14px; color: var(--soft); line-height: 1.5; }
