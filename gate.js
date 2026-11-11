@@ -1,0 +1,6 @@
+/* Pages behind the coming-soon password: without it, go to the coming-soon page. */
+(function () {
+  var ok = false;
+  try { ok = localStorage.getItem("mn-key") === "7c362ae2f50e8da10d4c1c903cfb236edc7d09f40cc5eb2f749f9d0fb78aebd4"; } catch (e) {}
+  if (!ok) { document.documentElement.style.visibility = "hidden"; location.replace("./"); }
+})();
