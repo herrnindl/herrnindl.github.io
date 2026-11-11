@@ -190,7 +190,7 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
 
 /* Coming soon */
 .gate { display: none; }
-html.locked body > :not(.gate) { display: none !important; }
+html.locked body > :not(.gate):not(.wave) { display: none !important; }
 html.locked .gate { display: flex; }
 html.locked body { background: #FFF8BB; color: #1C1C14; }
 .gate { position: fixed; inset: 0; z-index: 30; overflow-y: auto; background: #FFF8BB; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; gap: 0; padding: calc(24px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
@@ -211,6 +211,40 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
 .gate .glinks { font-size: 13px; color: rgba(28,28,20,.62); }
 .gate .glinks a { text-decoration: none; border-bottom: 1px solid rgba(28,28,20,.25); }
 @media (prefers-reduced-motion: reduce) { .gate .gdots i, .gate .shake { animation: none; } }
+
+/* now. */
+.now { margin: 0; font-size: 14px; color: var(--soft); }
+.now b { color: var(--fg); font-weight: 800; letter-spacing: -.02em; margin-right: 6px; }
+/* soundtrack */
+.song { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; text-decoration: none; padding: 3px 12px 3px 10px; border-radius: 999px; border: 1px solid var(--line); }
+.song::before { content: "\266A"; font-size: 12px; }
+/* journal */
+.jlist { display: grid; gap: 0; margin-top: 18px; max-width: 720px; }
+.jentry { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 16px; align-items: center; padding: 14px 0; border: 0; border-top: 1px solid var(--line); background: none; text-align: left; width: 100%; }
+.jentry:last-child { border-bottom: 1px solid var(--line); }
+.jentry .th { width: 88px; aspect-ratio: 4 / 5; border-radius: 3px; overflow: hidden; background: var(--line); }
+.jentry .th img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.jentry small { font-size: 12px; letter-spacing: .16em; color: var(--soft); font-variant-numeric: tabular-nums; }
+.jentry b { display: block; font-weight: 800; font-size: 20px; letter-spacing: -.035em; margin: 2px 0 4px; }
+.jentry p { margin: 0; color: var(--soft); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* countdown on the coming-soon page */
+.gate .gcount { font-size: 13px; letter-spacing: .2em; color: rgba(28,28,20,.62); font-variant-numeric: tabular-nums; }
+
+/* ---------- animations ---------- */
+@keyframes titleIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes dotDrop { 0% { opacity: 0; transform: translateY(-.6em); } 60% { opacity: 1; transform: translateY(.06em); } 100% { opacity: 1; transform: none; } }
+.card h1.anim { animation: titleIn .45s cubic-bezier(.2,.7,.2,1) both; }
+.card h1.anim .dot { display: inline-block; animation: dotDrop .5s .28s cubic-bezier(.3,.8,.3,1) both; }
+.card .line.anim { animation: titleIn .45s .08s cubic-bezier(.2,.7,.2,1) both; }
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+.flood { position: fixed; inset: 0; z-index: 25; pointer-events: none; }
+.wave { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
+.wave i { position: absolute; border-radius: 50%; transform: translate(-50%, -50%) scale(1); }
+@media (prefers-reduced-motion: reduce) {
+  .card h1.anim, .card h1.anim .dot, .card .line.anim { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
 </style>
 </head>
 <body>
@@ -224,6 +258,7 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
     <button type="submit">enter</button>
   </form>
   <div class="msg" id="gateMsg" aria-live="polite"></div>
+  <div class="gcount" id="gCount" hidden></div>
   </div>
   <div class="glinks"><a href="impressum.html">impressum</a></div>
 </section>
@@ -237,6 +272,7 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
     <button class="view" data-view="colours">colours.</button>
     <button class="view" data-view="recaps">recaps.</button>
     <button class="view" data-view="posts">posts.</button>
+    <button class="view" data-view="journal">journal.</button>
     <button class="view" data-view="about">about.</button>
     <button class="view" data-view="sedcard">sedcard.</button>
     <button class="view" data-view="lebenslauf">lebenslauf.</button>
@@ -256,10 +292,12 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
   <div class="wall" id="wall"></div>
   <div class="grid2" id="recapGrid" hidden></div>
   <div class="grid3" id="postGrid" hidden></div>
+  <div class="jlist" id="journalList" hidden></div>
   <div class="empty" id="empty" hidden></div>
 
   <section class="about panel" id="about" hidden>
     <h2>about<span class="dot">.</span></h2>
+    <p class="now"><b>now.</b> ember. starting at wildkogel sundaze in december.</p>
     <p class="text">model from pinzgau, austria. MN. started on 01.01.2025, and since then it's been shoots, a first runway with s.Oliver, a few pages in print, and a life told in colours.</p>
     <div class="facts"><span>based in pinzgau</span><span>german · english</span></div>
     <div class="plabel">PRESS</div>
@@ -412,9 +450,11 @@ CHAPTERS.forEach((c, i) => { c.dot = i < CHAPTERS.length - 1 ? CHAPTERS[i + 1].b
 const ALL = { id: "all", bg: "#FFF8BB", fg: "#1C1C14", dot: "#1C1C14" };
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
+/* Song per chapter: fill in "title — artist". It shows as a link on the chapter page. */
+const SONGS = { origin: "", white: "", "baby-blue": "", lavendel: "", "navy-blue": "", grey: "", vanilla: "", "vanilla-2": "", ber: "", ember: "", red: "" };
 const INFO = { about: "who i am.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
-const VIEWS = ["colours", "recaps", "posts", ...Object.keys(INFO)];
-let photos = [], sets = { recaps: [], posts: [] }, view = "colours", filter = "all", list = [], idx = -1;
+const VIEWS = ["colours", "recaps", "posts", "journal", ...Object.keys(INFO)];
+let photos = [], sets = { recaps: [], posts: [], journal: [] }, view = "colours", filter = "all", list = [], idx = -1;
 (function readHash() {
   const h = location.hash.slice(1);
   if (VIEWS.includes(h)) view = h;
@@ -441,6 +481,7 @@ function renderCard() {
   const dot = () => el("span", "dot", ".");
   if (view === "recaps") { setTheme(ALL); title.append("recaps", dot()); $("line").textContent = "month by month."; return; }
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
+  if (view === "journal") { setTheme(ALL); title.append("journal", dot()); $("line").textContent = "notes on getting better."; return; }
   if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
   if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; return; }
   const c = byId[filter];
@@ -453,6 +494,15 @@ function renderCard() {
   if (c.vanilla) meta.append(el("span", "pill", "with vanilla"));
   if (c.notes) c.notes.forEach(n => meta.append(el("span", "place", n)));
   if (c.mn) { const p = el("span", "mnline", "2 years of"); p.append(el("b", null, "MN.")); meta.append(p); }
+  if (SONGS[c.id]) {
+    const a = el("a", "song", SONGS[c.id]);
+    a.href = "https://open.spotify.com/search/" + encodeURIComponent(SONGS[c.id].replace(" — ", " "));
+    a.target = "_blank"; a.rel = "noopener"; meta.append(a);
+  }
+}
+
+function animateCard() {
+  [$("title"), $("line")].forEach(e => { e.classList.remove("anim"); void e.offsetWidth; e.classList.add("anim"); });
 }
 
 function renderChips() {
@@ -464,7 +514,7 @@ function renderChips() {
     if (c) b.append(sw(c));
     b.append(el("span", null, label));
     if (n) b.append(el("span", "count", n));
-    b.onclick = () => select(id);
+    b.onclick = e => flood(id === "all" ? ALL.bg : byId[id].bg, e, () => select(id));
     chips.append(b);
   };
   make("all", "all", null, photos.length);
@@ -506,6 +556,19 @@ function renderRecaps() {
   sets.recaps.forEach(r => g.append(setTile(r)));
 }
 
+function renderJournal() {
+  const g = $("journalList"); g.textContent = "";
+  $("empty").textContent = "No journal posts yet.";
+  $("empty").hidden = sets.journal.length > 0;
+  sets.journal.forEach(j => {
+    const b = el("button", "jentry");
+    const th = el("div", "th"); if (j.cover) { const i = el("img"); i.src = j.cover; i.loading = "lazy"; i.alt = ""; th.append(i); } b.append(th);
+    const t = el("div"); t.append(el("small", null, j.date), el("b", null, j.title), el("p", null, j.caption)); b.append(t);
+    b.onclick = () => openSet(Object.assign({}, j, { number: j.date }));
+    g.append(b);
+  });
+}
+
 function renderPosts() {
   const g = $("postGrid"); g.textContent = "";
   $("empty").textContent = "No posts yet.";
@@ -519,6 +582,7 @@ function render() {
   $("wall").hidden = view !== "colours";
   $("recapGrid").hidden = view !== "recaps";
   $("postGrid").hidden = view !== "posts";
+  $("journalList").hidden = view !== "journal";
   $("empty").hidden = true;
   Object.keys(INFO).forEach(k => { $(k).hidden = view !== k; });
   renderChips();
@@ -526,6 +590,9 @@ function render() {
   if (view === "colours") renderColours();
   if (view === "recaps") renderRecaps();
   if (view === "posts") renderPosts();
+  if (view === "journal") renderJournal();
+  animateCard();
+  revealAll();
 }
 
 function updateHash() {
@@ -601,6 +668,54 @@ document.onkeydown = e => {
   } else if (!$("sheet").hidden && e.key === "Escape") closeSet();
 };
 
+/* Photos and entries fade in as they scroll into view. */
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { rootMargin: "0px 0px -6% 0px" }) : null;
+function revealAll() {
+  if (!io) return;
+  document.querySelectorAll(".tile:not(.reveal), .set:not(.reveal), .jentry:not(.reveal)").forEach((e, i) => { e.classList.add("reveal"); e.style.transitionDelay = Math.min(i % 6, 5) * 60 + "ms"; io.observe(e); });
+}
+const calm = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Switching chapter floods the page with its colour from where you tapped. */
+function flood(color, e, done) {
+  const cur = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim().toLowerCase();
+  if (calm() || !document.body.animate || cur === color.toLowerCase()) { done(); return; }
+  const r = e.currentTarget.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+  const f = el("div", "flood"); f.style.background = color; document.body.append(f);
+  const a = f.animate([{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(150vmax at ${x}px ${y}px)` }], { duration: 520, easing: "cubic-bezier(.6,0,.3,1)", fill: "forwards" });
+  a.onfinish = () => { done(); f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: "forwards" }).onfinish = () => f.remove(); };
+}
+
+/* The right password: the dots spread into a wave of colour that opens the site. */
+function unlockWave(done) {
+  const dots = [...document.querySelectorAll(".gate .gdots i")];
+  if (calm() || !document.body.animate || !dots.length) { done(); return; }
+  const w = el("div", "wave"); document.body.append(w);
+  const big = Math.hypot(innerWidth, innerHeight) * 2.2;
+  const spots = dots.slice().reverse().map(d => { const r = d.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, c: getComputedStyle(d).backgroundColor, s: r.width }; });
+  spots.push({ x: innerWidth / 2, y: innerHeight / 2, c: "#FFF8BB", s: 10 });
+  let last;
+  spots.forEach((p, i) => {
+    const c = el("i"); c.style.cssText = `left:${p.x}px;top:${p.y}px;width:${p.s}px;height:${p.s}px;background:${p.c}`;
+    w.append(c);
+    last = c.animate([{ transform: "translate(-50%,-50%) scale(1)" }, { transform: `translate(-50%,-50%) scale(${big / p.s})` }], { duration: 700, delay: i * 85, easing: "cubic-bezier(.5,0,.2,1)", fill: "forwards" });
+  });
+  last.onfinish = () => { done(); w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, fill: "forwards" }).onfinish = () => w.remove(); };
+}
+
+/* From 1 December: days until 01.01.2027. From then on, the red dot joins the row. */
+(function countdown() {
+  const now = new Date(), start = new Date(2026, 11, 1), red = new Date(2027, 0, 1);
+  if (now >= red) {
+    const d = el("i"); d.style.background = "#B3202A"; $("gCount").hidden = true;
+    const row = document.querySelector(".gate .gdots"); if (row) row.prepend(d);
+  } else if (now >= start) {
+    const days = Math.ceil((red - now) / 864e5);
+    $("gCount").textContent = days === 1 ? "tomorrow." : "in " + days + " days.";
+    $("gCount").hidden = false;
+  }
+})();
+
 /* Coming-soon gate */
 async function sha256(t) {
   const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
@@ -613,9 +728,9 @@ $("gateForm").addEventListener("submit", async e => {
   try { h = await sha256(v); } catch (err) {}
   if (h === window.MN_KEY) {
     try { localStorage.setItem("mn-key", h); } catch (err) {}
-    document.documentElement.classList.remove("locked");
-    window.scrollTo(0, 0);
+    $("gatePw").blur();
     loadData();
+    unlockWave(() => { document.documentElement.classList.remove("locked"); window.scrollTo(0, 0); render(); });
   } else {
     $("gateMsg").textContent = "not yet.";
     const f = $("gateForm"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
@@ -650,7 +765,7 @@ let loaded = false;
 function loadData() {
   if (loaded) return; loaded = true;
   fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); render(); }).catch(() => {});
-  fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [] }; render(); wirePress(d.press || {}); }).catch(() => {});
+  fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [] }; render(); wirePress(d.press || {}); }).catch(() => {});
 }
 if (!document.documentElement.classList.contains("locked")) loadData();
 </script>

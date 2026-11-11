@@ -141,6 +141,35 @@ if os.path.isdir("press"):
             if imgs:
                 sets["press"][name] = [f"press/{name}/{n}" for n in imgs]
 
+# journal/2026-11-20-title/ : post.txt (first line = title, rest = text) plus photos
+sets["journal"] = []
+if os.path.isdir("journal"):
+    for name in sorted(os.listdir("journal"), reverse=True):
+        m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", name)
+        folder = os.path.join("journal", name)
+        if not m or not os.path.isdir(folder):
+            continue
+        text = ""
+        for t in ("post.txt", "post.txt.txt", "post.md"):
+            if os.path.exists(os.path.join(folder, t)):
+                with open(os.path.join(folder, t), encoding="utf-8-sig") as f:
+                    text = f.read().strip()
+                break
+        lines = text.splitlines()
+        title = lines[0].strip() if lines else name[11:].replace("-", " ")
+        body = "\n".join(lines[1:]).strip()
+        imgs = sorted(n for n in os.listdir(folder) if n.lower().endswith(EXT))
+        if not body and not imgs:
+            continue
+        day = datetime.date(int(m[1]), int(m[2]), int(m[3]))
+        sets["journal"].append({
+            "id": name, "chapter": chapter_for(day), "date": day.strftime("%d.%m.%y"),
+            "title": title, "caption": body,
+            "cover": f"journal/{name}/{imgs[0]}" if imgs else "",
+            "images": [f"journal/{name}/{n}" for n in imgs],
+            "credit": "", "big": "",
+        })
+
 with open("sets.json", "w", encoding="utf-8") as f:
     json.dump(sets, f, ensure_ascii=False, indent=1)
-print(f"{len(sets['recaps'])} recaps, {len(sets['posts'])} posts")
+print(f"{len(sets['recaps'])} recaps, {len(sets['posts'])} posts, {len(sets['journal'])} journal")
