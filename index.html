@@ -464,7 +464,19 @@ const ALL = { id: "all", bg: "#FFF8BB", fg: "#1C1C14", dot: "#1C1C14" };
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
 /* Song per chapter: fill in "title — artist". It shows as a link on the chapter page. */
-const SONGS = { origin: "", white: "", "baby-blue": "", lavendel: "", "navy-blue": "", grey: "", vanilla: "", "vanilla-2": "", ber: "", ember: "", red: "" };
+const SONGS = {
+  origin: "Good Luck, Babe! — Chappell Roan",
+  white: "YMCA — Village People",
+  "baby-blue": "Scott Street — Phoebe Bridgers",
+  lavendel: ["Let Down — Radiohead", "Daisies"],
+  "navy-blue": "Hoppípolla — Sigur Rós",
+  grey: "About You — The 1975",
+  vanilla: "Dreams — Fleetwood Mac",
+  "vanilla-2": "I Want Things to Be Beautiful — Devi McCallion",
+  ber: "Coming Up Roses",
+  ember: "",
+  red: ""
+};
 const INFO = { about: "who i am.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
 const VIEWS = ["colours", "recaps", "posts", "journal", ...Object.keys(INFO)];
 let photos = [], sets = { recaps: [], posts: [], journal: [] }, view = "colours", filter = "all", list = [], idx = -1;
@@ -507,11 +519,11 @@ function renderCard() {
   if (c.vanilla) meta.append(el("span", "pill", "with vanilla"));
   if (c.notes) c.notes.forEach(n => meta.append(el("span", "place", n)));
   if (c.mn) { const p = el("span", "mnline", "2 years of"); p.append(el("b", null, "MN.")); meta.append(p); }
-  if (SONGS[c.id]) {
-    const a = el("a", "song", SONGS[c.id]);
-    a.href = "https://open.spotify.com/search/" + encodeURIComponent(SONGS[c.id].replace(" — ", " "));
+  [].concat(SONGS[c.id] || []).forEach(song => {
+    const a = el("a", "song", song);
+    a.href = "https://open.spotify.com/search/" + encodeURIComponent(song.replace(" — ", " "));
     a.target = "_blank"; a.rel = "noopener"; meta.append(a);
-  }
+  });
 }
 
 function animateCard() {
