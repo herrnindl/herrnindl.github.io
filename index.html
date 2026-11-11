@@ -257,6 +257,20 @@ button.song { background: none; color: inherit; font: inherit; font-size: 13px; 
   .card h1.anim, .card h1.anim .dot, .card .line.anim { animation: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* sound switch + mini player */
+.hright { display: flex; align-items: baseline; gap: 14px; min-width: 0; }
+.sound { background: none; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font-size: 11px; letter-spacing: .14em; color: var(--soft); }
+.sound b { font-weight: 800; color: var(--fg); letter-spacing: .06em; }
+.sound[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.sound[aria-pressed="true"] b { color: var(--bg); }
+@media (max-width: 420px) { .hright .name { display: none; } }
+.minibar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 18; display: flex; align-items: center; gap: 8px;
+  padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+  background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+.minibar #spotbox, .minibar iframe { flex: 1; min-width: 0; height: 80px; border: 0; border-radius: 12px; }
+.mclose { flex: none; width: 36px; height: 36px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--fg); }
+body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px)); }
 </style>
 </head>
 <body>
@@ -277,7 +291,7 @@ button.song { background: none; color: inherit; font: inherit; font-size: 13px; 
 <div class="wrap">
   <header>
     <a class="mark" href="#" id="home">MN.</a>
-    <span class="name">M A R K U S&nbsp;&nbsp;N I N D L</span>
+    <span class="hright"><span class="name">M A R K U S&nbsp;&nbsp;N I N D L</span><button class="sound" id="sound" aria-pressed="false" title="Music on or off">sound <b>off</b></button></span>
   </header>
 
   <nav class="views" aria-label="Sections">
@@ -431,6 +445,8 @@ button.song { background: none; color: inherit; font: inherit; font-size: 13px; 
   <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span><a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
 </div>
 
+<div class="minibar" id="minibar" hidden><div id="spotbox"></div><button class="mclose" id="mclose" aria-label="Turn sound off">✕</button></div>
+
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true">
   <div class="inner">
     <div class="top"><span class="num" id="sNum"></span><button class="x" id="sClose" aria-label="Close">✕</button></div>
@@ -533,6 +549,7 @@ function renderCard() {
       const b = el("button", "song");
       b.append(song.t, el("small", null, "play"));
       b.onclick = () => {
+        if (soundOn) { playSong(song); return; }
         const f = el("iframe", "spot");
         f.src = "https://open.spotify.com/embed/track/" + song.id + "?utm_source=generator";
         f.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
@@ -546,7 +563,8 @@ function renderCard() {
       a.target = "_blank"; a.rel = "noopener"; meta.append(a);
     }
   });
-  if ([].concat(SONGS[c.id] || []).some(x => x.id)) meta.append(el("span", "spotnote", "tap to play via spotify · spotify sets cookies"));
+  if ([].concat(SONGS[c.id] || []).some(x => x.id) && !soundOn) meta.append(el("span", "spotnote", "tap to play via spotify · spotify sets cookies"));
+  if (soundOn) { const first = [].concat(SONGS[c.id] || []).find(x => x.id); if (first) playSong(first); }
 }
 
 function animateCard() {
@@ -765,6 +783,41 @@ function unlockWave(done) {
     $("gCount").hidden = false;
   }
 })();
+
+/* Sound: one tap turns music on. Then every chapter plays its song by itself.
+   Spotify is only loaded after that tap (that tap is the consent). */
+let soundOn = false, ctrl = null, ctrlWaiting = null, current = "";
+try { soundOn = localStorage.getItem("mn-sound") === "1"; } catch (e) {}
+function loadSpotify(cb) {
+  if (ctrl) { cb(); return; }
+  ctrlWaiting = cb;
+  if (window.__spotLoading) return;
+  window.__spotLoading = true;
+  window.onSpotifyIframeApiReady = api => {
+    api.createController($("spotbox"), { width: "100%", height: 80, uri: "spotify:track:" + (current || "0ofHAoxe9vBkTCp2UQIavz") }, c => {
+      ctrl = c; const w = ctrlWaiting; ctrlWaiting = null; if (w) w();
+    });
+  };
+  const sc = document.createElement("script"); sc.src = "https://open.spotify.com/embed/iframe-api/v1"; sc.async = true; document.head.append(sc);
+}
+function playSong(song) {
+  if (!song || !song.id) return;
+  $("minibar").hidden = false;
+  if (current === song.id && ctrl) { try { ctrl.resume(); } catch (e) {} return; }
+  current = song.id;
+  loadSpotify(() => { try { ctrl.loadUri("spotify:track:" + song.id); ctrl.play(); } catch (e) {} });
+}
+function setSound(on) {
+  soundOn = on;
+  try { on ? localStorage.setItem("mn-sound", "1") : localStorage.removeItem("mn-sound"); } catch (e) {}
+  $("sound").setAttribute("aria-pressed", String(on)); $("sound").querySelector("b").textContent = on ? "on" : "off";
+  if (!on) { if (ctrl) { try { ctrl.pause(); } catch (e) {} } $("minibar").hidden = true; }
+  render();
+  if (on && !current) { const first = [].concat(SONGS[filter] || []).find(x => x.id) || SONGS.vanilla; playSong(first); }
+}
+$("sound").onclick = () => setSound(!soundOn);
+$("mclose").onclick = () => setSound(false);
+if (soundOn) { $("sound").setAttribute("aria-pressed", "true"); $("sound").querySelector("b").textContent = "on"; }
 
 /* Coming-soon gate */
 async function sha256(t) {
