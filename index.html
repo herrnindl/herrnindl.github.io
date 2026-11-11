@@ -135,6 +135,21 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .press .read { font-size: 12px; letter-spacing: .14em; color: var(--soft); white-space: nowrap; align-self: center; }
 .press li { grid-template-columns: 4.5em 1fr auto; }
 .plabel { font-size: 12px; letter-spacing: .24em; color: var(--soft); margin-top: 10px; }
+.faq { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+.faq h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
+.faq h2 .dot { color: var(--dot); }
+.qs { max-width: 640px; }
+.q { border-top: 1px solid var(--line); }
+.q:last-child { border-bottom: 1px solid var(--line); }
+.q summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-block: 14px; font-weight: 500; font-size: 17px; letter-spacing: -.015em; }
+.q summary::-webkit-details-marker { display: none; }
+.q summary::after { content: "+"; font-weight: 400; font-size: 20px; color: var(--soft); flex: none; transition: transform .2s ease; }
+.q[open] summary::after { transform: rotate(45deg); }
+.q .a { padding-bottom: 16px; display: grid; gap: 10px; color: var(--soft); }
+.q .a p { margin: 0; max-width: 58ch; }
+.q .a p:first-child { color: var(--fg); }
+.q .a a { color: var(--fg); }
+@media (prefers-reduced-motion: reduce) { .q summary::after { transition: none; } }
 .booking { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
 .booking h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
 .booking h2 .dot { color: var(--dot); }
@@ -225,6 +240,23 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
       <li data-press="2024-11-platzhirsch"><span class="when">11/24</span><div><b>Platzhirsch</b> <span>· Single des Monats</span></div></li>
       <li data-press="2024-08-platzhirsch"><span class="when">08/24</span><div><b>Platzhirsch</b> <span>· Mächtige Mähnen</span></div></li>
     </ul>
+  </section>
+
+  <section class="faq" id="faq">
+    <h2>faq<span class="dot">.</span></h2>
+    <div class="qs">
+      <details class="q"><summary>you call yourself a model. you must be arrogant and think highly of yourself.</summary><div class="a"><p>no. i just stopped waiting for permission. MN. isn&#x27;t about thinking i&#x27;m better than anyone, it&#x27;s about becoming a better version of me, and showing that you can do that too.</p><p>i didn&#x27;t start because i thought i was perfect. i started because i wasn&#x27;t sure of myself, and i wanted to change that. MN. is me working on myself, in public, one colour at a time. calling yourself something is the first step to becoming it. if that helps one person like themselves a bit more, it was worth it.</p></div></details>
+      <details class="q"><summary>why do you do this?</summary><div class="a"><p>to grow, and to show that you can start from wherever you are.</p><p>and for my grandma. she was still here at the beginning and saw the baby blue. photos before they were ever posted. she was proud of me. that&#x27;s something i carry into every chapter.</p></div></details>
+      <details class="q"><summary>what does MN. stand for?</summary><div class="a"><p>markus nindl. it started on 01.01.2025 as a small page and became the name for everything i create.</p></div></details>
+      <details class="q"><summary>what are the colours about?</summary><div class="a"><p>every chapter of my life gets a colour. each one is a time, a place and a version of me, from origin. to red. the colours tell the story, so you don&#x27;t need me to explain every detail.</p></div></details>
+      <details class="q"><summary>what does “i mog di” mean?</summary><div class="a"><p>it&#x27;s pinzgau dialect for “i like you”, with a second meaning. it&#x27;s about liking yourself, working on yourself, and helping others deal with their insecurities.</p></div></details>
+      <details class="q"><summary>do you do this full-time?</summary><div class="a"><p>no. i have a full-time job at the austrian post. MN. happens before, after and in between, and that&#x27;s part of the story.</p></div></details>
+      <details class="q"><summary>why pinzgau and not vienna or munich?</summary><div class="a"><p>because this is home. the mountains, the lakes and the people here are part of who i am. you don&#x27;t need a big city to start something.</p></div></details>
+      <details class="q"><summary>can i book you?</summary><div class="a"><p>yes. shootings, campaigns, fashion shows and collaborations. write to <a href="mailto:booking@herrnindl.com">booking@herrnindl.com</a> with a short idea, date and place.</p></div></details>
+      <details class="q"><summary>do you do unpaid or tfp shoots?</summary><div class="a"><p>it depends on the idea. if it&#x27;s creative and we both get something out of it, write me.</p></div></details>
+      <details class="q"><summary>can i use your photos?</summary><div class="a"><p>please ask first. the rights belong to the photographers, so always credit them.</p></div></details>
+      <details class="q"><summary>what&#x27;s next after red.?</summary><div class="a"><p>red. is 2027. after that? you&#x27;ll see.</p></div></details>
+    </div>
   </section>
 
   <section class="booking" id="booking">
