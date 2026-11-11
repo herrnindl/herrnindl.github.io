@@ -134,6 +134,14 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .press li.has:hover b { text-decoration: underline; }
 .press .read { font-size: 12px; letter-spacing: .14em; color: var(--soft); white-space: nowrap; align-self: center; }
 .press li { grid-template-columns: 4.5em 1fr auto; }
+.about, .faq { grid-template-columns: minmax(0, 1fr); }
+.stats { margin: 6px 0 0; width: 100%; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 14px 18px; max-width: 640px; }
+.stats div { display: grid; gap: 2px; align-content: start; min-width: 0; }
+.stats .wide { grid-column: span 2; }
+.stats dt { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--soft); }
+.stats dd { margin: 0; font-weight: 800; font-size: 18px; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.sedcard { justify-self: start; display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; padding: 10px 18px; border-radius: 999px; background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 800; letter-spacing: -.02em; }
+.sedcard small { font-weight: 400; font-size: 11px; letter-spacing: .2em; opacity: .75; }
 .plabel { font-size: 12px; letter-spacing: .24em; color: var(--soft); margin-top: 10px; }
 .faq { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
 .faq h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
@@ -233,6 +241,20 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
     <h2>about<span class="dot">.</span></h2>
     <p class="text">model from pinzgau, austria. MN. started on 01.01.2025, and since then it's been shoots, a first runway with s.Oliver, a few pages in print, and a life told in colours.</p>
     <div class="facts"><span>based in pinzgau</span><span>german · english</span></div>
+    <dl class="stats">
+      <div><dt>height</dt><dd>185 cm</dd></div>
+      <div><dt>weight</dt><dd>75 kg</dd></div>
+      <div><dt>chest</dt><dd>46</dd></div>
+      <div><dt>waist</dt><dd>88</dd></div>
+      <div><dt>hips</dt><dd>90</dd></div>
+      <div><dt>size</dt><dd>50</dd></div>
+      <div><dt>age</dt><dd id="age">24</dd></div>
+      <div><dt>hair</dt><dd>dark blonde</dd></div>
+      <div class="wide"><dt>eyes</dt><dd>green · blue · grey · yellow</dd></div>
+      <div><dt>skin</dt><dd>fair</dd></div>
+      <div><dt>shoes</dt><dd>43.5 (43/44)</dd></div>
+    </dl>
+    <a class="sedcard" href="sedcard-markus-nindl.pdf" download>sedcard. <small>PDF</small></a>
     <div class="plabel">PRESS</div>
     <ul class="press">
       <li data-press="2026-11-bezirkszeitung"><span class="when">11/26</span><div><b>Bezirkszeitung</b> <span>· s.Oliver fashion show at INTERSPORT Harms</span></div></li>
@@ -533,6 +555,14 @@ function wirePress(press) {
     li.onclick = go; li.onkeydown = e => { if (e.key === "Enter") go(); };
   });
 }
+
+/* Age updates itself every birthday (26 August 2002). */
+(function () {
+  const b = new Date(2002, 7, 26), n = new Date();
+  let a = n.getFullYear() - b.getFullYear();
+  if (n.getMonth() < 7 || (n.getMonth() === 7 && n.getDate() < 26)) a--;
+  const e = document.getElementById("age"); if (e) e.textContent = a;
+})();
 
 /* Photos only load once the site is unlocked, so nothing is downloaded behind the coming-soon page. */
 let loaded = false;
