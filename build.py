@@ -14,6 +14,11 @@ CHAPTERS = ["red", "ember", "ber", "vanilla-2", "vanilla", "grey",
             "navy-blue", "lavendel", "baby-blue", "white", "origin"]
 EXT = (".jpg", ".jpeg", ".png", ".webp", ".gif")
 
+DATES = {}
+if os.path.exists(os.path.join("photos", "dates.json")):
+    with open(os.path.join("photos", "dates.json")) as f:
+        DATES = json.load(f)
+
 out = []
 for ch in CHAPTERS:
     folder = os.path.join("photos", ch)
@@ -36,7 +41,18 @@ for ch in CHAPTERS:
             if len(meta) > i and meta[i]:
                 return meta[i]
             return default[i] if len(default) > i else ""
+        taken = ""
+        try:
+            from PIL import Image
+            with Image.open(os.path.join(folder, name)) as im:
+                ex = im.getexif()
+                d = ex.get_ifd(0x8769).get(36867) or ex.get(306) or ""
+                if d[:4].isdigit():
+                    taken = f"{d[8:10]}.{d[5:7]}.{d[0:4]}"
+        except Exception:
+            pass
         out.append({
+            "date": taken or DATES.get(f"photos/{ch}/{name}", ""),
             "src": f"photos/{ch}/{name}",
             "chapter": ch,
             "caption": pick(1),

@@ -52,7 +52,7 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .mark { font-family: var(--serif); font-weight: 500; font-size: 30px; letter-spacing: .06em; text-decoration: none; }
 .name { font-size: 10px; letter-spacing: .5em; color: var(--soft); white-space: nowrap; }
 
-.card { padding-block: clamp(48px, 12vw, 120px) clamp(32px, 7vw, 64px); }
+.card { padding-block: clamp(44px, 8vw, 88px) clamp(28px, 5vw, 56px); }
 .dates { font-size: 12px; letter-spacing: .28em; color: var(--soft); margin-bottom: 10px; min-height: 1em; }
 .card h1 { margin: 0; font-weight: 800; font-size: clamp(56px, 13vw, 132px); line-height: .9; letter-spacing: -.055em; text-wrap: balance; }
 .card h1 .dot { color: var(--dot); }
@@ -270,6 +270,10 @@ button.song { background: none; color: inherit; font: inherit; font-size: 13px; 
 .minibar #spotbox, .minibar iframe { flex: 1; min-width: 0; height: 80px; border: 0; border-radius: 12px; }
 .mclose { flex: none; width: 36px; height: 36px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--fg); }
 body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px)); }
+
+/* scroll hint: rows that scroll sideways fade out at the edge */
+.views, .chips { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
+.views.end, .chips.end { -webkit-mask-image: none; mask-image: none; }
 </style>
 </head>
 <body>
@@ -441,7 +445,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     </div>
   </section>
 
-  <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span><a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
+  <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span><a href="https://instagram.com/herrnindl" target="_blank" rel="noopener">instagram</a> · <a href="https://www.tiktok.com/@herrnindl" target="_blank" rel="noopener">tiktok</a> · <a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
 </div>
 
 <div class="minibar" id="minibar" hidden><div id="spotbox"></div><button class="mclose" id="mclose" aria-label="Turn sound off">✕</button></div>
@@ -545,7 +549,7 @@ function renderCard() {
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
   if (view === "journal") { setTheme(ALL); title.append("journal", dot()); $("line").textContent = "notes on getting better."; return; }
   if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
-  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; return; }
+  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); return; }
   const c = byId[filter];
   setTheme(c);
   $("dates").textContent = c.dates;
@@ -672,6 +676,7 @@ function render() {
   if (view === "journal") renderJournal();
   animateCard();
   revealAll();
+  if (window.fadeViews) { fadeViews(); fadeChips(); }
 }
 
 function updateHash() {
@@ -719,9 +724,12 @@ function open(arr, i) {
   $("lbImg").src = p.src; $("lbImg").alt = p.caption || "";
   $("lbCap").textContent = p.caption || label;
   const subEl = $("lbSub"); subEl.textContent = "";
-  if (p.caption && label) subEl.append(label);
+  const bits = [];
+  if (p.caption && label) bits.push(label);
+  if (p.date) bits.push(p.date);
+  subEl.append(bits.join("  ·  "));
   if (p.credit) {
-    if (p.caption && label) subEl.append("  ·  ");
+    if (bits.length) subEl.append("  ·  ");
     subEl.append("photo: ");
     p.credit.split(/(@[A-Za-z0-9._]+)/).forEach(part => {
       if (/^@[A-Za-z0-9._]+$/.test(part)) {
@@ -831,6 +839,15 @@ function setSound(on) {
 $("sound").onclick = () => setSound(!soundOn);
 $("mclose").onclick = () => setSound(false);
 if (soundOn) { $("sound").setAttribute("aria-pressed", "true"); $("sound").querySelector("b").textContent = "on"; }
+
+/* Remove the edge fade once a row is scrolled to its end (or fits). */
+function edgeFade(row) {
+  const upd = () => row.classList.toggle("end", row.scrollLeft + row.clientWidth >= row.scrollWidth - 4);
+  row.addEventListener("scroll", upd, { passive: true }); window.addEventListener("resize", upd); upd();
+  return upd;
+}
+window.fadeViews = edgeFade(document.querySelector(".views")); window.fadeChips = edgeFade($("chips"));
+new MutationObserver(() => fadeChips()).observe($("chips"), { childList: true });
 
 /* Coming-soon gate */
 async function sha256(t) {
