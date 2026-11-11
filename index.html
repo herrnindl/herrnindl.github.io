@@ -141,6 +141,8 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .stats dt { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--soft); }
 .stats dd { margin: 0; font-weight: 800; font-size: 18px; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .sedcard { justify-self: start; display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; padding: 10px 18px; border-radius: 999px; background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 800; letter-spacing: -.02em; }
+.docs { display: flex; flex-wrap: wrap; gap: 8px; }
+.sedcard.ghost { background: transparent; color: var(--fg); border: 1px solid var(--fg); }
 .sedcard small { font-weight: 400; font-size: 11px; letter-spacing: .2em; opacity: .75; }
 .plabel { font-size: 12px; letter-spacing: .24em; color: var(--soft); margin-top: 10px; }
 .faq { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
@@ -247,14 +249,17 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
       <div><dt>chest</dt><dd>46</dd></div>
       <div><dt>waist</dt><dd>88</dd></div>
       <div><dt>hips</dt><dd>90</dd></div>
-      <div><dt>size</dt><dd>50</dd></div>
+      <div><dt>size</dt><dd>M (50)</dd></div>
       <div><dt>age</dt><dd id="age">24</dd></div>
       <div><dt>hair</dt><dd>dark blonde</dd></div>
       <div class="wide"><dt>eyes</dt><dd>green · blue · grey · yellow</dd></div>
       <div><dt>skin</dt><dd>fair</dd></div>
       <div><dt>shoes</dt><dd>43.5 (43/44)</dd></div>
     </dl>
-    <a class="sedcard" href="sedcard-markus-nindl.pdf" download>sedcard. <small>PDF</small></a>
+    <div class="docs">
+      <a class="sedcard" href="sedcard-markus-nindl.pdf" download>sedcard. <small>PDF</small></a>
+      <a class="sedcard ghost" href="lebenslauf.html">lebenslauf.</a>
+    </div>
     <div class="plabel">PRESS</div>
     <ul class="press">
       <li data-press="2026-11-bezirkszeitung"><span class="when">11/26</span><div><b>Bezirkszeitung</b> <span>· s.Oliver fashion show at INTERSPORT Harms</span></div></li>
