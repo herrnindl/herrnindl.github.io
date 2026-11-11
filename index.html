@@ -407,7 +407,7 @@ const CHAPTERS = [
 ];
 /* The dot after each name is the colour of the next chapter, as in the video. */
 CHAPTERS.forEach((c, i) => { c.dot = i < CHAPTERS.length - 1 ? CHAPTERS[i + 1].bg : "#FFF8BB"; c.label = c.name + (c.suffix ? "." + c.suffix : "."); });
-const ALL = { id: "all", bg: "#FFF8BB", fg: "#1C1C14", dot: "#B3202A" };
+const ALL = { id: "all", bg: "#FFF8BB", fg: "#1C1C14", dot: "#1C1C14" };
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
 const INFO = { about: "who i am.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
