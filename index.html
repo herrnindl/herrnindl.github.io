@@ -91,8 +91,9 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .prev, .next { top: 50%; transform: translateY(-50%); }
 .prev { left: 12px; } .next { right: 12px; }
 
-.views { display: flex; gap: 18px; padding-block: 4px 0; }
-.view { background: none; border: 0; padding: 4px 0; font-size: 15px; font-weight: 500; letter-spacing: -.01em; color: var(--soft); border-bottom: 2px solid transparent; }
+.views { display: flex; gap: 18px; padding-block: 4px 0; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * max(18px, env(safe-area-inset-left, 0px))); padding-inline: max(18px, env(safe-area-inset-left, 0px)); }
+.views::-webkit-scrollbar { display: none; }
+.view { flex: none; white-space: nowrap; background: none; border: 0; padding: 4px 0; font-size: 15px; font-weight: 500; letter-spacing: -.01em; color: var(--soft); border-bottom: 2px solid transparent; }
 .view[aria-current="true"] { color: var(--fg); border-color: var(--fg); }
 
 .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-top: 18px; }
@@ -140,10 +141,23 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .stats .wide { grid-column: span 2; }
 .stats dt { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--soft); }
 .stats dd { margin: 0; font-weight: 800; font-size: 18px; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
-.sedcard { justify-self: start; display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; padding: 10px 18px; border-radius: 999px; background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 800; letter-spacing: -.02em; }
+.sedcard { justify-self: start; width: fit-content; display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; padding: 10px 18px; border-radius: 999px; background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 800; letter-spacing: -.02em; }
 .docs { display: flex; flex-wrap: wrap; gap: 8px; }
 .sedcard.ghost { background: transparent; color: var(--fg); border: 1px solid var(--fg); }
 .sedcard small { font-weight: 400; font-size: 11px; letter-spacing: .2em; opacity: .75; }
+.panel { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; }
+.panel > h2 { display: none; }
+.sedcard-panel { display: grid; gap: 22px; grid-template-columns: minmax(0, 1fr); }
+.sedprev { display: block; max-width: 720px; border-radius: 4px; overflow: hidden; box-shadow: 0 1px 0 var(--line); }
+.sedprev img { display: block; width: 100%; height: auto; }
+.cv { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); max-width: 720px; }
+.cvsec { display: grid; gap: 12px; }
+.cvsec h2 { margin: 0; font-size: 12px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.cv .row { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 2px 16px; }
+.cv .when { font-size: 13px; color: var(--soft); font-variant-numeric: tabular-nums; padding-top: 2px; }
+.cv .what b { font-weight: 500; display: block; }
+.cv .what span { color: var(--soft); font-size: 14px; }
+@media (max-width: 480px) { .cv .row { grid-template-columns: 1fr; } }
 .plabel { font-size: 12px; letter-spacing: .24em; color: var(--soft); margin-top: 10px; }
 .faq { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
 .faq h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
@@ -223,6 +237,11 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
     <button class="view" data-view="colours">colours.</button>
     <button class="view" data-view="recaps">recaps.</button>
     <button class="view" data-view="posts">posts.</button>
+    <button class="view" data-view="about">about.</button>
+    <button class="view" data-view="sedcard">sedcard.</button>
+    <button class="view" data-view="lebenslauf">lebenslauf.</button>
+    <button class="view" data-view="faq">faq.</button>
+    <button class="view" data-view="booking">booking.</button>
   </nav>
 
   <section class="card" aria-live="polite">
@@ -239,10 +258,21 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
   <div class="grid3" id="postGrid" hidden></div>
   <div class="empty" id="empty" hidden></div>
 
-  <section class="about" id="about">
+  <section class="about panel" id="about" hidden>
     <h2>about<span class="dot">.</span></h2>
     <p class="text">model from pinzgau, austria. MN. started on 01.01.2025, and since then it's been shoots, a first runway with s.Oliver, a few pages in print, and a life told in colours.</p>
     <div class="facts"><span>based in pinzgau</span><span>german · english</span></div>
+    <div class="plabel">PRESS</div>
+    <ul class="press">
+      <li data-press="2026-11-bezirkszeitung"><span class="when">11/26</span><div><b>Bezirkszeitung</b> <span>· s.Oliver fashion show at INTERSPORT Harms</span></div></li>
+      <li data-press="2025-02-platzhirsch"><span class="when">02/25</span><div><b>Platzhirsch</b> <span>· Leserecho</span></div></li>
+      <li data-press="2024-11-platzhirsch"><span class="when">11/24</span><div><b>Platzhirsch</b> <span>· Single des Monats</span></div></li>
+      <li data-press="2024-08-platzhirsch"><span class="when">08/24</span><div><b>Platzhirsch</b> <span>· Mächtige Mähnen</span></div></li>
+    </ul>
+  </section>
+
+  <section class="sedcard-panel panel" id="sedcard" hidden>
+    <h2>sedcard<span class="dot">.</span></h2>
     <dl class="stats">
       <div><dt>height</dt><dd>185 cm</dd></div>
       <div><dt>weight</dt><dd>75 kg</dd></div>
@@ -256,20 +286,59 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
       <div><dt>skin</dt><dd>fair</dd></div>
       <div><dt>shoes</dt><dd>43.5 (43/44)</dd></div>
     </dl>
-    <div class="docs">
-      <a class="sedcard" href="sedcard-markus-nindl.pdf" download>sedcard. <small>PDF</small></a>
-      <a class="sedcard ghost" href="lebenslauf.html">lebenslauf.</a>
-    </div>
-    <div class="plabel">PRESS</div>
-    <ul class="press">
-      <li data-press="2026-11-bezirkszeitung"><span class="when">11/26</span><div><b>Bezirkszeitung</b> <span>· s.Oliver fashion show at INTERSPORT Harms</span></div></li>
-      <li data-press="2025-02-platzhirsch"><span class="when">02/25</span><div><b>Platzhirsch</b> <span>· Leserecho</span></div></li>
-      <li data-press="2024-11-platzhirsch"><span class="when">11/24</span><div><b>Platzhirsch</b> <span>· Single des Monats</span></div></li>
-      <li data-press="2024-08-platzhirsch"><span class="when">08/24</span><div><b>Platzhirsch</b> <span>· Mächtige Mähnen</span></div></li>
-    </ul>
+    <a class="sedcard" href="sedcard-markus-nindl.pdf" download>download sedcard. <small>PDF</small></a>
+    <a class="sedprev" href="sedcard-markus-nindl.pdf" target="_blank" rel="noopener"><img src="sedcard-preview.jpg" alt="Sedcard of Markus Nindl" loading="lazy"></a>
   </section>
 
-  <section class="faq" id="faq">
+  <section class="cv panel" id="lebenslauf" hidden>
+    <h2>lebenslauf<span class="dot">.</span></h2>
+    <div class="cvsec">
+    <h2>Persönliche Daten</h2>
+    <div class="row"><div class="when">Name</div><div class="what"><b>Markus Nindl</b></div></div>
+    <div class="row"><div class="when">Geboren</div><div class="what"><b>26. August 2002 in Mittersill</b></div></div>
+    <div class="row"><div class="when">Wohnort</div><div class="what"><b>5741&nbsp;Neukirchen am Großvenediger</b></div></div>
+    <div class="row"><div class="when">E&#8209;Mail</div><div class="what"><b><a href="mailto:booking@herrnindl.com">booking@herrnindl.com</a></b></div></div>
+    </div>
+    <div class="cvsec">
+    <h2>Model &amp; MN.</h2>
+    <div class="row"><div class="when">01/2025 – heute</div><div class="what"><b>MN.</b><span>Eigene Marke als Model und Creator</span></div></div>
+    <div class="row"><div class="when">10/2026</div><div class="what"><b>Erster Catwalk</b><span>s.Oliver Modenschau bei INTERSPORT Harms, Neukirchen</span></div></div>
+    <div class="row"><div class="when">2024 – 2026</div><div class="what"><b>Presse</b><span>Platzhirsch (Single des Monats, 2024), Bezirkszeitung (2026)</span></div></div>
+    </div>
+    <div class="cvsec">
+    <h2>Berufserfahrung</h2>
+    <div class="row"><div class="when">07/2022 – heute</div><div class="what"><b>Österreichische Post AG</b><span>seit 11/2025 Stv. Standortleitung, Hollersbach, von Königsleiten bis Uttendorf</span></div></div>
+    <div class="row"><div class="when">06/2023 – 09/2023</div><div class="what"><b>Alpengasthof Rechtegg</b><span>Küchengehilfe, geringfügig · Neukirchen am Großvenediger</span></div></div>
+    <div class="row"><div class="when">01/2023 – 04/2023</div><div class="what"><b>Alpinlodge Sonnalm</b><span>Küchengehilfe, geringfügig · Jochberg</span></div></div>
+    <div class="row"><div class="when">06/2022</div><div class="what"><b>Café &amp; Bar Chic OG</b><span>Kellner · Mittersill</span></div></div>
+    <div class="row"><div class="when">07/2021 – 05/2022</div><div class="what"><b>Weiszhaus</b><span>Küchengehilfe · Mittersill (02/2023 geringfügig)</span></div></div>
+    </div>
+    <div class="cvsec">
+    <h2>Berufsausbildung</h2>
+    <div class="row"><div class="when">08/2019 – 01/2020</div><div class="what"><b>Restaurant Fliegerbichl</b><span>Restaurantfachmann · Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">06/2018 – 05/2019</div><div class="what"><b>Seminarzentrum Felbertal, Bundesheer</b><span>Hotel- und Gastgewerbeassistent · Mittersill</span></div></div>
+    <div class="row"><div class="when">08/2017 – 09/2017</div><div class="what"><b>Dankl.net GmbH</b><span>Elektriker · Neukirchen am Großvenediger</span></div></div>
+    </div>
+    <div class="cvsec">
+    <h2>Schulbildung</h2>
+    <div class="row"><div class="when">09/2016 – 07/2017</div><div class="what"><b>Höhere Technische Bundeslehranstalt</b><span>Bautechnik · Saalfelden</span></div></div>
+    <div class="row"><div class="when">09/2012 – 07/2016</div><div class="what"><b>Hauptschule</b><span>Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">09/2008 – 07/2012</div><div class="what"><b>Volksschule</b><span>Bramberg am Wildkogel</span></div></div>
+    </div>
+    <div class="cvsec">
+    <h2>Vereine</h2>
+    <div class="row"><div class="when">seit 11/2022</div><div class="what"><b>Österreichische Wasserrettung, Ortsstelle Mittersill</b><span>Fließwasserretter (FW&#8209;R), absolviert am 19.05.2024 · aktive Einsatzkraft seit 10.03.2024 · Retterschein, absolviert am 18.06.2023</span></div></div>
+    <div class="row"><div class="when">2010 – 2016</div><div class="what"><b>TaeKwonDo Club</b><span>9. KUP · Bramberg am Wildkogel</span></div></div>
+    </div>
+    <div class="cvsec">
+    <h2>Sprachen</h2>
+    <div class="row"><div class="when">Deutsch</div><div class="what"><b>Muttersprache</b></div></div>
+    <div class="row"><div class="when">Englisch</div><div class="what"><b>fließend</b></div></div>
+    <div class="row"><div class="when">Italienisch, Französisch</div><div class="what"><b>Grundkenntnisse</b></div></div>
+    </div>
+  </section>
+
+  <section class="faq panel" id="faq" hidden>
     <h2>faq<span class="dot">.</span></h2>
     <div class="qs">
       <details class="q"><summary>you call yourself a model. you must be arrogant and think highly of yourself.</summary><div class="a"><p>no. i just stopped waiting for permission. MN. isn&#x27;t about thinking i&#x27;m better than anyone, it&#x27;s about becoming a better version of me, and showing that you can do that too.</p><p>i didn&#x27;t start because i thought i was perfect. i started because i wasn&#x27;t sure of myself, and i wanted to change that. MN. is me working on myself, in public, one colour at a time. calling yourself something is the first step to becoming it. if that helps one person like themselves a bit more, it was worth it.</p></div></details>
@@ -290,7 +359,7 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
     </div>
   </section>
 
-  <section class="booking" id="booking">
+  <section class="booking panel" id="booking" hidden>
     <h2>booking<span class="dot">.</span></h2>
     <p>Shootings, campaigns, fashion shows and collaborations.</p>
     <div class="contacts">
@@ -341,10 +410,12 @@ CHAPTERS.forEach((c, i) => { c.dot = i < CHAPTERS.length - 1 ? CHAPTERS[i + 1].b
 const ALL = { id: "all", bg: "#FFF8BB", fg: "#1C1C14", dot: "#B3202A" };
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
+const INFO = { about: "who i am.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
+const VIEWS = ["colours", "recaps", "posts", ...Object.keys(INFO)];
 let photos = [], sets = { recaps: [], posts: [] }, view = "colours", filter = "all", list = [], idx = -1;
 (function readHash() {
   const h = location.hash.slice(1);
-  if (h === "recaps" || h === "posts") view = h;
+  if (VIEWS.includes(h)) view = h;
   else if (byId[h]) filter = h;
 })();
 
@@ -368,6 +439,7 @@ function renderCard() {
   const dot = () => el("span", "dot", ".");
   if (view === "recaps") { setTheme(ALL); title.append("recaps", dot()); $("line").textContent = "month by month."; return; }
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
+  if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
   if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; return; }
   const c = byId[filter];
   setTheme(c);
@@ -445,6 +517,8 @@ function render() {
   $("wall").hidden = view !== "colours";
   $("recapGrid").hidden = view !== "recaps";
   $("postGrid").hidden = view !== "posts";
+  $("empty").hidden = true;
+  Object.keys(INFO).forEach(k => { $(k).hidden = view !== k; });
   renderChips();
   renderCard();
   if (view === "colours") renderColours();
@@ -457,7 +531,7 @@ function updateHash() {
   history.replaceState(null, "", h ? "#" + h : location.pathname);
 }
 function select(id) { view = "colours"; filter = id; updateHash(); render(); }
-document.querySelectorAll(".view").forEach(v => v.onclick = () => { view = v.dataset.view; if (view === "colours") filter = "all"; updateHash(); render(); });
+document.querySelectorAll(".view").forEach(v => v.onclick = () => { view = v.dataset.view; if (view === "colours") filter = "all"; updateHash(); render(); v.scrollIntoView({ inline: "nearest", block: "nearest" }); });
 $("home").onclick = e => { e.preventDefault(); select("all"); window.scrollTo({ top: 0 }); };
 window.addEventListener("hashchange", () => {
   const h = location.hash.slice(1);
@@ -467,7 +541,7 @@ window.addEventListener("hashchange", () => {
     document.documentElement.classList.add("locked"); $("gatePw").value = ""; $("gateMsg").textContent = "";
     window.scrollTo(0, 0); return;
   }
-  if (h === "recaps" || h === "posts") view = h; else { view = "colours"; filter = byId[h] ? h : "all"; }
+  if (VIEWS.includes(h)) view = h; else { view = "colours"; filter = byId[h] ? h : "all"; }
   render();
 });
 
