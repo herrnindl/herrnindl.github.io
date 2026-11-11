@@ -8,7 +8,6 @@
 <meta name="theme-color" content="#FFF8BB">
 <link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
-<link rel="preload" href="fonts/inter-800.woff" as="font" type="font/woff" crossorigin>
 <script src="analytics.js"></script>
 <script>
 /* Coming-soon gate. Not real security: it keeps casual visitors out until launch. */
@@ -74,7 +73,7 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 
 .wall { columns: 3 260px; column-gap: 10px; margin-top: 18px; }
 .tile { break-inside: avoid; margin: 0 0 10px; display: block; width: 100%; padding: 0; border: 0; background: var(--line); border-radius: 3px; overflow: hidden; position: relative; }
-.tile img { display: block; width: 100%; height: auto; transition: transform .5s ease; }
+.tile img { display: block; width: 100%; height: auto; background: var(--line); transition: transform .5s ease; }
 .tile:hover img { transform: scale(1.02); }
 .tag { position: absolute; left: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.86); color: #1C1C14; font-size: 11px; font-weight: 500; padding: 3px 9px 3px 6px; border-radius: 999px; }
 .tag .sw { width: 9px; height: 9px; }
@@ -515,6 +514,20 @@ function soften(hex, a) {
   const n = parseInt(hex.slice(1), 16);
   return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
 }
+/* Grid images: small WebP previews with their real size, so only visible ones load and nothing jumps. */
+function setImg(img, it, sizes) {
+  if (it.w && it.h) { img.width = it.w; img.height = it.h; }
+  img.decoding = "async";
+  img.dataset.src = it.thumb || it.src || it.cover;
+  if (it.thumb2) { img.dataset.srcset = it.thumb + " 600w, " + it.thumb2 + " 1200w"; img.sizes = sizes || "(max-width: 600px) 100vw, 33vw"; }
+  if (lazyIO) lazyIO.observe(img); else loadImg(img);
+}
+function loadImg(img) {
+  if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+  if (img.dataset.src) img.src = img.dataset.src;
+  delete img.dataset.src; delete img.dataset.srcset;
+}
+const lazyIO = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { loadImg(x.target); lazyIO.unobserve(x.target); } }), { rootMargin: "900px 0px" }) : null;
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
 function setTheme(c) {
@@ -594,7 +607,7 @@ function renderColours() {
   $("empty").hidden = list.length > 0;
   list.forEach((p, i) => {
     const b = el("button", "tile");
-    const img = el("img"); img.src = p.thumb || p.src; img.loading = "lazy"; img.decoding = "async";
+    const img = el("img"); setImg(img, p);
     img.alt = p.caption || (byId[p.chapter].label + " photo");
     b.append(img);
     if (filter === "all") {
@@ -609,7 +622,7 @@ function setTile(s, extra) {
   const c = byId[s.chapter];
   const b = el("button", "set");
   if (c) b.style.setProperty("--c", c.bg);
-  if (s.cover) { const img = el("img"); img.src = s.thumb || s.cover; img.decoding = "async"; img.loading = "lazy"; img.alt = s.title || s.caption || ""; b.append(img); }
+  if (s.cover) { const img = el("img"); setImg(img, s, "(max-width: 600px) 50vw, 25vw"); img.alt = s.title || s.caption || ""; b.append(img); }
   if (extra) extra(b);
   b.onclick = () => openSet(s);
   return b;
@@ -628,7 +641,7 @@ function renderJournal() {
   $("empty").hidden = sets.journal.length > 0;
   sets.journal.forEach(j => {
     const b = el("button", "jentry");
-    const th = el("div", "th"); if (j.cover) { const i = el("img"); i.src = j.thumb || j.cover; i.loading = "lazy"; i.alt = ""; th.append(i); } b.append(th);
+    const th = el("div", "th"); if (j.cover) { const i = el("img"); setImg(i, j, "88px"); i.loading = "lazy"; i.alt = ""; th.append(i); } b.append(th);
     const t = el("div"); t.append(el("small", null, j.date), el("b", null, j.title), el("p", null, j.caption)); b.append(t);
     b.onclick = () => openSet(Object.assign({}, j, { number: j.date }));
     g.append(b);

@@ -43,13 +43,21 @@ for ch in CHAPTERS:
             "credit": pick(2),
         })
 
+SIZES = {}
+if os.path.exists(os.path.join("thumbs", "sizes.json")):
+    with open(os.path.join("thumbs", "sizes.json")) as f:
+        SIZES = json.load(f)
+
+
 def thumb(path):
-    t = os.path.join("thumbs", os.path.splitext(path)[0] + ".jpg")
-    return t.replace(os.sep, "/") if os.path.exists(t) else path
+    base = "thumbs/" + os.path.splitext(path)[0]
+    if path in SIZES and os.path.exists(base + "-600.webp"):
+        return {"thumb": base + "-600.webp", "thumb2": base + "-1200.webp", "w": SIZES[path][0], "h": SIZES[path][1]}
+    return {"thumb": path}
 
 
 for p in out:
-    p["thumb"] = thumb(p["src"])
+    p.update(thumb(p["src"]))
 
 with open("photos.json", "w", encoding="utf-8") as f:
     json.dump(out, f, ensure_ascii=False, indent=1)
@@ -212,7 +220,7 @@ sets["journal"].sort(key=lambda j: j["id"][:10], reverse=True)
 for group in ("recaps", "posts", "journal"):
     for item in sets[group]:
         if item.get("cover"):
-            item["thumb"] = thumb(item["cover"])
+            item.update(thumb(item["cover"]))
 
 with open("sets.json", "w", encoding="utf-8") as f:
     json.dump(sets, f, ensure_ascii=False, indent=1)
