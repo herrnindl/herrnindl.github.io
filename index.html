@@ -158,6 +158,12 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .cv .what b { font-weight: 500; display: block; }
 .cv .what span { color: var(--soft); font-size: 14px; }
 @media (max-width: 480px) { .cv .row { grid-template-columns: 1fr; } }
+.worked { display: grid; gap: 12px; max-width: 640px; }
+.worked div { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 12px; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.worked span { font-size: 12px; letter-spacing: .16em; color: var(--soft); }
+.worked p { margin: 0; font-weight: 500; letter-spacing: -.01em; }
+.worked a { text-decoration: none; border-bottom: 1px solid var(--line); }
+@media (max-width: 420px) { .worked div { grid-template-columns: 1fr; gap: 2px; } }
 .plabel { font-size: 12px; letter-spacing: .24em; color: var(--soft); margin-top: 10px; }
 .faq { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
 .faq h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
@@ -300,6 +306,12 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
     <p class="now"><b>now.</b> ember. starting at wildkogel sundaze in december.</p>
     <p class="text">model from pinzgau, austria. MN. started on 01.01.2025, and since then it's been shoots, a first runway with s.Oliver, a few pages in print, and a life told in colours.</p>
     <div class="facts"><span>based in pinzgau</span><span>german · english</span></div>
+    <div class="plabel">WORKED WITH</div>
+    <div class="worked">
+      <div><span>photographers</span><p><a href="https://instagram.com/alpindis" target="_blank" rel="noopener">alpindis</a> · <a href="https://instagram.com/wekreat.studio" target="_blank" rel="noopener">wekreat.studio</a> · <a href="https://instagram.com/ronaldmitterer" target="_blank" rel="noopener">ronald mitterer</a> · <a href="https://instagram.com/danielriederfotografie" target="_blank" rel="noopener">daniel rieder</a></p></div>
+      <div><span>runway</span><p>s.Oliver × INTERSPORT Harms</p></div>
+      <div><span>print</span><p>Platzhirsch · Bezirkszeitung</p></div>
+    </div>
     <div class="plabel">PRESS</div>
     <ul class="press">
       <li data-press="2026-11-bezirkszeitung"><span class="when">11/26</span><div><b>Bezirkszeitung</b> <span>· s.Oliver fashion show at INTERSPORT Harms</span></div></li>
