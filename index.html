@@ -224,6 +224,12 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
 /* soundtrack */
 .song { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; text-decoration: none; padding: 3px 12px 3px 10px; border-radius: 999px; border: 1px solid var(--line); }
 .song::before { content: "\266A"; font-size: 12px; }
+button.song { background: none; color: inherit; font: inherit; font-size: 13px; cursor: pointer; }
+.song small { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; opacity: .65; margin-left: 2px; }
+.spotnote { font-size: 11px; letter-spacing: .06em; color: var(--soft); }
+.player:empty { display: none; }
+.player { margin-top: 14px; max-width: 520px; }
+.spot { display: block; width: 100%; height: 80px; border: 0; border-radius: 12px; }
 /* journal */
 .jlist { display: grid; gap: 0; margin-top: 18px; max-width: 720px; }
 .jentry { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 16px; align-items: center; padding: 14px 0; border: 0; border-top: 1px solid var(--line); background: none; text-align: left; width: 100%; }
@@ -291,6 +297,7 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
     <h1 id="title"></h1>
     <p class="line" id="line"></p>
     <div class="meta" id="meta"></div>
+    <div class="player" id="player"></div>
   </section>
 
   <nav class="strip" id="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
@@ -464,18 +471,19 @@ const ALL = { id: "all", bg: "#FFF8BB", fg: "#1C1C14", dot: "#1C1C14" };
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
 /* Song per chapter: fill in "title — artist". It shows as a link on the chapter page. */
+/* Song per chapter. With a Spotify id it plays right on the page (after a tap); without one it links to Spotify. */
 const SONGS = {
-  origin: "Good Luck, Babe! — Chappell Roan",
-  white: "YMCA — Village People",
-  "baby-blue": "Scott Street — Phoebe Bridgers",
-  lavendel: ["Let Down — Radiohead", "Daisies"],
-  "navy-blue": "Hoppípolla — Sigur Rós",
-  grey: "About You — The 1975",
-  vanilla: "Dreams — Fleetwood Mac",
-  "vanilla-2": "I Want Things to Be Beautiful — Devi McCallion",
-  ber: "Coming Up Roses",
-  ember: "",
-  red: ""
+  origin: { t: "Good Luck, Babe! — Chappell Roan" },
+  white: { t: "YMCA — Village People", id: "2MtwLMtwLU17payh5C4fYG" },
+  "baby-blue": { t: "Scott Street — Phoebe Bridgers", id: "21uFPefbgeR3QLVJWATlrr" },
+  lavendel: [{ t: "Let Down — Radiohead", id: "2fuYa3Lx06QQJAm0MjztKr" }, { t: "Daisies" }],
+  "navy-blue": { t: "Hoppípolla — Sigur Rós", id: "6eTGxxQxiTFE6LfZHC33Wm" },
+  grey: { t: "About You — The 1975" },
+  vanilla: { t: "Dreams — Fleetwood Mac", id: "0ofHAoxe9vBkTCp2UQIavz" },
+  "vanilla-2": { t: "I Want Things to Be Beautiful — Devi McCallion", id: "4LJed63I60W8FpsKFyFl1h" },
+  ber: { t: "Coming Up Roses — Harry Styles", id: "0QPdjsMOUhwouq1NS3HwfQ" },
+  ember: null,
+  red: null
 };
 const INFO = { about: "who i am.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
 const VIEWS = ["colours", "recaps", "posts", "journal", ...Object.keys(INFO)];
@@ -502,7 +510,7 @@ function setTheme(c) {
 
 function renderCard() {
   const title = $("title"), meta = $("meta");
-  title.textContent = ""; meta.textContent = ""; $("dates").textContent = "";
+  title.textContent = ""; meta.textContent = ""; $("dates").textContent = ""; $("player").textContent = "";
   const dot = () => el("span", "dot", ".");
   if (view === "recaps") { setTheme(ALL); title.append("recaps", dot()); $("line").textContent = "month by month."; return; }
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
@@ -519,11 +527,26 @@ function renderCard() {
   if (c.vanilla) meta.append(el("span", "pill", "with vanilla"));
   if (c.notes) c.notes.forEach(n => meta.append(el("span", "place", n)));
   if (c.mn) { const p = el("span", "mnline", "2 years of"); p.append(el("b", null, "MN.")); meta.append(p); }
+  const player = $("player"); player.textContent = "";
   [].concat(SONGS[c.id] || []).forEach(song => {
-    const a = el("a", "song", song);
-    a.href = "https://open.spotify.com/search/" + encodeURIComponent(song.replace(" — ", " "));
-    a.target = "_blank"; a.rel = "noopener"; meta.append(a);
+    if (song.id) {
+      const b = el("button", "song");
+      b.append(song.t, el("small", null, "play"));
+      b.onclick = () => {
+        const f = el("iframe", "spot");
+        f.src = "https://open.spotify.com/embed/track/" + song.id + "?utm_source=generator";
+        f.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
+        f.loading = "lazy"; f.title = song.t;
+        player.textContent = ""; player.append(f);
+      };
+      meta.append(b);
+    } else {
+      const a = el("a", "song", song.t);
+      a.href = "https://open.spotify.com/search/" + encodeURIComponent(song.t.replace(" — ", " "));
+      a.target = "_blank"; a.rel = "noopener"; meta.append(a);
+    }
   });
+  if ([].concat(SONGS[c.id] || []).some(x => x.id)) meta.append(el("span", "spotnote", "tap to play via spotify · spotify sets cookies"));
 }
 
 function animateCard() {
