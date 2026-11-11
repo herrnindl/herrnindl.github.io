@@ -1,0 +1,18 @@
+# MN. journal
+#
+# Write your posts below. Newest at the top.
+# Each post starts with a line: date | title
+# Then your text. Separate posts with a line of three dashes: ---
+# Lines starting with # are notes like this one and never show on the site.
+#
+# Photos (optional): make a folder in "journal" named after the date,
+# for example 2026-11-20, and put the photos inside.
+#
+# Example:
+# 20.11.2026 | sleep is the cheapest skincare.
+# seven to eight hours, same time every night.
+# your face will thank you.
+# ---
+
+11.11.2026 | hi.
+---
