@@ -43,6 +43,14 @@ for ch in CHAPTERS:
             "credit": pick(2),
         })
 
+def thumb(path):
+    t = os.path.join("thumbs", os.path.splitext(path)[0] + ".jpg")
+    return t.replace(os.sep, "/") if os.path.exists(t) else path
+
+
+for p in out:
+    p["thumb"] = thumb(p["src"])
+
 with open("photos.json", "w", encoding="utf-8") as f:
     json.dump(out, f, ensure_ascii=False, indent=1)
 print(f"{len(out)} photos")
@@ -169,6 +177,42 @@ if os.path.isdir("journal"):
             "images": [f"journal/{name}/{n}" for n in imgs],
             "credit": "", "big": "",
         })
+
+# journal/journal.txt : all posts in one file.
+#   20.11.2026 | title
+#   text ...
+#   ---
+# Lines starting with # are ignored. Photos: optional folder journal/2026-11-20/
+jfile = os.path.join("journal", "journal.txt")
+for cand in (jfile, jfile + ".txt"):
+    if os.path.exists(cand):
+        with open(cand, encoding="utf-8-sig") as f:
+            raw = "\n".join(l for l in f.read().splitlines() if not l.lstrip().startswith("#"))
+        sets["journal"] = [j for j in sets["journal"] if not re.match(r"^\d{4}-\d{2}-\d{2}$", j["id"])]
+        for block in re.split(r"^\s*-{3,}\s*$", raw, flags=re.M):
+            lines = [l.rstrip() for l in block.strip().splitlines()]
+            if not lines:
+                continue
+            m = re.match(r"^\s*(\d{1,2})\.(\d{1,2})\.(\d{4})\s*\|?\s*(.*)$", lines[0])
+            if not m:
+                continue
+            day = datetime.date(int(m[3]), int(m[2]), int(m[1]))
+            folder = os.path.join("journal", day.isoformat())
+            imgs = sorted(n for n in os.listdir(folder) if n.lower().endswith(EXT)) if os.path.isdir(folder) else []
+            sets["journal"].append({
+                "id": day.isoformat(), "chapter": chapter_for(day), "date": day.strftime("%d.%m.%y"),
+                "title": m[4].strip() or "journal.", "caption": "\n".join(lines[1:]).strip(),
+                "cover": f"journal/{day.isoformat()}/{imgs[0]}" if imgs else "",
+                "images": [f"journal/{day.isoformat()}/{n}" for n in imgs],
+                "credit": "", "big": "",
+            })
+        break
+sets["journal"].sort(key=lambda j: j["id"][:10], reverse=True)
+
+for group in ("recaps", "posts", "journal"):
+    for item in sets[group]:
+        if item.get("cover"):
+            item["thumb"] = thumb(item["cover"])
 
 with open("sets.json", "w", encoding="utf-8") as f:
     json.dump(sets, f, ensure_ascii=False, indent=1)

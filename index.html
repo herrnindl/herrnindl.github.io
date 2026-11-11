@@ -236,11 +236,11 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
 .card h1.anim { animation: titleIn .45s cubic-bezier(.2,.7,.2,1) both; }
 .card h1.anim .dot { display: inline-block; animation: dotDrop .5s .28s cubic-bezier(.3,.8,.3,1) both; }
 .card .line.anim { animation: titleIn .45s .08s cubic-bezier(.2,.7,.2,1) both; }
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.reveal { opacity: 0; transform: translateY(12px); transition: opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1); }
 .reveal.in { opacity: 1; transform: none; }
-.flood { position: fixed; inset: 0; z-index: 25; pointer-events: none; }
+.flood { position: fixed; z-index: 25; pointer-events: none; border-radius: 50%; transform: translate(-50%,-50%) scale(.01); will-change: transform; backface-visibility: hidden; }
 .wave { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
-.wave i { position: absolute; border-radius: 50%; transform: translate(-50%, -50%) scale(1); }
+.wave i { position: absolute; border-radius: 50%; transform: translate(-50%, -50%) scale(0); will-change: transform; backface-visibility: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .card h1.anim, .card h1.anim .dot, .card .line.anim { animation: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
@@ -528,7 +528,7 @@ function renderColours() {
   $("empty").hidden = list.length > 0;
   list.forEach((p, i) => {
     const b = el("button", "tile");
-    const img = el("img"); img.src = p.src; img.loading = "lazy";
+    const img = el("img"); img.src = p.thumb || p.src; img.loading = "lazy"; img.decoding = "async";
     img.alt = p.caption || (byId[p.chapter].label + " photo");
     b.append(img);
     if (filter === "all") {
@@ -543,7 +543,7 @@ function setTile(s, extra) {
   const c = byId[s.chapter];
   const b = el("button", "set");
   if (c) b.style.setProperty("--c", c.bg);
-  if (s.cover) { const img = el("img"); img.src = s.cover; img.loading = "lazy"; img.alt = s.title || s.caption || ""; b.append(img); }
+  if (s.cover) { const img = el("img"); img.src = s.thumb || s.cover; img.decoding = "async"; img.loading = "lazy"; img.alt = s.title || s.caption || ""; b.append(img); }
   if (extra) extra(b);
   b.onclick = () => openSet(s);
   return b;
@@ -562,7 +562,7 @@ function renderJournal() {
   $("empty").hidden = sets.journal.length > 0;
   sets.journal.forEach(j => {
     const b = el("button", "jentry");
-    const th = el("div", "th"); if (j.cover) { const i = el("img"); i.src = j.cover; i.loading = "lazy"; i.alt = ""; th.append(i); } b.append(th);
+    const th = el("div", "th"); if (j.cover) { const i = el("img"); i.src = j.thumb || j.cover; i.loading = "lazy"; i.alt = ""; th.append(i); } b.append(th);
     const t = el("div"); t.append(el("small", null, j.date), el("b", null, j.title), el("p", null, j.caption)); b.append(t);
     b.onclick = () => openSet(Object.assign({}, j, { number: j.date }));
     g.append(b);
@@ -681,8 +681,9 @@ function flood(color, e, done) {
   const cur = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim().toLowerCase();
   if (calm() || !document.body.animate || cur === color.toLowerCase()) { done(); return; }
   const r = e.currentTarget.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
-  const f = el("div", "flood"); f.style.background = color; document.body.append(f);
-  const a = f.animate([{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(150vmax at ${x}px ${y}px)` }], { duration: 520, easing: "cubic-bezier(.6,0,.3,1)", fill: "forwards" });
+  const big = Math.hypot(innerWidth, innerHeight) * 2.1;
+  const f = el("div", "flood"); f.style.cssText = `left:${x}px;top:${y}px;width:${big}px;height:${big}px;background:${color}`; document.body.append(f);
+  const a = f.animate([{ transform: "translate(-50%,-50%) scale(.01)" }, { transform: "translate(-50%,-50%) scale(1)" }], { duration: 480, easing: "cubic-bezier(.6,0,.3,1)", fill: "forwards" });
   a.onfinish = () => { done(); f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: "forwards" }).onfinish = () => f.remove(); };
 }
 
@@ -696,11 +697,12 @@ function unlockWave(done) {
   spots.push({ x: innerWidth / 2, y: innerHeight / 2, c: "#FFF8BB", s: 10 });
   let last;
   spots.forEach((p, i) => {
-    const c = el("i"); c.style.cssText = `left:${p.x}px;top:${p.y}px;width:${p.s}px;height:${p.s}px;background:${p.c}`;
+    const c = el("i"); c.style.cssText = `left:${p.x}px;top:${p.y}px;width:${big}px;height:${big}px;background:${p.c}`;
     w.append(c);
-    last = c.animate([{ transform: "translate(-50%,-50%) scale(1)" }, { transform: `translate(-50%,-50%) scale(${big / p.s})` }], { duration: 700, delay: i * 85, easing: "cubic-bezier(.5,0,.2,1)", fill: "forwards" });
+    last = c.animate([{ transform: `translate(-50%,-50%) scale(${p.s / big})` }, { transform: "translate(-50%,-50%) scale(1)" }], { duration: 650, delay: i * 70, easing: "cubic-bezier(.5,0,.2,1)", fill: "both" });
   });
-  last.onfinish = () => { done(); w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, fill: "forwards" }).onfinish = () => w.remove(); };
+  /* The site is built while the screen is fully vanilla, then the cover fades away. */
+  last.onfinish = () => { done(); setTimeout(() => requestAnimationFrame(() => { w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: "forwards" }).onfinish = () => w.remove(); }), 260); };
 }
 
 /* From 1 December: days until 01.01.2027. From then on, the red dot joins the row. */
