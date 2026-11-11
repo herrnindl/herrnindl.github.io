@@ -274,6 +274,23 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 /* scroll hint: rows that scroll sideways fade out at the edge */
 .views, .chips { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
 .views.end, .chips.end { -webkit-mask-image: none; mask-image: none; }
+
+/* about portrait */
+.aboutpic { margin: 0; display: grid; gap: 6px; max-width: 420px; }
+.aboutpic img { width: 100%; height: auto; border-radius: 3px; display: block; background: var(--line); }
+.aboutpic figcaption { font-size: 11px; letter-spacing: .14em; color: var(--soft); }
+@media (min-width: 900px) {
+  .about.panel { grid-template-columns: minmax(0, 1fr) 380px; column-gap: 56px; align-items: start; }
+  .about.panel > :not(.aboutpic):not(h2) { grid-column: 1; }
+  .aboutpic { grid-column: 2; grid-row: 1 / span 20; position: sticky; top: 24px; }
+}
+/* next chapter */
+.nextch { margin-top: 28px; }
+.nextbtn { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 28px 24px; border: 0; border-radius: 4px; background: var(--c); text-align: left; }
+.nextbtn small { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .7; }
+.nextbtn b { font-weight: 800; font-size: clamp(32px, 7vw, 64px); letter-spacing: -.05em; line-height: 1; }
+.nextbtn:hover b { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 3px; }
+#lbImg { touch-action: pan-y; }
 </style>
 </head>
 <body>
@@ -324,9 +341,11 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="grid3" id="postGrid" hidden></div>
   <div class="jlist" id="journalList" hidden></div>
   <div class="empty" id="empty" hidden></div>
+  <div class="nextch" id="nextch" hidden></div>
 
   <section class="about panel" id="about" hidden>
     <h2>about<span class="dot">.</span></h2>
+    <figure class="aboutpic"><img src="thumbs/photos/white/250223-Studioportrait-alpindis.at-0292-Bearbeitet-600.webp" srcset="thumbs/photos/white/250223-Studioportrait-alpindis.at-0292-Bearbeitet-600.webp 600w, thumbs/photos/white/250223-Studioportrait-alpindis.at-0292-Bearbeitet-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 380px" alt="Markus Nindl" width="600" height="900" loading="lazy" decoding="async"><figcaption>photo: daniel breuer · alpindis</figcaption></figure>
     <p class="now"><b>now.</b> ember. starting at wildkogel sundaze in december.</p>
     <p class="text">model from pinzgau, austria. MN. started on 01.01.2025, and since then it's been shoots, a first runway with s.Oliver, a few pages in print, and a life told in colours.</p>
     <div class="facts"><span>based in pinzgau</span><span>german · english</span></div>
@@ -607,8 +626,17 @@ function renderChips() {
 function renderColours() {
   list = (filter === "all" ? photos : photos.filter(p => p.chapter === filter));
   const wall = $("wall"); wall.textContent = "";
-  $("empty").textContent = "No photos in this chapter yet.";
+  const cur = byId[filter];
+  $("empty").textContent = cur ? cur.label + " photos are coming." : "photos are coming.";
   $("empty").hidden = list.length > 0;
+  const nx = $("nextch"); nx.textContent = ""; nx.hidden = !cur;
+  if (cur) {
+    const i = CHAPTERS.indexOf(cur), n = CHAPTERS[(i + 1) % CHAPTERS.length];
+    const a = el("button", "nextbtn"); a.style.setProperty("--c", n.bg); a.style.color = n.fg; if (n.id === "white" || n.id === "vanilla") a.style.boxShadow = "inset 0 0 0 1px rgba(0,0,0,.12)";
+    a.append(el("small", null, i + 1 < CHAPTERS.length ? "next chapter" : "back to the start"), el("b", null, n.label));
+    a.onclick = e => flood(n.bg, e, () => { select(n.id); window.scrollTo({ top: 0 }); });
+    nx.append(a);
+  }
   list.forEach((p, i) => {
     const b = el("button", "tile");
     const img = el("img"); setImg(img, p);
@@ -666,6 +694,7 @@ function render() {
   $("recapGrid").hidden = view !== "recaps";
   $("postGrid").hidden = view !== "posts";
   $("journalList").hidden = view !== "journal";
+  if (view !== "colours") $("nextch").hidden = true;
   $("empty").hidden = true;
   Object.keys(INFO).forEach(k => { $(k).hidden = view !== k; });
   renderChips();
@@ -742,7 +771,25 @@ function open(arr, i) {
   $("prev").hidden = $("next").hidden = list.length < 2;
   $("lb").hidden = false;
 }
-const closeLb = () => { $("lb").hidden = true; };
+const closeLb = () => { $("lb").hidden = true; $("lbImg").style.transform = ""; };
+/* Swipe: left/right to browse, down to close. */
+(function swipe() {
+  let x0 = 0, y0 = 0, on = false;
+  const box = $("lb"), img = $("lbImg");
+  box.addEventListener("touchstart", e => { if (e.touches.length !== 1) return; on = true; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; img.style.transition = "none"; }, { passive: true });
+  box.addEventListener("touchmove", e => {
+    if (!on) return;
+    const dx = e.touches[0].clientX - x0, dy = e.touches[0].clientY - y0;
+    img.style.transform = Math.abs(dx) > Math.abs(dy) ? `translateX(${dx}px)` : (dy > 0 ? `translateY(${dy}px) scale(${1 - Math.min(dy, 300) / 1500})` : "");
+  }, { passive: true });
+  box.addEventListener("touchend", e => {
+    if (!on) return; on = false;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    img.style.transition = "transform .25s ease"; img.style.transform = "";
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) { if (list.length > 1) open(list, idx + (dx < 0 ? 1 : -1)); }
+    else if (dy > 90) closeLb();
+  });
+})();
 $("close").onclick = closeLb;
 $("prev").onclick = () => open(list, idx - 1);
 $("next").onclick = () => open(list, idx + 1);
