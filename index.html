@@ -187,6 +187,41 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .contact { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--fg); text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
 .contact.primary { background: var(--fg); color: var(--bg); }
 .contact small { font-size: 11px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
+/* booking form: fills in an email, nothing is sent from the site itself */
+.bform { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 16px; max-width: 620px; margin-top: 6px; }
+.bform label { display: grid; gap: 4px; font-size: 11px; letter-spacing: .2em; color: var(--soft); }
+.bform .wide { grid-column: 1 / -1; }
+.bform input, .bform select, .bform textarea { font: inherit; font-size: 16px; letter-spacing: -.01em; color: var(--fg); background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 6px 0 8px; width: 100%; min-width: 0; -webkit-appearance: none; appearance: none; }
+.bform select { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.4'/%3E%3C/svg%3E") right 2px center no-repeat; padding-right: 18px; }
+.bform textarea { resize: vertical; min-height: 84px; }
+.bform input:focus, .bform select:focus, .bform textarea:focus { outline: none; border-bottom-color: var(--fg); }
+.bform button { justify-self: start; font: inherit; font-weight: 500; letter-spacing: -.01em; padding: 11px 20px; border-radius: 999px; border: 0; background: var(--fg); color: var(--bg); cursor: pointer; }
+.bform .note { grid-column: 1 / -1; margin: -4px 0 0; font-size: 12px; }
+@media (max-width: 520px) { .bform { grid-template-columns: minmax(0, 1fr); } }
+/* timeline: every chapter as long as it lasted */
+.tl { position: relative; margin-top: 16px; padding-bottom: 22px; }
+.tl .bar { display: flex; gap: 2px; height: 26px; border-radius: 7px; overflow: hidden; }
+.tl .bar button { border: 0; padding: 0; margin: 0; height: 100%; background: var(--c); cursor: pointer; flex: 1 1 auto; min-width: 3px; box-shadow: inset 0 0 0 1px rgba(28,28,20,.14); transition: filter .2s ease; }
+.tl .bar button:hover { filter: brightness(1.08); }
+.tl .bar button.future { background: repeating-linear-gradient(-45deg, var(--c) 0 5px, color-mix(in srgb, var(--c) 45%, transparent) 5px 10px); }
+.tl .now { position: absolute; top: -6px; height: 38px; width: 2px; margin-left: -1px; background: var(--fg); border-radius: 2px; pointer-events: none; }
+.tl .now span { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: .2em; white-space: nowrap; }
+.tl .yr { position: absolute; bottom: 0; font-size: 10px; letter-spacing: .14em; color: var(--soft); transform: translateX(-1px); font-variant-numeric: tabular-nums; }
+.tl .yr::before { content: ""; position: absolute; left: 0; top: -9px; width: 1px; height: 6px; background: var(--line); }
+#tlHead { margin-top: 34px; }
+/* chapter opening: name and line show for a moment while the colour floods in */
+.intro { position: fixed; inset: 0; z-index: 26; display: grid; place-content: center; text-align: center; pointer-events: none; padding: 24px; }
+.intro b { display: block; font-weight: 800; font-size: clamp(48px, 13vw, 128px); letter-spacing: -.055em; line-height: .9; }
+.intro span { display: block; margin-top: 14px; font-size: clamp(14px, 2.4vw, 18px); letter-spacing: .16em; opacity: .8; }
+/* launch: 01.01.2027 */
+.launch { position: fixed; inset: 0; z-index: 60; background: #B3202A; color: #FFF8BB; display: grid; place-content: center; text-align: center; }
+.launch .lmark { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: clamp(64px, 18vw, 150px); letter-spacing: .06em; line-height: 1; }
+.launch .lmark i { font-style: normal; display: inline-block; }
+.launch p { margin: 18px 0 0; font-size: 12px; letter-spacing: .4em; }
+/* easter egg */
+.egg { position: fixed; inset: 0; z-index: 55; pointer-events: none; overflow: hidden; }
+.egg i { position: absolute; top: -30px; border-radius: 50%; }
+.egg p { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); margin: 0; padding: 12px 20px; border-radius: 999px; background: #1C1C14; color: #FFE135; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
 footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 11px; letter-spacing: .24em; color: var(--soft); }
 footer a { text-decoration: none; border-bottom: 1px solid var(--line); }
 footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-spacing: .06em; color: var(--fg); }
@@ -372,6 +407,8 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 
   <nav class="strip" id="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
 
+  <div class="hofhead" id="tlHead" hidden>the timeline.</div>
+  <div class="tl" id="tl" hidden></div>
   <div class="hofhead" id="hofHead" hidden>the chapters.</div>
   <div class="hof" id="hof" hidden></div>
   <div class="hofhead" id="wallHead" hidden>every photo.</div>
@@ -502,6 +539,15 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       <a class="contact primary" href="mailto:booking@herrnindl.com"><small>MAIL</small> booking@herrnindl.com</a>
       <a class="contact" href="https://instagram.com/herrnindl" target="_blank" rel="noopener"><small>IG</small> @herrnindl</a>
     </div>
+    <form class="bform" id="bform" novalidate>
+      <label>WHAT<select id="bWhat"><option>shooting</option><option>campaign</option><option>fashion show</option><option>collaboration</option><option>something else</option></select></label>
+      <label>WHEN<input id="bWhen" type="text" placeholder="date or month" autocomplete="off"></label>
+      <label>WHERE<input id="bWhere" type="text" placeholder="city or location" autocomplete="off"></label>
+      <label>YOUR NAME<input id="bName" type="text" placeholder="name · brand · @handle" autocomplete="name"></label>
+      <label class="wide">IDEA<textarea id="bIdea" placeholder="a few words about it"></textarea></label>
+      <button type="submit">write the mail.</button>
+      <p class="note">opens your mail app with everything filled in.</p>
+    </form>
   </section>
 
   <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span><a href="https://instagram.com/herrnindl" target="_blank" rel="noopener">instagram</a> · <a href="https://www.tiktok.com/@herrnindl" target="_blank" rel="noopener">tiktok</a> · <a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
@@ -664,16 +710,37 @@ function renderChips() {
     if (c) b.append(sw(c));
     b.append(el("span", null, label));
     if (n) b.append(el("span", "count", n));
-    b.onclick = e => flood(id === "all" ? ALL.bg : byId[id].bg, e, () => select(id));
+    b.onclick = e => id === "all" ? flood(ALL.bg, e, () => select(id)) : enterChapter(byId[id], e, true);
     chips.append(b);
   };
   make("all", "all", null, photos.length);
   [...CHAPTERS].reverse().forEach(c => make(c.id, c.label, c, counts[c.id]));
 }
 
+/* the timeline: every chapter as wide as it lasted, from 26.08.2024 to the end of red */
+const TL = [["origin","2024-08-26"],["white","2025-03-03"],["baby-blue","2025-05-23"],["lavendel","2025-07-07"],["navy-blue","2025-10-21"],["grey","2026-01-01"],["vanilla","2026-04-01"],["vanilla-2","2026-06-23"],["ber","2026-09-01"],["ember","2026-11-01"],["red","2027-01-01"]];
+const TL_END = "2028-01-01";
+function renderTimeline() {
+  const t = $("tl"); t.textContent = "";
+  const d = x => new Date(x + "T00:00:00").getTime(), a = d(TL[0][1]), z = d(TL_END), pos = v => (v - a) / (z - a) * 100;
+  const now = Date.now(), bar = el("div", "bar");
+  TL.forEach(([id, start], i) => {
+    const c = byId[id], s = d(start), e = d(i < TL.length - 1 ? TL[i + 1][1] : TL_END);
+    const b = el("button"); b.style.setProperty("--c", c.bg); b.style.flexGrow = e - s; b.style.flexBasis = 0;
+    if (s > now) b.classList.add("future");
+    b.title = c.label + "  " + c.dates; b.setAttribute("aria-label", c.label + " " + c.dates);
+    b.onclick = ev => enterChapter(c, ev);
+    bar.append(b);
+  });
+  t.append(bar);
+  ["2025", "2026", "2027"].forEach(y => { const l = el("span", "yr", y); l.style.left = pos(d(y + "-01-01")) + "%"; t.append(l); });
+  if (now < z) { const m = el("div", "now"); m.style.left = pos(now) + "%"; m.append(el("span", null, "now")); t.append(m); }
+}
+
 function renderHof() {
   const g = $("hof"), show = view === "colours" && filter === "all";
-  g.hidden = $("hofHead").hidden = $("wallHead").hidden = !show; if (!show) return;
+  g.hidden = $("hofHead").hidden = $("wallHead").hidden = $("tl").hidden = $("tlHead").hidden = !show; if (!show) return;
+  renderTimeline();
   g.textContent = "";
   const counts = {}; photos.forEach(p => counts[p.chapter] = (counts[p.chapter] || 0) + 1);
   const cur = nowId(), live = new Date() >= new Date("2027-01-01T00:00:00+01:00");
@@ -688,7 +755,7 @@ function renderHof() {
     b.append(foot);
     if (c.id === cur) b.append(el("span", "nowtag", "now"));
     b.setAttribute("aria-label", c.label + " " + c.dates);
-    b.onclick = e => flood(c.bg, e, () => { select(c.id); window.scrollTo({ top: 0 }); });
+    b.onclick = e => enterChapter(c, e);
     g.append(b);
   });
 }
@@ -704,7 +771,7 @@ function renderColours() {
     const i = CHAPTERS.indexOf(cur), n = CHAPTERS[(i + 1) % CHAPTERS.length];
     const a = el("button", "nextbtn"); a.style.setProperty("--c", n.bg); a.style.color = n.fg; if (n.id === "white" || n.id === "vanilla") a.style.boxShadow = "inset 0 0 0 1px rgba(0,0,0,.12)";
     a.append(el("small", null, i + 1 < CHAPTERS.length ? "next chapter" : "back to the start"), el("b", null, n.label));
-    a.onclick = e => flood(n.bg, e, () => { select(n.id); window.scrollTo({ top: 0 }); });
+    a.onclick = e => enterChapter(n, e);
     nx.append(a);
   }
   list.forEach((p, i) => {
@@ -899,6 +966,83 @@ function flood(color, e, done) {
   a.onfinish = () => { done(); f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: "forwards" }).onfinish = () => f.remove(); };
 }
 
+/* Entering a chapter: the colour floods in, its name and line show for a moment, then the photos. */
+function enterChapter(c, e, stay) {
+  const go = () => { select(c.id); if (!stay) window.scrollTo({ top: 0 }); };
+  const cur = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim().toLowerCase();
+  if (calm() || !document.body.animate || cur === c.bg.toLowerCase()) { go(); return; }
+  const r = e.currentTarget.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+  const big = Math.hypot(innerWidth, innerHeight) * 2.1;
+  const f = el("div", "flood"); f.style.cssText = `left:${x}px;top:${y}px;width:${big}px;height:${big}px;background:${c.bg}`; document.body.append(f);
+  const t = el("div", "intro"); t.style.color = c.fg;
+  const nm = el("b", null, c.name); const dt = el("i", null, "."); dt.style.cssText = "font-style:normal;color:" + c.dot; nm.append(dt); if (c.suffix) nm.append(c.suffix);
+  t.append(nm, el("span", null, c.line)); t.style.opacity = 0; document.body.append(t);
+  f.animate([{ transform: "translate(-50%,-50%) scale(.01)" }, { transform: "translate(-50%,-50%) scale(1)" }], { duration: 480, easing: "cubic-bezier(.6,0,.3,1)", fill: "forwards" }).onfinish = () => {
+    go();
+    t.animate([{ opacity: 0, transform: "translateY(14px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.2,.7,.2,1)", fill: "forwards" });
+    setTimeout(() => {
+      t.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, fill: "forwards" }).onfinish = () => t.remove();
+      f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 360, delay: 120, fill: "forwards" }).onfinish = () => f.remove();
+    }, 1050);
+  };
+}
+
+/* Launch, from 01.01.2027: once per device the screen turns red, the dot drops, then the site opens. */
+const LAUNCH = new Date("2027-01-01T00:00:00+01:00");
+function launchMoment() {
+  if (new Date() < LAUNCH || document.documentElement.classList.contains("locked")) return;
+  try { if (localStorage.getItem("mn-launch") === "1") return; localStorage.setItem("mn-launch", "1"); } catch (e) { return; }
+  if (calm() || !document.body.animate) return;
+  const L = el("div", "launch"), mk = el("div", "lmark", "MN"), dot = el("i", null, ".");
+  mk.append(dot); L.append(mk, el("p", null, "RED. 2027")); document.body.append(L);
+  L.animate([{ clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)" }], { duration: 700, easing: "cubic-bezier(.6,0,.3,1)" });
+  mk.animate([{ opacity: 0, transform: "scale(.94)" }, { opacity: 1, transform: "none" }], { duration: 500, delay: 450, fill: "backwards" });
+  dot.animate([{ transform: "translateY(-120vh)" }, { transform: "translateY(0)", offset: .7 }, { transform: "translateY(-14px)", offset: .85 }, { transform: "translateY(0)" }], { duration: 900, delay: 1000, easing: "cubic-bezier(.5,0,.6,1)", fill: "backwards" });
+  L.querySelector("p").animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 1800, fill: "backwards" });
+  setTimeout(() => L.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: "forwards" }).onfinish = () => L.remove(), 3300);
+  L.onclick = () => L.remove();
+}
+
+/* Easter egg: type "bananaleclerc", or tap the MN. logo five times quickly. */
+function bananaRain() {
+  if (document.querySelector(".egg")) return;
+  const w = el("div", "egg"), cols = ["#FFE135", ...CHAPTERS.map(c => c.bg)];
+  const n = calm() ? 0 : 70;
+  for (let i = 0; i < n; i++) {
+    const d = el("i"), s = 8 + Math.random() * 18;
+    d.style.cssText = `left:${Math.random() * 100}%;width:${s}px;height:${s}px;background:${cols[i % cols.length]};box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)`;
+    w.append(d);
+    d.animate([{ transform: "translateY(0)" }, { transform: `translate(${(Math.random() - .5) * 120}px, ${innerHeight + 60}px)` }], { duration: 1400 + Math.random() * 1400, delay: Math.random() * 900, easing: "cubic-bezier(.4,0,.8,.6)", fill: "both" });
+  }
+  const m = el("p", null, "you found it. thank you for being early."); w.append(m);
+  m.animate([{ opacity: 0, transform: "translate(-50%,-40%)" }, { opacity: 1, transform: "translate(-50%,-50%)" }], { duration: 300, fill: "both" });
+  document.body.append(w);
+  setTimeout(() => w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, fill: "forwards" }).onfinish = () => w.remove(), 3600);
+}
+(function egg() {
+  let buf = "", taps = [];
+  document.addEventListener("keydown", e => {
+    if (e.target.closest && e.target.closest("input, textarea, select")) return;
+    if (e.key.length !== 1) return;
+    buf = (buf + e.key.toLowerCase()).slice(-13);
+    if (buf === "bananaleclerc") { buf = ""; bananaRain(); }
+  });
+  $("home").addEventListener("click", () => {
+    const t = Date.now(); taps = taps.filter(x => t - x < 2000); taps.push(t);
+    if (taps.length >= 5) { taps = []; bananaRain(); }
+  });
+})();
+
+/* Booking form: builds the mail, the visitor's own mail app sends it. */
+$("bform").addEventListener("submit", e => {
+  e.preventDefault();
+  const v = id => $(id).value.trim();
+  const what = v("bWhat"), when = v("bWhen"), where = v("bWhere"), name = v("bName"), idea = v("bIdea");
+  const subject = "booking. " + what + (when ? " · " + when : "");
+  const body = ["what: " + what, "when: " + (when || "–"), "where: " + (where || "–"), "from: " + (name || "–"), "", idea].join("\n");
+  location.href = "mailto:booking@herrnindl.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+});
+
 /* The right password: the dots spread into a wave of colour that opens the site. */
 function unlockWave(done) {
   const dots = [...document.querySelectorAll(".gate .gdots i")];
@@ -988,7 +1132,7 @@ $("gateForm").addEventListener("submit", async e => {
     try { localStorage.setItem("mn-key", h); } catch (err) {}
     $("gatePw").blur();
     loadData();
-    unlockWave(() => { document.documentElement.classList.remove("locked"); window.scrollTo(0, 0); render(); });
+    unlockWave(() => { document.documentElement.classList.remove("locked"); window.scrollTo(0, 0); render(); launchMoment(); });
   } else {
     $("gateMsg").textContent = "not yet.";
     const f = $("gateForm"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
@@ -1025,7 +1169,7 @@ function loadData() {
   fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); render(); }).catch(() => {});
   fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [] }; render(); wirePress(d.press || {}); }).catch(() => {});
 }
-if (!document.documentElement.classList.contains("locked")) loadData();
+if (!document.documentElement.classList.contains("locked")) { loadData(); launchMoment(); }
 </script>
 </body>
 </html>
