@@ -259,6 +259,7 @@ html.roomopen { overflow: hidden; }
 .mnback { position: sticky; top: 16vh; height: 0; z-index: 0; pointer-events: none; overflow: visible; }
 .mnback span { display: block; text-align: center; font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: min(40vw, 520px); line-height: .8; letter-spacing: .06em; color: var(--fg); opacity: .07; white-space: nowrap; }
 .wallbox .wall { position: relative; z-index: 1; }
+.wallbox:not(:has(.tile, .print, .one)) .mnback, .wallbox:has(> .wall[hidden]) .mnback { display: none; }
 /* film grain, very soft, only behind the content */
 body::before { content: ""; position: fixed; inset: -50%; z-index: -1; pointer-events: none; opacity: .09;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -305,7 +306,7 @@ body::before { content: ""; position: fixed; inset: -50%; z-index: -1; pointer-e
 .deck .count { position: absolute; z-index: 3; right: 38px; top: 0; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 999px; background: #B3202A; color: #FFF8BB; font-weight: 800; font-size: 14px; letter-spacing: -.02em; display: grid; place-items: center; box-shadow: 0 0 0 3px var(--bg); }
 .more .go { font: inherit; font-weight: 800; font-size: clamp(30px, 7vw, 44px); letter-spacing: -.05em; line-height: 1; border: 0; background: none; color: var(--fg); cursor: pointer; padding: 0; }
 .more .go i { font-style: normal; color: var(--dot); }
-.more .all { font: inherit; font-size: 13px; letter-spacing: .14em; border: 0; background: none; color: var(--soft); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+.more .all { font: inherit; font-size: 13px; padding: 8px 4px; letter-spacing: .14em; border: 0; background: none; color: var(--soft); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
 /* back to top: a dot that fills with the chapter colours as you scroll */
 .topdot { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 17; width: 48px; height: 48px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; display: grid; place-items: center;
   background: conic-gradient(from -90deg, transparent calc(var(--p, 0) * 1turn), rgba(28,28,20,.14) 0), conic-gradient(from -90deg, #000 0 9%, #FFF 9% 18%, #91B2EB 18% 27%, #BAB6DE 27% 36%, #343A4E 36% 45%, #A9A9A9 45% 54%, #FFF8BB 54% 63%, #B8B05F 63% 72%, #B8C98B 72% 81%, #E9A283 81% 90%, #B3202A 90% 100%);
@@ -332,7 +333,7 @@ body.mini .topdot { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .selgrid > button { position: relative; aspect-ratio: 4 / 5; padding: 0; border: 0; border-radius: 3px; overflow: hidden; background: var(--line); cursor: pointer; }
 .selgrid img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
 .selgrid > button:hover img { transform: scale(1.035); }
-.selgrid .hero { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+.selgrid .hero { grid-column: span 2; grid-row: span 2; aspect-ratio: 4 / 5; }
 .selgrid .skel { aspect-ratio: 4 / 5; border-radius: 3px; background: var(--line); animation: skel 1.4s ease-in-out infinite alternate; }
 @keyframes skel { to { opacity: .45; } }
 .selgrid .hero img { position: absolute; inset: 0; object-position: 50% 22%; }
@@ -578,7 +579,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .egg i { position: absolute; top: -30px; border-radius: 50%; }
 .egg p { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); margin: 0; padding: 12px 20px; border-radius: 999px; background: #1C1C14; color: #FFE135; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
 footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 11px; letter-spacing: .24em; color: var(--soft); }
-footer a { text-decoration: none; border-bottom: 1px solid var(--line); }
+footer a { text-decoration: none; border-bottom: 1px solid var(--line); display: inline-block; padding: 6px 0; }
 footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-spacing: .06em; color: var(--fg); }
 
 @media (prefers-reduced-motion: reduce) { body, .strip, .tile img { transition: none; } .tile:hover img { transform: none; } }
