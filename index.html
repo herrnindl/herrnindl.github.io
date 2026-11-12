@@ -219,7 +219,12 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
 
 /* "in colours." on the start page, one chapter colour per letter */
 .line .cl { font-weight: 500; }
-.line .pale { -webkit-text-stroke: .7px rgba(28,28,20,.45); paint-order: stroke fill; }
+/* "colours." sits on a red brush stroke that paints itself in */
+.line .paint { display: inline-block; padding: .04em .4em .1em .34em; margin-left: -.1em; transform: rotate(-1.2deg); background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%2060%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23B3202A%22%20d%3D%22M14.0%208.4%20Q14.0%208.4%2029.4%208.6%20Q44.8%208.8%2060.2%208.4%20Q75.7%208.0%2091.1%208.1%20Q106.5%208.2%20121.9%208.1%20Q137.3%208.0%20152.8%207.1%20Q168.2%206.3%20183.6%206.1%20Q199.0%205.8%20214.4%206.7%20Q229.8%207.5%20245.2%206.6%20Q260.7%205.8%20276.1%205.6%20Q291.5%205.4%20306.9%206.1%20Q322.3%206.9%20337.8%206.1%20Q353.2%205.3%20368.6%205.5%20Q384.0%205.8%20388.0%207.9%20Q392.0%2010.0%20395.0%2012.5%20Q398.0%2015.0%20394.0%2017.0%20Q390.0%2019.0%20394.5%2022.0%20Q399.0%2025.0%20395.5%2027.5%20Q392.0%2030.0%20394.5%2033.0%20Q397.0%2036.0%20393.0%2038.5%20Q389.0%2041.0%20392.5%2043.5%20Q396.0%2046.0%20392.0%2047.5%20Q388.0%2049.0%20386.0%2048.4%20Q384.0%2047.9%20368.6%2048.4%20Q353.2%2048.9%20337.8%2049.4%20Q322.3%2049.9%20306.9%2050.3%20Q291.5%2050.6%20276.1%2050.0%20Q260.7%2049.3%20245.2%2050.2%20Q229.8%2051.1%20214.4%2051.3%20Q199.0%2051.6%20183.6%2051.5%20Q168.2%2051.4%20152.8%2052.0%20Q137.3%2052.5%20121.9%2052.4%20Q106.5%2052.3%2091.1%2051.9%20Q75.7%2051.5%2060.2%2052.2%20Q44.8%2053.0%2029.4%2053.0%20Q14.0%2052.9%2012.0%2052.5%20Q10.0%2052.0%206.5%2049.0%20Q3.0%2046.0%206.0%2043.0%20Q9.0%2040.0%205.5%2036.5%20Q2.0%2033.0%205.0%2030.0%20Q8.0%2027.0%206.0%2023.5%20Q4.0%2020.0%207.5%2017.0Z%22/%3E%3Cpath%20d%3D%22M330%2012%20L392%2011%22%20stroke%3D%22%23FFF8BB%22%20stroke-width%3D%221.3%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M350%2049%20L394%2048%22%20stroke%3D%22%23FFF8BB%22%20stroke-width%3D%221.3%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M372%2031%20L396%2030%22%20stroke%3D%22%23FFF8BB%22%20stroke-width%3D%221.3%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E") left center / 100% 100% no-repeat; animation: paintIn .7s .35s cubic-bezier(.6,.05,.3,1) both; }
+@keyframes paintIn { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+@media (prefers-reduced-motion: reduce) { .line .paint { animation: none; } }
+/* journal titles: the dot takes the colour of the post's chapter */
+.jdot { color: var(--jd); }
 /* now. */
 .now { margin: 0; font-size: 14px; color: var(--soft); }
 .now b { color: var(--fg); font-weight: 800; letter-spacing: -.02em; margin-right: 6px; }
@@ -235,6 +240,7 @@ button.song { background: none; color: inherit; font: inherit; font-size: 13px; 
 /* journal */
 .jlist { display: grid; gap: 0; margin-top: 18px; max-width: 720px; }
 .jentry { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 16px; align-items: center; padding: 14px 0; border: 0; border-top: 1px solid var(--line); background: none; text-align: left; width: 100%; }
+.jentry.noimg { grid-template-columns: minmax(0, 1fr); padding: 18px 0; }
 .jentry:last-child { border-bottom: 1px solid var(--line); }
 .jentry .th { width: 88px; aspect-ratio: 4 / 5; border-radius: 3px; overflow: hidden; background: var(--line); }
 .jentry .th img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -616,7 +622,8 @@ function renderCard() {
   if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
   if (filter === "all") { setTheme(ALL); title.append("my life"); const ln = $("line"); ln.textContent = "in ";
     /* c→baby blue, o→lavendel, l→navy blue, o→grey, u→vanilla, r→vanilla II, s→ber, .→ember */
-    ["baby-blue", "lavendel", "navy-blue", "grey", "vanilla", "vanilla-2", "ber", "ember"].forEach((id, i) => { const ch = el("span", "cl" + (id === "vanilla" ? " pale" : ""), "colours."[i]); ch.style.color = byId[id].bg; ln.append(ch); }); meta.append(el("span", "place", "model from pinzgau, austria")); const g = fillSig(el("span", "sig")); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
+    const pt = el("span", "paint"); ln.append(pt);
+    ["baby-blue", "lavendel", "navy-blue", "grey", "vanilla", "vanilla-2", "ber", "ember"].forEach((id, i) => { const ch = el("span", "cl", "colours."[i]); ch.style.color = byId[id].bg; pt.append(ch); }); meta.append(el("span", "place", "model from pinzgau, austria")); const g = fillSig(el("span", "sig")); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
     if (NEXT) { const n = el("p", "now next"); const b = el("b", null, "next"); b.append(el("i", null, ".")); n.append(b, NEXT); $("player").append(n); }
     return; }
   const c = byId[filter];
@@ -739,15 +746,21 @@ function renderRecaps() {
   sets.recaps.forEach(r => g.append(setTile(r)));
 }
 
+/* Title with its last dot in a colour (added if the title has none). */
+function jTitle(e, title, colour) {
+  const tt = (title || "").replace(/\.\s*$/, "");
+  const d = el("span", "jdot", "."); d.style.setProperty("--jd", colour);
+  e.textContent = tt; e.append(d); return e;
+}
 function renderJournal() {
   const g = $("journalList"); g.textContent = "";
   $("empty").textContent = "No journal posts yet.";
   $("empty").hidden = sets.journal.length > 0;
   sets.journal.forEach(j => {
     const b = el("button", "jentry");
-    const th = el("div", "th"); if (j.cover) { const i = el("img"); setImg(i, j, "88px"); i.loading = "lazy"; i.alt = ""; th.append(i); } b.append(th);
-    const t = el("div"); t.append(el("small", null, j.date), el("b", null, j.title), el("p", null, j.caption)); b.append(t);
-    b.onclick = () => openSet(Object.assign({}, j, { number: j.date }));
+    if (j.cover) { const th = el("div", "th"); const i = el("img"); setImg(i, j, "88px"); i.loading = "lazy"; i.alt = ""; th.append(i); b.append(th); } else b.classList.add("noimg");
+    const t = el("div"); t.append(el("small", null, j.date), jTitle(el("b"), j.title, (byId[j.chapter] || ALL).bg)); if (j.caption) t.append(el("p", null, j.caption)); b.append(t);
+    b.onclick = () => openSet(Object.assign({}, j, { number: j.date, journal: true }));
     g.append(b);
   });
 }
@@ -808,6 +821,7 @@ function openSet(s) {
   $("sNum").textContent = s.number || s.date || "";
   $("sBig").textContent = s.big || ""; $("sBig").hidden = !s.big;
   $("sTitle").textContent = s.title || ""; $("sTitle").hidden = !s.title;
+  if (s.journal && s.title) jTitle($("sTitle"), s.title, c.dot || c.fg);
   $("sText").textContent = s.caption || ""; $("sText").hidden = !s.caption;
   const box = $("sImgs"); box.textContent = "";
   const items = s.images.map(src => ({ src, chapter: s.chapter, caption: s.title || "", credit: s.credit || "" }));
