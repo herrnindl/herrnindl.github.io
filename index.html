@@ -78,8 +78,9 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .sw { width: 11px; height: 11px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
 .count { font-size: 11px; opacity: .6; }
 
-.wall { columns: 3 260px; column-gap: 10px; margin-top: 18px; }
-.tile { break-inside: avoid; margin: 0 0 10px; display: block; width: 100%; padding: 0; border: 0; background: var(--line); border-radius: 3px; overflow: hidden; position: relative; }
+.wall { --wg: 10px; display: flex; align-items: flex-start; gap: var(--wg); margin-top: 18px; }
+.wall .col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--wg); }
+.tile { margin: 0; display: block; width: 100%; padding: 0; border: 0; background: var(--line); border-radius: 3px; overflow: hidden; position: relative; }
 .tile img { display: block; width: 100%; height: auto; background: var(--line); transition: transform .5s ease; }
 .tile:hover img { transform: scale(1.02); }
 .tag { position: absolute; left: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.86); color: #1C1C14; font-size: 11px; font-weight: 500; padding: 3px 9px 3px 6px; border-radius: 999px; }
@@ -217,6 +218,30 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .contact { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--fg); text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
 .contact.primary { background: var(--fg); color: var(--bg); }
 .contact small { font-size: 11px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
+/* ===== show more: the next photos wait as a deck of cards ===== */
+.more { display: grid; justify-items: center; gap: 14px; margin: 34px 0 10px; }
+.deck { position: relative; width: 210px; height: 150px; border: 0; padding: 0; background: none; cursor: pointer; color: var(--fg); }
+.deck .dcard { position: absolute; left: 50%; top: 6px; width: 92px; height: 116px; margin-left: -46px; border-radius: 6px; overflow: hidden; background: var(--line); box-shadow: 0 12px 26px -12px rgba(0,0,0,.5), 0 0 0 3px var(--bg); transition: transform .45s cubic-bezier(.2,.75,.2,1); }
+.deck .dcard img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.deck .dcard:nth-child(1) { transform: rotate(-11deg) translateX(-36px); }
+.deck .dcard:nth-child(2) { transform: rotate(9deg) translateX(34px); }
+.deck .dcard:nth-child(3) { transform: translateY(-4px); z-index: 2; }
+.deck:hover .card:nth-child(1), .deck:focus-visible .card:nth-child(1) { transform: rotate(-20deg) translate(-62px, 6px); }
+.deck:hover .card:nth-child(2), .deck:focus-visible .card:nth-child(2) { transform: rotate(18deg) translate(60px, 6px); }
+.deck:hover .card:nth-child(3), .deck:focus-visible .card:nth-child(3) { transform: translateY(-14px) scale(1.05); }
+.deck .count { position: absolute; z-index: 3; right: 38px; top: 0; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 999px; background: #B3202A; color: #FFF8BB; font-weight: 800; font-size: 14px; letter-spacing: -.02em; display: grid; place-items: center; box-shadow: 0 0 0 3px var(--bg); }
+.more .go { font: inherit; font-weight: 800; font-size: clamp(30px, 7vw, 44px); letter-spacing: -.05em; line-height: 1; border: 0; background: none; color: var(--fg); cursor: pointer; padding: 0; }
+.more .go i { font-style: normal; color: var(--dot); }
+.more .all { font: inherit; font-size: 13px; letter-spacing: .14em; border: 0; background: none; color: var(--soft); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+/* back to top: a dot that fills with the chapter colours as you scroll */
+.topdot { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 17; width: 48px; height: 48px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; display: grid; place-items: center;
+  background: conic-gradient(from -90deg, transparent calc(var(--p, 0) * 1turn), rgba(28,28,20,.14) 0), conic-gradient(from -90deg, #000 0 9%, #FFF 9% 18%, #91B2EB 18% 27%, #BAB6DE 27% 36%, #343A4E 36% 45%, #A9A9A9 45% 54%, #FFF8BB 54% 63%, #B8B05F 63% 72%, #B8C98B 72% 81%, #E9A283 81% 90%, #B3202A 90% 100%);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,.45); transition: opacity .3s ease, transform .3s cubic-bezier(.2,.7,.2,1); }
+.topdot::before { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: var(--fg); }
+.topdot span { position: relative; color: var(--bg); font-weight: 800; font-size: 18px; line-height: 1; }
+.topdot[hidden] { display: grid; opacity: 0; transform: scale(.4); pointer-events: none; }
+body.mini .topdot { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
+.wrap > footer { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 /* ===== award round ===== */
 .subnav { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
 .subnav button { font: inherit; font-size: 14px; font-weight: 500; letter-spacing: -.01em; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--soft); cursor: pointer; }
@@ -260,8 +285,8 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .sizes { display: inline-flex; border: 1px solid var(--fg); border-radius: 999px; overflow: hidden; }
 .sizes button { font: inherit; font-size: 12px; font-weight: 500; text-transform: none; letter-spacing: .04em; width: 30px; padding: 5px 0; border: 0; background: none; color: var(--fg); cursor: pointer; }
 .sizes button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
-.wall.s { columns: 5 120px; column-gap: 6px; } .wall.s .tile { margin-bottom: 6px; } .wall.s .tag { display: none; }
-.wall.l { columns: 2 380px; column-gap: 14px; } .wall.l .tile { margin-bottom: 14px; }
+.wall.s { --wg: 6px; } .wall.s .tag { display: none; }
+.wall.l { --wg: 14px; }
 /* two versions of one shot: hover shows the other */
 .tile .alt { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .45s ease; }
 @media (hover: hover) { .tile:hover .alt { opacity: 1; } }
@@ -366,7 +391,7 @@ html { overflow-x: clip; }
 .otd b { display: block; font-weight: 800; font-size: 24px; letter-spacing: -.04em; margin-top: 2px; }
 .otd span { font-size: 13px; color: var(--soft); }
 /* chapter quote between the photos */
-.quote { break-inside: avoid; margin: 0 0 var(--gap, 6px); padding: 34px 22px; border-radius: 4px; background: var(--fg); color: var(--bg); font-weight: 800; font-size: clamp(24px, 5vw, 34px); letter-spacing: -.045em; line-height: 1.02; }
+.quote { margin: 0; padding: 34px 22px; border-radius: 4px; background: var(--fg); color: var(--bg); font-weight: 800; font-size: clamp(24px, 5vw, 34px); letter-spacing: -.045em; line-height: 1.02; }
 .quote i { font-style: normal; color: var(--dot); }
 /* share a chapter */
 .sharebtn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 999px; border: 1px solid currentColor; background: none; color: inherit; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; }
@@ -655,6 +680,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="hofhead whead" id="wallHead" hidden><span>every photo.</span><span class="wtools"><span class="sizes" id="sizes" role="group" aria-label="photo size"><button type="button" data-s="s">S</button><button type="button" data-s="m">M</button><button type="button" data-s="l">L</button></span><button class="shufbtn" id="shuf" type="button">shuffle.</button></span></div>
   <div class="chrecaps" id="chRecaps" hidden></div>
   <div class="wall" id="wall"></div>
+  <div class="more" id="more" hidden></div>
   <div class="grid2 rgrid" id="recapGrid" hidden></div>
   <div class="grid3" id="postGrid" hidden></div>
   <div class="jlist" id="journalList" hidden></div>
@@ -872,6 +898,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 </div>
 
 <button class="bookfab" id="bookFab" type="button" hidden>book<i>.</i></button>
+<button class="topdot" id="topDot" type="button" hidden aria-label="back to top"><span>↑</span></button>
 <div class="minibar" id="minibar" hidden><div id="spotbox"></div><button class="mclose" id="mclose" aria-label="Turn sound off">✕</button></div>
 
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true">
@@ -1263,7 +1290,7 @@ $("bookFab").onclick = () => { view = "booking"; updateHash(); render(); window.
 /* photo size: S / M / L, remembered on this device */
 let wallSize = "m"; try { wallSize = localStorage.getItem("mn-size") || "m"; } catch (e) {}
 function applySize() { const w = $("wall"); w.classList.remove("s", "l"); if (wallSize !== "m") w.classList.add(wallSize); document.querySelectorAll("#sizes button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s === wallSize))); }
-document.querySelectorAll("#sizes button").forEach(b => b.onclick = () => { wallSize = b.dataset.s; try { localStorage.setItem("mn-size", wallSize); } catch (e) {} applySize(); });
+document.querySelectorAll("#sizes button").forEach(b => b.onclick = () => { wallSize = b.dataset.s; try { localStorage.setItem("mn-size", wallSize); } catch (e) {} applySize(); if (view === "colours") { renderColours(); revealAll(); } });
 applySize();
 const shotBase = p => p.src.split("/").pop().replace(/\.[a-z0-9]+$/i, "").replace(/(swe?|_farbe|[abc]|x|_1|-bearbeitet)+$/gi, "").toLowerCase();
 
@@ -1443,28 +1470,100 @@ function renderColours() {
   /* on the start page, two versions of one shot share a tile: hover shows the other */
   const alts = new Map(), skip = new Set();
   if (filter === "all") { const seen = new Map(); list.forEach(p => { if (p.video) return; const k = p.chapter + "/" + shotBase(p); if (seen.has(k)) { const first = seen.get(k); if (!alts.has(first)) { alts.set(first, p); skip.add(p); } } else seen.set(k, p); }); }
+  const items = [];
   list.forEach((p, i) => {
     if (skip.has(p)) return;
-    const b = el("button", "tile"); b.dataset.k = p.src;
-    if (p.video) {
-      const v = el("video"); v.src = p.src; v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = !calm(); v.preload = "metadata"; v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-label", byId[p.chapter].label + " video");
-      b.append(v); b.onclick = () => { v.paused ? v.play() : v.pause(); };
-      if (filter === "all") { const t = el("span", "tag"); t.append(sw(byId[p.chapter]), el("span", null, byId[p.chapter].label)); b.append(t); }
-      wall.append(b); return;
-    }
-    const img = el("img"); setImg(img, p);
-    img.alt = p.caption || (byId[p.chapter].label + " photo");
-    b.append(img);
-    const alt = alts.get(p);
-    if (alt) { const a = el("img", "alt"); a.alt = ""; a.loading = "lazy"; a.decoding = "async"; a.src = alt.thumb || alt.src; if (alt.thumb2) { a.srcset = alt.thumb + " 600w, " + alt.thumb2 + " 1200w"; a.sizes = img.sizes; } b.append(a, el("span", "two")); b.title = "two versions"; }
-    if (filter === "all") {
-      const t = el("span", "tag"); t.append(sw(byId[p.chapter]), el("span", null, byId[p.chapter].label)); b.append(t);
-    }
-    b.onclick = () => { const L = list.filter(x => !x.video); open(L, L.indexOf(p)); };
-    wall.append(b);
-    if (cur && QUOTES[cur.id] && i === Math.min(5, list.length - 1)) { const q = el("div", "quote"); q.style.setProperty("--dot", cur.dot === cur.fg ? cur.bg : cur.dot); q.append(QUOTES[cur.id].replace(/\.$/, "")); q.append(el("i", null, ".")); wall.append(q); }
+    items.push({ p, alt: alts.get(p) });
+    if (cur && QUOTES[cur.id] && items.length === Math.min(6, list.length)) items.push({ quote: true });
   });
+  W.items = items; W.cur = cur;
+  W.cols = []; W.h = [];
+  const n = colCount();
+  for (let c = 0; c < n; c++) { const d = el("div", "col"); wall.append(d); W.cols.push(d); W.h.push(0); }
+  W.n = n;
+  const key = filter, page = pageSize(n);
+  W.shown = 0; W.key = key;
+  placeTiles(Math.min(items.length, Math.max(page, shownBy[key] || 0)));
+  renderMore();
 }
+
+/* ---------- the photo wall: columns filled shortest-first, so new photos never move the old ones ---------- */
+const W = { items: [], cols: [], h: [], shown: 0, n: 0, key: "" };
+const shownBy = {};
+function colCount() {
+  const w = $("wall").clientWidth || (Math.min(innerWidth, 1320) - 36);
+  const [min, max, gap] = wallSize === "s" ? [120, 5, 6] : wallSize === "l" ? [380, 2, 14] : [260, 3, 10];
+  return Math.max(wallSize === "s" ? 2 : 1, Math.min(max, Math.floor((w + gap) / (min + gap))));
+}
+function pageSize(n) { return n === 1 ? 8 : n * (wallSize === "s" ? 4 : 5); }
+function makeTile(it) {
+  const cur = W.cur;
+  if (it.quote) { const q = el("div", "quote"); q.style.setProperty("--dot", cur.dot === cur.fg ? cur.bg : cur.dot); q.append(QUOTES[cur.id].replace(/\.$/, "")); q.append(el("i", null, ".")); return [q, .8]; }
+  const p = it.p, b = el("button", "tile"); b.dataset.k = p.src;
+  const tag = () => { if (filter === "all") { const t = el("span", "tag"); t.append(sw(byId[p.chapter]), el("span", null, byId[p.chapter].label)); b.append(t); } };
+  if (p.video) {
+    const v = el("video"); v.src = p.src; v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = !calm(); v.preload = "metadata"; v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-label", byId[p.chapter].label + " video");
+    b.append(v); b.onclick = () => { v.paused ? v.play() : v.pause(); }; tag();
+    return [b, 1.25];
+  }
+  const img = el("img"); setImg(img, p, wallSize === "s" ? "(max-width: 600px) 50vw, 20vw" : wallSize === "l" ? "(max-width: 800px) 100vw, 50vw" : undefined);
+  img.alt = p.caption || (byId[p.chapter].label + " photo");
+  b.append(img);
+  const alt = it.alt;
+  if (alt) { const a = el("img", "alt"); a.alt = ""; a.loading = "lazy"; a.decoding = "async"; a.src = alt.thumb || alt.src; if (alt.thumb2) { a.srcset = alt.thumb + " 600w, " + alt.thumb2 + " 1200w"; a.sizes = img.sizes; } b.append(a, el("span", "two")); b.title = "two versions"; }
+  tag();
+  b.onclick = () => { const L = list.filter(x => !x.video); open(L, L.indexOf(p)); };
+  return [b, p.w && p.h ? p.h / p.w : 1.25];
+}
+function placeTiles(upto) {
+  const added = [];
+  while (W.shown < upto && W.shown < W.items.length) {
+    const [e, r] = makeTile(W.items[W.shown]);
+    let c = 0; W.h.forEach((h, j) => { if (h < W.h[c] - 0.01) c = j; });
+    W.cols[c].append(e); W.h[c] += r + 0.04; W.shown++; added.push(e);
+  }
+  shownBy[W.key] = W.shown;
+  return added;
+}
+function renderMore() {
+  const m = $("more"); m.textContent = "";
+  const left = W.items.slice(W.shown).filter(it => it.p), show = view === "colours" && left.length > 0;
+  m.hidden = !show; if (!show) return;
+  const cur = W.cur || ALL;
+  m.style.setProperty("--dot", cur.dot === cur.bg ? cur.fg : (cur.dot || "#B3202A"));
+  const deck = el("button", "deck"); deck.type = "button"; deck.setAttribute("aria-label", "show more photos");
+  left.slice(0, 3).reverse().forEach(it => { const c = el("span", "dcard"); const im = el("img"); im.src = it.p.thumb || it.p.src; im.alt = ""; im.loading = "lazy"; c.append(im); deck.append(c); });
+  deck.append(el("span", "count", "+" + left.length));
+  const go = el("button", "go", "show more"); go.type = "button"; go.append(el("i", null, "."));
+  const all = el("button", "all", "SHOW ALL " + (W.shown + left.length)); all.type = "button";
+  deck.onclick = go.onclick = () => dealMore(pageSize(W.n), deck);
+  all.onclick = () => dealMore(W.items.length, deck);
+  m.append(deck, go, all);
+}
+/* the deck deals the next photos onto the wall */
+function dealMore(n, deck) {
+  const from = deck.getBoundingClientRect(), fx = from.left + from.width / 2, fy = from.top + from.height / 2;
+  const added = placeTiles(W.shown + n);
+  added.forEach(e => e.classList.add("reveal", "in"));
+  if (!calm() && document.body.animate) added.forEach((e, k) => {
+    const r = e.getBoundingClientRect(); if (r.top > innerHeight + 200) return;
+    const dx = fx - (r.left + r.width / 2), dy = fy - (r.top + r.height / 2), rot = (Math.random() - .5) * 26;
+    e.animate([{ transform: `translate(${dx}px, ${dy}px) scale(.22) rotate(${rot}deg)`, opacity: 0 }, { opacity: 1, offset: .25 }, { transform: "none", opacity: 1 }],
+      { duration: 820, delay: Math.min(k, 24) * 55, easing: "cubic-bezier(.2,.75,.2,1)", fill: "backwards" });
+  });
+  renderMore(); revealAll();
+}
+let rzT = 0;
+addEventListener("resize", () => { clearTimeout(rzT); rzT = setTimeout(() => { if (view === "colours" && colCount() !== W.n) { renderColours(); revealAll(); } }, 180); });
+
+/* back to top */
+function updTop() {
+  const t = $("topDot"), max = document.documentElement.scrollHeight - innerHeight;
+  t.hidden = scrollY < innerHeight * 1.5 || document.documentElement.classList.contains("locked") || !$("lb").hidden;
+  t.style.setProperty("--p", max > 0 ? Math.min(1, scrollY / max).toFixed(3) : 0);
+}
+addEventListener("scroll", updTop, { passive: true });
+$("topDot").onclick = () => window.scrollTo({ top: 0, behavior: calm() ? "auto" : "smooth" });
 
 function setTile(s, extra) {
   const c = byId[s.chapter];
@@ -1559,6 +1658,8 @@ function render() {
   $("strip").hidden = view !== "colours";
   $("wall").hidden = view !== "colours";
   if (view !== "colours") $("chRecaps").hidden = true;
+  if (view !== "colours") $("more").hidden = true;
+  updTop();
   /* sections without anything in them stay out of the menu until the first post */
   document.querySelector('.view[data-view="posts"]').hidden = !sets.posts.length;
   $("recapGrid").hidden = view !== "recaps";
