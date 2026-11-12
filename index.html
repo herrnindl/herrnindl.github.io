@@ -311,14 +311,19 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 #lbImg { touch-action: pan-y; }
 
 /* signature: drawn in the current text colour, writes itself in */
-.sig { display: block; width: clamp(150px, 34vw, 240px); aspect-ratio: 1493 / 435; background: currentColor;
-  -webkit-mask: url("signature.png") left center / contain no-repeat; mask: url("signature.png") left center / contain no-repeat;
-  animation: sigWrite 1.4s .35s cubic-bezier(.45,0,.2,1) both; }
-@keyframes sigWrite { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.sig { display: block; width: clamp(150px, 34vw, 240px); aspect-ratio: 1493 / 435; }
+.sig svg { display: block; width: 100%; height: 100%; overflow: visible; }
+/* written like a pen: each stroke draws along its own path, then the i gets its dot */
+.sig path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: sigPen var(--d) var(--w) cubic-bezier(.55,.05,.45,.95) forwards; }
+.sig .s1 { --w: .4s; --d: .95s; }
+.sig .s3 { --w: 1.65s; --d: 1.2s; }
+.sig circle { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: sigDot .18s 1.42s ease-out forwards; }
+@keyframes sigPen { to { stroke-dashoffset: 0; } }
+@keyframes sigDot { 60% { transform: scale(1.4); } to { transform: scale(1); } }
 .player .sig { margin-top: 8px; }
 .sig-about { width: 200px; margin-top: 4px; }
 @media (min-width: 900px) { .about.panel > .sig-about { grid-column: 1; } }
-@media (prefers-reduced-motion: reduce) { .sig { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .sig path, .sig circle { animation: none; stroke-dashoffset: 0; transform: none; } }
 </style>
 </head>
 <body>
@@ -586,6 +591,9 @@ function loadImg(img) {
   delete img.dataset.src; delete img.dataset.srcset;
 }
 const lazyIO = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { loadImg(x.target); lazyIO.unobserve(x.target); } }), { rootMargin: "900px 0px" }) : null;
+const SIG = "<svg viewBox=\"0 0 1493 435\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"8.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path class=\"s1\" pathLength=\"1\" d=\"M14.0 367.0C21.7 361.8 46.0 346.0 60.0 335.9C74.0 325.8 79.7 321.3 98.0 306.6C116.3 292.0 143.0 268.6 170.0 248.1C197.0 227.6 218.5 211.5 260.0 183.6C301.5 155.8 386.7 101.8 419.0 81.2C451.3 60.6 445.8 64.3 454.0 60.1C462.2 55.8 460.6 59.5 468.0 55.6C475.4 51.8 498.4 36.9 498.3 37.0C498.1 37.1 474.1 51.1 467.2 56.3C460.3 61.4 472.2 55.6 457.0 67.8C441.8 80.0 400.3 110.1 376.0 129.4C351.7 148.7 328.8 168.4 311.0 183.6C293.2 198.9 284.3 206.8 269.0 221.0C253.7 235.2 233.3 254.3 219.0 269.0C204.7 283.7 192.1 297.8 183.2 309.0C174.3 320.2 169.3 329.8 165.7 336.0C162.2 342.2 162.5 343.2 161.7 346.0C161.0 348.8 161.1 351.2 161.2 353.0C161.3 354.8 161.8 355.8 162.5 357.0C163.1 358.2 164.1 359.3 165.2 360.2C166.3 361.0 167.4 361.7 169.0 362.2C170.6 362.7 170.0 363.1 175.0 363.0C180.0 362.9 190.2 362.7 199.0 361.5C207.8 360.2 210.8 360.9 228.0 355.3C245.2 349.7 273.3 339.0 302.0 327.8C330.7 316.6 379.5 296.2 400.0 288.2C420.5 280.2 418.3 281.8 425.0 279.8C431.7 277.8 436.7 276.6 440.0 276.4C443.3 276.2 443.9 277.3 445.1 278.5C446.3 279.8 446.8 269.6 447.0 284.0C447.2 298.4 446.1 350.8 446.0 365.0C445.9 379.2 446.2 367.8 446.6 368.9C447.1 370.0 447.6 371.0 448.6 371.6C449.7 372.3 446.6 372.9 453.0 373.0C459.4 373.1 478.5 373.1 487.0 372.4C495.5 371.6 495.5 371.0 504.0 368.4C512.5 365.8 529.7 359.2 538.0 356.8C546.3 354.4 551.3 354.5 554.0 354.0\"/><circle class=\"s2\" cx=\"428.5\" cy=\"210.5\" r=\"5\" fill=\"currentColor\" stroke=\"none\"/><path class=\"s3\" pathLength=\"1\" d=\"M655.0 421.0C657.2 418.9 658.7 416.2 668.0 408.4C677.3 400.5 688.8 390.5 711.0 373.9C733.2 357.3 766.5 334.6 801.0 308.9C835.5 283.3 875.7 251.7 918.0 220.0C960.3 188.3 1020.8 143.4 1055.0 118.8C1089.2 94.3 1102.2 86.3 1123.0 72.6C1143.8 59.0 1165.7 45.4 1180.0 37.0C1194.3 28.6 1202.2 24.8 1209.0 22.0C1215.8 19.2 1218.0 20.9 1221.0 20.1C1224.0 19.3 1227.1 17.2 1227.2 17.3C1227.2 17.4 1223.5 18.5 1221.3 20.6C1219.1 22.7 1230.5 17.2 1214.0 29.8C1197.5 42.4 1145.7 78.7 1122.0 96.1C1098.3 113.5 1091.3 118.4 1072.0 134.2C1052.7 150.0 1025.7 172.4 1006.0 191.0C986.3 209.6 967.6 230.8 953.9 246.0C940.2 261.2 930.1 273.8 923.7 282.0C917.4 290.2 917.9 290.8 915.7 295.0C913.5 299.2 911.8 303.2 910.6 307.0C909.5 310.8 908.9 315.0 909.0 318.0C909.1 321.0 909.8 323.1 911.0 324.9C912.2 326.7 913.8 327.9 916.0 328.7C918.2 329.6 916.0 329.8 924.0 330.0C932.0 330.2 952.0 330.8 964.0 330.0C976.0 329.2 988.0 326.5 996.0 324.9C1004.0 323.3 1003.2 323.4 1012.0 320.4C1020.8 317.3 1025.8 316.2 1049.0 306.8C1072.2 297.5 1131.3 272.2 1151.0 264.3C1170.7 256.3 1163.3 260.1 1167.0 259.1C1170.7 258.1 1171.5 258.3 1173.0 258.5C1174.5 258.6 1175.3 259.0 1176.1 259.9C1176.9 260.8 1177.6 262.0 1177.9 264.0C1178.2 266.0 1178.1 269.5 1177.7 272.0C1177.4 274.5 1178.0 274.2 1175.9 279.0C1173.8 283.8 1172.8 287.7 1165.0 301.0C1157.2 314.3 1135.7 348.0 1129.3 359.0C1122.9 370.0 1127.0 365.2 1126.7 367.0C1126.5 368.8 1127.3 369.3 1127.9 370.1C1128.5 370.8 1128.6 371.1 1130.1 371.5C1131.6 371.8 1133.2 372.3 1137.0 372.0C1140.8 371.7 1143.0 372.3 1153.0 369.8C1163.0 367.3 1183.0 360.6 1197.0 357.1C1211.0 353.5 1222.3 350.7 1237.0 348.5C1251.7 346.4 1276.3 344.5 1285.0 344.0C1293.7 343.5 1288.2 344.7 1289.1 345.4C1290.0 346.0 1290.8 345.5 1290.5 348.1C1290.3 350.7 1288.0 357.8 1287.5 361.0C1287.1 364.2 1287.3 365.2 1288.1 367.0C1288.8 368.8 1290.4 370.5 1292.1 371.7C1293.7 372.9 1291.3 373.1 1298.0 374.2C1304.7 375.2 1308.8 377.4 1332.0 378.0C1355.2 378.6 1416.5 377.8 1437.0 378.0C1457.5 378.2 1449.5 378.3 1455.0 379.0C1460.5 379.7 1466.5 380.9 1470.0 381.9C1473.5 382.9 1474.3 384.0 1475.8 385.2C1477.3 386.4 1478.5 388.4 1479.0 389.0\"/></svg>";
+const fillSig = e => { e.innerHTML = SIG; return e; };
+document.querySelectorAll(".sig").forEach(fillSig);
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
 function setTheme(c) {
@@ -603,7 +611,7 @@ function renderCard() {
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
   if (view === "journal") { setTheme(ALL); title.append("journal", dot()); $("line").textContent = "notes on getting better."; return; }
   if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
-  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); const g = el("span", "sig"); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
+  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); const g = fillSig(el("span", "sig")); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
     if (NEXT) { const n = el("p", "now next"); const b = el("b", null, "next"); b.append(el("i", null, ".")); n.append(b, NEXT); $("player").append(n); }
     return; }
   const c = byId[filter];
