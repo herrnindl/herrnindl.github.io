@@ -8,6 +8,11 @@
 <meta name="theme-color" content="#FFF8BB">
 <link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MN.">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script src="analytics.js"></script>
 <script>
 /* Coming-soon gate. Not real security: it keeps casual visitors out until launch. */
@@ -212,6 +217,54 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .contact { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--fg); text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
 .contact.primary { background: var(--fg); color: var(--bg); }
 .contact small { font-size: 11px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
+/* MN. in numbers */
+.nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 12px; max-width: 640px; }
+.nums div { display: grid; gap: 2px; }
+.nums b { font-weight: 800; font-size: clamp(34px, 8vw, 54px); letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+.nums span { font-size: 11px; letter-spacing: .18em; color: var(--soft); }
+/* photographers, built from the credits */
+.phgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 10px; max-width: 900px; }
+.ph { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: center; padding: 8px; border-radius: 12px; border: 1px solid var(--line); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.ph img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; display: block; }
+.ph b { display: block; font-weight: 800; letter-spacing: -.03em; font-size: 17px; }
+.ph small { display: block; font-size: 12px; color: var(--soft); }
+.ph .chs { display: flex; gap: 4px; margin-top: 5px; }
+.ph .chs i { width: 9px; height: 9px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.ph a { color: inherit; font-size: 12px; text-decoration: none; border-bottom: 1px solid var(--line); }
+/* places: home in the middle, every chapter at its real direction and distance */
+.places { max-width: 560px; width: 100%; }
+.places svg { display: block; width: 100%; height: auto; overflow: visible; }
+.places .ring { fill: none; stroke: var(--line); }
+.places .rl { font-size: 15px; letter-spacing: .14em; fill: var(--soft); }
+.places .pl { font-size: 20px; font-weight: 500; fill: var(--fg); letter-spacing: -.01em; }
+.places .pd { cursor: pointer; }
+.places .pd circle { stroke: rgba(0,0,0,.3); stroke-width: 1.2; transition: r .2s ease; }
+.places .pd:hover circle { r: 14; }
+.places .home { font-size: 15px; letter-spacing: .2em; fill: var(--fg); }
+.embed.plist { height: 352px; max-width: 640px; }
+/* on this day */
+.otd { margin-top: 30px; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; max-width: 520px; padding: 10px; border-radius: 14px; border: 1px solid var(--line); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; width: 100%; }
+.otd img { width: 96px; height: 120px; object-fit: cover; border-radius: 8px; display: block; }
+.otd small { font-size: 11px; letter-spacing: .22em; color: var(--soft); }
+.otd b { display: block; font-weight: 800; font-size: 24px; letter-spacing: -.04em; margin-top: 2px; }
+.otd span { font-size: 13px; color: var(--soft); }
+/* chapter quote between the photos */
+.quote { break-inside: avoid; margin: 0 0 var(--gap, 6px); padding: 34px 22px; border-radius: 4px; background: var(--fg); color: var(--bg); font-weight: 800; font-size: clamp(24px, 5vw, 34px); letter-spacing: -.045em; line-height: 1.02; }
+.quote i { font-style: normal; color: var(--dot); }
+/* share a chapter */
+.sharebtn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 999px; border: 1px solid currentColor; background: none; color: inherit; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; }
+/* guestbook */
+.gb { margin-top: 12px; display: grid; gap: 14px; }
+.gbwall { display: flex; flex-wrap: wrap; gap: 6px; min-height: 22px; }
+.gbwall i { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); position: relative; }
+.gbwall i:hover::after { content: attr(data-n); position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: var(--fg); color: var(--bg); }
+.gbform { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.gbform .cols { display: flex; gap: 6px; }
+.gbform .cols button { width: 26px; height: 26px; border-radius: 50%; border: 0; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); cursor: pointer; padding: 0; }
+.gbform .cols button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--fg); }
+.gbform input { font: inherit; font-size: 16px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); width: 11em; }
+.gbform .go { padding: 9px 16px; border-radius: 999px; border: 0; background: var(--fg); color: var(--bg); font: inherit; font-weight: 500; cursor: pointer; }
+.gbnote { font-size: 11px; color: var(--soft); margin: 0; }
 /* inspirations: theirs next to mine */
 .insp { display: grid; gap: 40px; }
 .icard { display: grid; gap: 22px; }
@@ -471,10 +524,13 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 
   <nav class="strip" id="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
 
+  <div class="otd" id="otd" hidden></div>
   <div class="hofhead" id="tlHead" hidden>the timeline.</div>
   <div class="tl" id="tl" hidden></div>
   <div class="hofhead" id="hofHead" hidden>the chapters.</div>
   <div class="hof" id="hof" hidden></div>
+  <div class="hofhead" id="gbHead" hidden>leave a dot.</div>
+  <div class="gb" id="gb" hidden></div>
   <div class="hofhead" id="wallHead" hidden>every photo.</div>
   <div class="chrecaps" id="chRecaps" hidden></div>
   <div class="wall" id="wall"></div>
@@ -491,9 +547,11 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <p class="now"><b>now.</b> ember. starting at wildkogel sundaze in december.</p>
     <p class="text">model from pinzgau, austria. MN. started on 01.01.2025, and since then it's been shoots, a first runway with s.Oliver, a few pages in print, and a life told in colours.</p>
     <div class="facts"><span>based in pinzgau</span><span>german · english</span></div>
+    <div class="plabel">MN. IN NUMBERS</div>
+    <div class="nums" id="nums"></div>
     <div class="plabel">WORKED WITH</div>
+    <div class="phgrid" id="phgrid"></div>
     <div class="worked">
-      <div><span>photographers</span><p><a href="https://instagram.com/alpindis" target="_blank" rel="noopener">alpindis</a> · <a href="https://instagram.com/wekreat.studio" target="_blank" rel="noopener">wekreat.studio</a> · <a href="https://instagram.com/ronaldmitterer" target="_blank" rel="noopener">ronald mitterer</a> · <a href="https://instagram.com/danielriederfotografie" target="_blank" rel="noopener">daniel rieder</a></p></div>
       <div><span>runway</span><p>s.Oliver × INTERSPORT Harms</p></div>
       <div><span>shot wearing</span><p>s.Oliver · Calvin Klein · Nautica · Only &amp; Sons · Hidden Hills Watch · Cocoburry · Distorted People · Peso · BRTLwear · leder.ritsch · getdressedmittersill</p></div>
       <div><span>print</span><p>Platzhirsch · Bezirkszeitung</p></div>
@@ -505,6 +563,12 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       <li data-press="2024-11-platzhirsch"><span class="when">11/24</span><div><b>Platzhirsch</b> <span>· Single des Monats</span></div></li>
       <li data-press="2024-08-platzhirsch"><span class="when">08/24</span><div><b>Platzhirsch</b> <span>· Mächtige Mähnen</span></div></li>
     </ul>
+    <div class="plabel">PLACES</div>
+    <div class="places" id="places"></div>
+    <div class="plabel">THE SOUNDTRACK</div>
+    <div class="embed plist" data-embed="https://open.spotify.com/embed/playlist/0ikp5Gii48zfVnC9Ybgvkt?utm_source=generator" data-title="MN. playlist on Spotify">
+      <button class="reveal-btn" type="button"><b>MN.</b><span>colors, memories, and moments — the sound behind the name.</span><em>tap to load the playlist</em><small>loads spotify · spotify sets cookies</small></button>
+    </div>
   </section>
 
   <section class="sedcard-panel panel" id="sedcard" hidden>
@@ -819,6 +883,7 @@ function renderCard() {
     }
   });
   if ([].concat(SONGS[c.id] || []).some(x => x.id) && !soundOn) meta.append(el("span", "spotnote", "tap to play via spotify · spotify sets cookies"));
+  { const sh = el("button", "sharebtn", "share."); sh.type = "button"; sh.setAttribute("aria-label", "share " + c.label + " as a story"); sh.onclick = () => shareChapter(c); meta.append(sh); }
   if (soundOn) { const first = [].concat(SONGS[c.id] || []).find(x => x.id); if (first) playSong(first); }
 }
 
@@ -860,6 +925,163 @@ function renderTimeline() {
   t.append(bar);
   ["2025", "2026", "2027"].forEach(y => { const l = el("span", "yr", y); l.style.left = pos(d(y + "-01-01")) + "%"; t.append(l); });
   if (now < z) { const m = el("div", "now"); m.style.left = pos(now) + "%"; m.append(el("span", null, "now")); t.append(m); }
+}
+
+/* ---------- about: MN. in numbers ---------- */
+const RUNWAYS = 1;   /* change when there's a new runway */
+function credits() {
+  const by = {};
+  photos.forEach(p => { if (!p.credit) return; (by[p.credit] = by[p.credit] || []).push(p); });
+  return Object.entries(by).map(([credit, list]) => {
+    const m = credit.match(/^(.*?)\s*@([\w.]+)\s*$/);
+    return { credit, name: (m ? (m[1] || m[2]) : credit).trim(), handle: m ? m[2] : "", list };
+  }).sort((a, b) => b.list.length - a.list.length);
+}
+function renderNums() {
+  const box = $("nums"); if (!box) return; box.textContent = "";
+  const day = 864e5, start = new Date("2025-01-01T00:00:00+01:00");
+  const today = new Date();
+  const started = TL.filter(([, st]) => new Date(st + "T00:00:00+01:00") <= today).length;
+  const items = [
+    [Math.floor((today - start) / day) + 1, "days of MN."],
+    [started, "chapters"],
+    [photos.length, "photos"],
+    [credits().length, "photographers"],
+    [document.querySelectorAll(".press li").length, "times in print"],
+    [RUNWAYS, RUNWAYS === 1 ? "runway" : "runways"],
+  ];
+  items.forEach(([n, l]) => { const d = el("div"); const b = el("b", null, "0"); b.dataset.n = n; d.append(b, el("span", null, l)); box.append(d); });
+  countUp(box);
+}
+function countUp(box) {
+  const go = () => box.querySelectorAll("b").forEach(b => {
+    const n = +b.dataset.n; if (calm()) { b.textContent = n.toLocaleString("de-AT"); return; }
+    const t0 = performance.now(), T = 1100;
+    const f = t => { const k = Math.min(1, (t - t0) / T), e = 1 - Math.pow(1 - k, 3); b.textContent = Math.round(n * e).toLocaleString("de-AT"); if (k < 1) requestAnimationFrame(f); };
+    requestAnimationFrame(f);
+  });
+  if (!("IntersectionObserver" in window)) { go(); return; }
+  const o = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { o.disconnect(); go(); } }, { threshold: .3 });
+  o.observe(box);
+}
+/* ---------- about: photographers, straight from the credits ---------- */
+function renderPhotographers() {
+  const g = $("phgrid"); if (!g) return; g.textContent = "";
+  credits().forEach(c => {
+    const b = el("button", "ph");
+    const img = el("img"); setImg(img, c.list[0], "64px"); img.alt = ""; img.loading = "lazy";
+    const t = el("div"); t.append(el("b", null, c.name.toLowerCase()));
+    t.append(el("small", null, c.list.length + " photos"));
+    const chs = el("span", "chs"); [...new Set(c.list.map(p => p.chapter))].forEach(id => { const i = el("i"); i.style.background = byId[id].bg; i.title = byId[id].label; chs.append(i); }); t.append(chs);
+    if (c.handle) { const a = el("a", null, "@" + c.handle); a.href = "https://instagram.com/" + c.handle; a.target = "_blank"; a.rel = "noopener"; a.onclick = e => e.stopPropagation(); t.append(a); }
+    b.append(img, t);
+    b.onclick = () => open(c.list, 0);
+    g.append(b);
+  });
+}
+/* ---------- about: places around home ---------- */
+const HOME = { name: "neukirchen", lat: 47.25, lon: 12.28 };
+const PLACES = [
+  { id: "baby-blue", name: "graz", lat: 47.07, lon: 15.44 },
+  { id: "lavendel", name: "italia", lat: 45.44, lon: 10.99 },
+  { id: "navy-blue", name: "dublin", lat: 53.35, lon: -6.26 },
+  { id: "grey", name: "munich", lat: 48.14, lon: 11.58 },
+  { id: "vanilla", name: "france", lat: 48.86, lon: 2.35 },
+  { id: "vanilla-2", name: "königsleiten", lat: 47.21, lon: 12.10 },
+  { id: "ember", name: "wildkogel", lat: 47.30, lon: 12.31 },
+];
+function renderPlaces() {
+  const box = $("places"); if (!box || box.dataset.done) return; box.dataset.done = 1;
+  const R = 220, K = 8, km = p => { const x = (p.lon - HOME.lon) * Math.cos(HOME.lat * Math.PI / 180) * 111.32, y = (HOME.lat - p.lat) * 110.57; return [x, y, Math.hypot(x, y)]; };
+  const dmax = Math.max(...PLACES.map(p => km(p)[2])), sc = d => R * Math.log(1 + d / K) / Math.log(1 + dmax / K);
+  const NS = "http://www.w3.org/2000/svg", mk = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  const svg = mk("svg", { viewBox: "-300 -250 600 500", role: "img", "aria-label": "places of the chapters around home" });
+  [10, 100, 1000].forEach(d => { const r = sc(d); svg.append(mk("circle", { class: "ring", r, cx: 0, cy: 0 })); const t = mk("text", { class: "rl", x: 4, y: -r - 4 }); t.textContent = d.toLocaleString("de-AT") + " km"; svg.append(t); });
+  const hm = mk("g", {}); [["#000000", 12], ["#FFFFFF", 8]].forEach(([c, r]) => hm.append(mk("circle", { r, fill: c, stroke: "rgba(0,0,0,.25)" })));
+  const ht = mk("text", { class: "home", x: 0, y: 32, "text-anchor": "middle" }); ht.textContent = "HOME"; hm.append(ht); svg.append(hm);
+  PLACES.forEach(p => {
+    const c = byId[p.id], [x, y, d] = km(p), r = sc(d), a = Math.atan2(y, x), X = Math.cos(a) * r, Y = Math.sin(a) * r;
+    const g = mk("g", { class: "pd", tabindex: 0, role: "button", "aria-label": p.name + " · " + c.label });
+    g.append(mk("circle", { cx: X, cy: Y, r: 11, fill: c.bg }));
+    const left = X < -40, t = mk("text", { class: "pl", x: X + (left ? -14 : 14), y: Y + 4, "text-anchor": left ? "end" : "start" });
+    t.textContent = p.name; g.append(t);
+    const ttl = mk("title", {}); ttl.textContent = p.name + " · " + c.label + " · " + Math.round(d).toLocaleString("de-AT") + " km"; g.append(ttl);
+    g.addEventListener("click", e => enterChapter(c, e));
+    g.addEventListener("keydown", e => { if (e.key === "Enter") enterChapter(c, e); });
+    svg.append(g);
+  });
+  box.append(svg);
+}
+function renderAboutExtras() { if (view !== "about") return; renderNums(); renderPhotographers(); renderPlaces(); }
+
+/* ---------- start page: on this day ---------- */
+function renderOtd() {
+  const box = $("otd"), show = view === "colours" && filter === "all";
+  const now = new Date(), dd = String(now.getDate()).padStart(2, "0") + "." + String(now.getMonth() + 1).padStart(2, "0") + ".";
+  const hits = show ? photos.filter(p => p.date && p.date.startsWith(dd) && +p.date.slice(6) < now.getFullYear()) : [];
+  box.hidden = !hits.length; if (!hits.length) return;
+  const p = hits[Math.floor(now.getDate() * 7 % hits.length)], yrs = now.getFullYear() - +p.date.slice(6);
+  box.textContent = ""; const b = el("button", "otd"); box.replaceWith(b); b.id = "otd";
+  const img = el("img"); setImg(img, p, "96px"); img.alt = "";
+  const t = el("div"); t.append(el("small", null, "ON THIS DAY"), el("b", null, yrs === 1 ? "one year ago." : yrs + " years ago."), el("span", null, p.date + " · " + byId[p.chapter].label));
+  b.append(img, t); b.onclick = () => open(hits, hits.indexOf(p));
+}
+
+/* ---------- chapter quotes: one sentence per chapter, shown between the photos ---------- */
+const QUOTES = {
+  /* "navy-blue": "the end? no. a new start.", */
+};
+
+/* ---------- share a chapter as a story image ---------- */
+async function shareChapter(c) {
+  const W = 1080, H = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const x = cv.getContext("2d");
+  try { await Promise.all(['800 100px Inter', '400 40px Inter', '500 60px "Bodoni Moda"'].map(f => document.fonts.load(f))); } catch (e) {}
+  x.fillStyle = c.bg; x.fillRect(0, 0, W, H); x.fillStyle = c.fg; x.textBaseline = "alphabetic";
+  x.font = '500 70px "Bodoni Moda", Georgia, serif'; x.fillText("MN.", 90, 170);
+  const pics = photos.filter(p => p.chapter === c.id);
+  let y = 300;
+  if (pics.length) {
+    const p = pics[0], img = new Image(); img.src = p.thumb2 || p.src;
+    try { await img.decode(); const bw = 900, bh = 1000, r = Math.max(bw / img.width, bh / img.height), sw = bw / r, sh = bh / r;
+      x.save(); x.beginPath(); x.roundRect(90, y, bw, bh, 28); x.clip(); x.drawImage(img, (img.width - sw) / 2, (img.height - sh) / 2, sw, sh, 90, y, bw, bh); x.restore(); y += bh + 120; } catch (e) { y = 900; }
+  } else y = 1000;
+  x.font = '400 34px Inter, Arial, sans-serif'; x.letterSpacing = "10px"; x.fillText(c.dates.toUpperCase(), 90, y); x.letterSpacing = "0px";
+  let fs = 210; x.font = `800 ${fs}px Inter, Arial, sans-serif`;
+  const name = c.name, nameW = () => x.measureText(name + ".").width;
+  while (nameW() > 900 && fs > 90) { fs -= 6; x.font = `800 ${fs}px Inter, Arial, sans-serif`; }
+  x.letterSpacing = `${-fs * .05}px`; y += fs * .95; x.fillText(name, 84, y);
+  const nw = x.measureText(name).width; x.fillStyle = c.dot === c.bg ? c.fg : c.dot; x.fillText(".", 84 + nw, y); x.fillStyle = c.fg; x.letterSpacing = "0px";
+  x.font = '400 56px Inter, Arial, sans-serif'; x.fillText(c.line, 90, y + 90);
+  x.font = '400 30px Inter, Arial, sans-serif'; x.letterSpacing = "8px"; x.globalAlpha = .75; x.fillText("MY LIFE IN COLOURS.  ·  HERRNINDL.COM", 90, H - 110); x.globalAlpha = 1; x.letterSpacing = "0px";
+  const blob = await new Promise(r => cv.toBlob(r, "image/png"));
+  const file = new File([blob], "mn-" + c.id + ".png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: c.label }); return; } catch (e) { if (e.name === "AbortError") return; } }
+  const a = el("a"); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+/* ---------- guestbook: leave a dot (switches on when GB_API is set) ---------- */
+const GB_API = "";
+async function renderGb() {
+  const box = $("gb"), head = $("gbHead"), show = !!GB_API && view === "colours" && filter === "all";
+  box.hidden = head.hidden = !show; if (!show || box.dataset.done) return; box.dataset.done = 1;
+  const wall = el("div", "gbwall"); box.append(wall);
+  const draw = list => { wall.textContent = ""; list.slice(-400).forEach(d => { const i = el("i"); i.style.background = d.c; if (d.n) i.dataset.n = d.n; i.title = d.n || ""; wall.append(i); }); };
+  try { draw(await (await fetch(GB_API)).json()); } catch (e) {}
+  let mine = null; try { mine = localStorage.getItem("mn-dot"); } catch (e) {}
+  if (mine) { box.append(el("p", "gbnote", "your dot is on the wall. thank you.")); return; }
+  const f = el("form", "gbform"), cols = el("div", "cols"); let pick = CHAPTERS[CHAPTERS.length - 2].bg;
+  CHAPTERS.forEach(c => { const b = el("button"); b.type = "button"; b.style.setProperty("--c", c.bg); b.title = c.label; b.setAttribute("aria-label", c.label); b.setAttribute("aria-pressed", String(c.bg === pick)); b.onclick = () => { pick = c.bg; cols.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); }; cols.append(b); });
+  const name = el("input"); name.placeholder = "first name (optional)"; name.maxLength = 20;
+  const go = el("button", "go", "leave it."); go.type = "submit";
+  f.append(cols, name, go); box.append(f, el("p", "gbnote", "your colour and first name are shown here. nothing else is saved. details in the datenschutz."));
+  f.onsubmit = async e => {
+    e.preventDefault(); go.disabled = true;
+    try { const r = await fetch(GB_API, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ c: pick, n: name.value.trim() }) });
+      if (!r.ok) throw 0; draw(await r.json()); try { localStorage.setItem("mn-dot", "1"); } catch (e) {}
+      f.replaceWith(el("p", "gbnote", "your dot is on the wall. thank you."));
+    } catch (err) { go.disabled = false; go.textContent = "try again."; }
+  };
 }
 
 function renderHof() {
@@ -911,6 +1133,7 @@ function renderColours() {
     }
     b.onclick = () => open(list, i);
     wall.append(b);
+    if (cur && QUOTES[cur.id] && i === Math.min(5, list.length - 1)) { const q = el("div", "quote"); q.style.setProperty("--dot", cur.dot === cur.fg ? cur.bg : cur.dot); q.append(QUOTES[cur.id].replace(/\.$/, "")); q.append(el("i", null, ".")); wall.append(q); }
   });
 }
 
@@ -1017,6 +1240,9 @@ function render() {
   renderChips();
   renderCard();
   renderHof();
+  renderOtd();
+  renderGb();
+  renderAboutExtras();
   if (view === "colours") renderColours();
   if (view === "recaps") renderRecaps();
   if (view === "posts") renderPosts();
@@ -1218,7 +1444,7 @@ function loadEmbed(box) {
   box.textContent = ""; box.append(f);
 }
 document.querySelectorAll(".embed").forEach(b => { b.querySelector(".reveal-btn").onclick = () => loadEmbed(b); });
-function autoEmbeds() { let on = false; try { on = soundOn; } catch (e) {} if (on && view === "inspirations") document.querySelectorAll(".embed").forEach(loadEmbed); }
+function autoEmbeds() { let on = false; try { on = soundOn; } catch (e) {} if (on && (view === "inspirations" || view === "about")) document.querySelectorAll(".embed").forEach(loadEmbed); }
 
 /* Booking form: builds the mail, the visitor's own mail app sends it. */
 $("bform").addEventListener("submit", e => {
