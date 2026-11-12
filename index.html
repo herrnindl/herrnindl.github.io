@@ -77,7 +77,7 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .tile:hover img { transform: scale(1.02); }
 .tag { position: absolute; left: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.86); color: #1C1C14; font-size: 11px; font-weight: 500; padding: 3px 9px 3px 6px; border-radius: 999px; }
 .tag .sw { width: 9px; height: 9px; }
-.empty { border: 1px dashed var(--line); border-radius: 4px; padding: 44px 20px; text-align: center; color: var(--soft); margin-top: 18px; }
+.empty { margin-top: 28px; padding: 36px 0 8px; font-weight: 800; font-size: clamp(26px, 6vw, 40px); letter-spacing: -.045em; line-height: 1; color: var(--fg); }
 
 .lb { position: fixed; inset: 0; z-index: 20; background: rgba(10,10,8,.95); color: #F2F0E6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
 .lb img { max-height: calc(100% - 90px); object-fit: contain; border-radius: 3px; }
@@ -103,6 +103,23 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .set img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
 .set:hover img { transform: scale(1.02); }
 .multi { position: absolute; top: 8px; right: 8px; width: 16px; height: 16px; border-radius: 3px; border: 2px solid #fff; box-shadow: 3px -3px 0 -1px rgba(255,255,255,.85); }
+/* recaps: every month of the year has its place; months without a cover get one in their chapter colour */
+.set:has(.rcover) { container-type: inline-size; }
+.rcover { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 0; background: var(--c); color: var(--t); font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; }
+.rcover small { font-size: 6.2cqw; letter-spacing: .3em; padding-left: .3em; margin-bottom: 1cqw; }
+.rcover b { font-weight: 500; font-size: 44cqw; line-height: .86; letter-spacing: .01em; }
+.rcover span { font-size: 13cqw; letter-spacing: .16em; padding-left: .16em; margin-top: 1cqw; }
+.grid2 .set.light, .chrecaps .set.light { box-shadow: inset 0 0 0 1px rgba(28,28,20,.12); }
+.rtag { position: absolute; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 7px; border-radius: 999px; background: rgba(255,255,255,.88); color: #1C1C14; font-family: "Inter", sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -.01em; }
+.rtag i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.chrecaps { margin-top: 18px; }
+.chrecaps .hofhead { margin: 0 0 10px; }
+.chrecaps .row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+@media (min-width: 900px) { .chrecaps .row { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.chrecaps .set { aspect-ratio: 4 / 5; border-radius: 3px; }
+.chrecaps .rtag { display: none; }
+.chrecaps .rcover { border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); background: color-mix(in srgb, var(--c) 93%, #000); }
+.sheet .chlink { margin-left: auto; margin-right: 12px; padding: 5px 12px; border-radius: 999px; border: 1px solid currentColor; background: none; color: inherit; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; }
 .rlabel { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 12px 10px; background: linear-gradient(transparent, rgba(0,0,0,.55)); color: #fff; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
 .rlabel b { font-weight: 800; font-size: 22px; letter-spacing: -.04em; }
 .rlabel span { font-size: 12px; letter-spacing: .14em; }
@@ -449,6 +466,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="hofhead" id="hofHead" hidden>the chapters.</div>
   <div class="hof" id="hof" hidden></div>
   <div class="hofhead" id="wallHead" hidden>every photo.</div>
+  <div class="chrecaps" id="chRecaps" hidden></div>
   <div class="wall" id="wall"></div>
   <div class="grid2" id="recapGrid" hidden></div>
   <div class="grid3" id="postGrid" hidden></div>
@@ -654,7 +672,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true">
   <div class="inner">
-    <div class="top"><span class="num" id="sNum"></span><button class="x" id="sClose" aria-label="Close">✕</button></div>
+    <div class="top"><span class="num" id="sNum"></span><button class="chlink" id="sChap" hidden></button><button class="x" id="sClose" aria-label="Close">✕</button></div>
     <div class="big" id="sBig"></div>
     <h2 id="sTitle"></h2>
     <p class="txt" id="sText"></p>
@@ -862,8 +880,9 @@ function renderColours() {
   list = (filter === "all" ? photos : photos.filter(p => p.chapter === filter));
   const wall = $("wall"); wall.textContent = "";
   const cur = byId[filter];
-  $("empty").textContent = cur ? cur.label + " photos are coming." : "photos are coming.";
-  $("empty").hidden = list.length > 0;
+  const nr = renderChRecaps();
+  $("empty").textContent = cur && cur.id === "red" ? "red. starts 01.01.2027." : (cur ? cur.label + " photos are coming." : "photos are coming.");
+  $("empty").hidden = list.length > 0 || nr > 0;
   const nx = $("nextch"); nx.textContent = ""; nx.hidden = !cur;
   if (cur) {
     const i = CHAPTERS.indexOf(cur), n = CHAPTERS[(i + 1) % CHAPTERS.length];
@@ -895,11 +914,49 @@ function setTile(s, extra) {
   return b;
 }
 
+/* recaps: all 12 months of every year from 2026 on, newest first */
+function chapterAt(day) { let id = TL[0][0]; TL.forEach(([c, st]) => { if (day >= st) id = c; }); return id; }
+function recapMonths() {
+  const have = {}; sets.recaps.forEach(r => have[r.id] = r);
+  const ys = sets.recaps.map(r => +r.id.slice(0, 4)).concat([2026, new Date().getFullYear()]);
+  const out = [];
+  for (let y = Math.max(...ys); y >= 2026; y--) for (let m = 12; m >= 1; m--) {
+    const id = y + "-" + String(m).padStart(2, "0");
+    if (have[id]) { out.push(have[id]); continue; }
+    const ch = chapterAt(id + "-15"), first = TL.find(t => t[0] === ch)[1];
+    const k = (y - +first.slice(0, 4)) * 12 + m - +first.slice(5, 7) + 1;
+    out.push({ id, chapter: ch, number: String(m).padStart(2, "0") + "/" + String(y).slice(2), big: String(Math.max(k, 1)).padStart(2, "0"), placeholder: true, images: [] });
+  }
+  return out;
+}
+function recapTile(r, small) {
+  const c = byId[r.chapter] || ALL;
+  let b;
+  if (r.placeholder) {
+    b = el("button", "set"); b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg);
+    const cv = el("div", "rcover"); cv.append(el("small", null, c.name.toUpperCase() + "."), el("b", null, r.big), el("span", null, r.number));
+    b.append(cv); b.setAttribute("aria-label", c.label + " " + r.number);
+    b.onclick = e => enterChapter(c, e);
+  } else b = setTile(r);
+  if (c.id === "white" || c.id === "vanilla") b.classList.add("light");
+  if (!small) { const t = el("span", "rtag"); const d = el("i"); d.style.setProperty("--c", c.bg); t.append(d, c.label); b.append(t); }
+  return b;
+}
+function renderChRecaps() {
+  const box = $("chRecaps"); box.textContent = "";
+  const cur = view === "colours" && byId[filter];
+  const mine = cur ? recapMonths().filter(r => r.chapter === cur.id).reverse() : [];
+  box.hidden = !mine.length; if (!mine.length) return 0;
+  const row = el("div", "row"); mine.forEach(r => row.append(recapTile(r, true)));
+  box.append(el("div", "hofhead", "recaps."), row);
+  return mine.length;
+}
+
 function renderRecaps() {
   const g = $("recapGrid"); g.textContent = "";
   $("empty").textContent = "No recaps yet.";
-  $("empty").hidden = sets.recaps.length > 0;
-  sets.recaps.forEach(r => g.append(setTile(r)));
+  $("empty").hidden = true;
+  recapMonths().forEach(r => g.append(recapTile(r)));
 }
 
 /* Title with its last dot in a colour (added if the title has none). */
@@ -932,6 +989,9 @@ function render() {
   document.querySelectorAll(".view").forEach(v => v.setAttribute("aria-current", String(v.dataset.view === view)));
   $("strip").hidden = view !== "colours";
   $("wall").hidden = view !== "colours";
+  if (view !== "colours") $("chRecaps").hidden = true;
+  /* sections without anything in them stay out of the menu until the first post */
+  document.querySelector('.view[data-view="posts"]').hidden = !sets.posts.length;
   $("recapGrid").hidden = view !== "recaps";
   $("postGrid").hidden = view !== "posts";
   $("journalList").hidden = view !== "journal";
@@ -976,6 +1036,8 @@ function openSet(s) {
   const sh = $("sheet");
   sh.style.setProperty("--sbg", c.bg); sh.style.setProperty("--sfg", c.fg);
   $("sNum").textContent = s.number || s.date || "";
+  const sc = $("sChap"); sc.hidden = !byId[s.chapter];
+  if (byId[s.chapter]) { sc.textContent = "→ " + c.label; sc.onclick = () => { closeSet(); select(c.id); window.scrollTo({ top: 0 }); }; }
   $("sBig").textContent = s.big || ""; $("sBig").hidden = !s.big;
   $("sTitle").textContent = s.title || ""; $("sTitle").hidden = !s.title;
   if (s.journal && s.title) jTitle($("sTitle"), s.title, c.dot || c.fg);
