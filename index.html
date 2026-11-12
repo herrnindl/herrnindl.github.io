@@ -286,6 +286,24 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 }
 /* next chapter */
 .nextch { margin-top: 28px; }
+/* hall of fame: every chapter as a tile in its colour */
+.hof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
+@media (min-width: 640px) { .hof { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; } }
+@media (min-width: 1000px) { .hof { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.hof button { position: relative; aspect-ratio: 1; border: 0; border-radius: 10px; padding: 10px; background: var(--c); color: var(--t); display: flex; flex-direction: column; justify-content: space-between; text-align: left; font: inherit; cursor: pointer; overflow: hidden; transition: transform .2s ease; }
+.hof button.light { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.hof button:hover { transform: translateY(-3px); }
+.hof button:active { transform: scale(.97); }
+.hof small { font-size: 9px; letter-spacing: .12em; opacity: .7; font-variant-numeric: tabular-nums; }
+.hof b { font-weight: 800; font-size: clamp(17px, 4.6vw, 24px); letter-spacing: -.045em; line-height: .95; }
+.hof b i { font-style: normal; color: var(--d); }
+.hof em { font-style: normal; font-size: 10px; letter-spacing: .14em; opacity: .75; }
+.hof .nowtag { position: absolute; bottom: 9px; right: 9px; font-size: 9px; letter-spacing: .16em; font-weight: 500; padding: 2px 7px; border-radius: 999px; background: var(--t); color: var(--c); }
+.hof button.locked { opacity: .9; }
+.hofhead { margin-top: 26px; font-size: 11px; letter-spacing: .24em; color: var(--soft); text-transform: uppercase; }
+.next { margin-top: 18px; }
+.next b i { font-style: normal; }
+@media (prefers-reduced-motion: reduce) { .hof button { transition: none; } }
 .nextbtn { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 28px 24px; border: 0; border-radius: 4px; background: var(--c); text-align: left; }
 .nextbtn small { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .7; }
 .nextbtn b { font-weight: 800; font-size: clamp(32px, 7vw, 64px); letter-spacing: -.05em; line-height: 1; }
@@ -346,6 +364,9 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 
   <nav class="strip" id="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
 
+  <div class="hofhead" id="hofHead" hidden>the chapters.</div>
+  <div class="hof" id="hof" hidden></div>
+  <div class="hofhead" id="wallHead" hidden>every photo.</div>
   <div class="wall" id="wall"></div>
   <div class="grid2" id="recapGrid" hidden></div>
   <div class="grid3" id="postGrid" hidden></div>
@@ -534,6 +555,9 @@ const SONGS = {
   ember: null,
   red: null
 };
+/* "next." on the start page. Change the text when the next thing changes. */
+const NEXT = "wildkogel sundaze · december 2026";
+const nowId = () => new Date() >= new Date("2027-01-01T00:00:00+01:00") ? "red" : "ember";
 const INFO = { about: "who i am.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
 const VIEWS = ["colours", "recaps", "posts", "journal", ...Object.keys(INFO)];
 let photos = [], sets = { recaps: [], posts: [], journal: [] }, view = "colours", filter = "all", list = [], idx = -1;
@@ -579,7 +603,9 @@ function renderCard() {
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
   if (view === "journal") { setTheme(ALL); title.append("journal", dot()); $("line").textContent = "notes on getting better."; return; }
   if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
-  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); const g = el("span", "sig"); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g); return; }
+  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); const g = el("span", "sig"); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
+    if (NEXT) { const n = el("p", "now next"); const b = el("b", null, "next"); b.append(el("i", null, ".")); n.append(b, NEXT); $("player").append(n); }
+    return; }
   const c = byId[filter];
   setTheme(c);
   $("dates").textContent = c.dates;
@@ -632,6 +658,28 @@ function renderChips() {
   };
   make("all", "all", null, photos.length);
   CHAPTERS.forEach(c => make(c.id, c.label, c, counts[c.id]));
+}
+
+function renderHof() {
+  const g = $("hof"), show = view === "colours" && filter === "all";
+  g.hidden = $("hofHead").hidden = $("wallHead").hidden = !show; if (!show) return;
+  g.textContent = "";
+  const counts = {}; photos.forEach(p => counts[p.chapter] = (counts[p.chapter] || 0) + 1);
+  const cur = nowId(), live = new Date() >= new Date("2027-01-01T00:00:00+01:00");
+  CHAPTERS.forEach(c => {
+    const b = el("button"); b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg); b.style.setProperty("--d", c.dot === c.bg ? c.fg : c.dot);
+    if (c.id === "white" || c.id === "vanilla") b.classList.add("light");
+    b.append(el("small", null, c.dates));
+    const name = el("b", null, c.name); name.append(el("i", null, ".")); if (c.suffix) name.append(c.suffix);
+    const n = counts[c.id];
+    const foot = el("div"); foot.append(name, el("em", null, n ? n + " photos" : (c.id === "red" && !live ? "is coming" : "soon")));
+    foot.style.display = "grid"; foot.style.gap = "4px";
+    b.append(foot);
+    if (c.id === cur) b.append(el("span", "nowtag", "now"));
+    b.setAttribute("aria-label", c.label + " " + c.dates);
+    b.onclick = e => flood(c.bg, e, () => { select(c.id); window.scrollTo({ top: 0 }); });
+    g.append(b);
+  });
 }
 
 function renderColours() {
@@ -710,6 +758,7 @@ function render() {
   Object.keys(INFO).forEach(k => { $(k).hidden = view !== k; });
   renderChips();
   renderCard();
+  renderHof();
   if (view === "colours") renderColours();
   if (view === "recaps") renderRecaps();
   if (view === "posts") renderPosts();
