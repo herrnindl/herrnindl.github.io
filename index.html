@@ -217,9 +217,6 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
 .gate .glinks a { text-decoration: none; border-bottom: 1px solid rgba(28,28,20,.25); }
 @media (prefers-reduced-motion: reduce) { .gate .gdots i, .gate .shake { animation: none; } }
 
-/* "in colours." on the start page, one chapter colour per letter */
-.line .cl { font-weight: 500; }
-.line .pale { -webkit-text-stroke: .7px rgba(28,28,20,.45); paint-order: stroke fill; }
 /* journal titles: the dot takes the colour of the post's chapter */
 .jdot { color: var(--jd); }
 /* now. */
@@ -617,10 +614,7 @@ function renderCard() {
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
   if (view === "journal") { setTheme(ALL); title.append("journal", dot()); $("line").textContent = "notes on getting better."; return; }
   if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
-  if (filter === "all") { setTheme(ALL); title.append("my life"); const ln = $("line"); ln.textContent = "in ";
-    /* c→baby blue, o→lavendel, l→navy blue, o→grey, u→vanilla, r→vanilla II, s→ber, .→ember */
-    const pt = el("span", "paint"); ln.append(pt);
-    ["baby-blue", "lavendel", "navy-blue", "grey", "vanilla", "vanilla-2", "ber", "ember"].forEach((id, i) => { const ch = el("span", "cl" + (id === "vanilla" ? " pale" : ""), "colours."[i]); ch.style.color = byId[id].bg; pt.append(ch); }); meta.append(el("span", "place", "model from pinzgau, austria")); const g = fillSig(el("span", "sig")); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
+  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); const g = fillSig(el("span", "sig")); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
     if (NEXT) { const n = el("p", "now next"); const b = el("b", null, "next"); b.append(el("i", null, ".")); n.append(b, NEXT); $("player").append(n); }
     return; }
   const c = byId[filter];
