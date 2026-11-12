@@ -217,6 +217,9 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
 .gate .glinks a { text-decoration: none; border-bottom: 1px solid rgba(28,28,20,.25); }
 @media (prefers-reduced-motion: reduce) { .gate .gdots i, .gate .shake { animation: none; } }
 
+/* "in colours." on the start page, one chapter colour per letter */
+.line .cl { font-weight: 500; }
+.line .pale { -webkit-text-stroke: .7px rgba(28,28,20,.45); paint-order: stroke fill; }
 /* now. */
 .now { margin: 0; font-size: 14px; color: var(--soft); }
 .now b { color: var(--fg); font-weight: 800; letter-spacing: -.02em; margin-right: 6px; }
@@ -611,7 +614,9 @@ function renderCard() {
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
   if (view === "journal") { setTheme(ALL); title.append("journal", dot()); $("line").textContent = "notes on getting better."; return; }
   if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
-  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); const g = fillSig(el("span", "sig")); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
+  if (filter === "all") { setTheme(ALL); title.append("my life"); const ln = $("line"); ln.textContent = "in ";
+    /* c→baby blue, o→lavendel, l→navy blue, o→grey, u→vanilla, r→vanilla II, s→ber, .→ember */
+    ["baby-blue", "lavendel", "navy-blue", "grey", "vanilla", "vanilla-2", "ber", "ember"].forEach((id, i) => { const ch = el("span", "cl" + (id === "vanilla" ? " pale" : ""), "colours."[i]); ch.style.color = byId[id].bg; ln.append(ch); }); meta.append(el("span", "place", "model from pinzgau, austria")); const g = fillSig(el("span", "sig")); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
     if (NEXT) { const n = el("p", "now next"); const b = el("b", null, "next"); b.append(el("i", null, ".")); n.append(b, NEXT); $("player").append(n); }
     return; }
   const c = byId[filter];
@@ -665,7 +670,7 @@ function renderChips() {
     chips.append(b);
   };
   make("all", "all", null, photos.length);
-  CHAPTERS.forEach(c => make(c.id, c.label, c, counts[c.id]));
+  [...CHAPTERS].reverse().forEach(c => make(c.id, c.label, c, counts[c.id]));
 }
 
 function renderHof() {
@@ -674,7 +679,7 @@ function renderHof() {
   g.textContent = "";
   const counts = {}; photos.forEach(p => counts[p.chapter] = (counts[p.chapter] || 0) + 1);
   const cur = nowId(), live = new Date() >= new Date("2027-01-01T00:00:00+01:00");
-  CHAPTERS.forEach(c => {
+  [...CHAPTERS].reverse().forEach(c => {
     const b = el("button"); b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg); b.style.setProperty("--d", c.dot === c.bg ? c.fg : c.dot);
     if (c.id === "white" || c.id === "vanilla") b.classList.add("light");
     b.append(el("small", null, c.dates));
