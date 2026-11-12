@@ -113,6 +113,12 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .rtag { position: absolute; left: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 7px; border-radius: 999px; background: rgba(255,255,255,.88); color: #1C1C14; font-family: "Inter", sans-serif; font-size: 12px; font-weight: 500; letter-spacing: -.01em; }
 .rtag i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
 .chrecaps { margin-top: 18px; }
+/* recaps: always full rows — 2 per row on phones, 4 on tablets, 6 on computers */
+.rgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (min-width: 700px) { .rgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .rgrid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.rgrid .rtag { left: 7px; bottom: 7px; font-size: 11px; padding: 3px 8px 3px 6px; gap: 5px; }
+.rgrid .rtag i { width: 8px; height: 8px; }
 .chrecaps .hofhead { margin: 0 0 10px; }
 .chrecaps .row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 @media (min-width: 900px) { .chrecaps .row { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
@@ -468,7 +474,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="hofhead" id="wallHead" hidden>every photo.</div>
   <div class="chrecaps" id="chRecaps" hidden></div>
   <div class="wall" id="wall"></div>
-  <div class="grid2" id="recapGrid" hidden></div>
+  <div class="grid2 rgrid" id="recapGrid" hidden></div>
   <div class="grid3" id="postGrid" hidden></div>
   <div class="jlist" id="journalList" hidden></div>
   <div class="empty" id="empty" hidden></div>
@@ -916,24 +922,28 @@ function setTile(s, extra) {
 
 /* recaps: all 12 months of every year from 2026 on, newest first */
 function chapterAt(day) { let id = TL[0][0]; TL.forEach(([c, st]) => { if (day >= st) id = c; }); return id; }
+/* a recap belongs to the chapter it leads into: these months follow the next colour */
+const RECAP_CHAPTER = { "2026-10": "ember", "2026-11": "ember", "2026-12": "red" };
 function recapMonths() {
-  const have = {}; sets.recaps.forEach(r => have[r.id] = r);
+  const have = {}; sets.recaps.forEach(r => { if (RECAP_CHAPTER[r.id]) r.chapter = RECAP_CHAPTER[r.id]; have[r.id] = r; });
   const ys = sets.recaps.map(r => +r.id.slice(0, 4)).concat([2026, new Date().getFullYear()]);
   const out = [];
   for (let y = Math.max(...ys); y >= 2026; y--) for (let m = 12; m >= 1; m--) {
     const id = y + "-" + String(m).padStart(2, "0");
     if (have[id]) { out.push(have[id]); continue; }
-    const ch = chapterAt(id + "-15"), first = TL.find(t => t[0] === ch)[1];
-    const k = (y - +first.slice(0, 4)) * 12 + m - +first.slice(5, 7) + 1;
-    out.push({ id, chapter: ch, number: String(m).padStart(2, "0") + "/" + String(y).slice(2), big: String(Math.max(k, 1)).padStart(2, "0"), placeholder: true, images: [] });
+    const ch = RECAP_CHAPTER[id] || chapterAt(id + "-15");
+    out.push({ id, chapter: ch, number: String(m).padStart(2, "0") + "/" + String(y).slice(2), placeholder: true, images: [] });
   }
+  /* number the months of each chapter 01, 02 …; every second one is the dark version (like 08 → 09) */
+  const n = {};
+  out.slice().reverse().forEach(r => { n[r.chapter] = (n[r.chapter] || 0) + 1; if (r.placeholder) { r.big = String(n[r.chapter]).padStart(2, "0"); r.dark = n[r.chapter] % 2 === 0; } });
   return out;
 }
 function recapTile(r, small) {
   const c = byId[r.chapter] || ALL;
   let b;
   if (r.placeholder) {
-    b = el("button", "set"); b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg);
+    b = el("button", "set"); b.style.setProperty("--c", r.dark ? c.fg : c.bg); b.style.setProperty("--t", r.dark ? "#FFF8BB" : c.fg);
     const cv = el("div", "rcover"); cv.append(el("small", null, c.name.toUpperCase() + "."), el("b", null, r.big), el("span", null, r.number));
     b.append(cv); b.setAttribute("aria-label", c.label + " " + r.number);
     b.onclick = e => enterChapter(c, e);
