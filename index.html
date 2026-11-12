@@ -16,7 +16,9 @@ if (location.hash === "#lock") {
   try { localStorage.removeItem("mn-key"); } catch (e) {}
   history.replaceState(null, "", location.pathname);
 }
-try { if (localStorage.getItem("mn-key") !== window.MN_KEY) document.documentElement.classList.add("locked"); }
+try { if (localStorage.getItem("mn-key") !== window.MN_KEY) document.documentElement.classList.add("locked");
+  /* Already in: every time the site is opened (once per visit), the dots greet you and burst into colour. */
+  else if (!sessionStorage.getItem("mn-hello") && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("locked", "welcome"); }
 catch (e) { document.documentElement.classList.add("locked"); }
 </script>
 <style>
@@ -288,6 +290,7 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
 .gate { display: none; }
 html.locked body > :not(.gate):not(.wave) { display: none !important; }
 html.locked .gate { display: flex; }
+html.welcome .gate form, html.welcome .gate .msg, html.welcome .gate .gcount, html.welcome .gate .glinks { visibility: hidden; }
 html.locked body { background: #FFF8BB; color: #1C1C14; }
 .gate { position: fixed; inset: 0; z-index: 30; overflow-y: auto; background: #FFF8BB; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; gap: 0; padding: calc(24px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
 .gate .gmark { font-family: var(--serif); font-weight: 500; font-size: 96px; letter-spacing: .06em; line-height: 1; }
@@ -1353,7 +1356,11 @@ function loadData() {
   fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); render(); }).catch(() => {});
   fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [] }; render(); wirePress(d.press || {}); }).catch(() => {});
 }
-if (!document.documentElement.classList.contains("locked")) { loadData(); launchMoment(); }
+if (document.documentElement.classList.contains("welcome")) {
+  try { sessionStorage.setItem("mn-hello", "1"); } catch (e) {}
+  loadData();
+  setTimeout(() => unlockWave(() => { document.documentElement.classList.remove("locked", "welcome"); window.scrollTo(0, 0); render(); launchMoment(); }), 650);
+} else if (!document.documentElement.classList.contains("locked")) { loadData(); launchMoment(); }
 </script>
 </body>
 </html>
