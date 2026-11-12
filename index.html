@@ -291,6 +291,16 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .nextbtn b { font-weight: 800; font-size: clamp(32px, 7vw, 64px); letter-spacing: -.05em; line-height: 1; }
 .nextbtn:hover b { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 3px; }
 #lbImg { touch-action: pan-y; }
+
+/* signature: drawn in the current text colour, writes itself in */
+.sig { display: block; width: clamp(150px, 34vw, 240px); aspect-ratio: 1493 / 435; background: currentColor;
+  -webkit-mask: url("signature.png") left center / contain no-repeat; mask: url("signature.png") left center / contain no-repeat;
+  animation: sigWrite 1.4s .35s cubic-bezier(.45,0,.2,1) both; }
+@keyframes sigWrite { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.player .sig { margin-top: 8px; }
+.sig-about { width: 200px; margin-top: 4px; }
+@media (min-width: 900px) { .about.panel > .sig-about { grid-column: 1; } }
+@media (prefers-reduced-motion: reduce) { .sig { animation: none; } }
 </style>
 </head>
 <body>
@@ -346,6 +356,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <section class="about panel" id="about" hidden>
     <h2>about<span class="dot">.</span></h2>
     <figure class="aboutpic"><img src="thumbs/photos/white/250223-Studioportrait-alpindis.at-0292-Bearbeitet-600.webp" srcset="thumbs/photos/white/250223-Studioportrait-alpindis.at-0292-Bearbeitet-600.webp 600w, thumbs/photos/white/250223-Studioportrait-alpindis.at-0292-Bearbeitet-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 380px" alt="Markus Nindl" width="600" height="900" loading="lazy" decoding="async"><figcaption>photo: daniel breuer · alpindis</figcaption></figure>
+    <span class="sig sig-about" role="img" aria-label="Markus Nindl signature"></span>
     <p class="now"><b>now.</b> ember. starting at wildkogel sundaze in december.</p>
     <p class="text">model from pinzgau, austria. MN. started on 01.01.2025, and since then it's been shoots, a first runway with s.Oliver, a few pages in print, and a life told in colours.</p>
     <div class="facts"><span>based in pinzgau</span><span>german · english</span></div>
@@ -568,7 +579,7 @@ function renderCard() {
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
   if (view === "journal") { setTheme(ALL); title.append("journal", dot()); $("line").textContent = "notes on getting better."; return; }
   if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
-  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); return; }
+  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); const g = el("span", "sig"); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g); return; }
   const c = byId[filter];
   setTheme(c);
   $("dates").textContent = c.dates;
