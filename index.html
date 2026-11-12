@@ -187,6 +187,30 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .contact { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--fg); text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
 .contact.primary { background: var(--fg); color: var(--bg); }
 .contact small { font-size: 11px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
+/* inspirations: theirs next to mine */
+.insp { display: grid; gap: 40px; }
+.icard { display: grid; gap: 22px; }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin: 0; }
+.pair figure { margin: 0; display: grid; gap: 8px; }
+.pair figcaption { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--soft); }
+.embed, .mntile { height: 380px; border-radius: 14px; overflow: hidden; }
+.embed { position: relative; background: #1C1C14; }
+.embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.reveal-btn { width: 100%; height: 100%; border: 0; padding: 18px; background: #1C1C14; color: #FFF8BB; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 4px; text-align: left; font: inherit; cursor: pointer; }
+.reveal-btn b { font-weight: 800; font-size: clamp(30px, 8vw, 54px); letter-spacing: -.05em; line-height: .9; }
+.reveal-btn span { font-size: 12px; letter-spacing: .16em; opacity: .7; }
+.reveal-btn em { font-style: normal; margin-top: 14px; padding: 7px 14px; border-radius: 999px; background: #FFF8BB; color: #1C1C14; font-size: 13px; font-weight: 500; }
+.reveal-btn small { font-size: 10px; letter-spacing: .08em; opacity: .5; margin-top: 4px; }
+.mntile { background: var(--fg); color: var(--bg); display: grid; place-items: center; }
+.mntile span { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: clamp(54px, 15vw, 120px); letter-spacing: .06em; line-height: 1; }
+.mntile i { font-style: normal; color: #B3202A; }
+.istory { display: grid; gap: 10px; max-width: 60ch; }
+.istory small { font-size: 11px; letter-spacing: .22em; color: var(--soft); text-transform: uppercase; }
+.istory h3 { margin: 0; font-weight: 800; font-size: clamp(30px, 6vw, 48px); letter-spacing: -.05em; line-height: .95; }
+.istory h3 i { font-style: normal; color: #B3202A; }
+.istory p { margin: 0; color: var(--soft); }
+@media (max-width: 599px) { .pair { grid-template-columns: minmax(0, 1fr); } .mntile { height: auto; aspect-ratio: 16 / 10; } }
+@media (min-width: 900px) { .icard { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: 48px; align-items: center; } }
 /* booking form: fills in an email, nothing is sent from the site itself */
 .bform { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 16px; max-width: 620px; margin-top: 6px; }
 .bform label { display: grid; gap: 4px; font-size: 11px; letter-spacing: .2em; color: var(--soft); }
@@ -394,6 +418,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <button class="view" data-view="posts">posts.</button>
     <button class="view" data-view="journal">journal.</button>
     <button class="view" data-view="about">about.</button>
+    <button class="view" data-view="inspirations">inspirations.</button>
     <button class="view" data-view="sedcard">sedcard.</button>
     <button class="view" data-view="lebenslauf">lebenslauf.</button>
     <button class="view" data-view="faq">faq.</button>
@@ -513,6 +538,30 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     </div>
   </section>
 
+  <section class="insp panel" id="inspirations" hidden>
+    <h2>inspirations<span class="dot">.</span></h2>
+    <article class="icard">
+      <div class="pair">
+        <figure class="theirs">
+          <div class="embed" data-embed="https://open.spotify.com/embed/album/4eLPsYPBmXABThSJ821sqY?utm_source=generator" data-title="DAMN. by Kendrick Lamar">
+            <button class="reveal-btn" type="button"><b>DAMN.</b><span>kendrick lamar · 2017</span><em>tap to see the cover</em><small>loads spotify · spotify sets cookies</small></button>
+          </div>
+          <figcaption>the inspiration</figcaption>
+        </figure>
+        <figure class="mine">
+          <div class="mntile" aria-label="MN. logo"><span>MN<i>.</i></span></div>
+          <figcaption>MN.</figcaption>
+        </figure>
+      </div>
+      <div class="istory">
+        <small>01 · the logo</small>
+        <h3>DAMN<i>.</i> → MN<i>.</i></h3>
+        <p>the MN. logo comes from the cover of DAMN. by kendrick lamar. a few bold letters and a full stop. it doesn&#x27;t explain itself, it just stands there.</p>
+        <p>that&#x27;s what i wanted for MN.: my initials, a dot, and the rest is the work. at one point i even wanted ZE DAMN 1 as my licence plate. my car isn&#x27;t cool enough for that yet.</p>
+      </div>
+    </article>
+  </section>
+
   <section class="faq panel" id="faq" hidden>
     <h2>faq<span class="dot">.</span></h2>
     <div class="qs">
@@ -615,7 +664,7 @@ const SONGS = {
 /* "next." on the start page. Change the text when the next thing changes. */
 const NEXT = "wildkogel sundaze · december 2026";
 const nowId = () => new Date() >= new Date("2027-01-01T00:00:00+01:00") ? "red" : "ember";
-const INFO = { about: "who i am.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
+const INFO = { about: "who i am.", inspirations: "where MN. comes from.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
 const VIEWS = ["colours", "recaps", "posts", "journal", ...Object.keys(INFO)];
 let photos = [], sets = { recaps: [], posts: [], journal: [] }, view = "colours", filter = "all", list = [], idx = -1;
 (function readHash() {
@@ -854,6 +903,7 @@ function render() {
   animateCard();
   revealAll();
   if (window.fadeViews) { fadeViews(); fadeChips(); }
+  if (typeof autoEmbeds === "function") autoEmbeds();
 }
 
 function updateHash() {
@@ -1036,6 +1086,16 @@ function bananaRain() {
     if (taps.length >= 5) { taps = []; bananaRain(); }
   });
 })();
+
+/* Inspirations: the artist's own player loads after one tap (or straight away when sound is on). */
+function loadEmbed(box) {
+  if (box.querySelector("iframe")) return;
+  const f = el("iframe"); f.src = box.dataset.embed; f.title = box.dataset.title || "";
+  f.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"; f.loading = "lazy";
+  box.textContent = ""; box.append(f);
+}
+document.querySelectorAll(".embed").forEach(b => { b.querySelector(".reveal-btn").onclick = () => loadEmbed(b); });
+function autoEmbeds() { let on = false; try { on = soundOn; } catch (e) {} if (on && view === "inspirations") document.querySelectorAll(".embed").forEach(loadEmbed); }
 
 /* Booking form: builds the mail, the visitor's own mail app sends it. */
 $("bform").addEventListener("submit", e => {
