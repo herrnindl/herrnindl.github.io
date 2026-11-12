@@ -86,7 +86,7 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .tag .sw { width: 9px; height: 9px; }
 .empty { margin-top: 28px; padding: 36px 0 8px; font-weight: 800; font-size: clamp(26px, 6vw, 40px); letter-spacing: -.045em; line-height: 1; color: var(--fg); }
 
-.lb { position: fixed; inset: 0; z-index: 20; background: rgba(10,10,8,.95); color: #F2F0E6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
+.lb { position: fixed; inset: 0; z-index: 20; background: radial-gradient(120% 80% at 50% 45%, color-mix(in srgb, var(--lbc, #0A0A08) 42%, #0A0A08) 0%, #0A0A08 75%); transition: background .5s ease; color: #F2F0E6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
 .lb img { max-height: calc(100% - 90px); object-fit: contain; border-radius: 3px; }
 .cap { text-align: center; }
 .cap b { display: block; font-weight: 500; }
@@ -217,6 +217,74 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .contact { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--fg); text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
 .contact.primary { background: var(--fg); color: var(--bg); }
 .contact small { font-size: 11px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
+/* ===== going full on ===== */
+/* wrapped card on the start page */
+.wrapcard { position: relative; display: grid; grid-template-columns: 74px minmax(0, 1fr); align-items: center; gap: 16px; width: 100%; max-width: 520px; margin-top: 14px; padding: 12px; border: 0; border-radius: 16px; background: #1C1C14; color: #FFF8BB; text-align: left; font: inherit; cursor: pointer; overflow: hidden; }
+.wstripes { width: 74px; height: 96px; border-radius: 10px; background: linear-gradient(180deg, #A9A9A9 0 20%, #FFF8BB 20% 40%, #B8B05F 40% 60%, #B8C98B 60% 80%, #E9A283 80% 100%); background-size: 100% 200%; animation: wstripe 6s linear infinite; }
+@keyframes wstripe { to { background-position: 0 -192px; } }
+.wtxt small { font-size: 10px; letter-spacing: .26em; opacity: .7; }
+.wtxt b { display: block; font-weight: 800; font-size: 40px; letter-spacing: -.055em; line-height: .95; }
+.wtxt b i { font-style: normal; color: #B3202A; }
+.wtxt em { font-style: normal; font-size: 13px; opacity: .8; }
+.wrapcard:hover .wstripes { animation-duration: 2s; }
+/* wrapped stories */
+.wrapped { position: fixed; inset: 0; z-index: 50; background: var(--wb, #1C1C14); color: var(--wf, #FFF8BB); display: grid; grid-template-rows: auto 1fr; padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px)); transition: background .45s ease, color .45s ease; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.wbars { display: flex; gap: 4px; }
+.wbars i { flex: 1; height: 3px; border-radius: 3px; background: color-mix(in srgb, currentColor 28%, transparent); overflow: hidden; }
+.wbars i b { display: block; height: 100%; width: 0; background: currentColor; }
+.wtop { display: grid; gap: 12px; }
+.wtop .wrow { display: flex; justify-content: space-between; align-items: center; font-size: 12px; letter-spacing: .2em; }
+.wtop .wrow span { font-family: "Bodoni Moda", Georgia, serif; font-size: 20px; letter-spacing: .06em; }
+.wtop button { border: 0; background: none; color: inherit; font-size: 22px; cursor: pointer; padding: 4px 8px; }
+.wslide { align-self: center; justify-self: center; width: min(100%, 620px); display: grid; gap: 14px; }
+.wslide small { font-size: 12px; letter-spacing: .26em; opacity: .75; }
+.wslide h2 { margin: 0; font-weight: 800; font-size: clamp(64px, 20vw, 150px); letter-spacing: -.06em; line-height: .86; }
+.wslide h2 i, .wslide h3 i { font-style: normal; color: var(--wd); }
+.wslide h3 { margin: 0; font-weight: 800; font-size: clamp(40px, 11vw, 84px); letter-spacing: -.055em; line-height: .9; }
+.wslide p { margin: 0; font-size: clamp(17px, 4.4vw, 22px); letter-spacing: -.015em; opacity: .9; max-width: 30ch; }
+.wslide .wlist { display: grid; gap: 8px; font-size: clamp(16px, 4.2vw, 20px); }
+.wslide .wlist div { display: flex; align-items: center; gap: 10px; }
+.wslide .wlist i { width: 14px; height: 14px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+.wslide .wcovers { display: flex; gap: 8px; }
+.wslide .wcovers img, .wslide .wcovers span { width: 30%; max-width: 150px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; display: block; }
+.wslide .big { font-weight: 800; font-size: clamp(90px, 30vw, 220px); letter-spacing: -.07em; line-height: .8; font-variant-numeric: tabular-nums; }
+.wslide > * { animation: wIn .55s cubic-bezier(.2,.7,.2,1) both; }
+.wslide > :nth-child(2) { animation-delay: .08s; } .wslide > :nth-child(3) { animation-delay: .16s; } .wslide > :nth-child(4) { animation-delay: .24s; } .wslide > :nth-child(5) { animation-delay: .32s; }
+@keyframes wIn { from { opacity: 0; transform: translateY(26px); } }
+.wnav { position: absolute; top: 70px; bottom: 0; width: 34%; border: 0; background: none; cursor: pointer; }
+.wnav.wprev { left: 0; } .wnav.wnext { right: 0; width: 66%; }
+/* ticker */
+.ticker { margin-top: 34px; margin-left: calc(50% - 50vw); width: 100vw; padding: 16px 0; overflow: hidden; border-block: 1px solid var(--line); }
+html { overflow-x: clip; }
+.ticker .tr { display: flex; width: max-content; animation: tick 38s linear infinite; }
+.ticker:hover .tr { animation-play-state: paused; }
+.ticker span { white-space: nowrap; font-weight: 800; font-size: clamp(30px, 6vw, 56px); letter-spacing: -.05em; padding-right: .7em; }
+.ticker span i { font-style: normal; color: var(--d); -webkit-text-stroke: 1px rgba(0,0,0,.12); }
+@keyframes tick { to { transform: translateX(-50%); } }
+/* shuffle */
+.whead { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.shufbtn { font: inherit; font-size: 13px; font-weight: 500; letter-spacing: -.01em; text-transform: none; padding: 6px 13px; border-radius: 999px; border: 1px solid var(--fg); background: none; color: var(--fg); cursor: pointer; }
+.shufbtn:active { transform: scale(.96); }
+/* photo feel on computers: tilt + light */
+@media (hover: hover) and (pointer: fine) {
+  .wall .tile { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease; will-change: transform; }
+  .wall .tile.tilt { transition: transform .08s linear, box-shadow .3s ease; box-shadow: 0 18px 40px -18px rgba(0,0,0,.45); z-index: 2; }
+  .wall .tile::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s ease; background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.22), transparent 45%); }
+  .wall .tile.tilt::after { opacity: 1; }
+  .wall .tile:hover img { transform: none; }
+}
+/* the film: plays the chapters when nobody touches the start page */
+.film { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; background: var(--fb); color: var(--ff); transition: background .9s ease, color .9s ease; cursor: none; overflow: hidden; }
+.film .fin { display: grid; justify-items: center; gap: 12px; text-align: center; padding: 24px; }
+.film img { width: min(54vw, 300px); aspect-ratio: 4 / 5; object-fit: cover; border-radius: 8px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
+.film small { font-size: 12px; letter-spacing: .3em; opacity: .8; }
+.film b { font-weight: 800; font-size: clamp(56px, 16vw, 150px); letter-spacing: -.06em; line-height: .86; }
+.film b i { font-style: normal; color: var(--fd); }
+.film span { font-size: clamp(16px, 4vw, 22px); opacity: .85; }
+.film .fin > * { animation: wIn .7s cubic-bezier(.2,.7,.2,1) both; }
+.film .fin > :nth-child(2) { animation-delay: .1s; } .film .fin > :nth-child(3) { animation-delay: .2s; } .film .fin > :nth-child(4) { animation-delay: .3s; }
+.film .fhint { position: absolute; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center; font-size: 11px; letter-spacing: .24em; opacity: .55; }
+@media (prefers-reduced-motion: reduce) { .ticker .tr, .wstripes { animation: none; } .wslide > *, .film .fin > * { animation: none; } }
 /* MN. in numbers */
 .nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 12px; max-width: 640px; }
 .nums div { display: grid; gap: 2px; }
@@ -525,13 +593,15 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <nav class="strip" id="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
 
   <div class="otd" id="otd" hidden></div>
+  <button class="wrapcard" id="wrapCard" type="button" hidden><span class="wstripes" aria-hidden="true"></span><span class="wtxt"><small>MN. WRAPPED</small><b>2026<i>.</i></b><em>my year in colours. tap to play.</em></span></button>
   <div class="hofhead" id="tlHead" hidden>the timeline.</div>
   <div class="tl" id="tl" hidden></div>
   <div class="hofhead" id="hofHead" hidden>the chapters.</div>
   <div class="hof" id="hof" hidden></div>
+  <div class="ticker" id="ticker" hidden aria-hidden="true"></div>
   <div class="hofhead" id="gbHead" hidden>leave a dot.</div>
   <div class="gb" id="gb" hidden></div>
-  <div class="hofhead" id="wallHead" hidden>every photo.</div>
+  <div class="hofhead whead" id="wallHead" hidden><span>every photo.</span><button class="shufbtn" id="shuf" type="button">shuffle.</button></div>
   <div class="chrecaps" id="chRecaps" hidden></div>
   <div class="wall" id="wall"></div>
   <div class="grid2 rgrid" id="recapGrid" hidden></div>
@@ -1084,6 +1154,131 @@ async function renderGb() {
   };
 }
 
+
+/* ===================== going full on ===================== */
+
+/* ---------- ticker: the chapters, endlessly ---------- */
+function renderTicker() {
+  const t = $("ticker"), show = view === "colours" && filter === "all";
+  t.hidden = !show; if (!show || t.dataset.done) return; t.dataset.done = 1;
+  const tr = el("div", "tr");
+  for (let k = 0; k < 2; k++) CHAPTERS.forEach(c => { const sp = el("span", null, c.name); const d = el("i", null, "."); sp.style.setProperty("--d", c.dot === "#FFF8BB" ? "#1C1C14" : c.dot); sp.append(d); if (c.suffix) sp.append(c.suffix); tr.append(sp); });
+  t.append(tr);
+}
+
+/* ---------- shuffle: the photo wall reorders itself, photos fly to their new place ---------- */
+$("shuf").onclick = () => {
+  const wall = $("wall"), before = new Map();
+  wall.querySelectorAll(".tile").forEach(t => { const r = t.getBoundingClientRect(); if (r.bottom > -300 && r.top < innerHeight + 300) before.set(t.dataset.k, r); });
+  mixed = shuffle(photos); renderColours();
+  if (calm() || !document.body.animate) return;
+  wall.querySelectorAll(".tile").forEach((t, i) => {
+    const a = before.get(t.dataset.k), b = t.getBoundingClientRect();
+    if (b.bottom < -300 || b.top > innerHeight + 300) return;
+    t.classList.add("reveal", "in");
+    const from = a ? `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.width / b.width})` : "translateY(60px) scale(.9)";
+    t.animate([{ transform: from, opacity: a ? 1 : 0 }, { transform: "none", opacity: 1 }], { duration: 750 + Math.random() * 250, delay: Math.min(i, 30) * 12, easing: "cubic-bezier(.2,.75,.2,1)", fill: "backwards" });
+  });
+};
+
+/* ---------- tilt + light on photos (computers only) ---------- */
+if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  const wall = $("wall");
+  wall.addEventListener("pointermove", e => {
+    const t = e.target.closest(".tile"); if (!t || calm()) return;
+    const r = t.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    t.classList.add("tilt");
+    t.style.transform = `perspective(900px) rotateX(${(0.5 - y) * 9}deg) rotateY(${(x - 0.5) * 11}deg) scale(1.025)`;
+    t.style.setProperty("--mx", x * 100 + "%"); t.style.setProperty("--my", y * 100 + "%");
+  });
+  wall.addEventListener("pointerout", e => { const t = e.target.closest(".tile"); if (t && !t.contains(e.relatedTarget)) { t.classList.remove("tilt"); t.style.transform = ""; } });
+}
+
+/* ---------- the film: when nobody touches the start page for a while, the chapters play ---------- */
+let filmTimer = 0, filmOn = null;
+function filmReady() { return view === "colours" && filter === "all" && !document.documentElement.classList.contains("locked") && $("lb").hidden && $("sheet").hidden && !document.querySelector(".wrapped, .launch, .egg") && document.visibilityState === "visible" && !calm(); }
+function armFilm() { clearTimeout(filmTimer); if (filmOn) return; filmTimer = setTimeout(() => { if (filmReady()) playFilm(); else armFilm(); }, 40000); }
+function playFilm() {
+  const f = el("div", "film"); f.setAttribute("role", "dialog"); f.setAttribute("aria-label", "my life in colours. — tap to stop");
+  const hint = el("div", "fhint", "TAP ANYWHERE TO GO BACK"); document.body.append(f);
+  let i = 0;
+  const step = () => {
+    const c = CHAPTERS[i % CHAPTERS.length]; i++;
+    f.style.setProperty("--fb", c.bg); f.style.setProperty("--ff", c.fg); f.style.setProperty("--fd", c.dot === c.bg ? c.fg : c.dot);
+    const box = el("div", "fin"), pics = photos.filter(p => p.chapter === c.id);
+    if (pics.length) { const im = el("img"); const p = pics[Math.floor(Math.random() * pics.length)]; im.src = p.thumb2 || p.thumb || p.src; im.alt = ""; box.append(im); }
+    const nm = el("b", null, c.name); nm.append(el("i", null, ".")); if (c.suffix) nm.append(c.suffix);
+    box.append(el("small", null, c.dates.toUpperCase()), nm, el("span", null, c.line));
+    f.textContent = ""; f.append(box, hint);
+  };
+  step(); const iv = setInterval(step, 3200);
+  const stop = () => { clearInterval(iv); ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => removeEventListener(ev, stop, true)); f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 350, fill: "forwards" }).onfinish = () => f.remove(); filmOn = null; armFilm(); };
+  filmOn = stop;
+  setTimeout(() => ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => addEventListener(ev, stop, true)), 300);
+}
+["pointermove", "pointerdown", "keydown", "scroll", "wheel", "touchstart"].forEach(ev => addEventListener(ev, () => { if (!filmOn) armFilm(); }, { passive: true }));
+armFilm();
+
+/* ---------- MN. wrapped: the year as stories ---------- */
+const WRAP_YEAR = 2026;
+function wrapSlides() {
+  const Y = WRAP_YEAR, inYear = c => { const st = TL.find(t => t[0] === c.id)[1]; const i = TL.findIndex(t => t[0] === c.id); const en = i + 1 < TL.length ? TL[i + 1][1] : "9999"; return st < (Y + 1) + "-01-01" && en > Y + "-01-01"; };
+  const chs = CHAPTERS.filter(inYear), red = byId.red, ink = "#1C1C14", van = "#FFF8BB";
+  const songs = chs.map(c => [c, [].concat(SONGS[c.id] || [])[0]]).filter(x => x[1]);
+  const cr = credits(), top = cr[0];
+  const far = PLACES.filter(p => chs.some(c => c.id === p.id)).map(p => { const x = (p.lon - HOME.lon) * Math.cos(HOME.lat * Math.PI / 180) * 111.32, y = (HOME.lat - p.lat) * 110.57; return [p, Math.hypot(x, y)]; }).sort((a, b) => b[1] - a[1])[0];
+  const days = Math.min(365, Math.floor((Math.min(Date.now(), new Date(Y + "-12-31T23:59:59+01:00").getTime()) - new Date(Y + "-01-01T00:00:00+01:00").getTime()) / 864e5) + 1);
+  const S = [];
+  S.push({ bg: ink, fg: van, d: red.bg, html: [["small", "MN. WRAPPED"], ["h2", Y + "", "."], ["p", "my year in colours."]] });
+  S.push({ bg: van, fg: ink, d: red.bg, html: [["small", "THIS YEAR"], ["div.big", chs.length + ""], ["h3", "chapters", "."], ["p", days + " days. " + chs.map(c => c.label).join(" ")]] });
+  chs.forEach((c, k) => {
+    const rc = recapMonths().filter(r => r.chapter === c.id && !r.placeholder).reverse().slice(0, 3);
+    S.push({ bg: c.bg, fg: c.fg, d: c.dot === c.bg ? c.fg : c.dot, chapter: c, covers: rc, html: [["small", "CHAPTER " + String(k + 1).padStart(2, "0") + " · " + c.dates.toUpperCase()], ["h2", c.name, ".", c.suffix || ""], ["p", c.line + (c.place ? " · " + c.place : "")]] });
+  });
+  S.push({ bg: ink, fg: van, d: "#E9A283", html: [["small", "SINCE 01.01.2025"], ["div.big", photos.length + ""], ["h3", "photos", "."], ["p", cr.length + " photographers. " + document.querySelectorAll(".press li").length + " times in print. " + RUNWAYS + " runway."]] });
+  if (top) S.push({ bg: "#91B2EB", fg: "#1D2547", d: "#BAB6DE", html: [["small", "MOST PHOTOGRAPHED BY"], ["h3", top.name.toLowerCase(), "."], ["p", top.list.length + " photos together" + (top.handle ? " · @" + top.handle : "") + "."]] });
+  if (far) S.push({ bg: byId[far[0].id].bg, fg: byId[far[0].id].fg, d: byId[far[0].id].dot, html: [["small", "FURTHEST FROM HOME"], ["h2", far[0].name, "."], ["p", Math.round(far[1]).toLocaleString("de-AT") + " km from pinzgau. " + byId[far[0].id].label]] });
+  S.push({ bg: "#B8C98B", fg: "#234C3D", d: "#E9A283", html: [["small", "30.10." + Y], ["h3", "first runway", "."], ["p", "s.Oliver × INTERSPORT Harms, neukirchen. the start of something."]] });
+  if (songs.length) S.push({ bg: "#343A4E", fg: "#E8EAF0", d: "#A9A9A9", songs, html: [["small", "THE SOUNDTRACK OF " + Y], ["h3", "on repeat", "."]] });
+  const left = Math.max(0, Math.ceil((new Date((Y + 1) + "-01-01T00:00:00+01:00") - Date.now()) / 864e5));
+  S.push({ bg: red.bg, fg: red.fg, d: van, end: true, html: [["small", left ? "IN " + left + (left === 1 ? " DAY" : " DAYS") : (Y + 1) + ""], ["h2", "red", "."], ["p", (Y + 1) + ". the next chapter. thank you for watching."]] });
+  return S;
+}
+function openWrapped() {
+  const S = wrapSlides(); let i = 0, t0 = 0, raf = 0, paused = false, held = 0;
+  const W = el("div", "wrapped"); W.setAttribute("role", "dialog"); W.setAttribute("aria-label", "MN. wrapped " + WRAP_YEAR);
+  const top = el("div", "wtop"), bars = el("div", "wbars"), row = el("div", "wrow"), x = el("button", null, "✕");
+  S.forEach(() => { const b = el("i"); b.append(el("b")); bars.append(b); });
+  const mk = el("span", null, "MN."); x.setAttribute("aria-label", "close"); row.append(mk, x); top.append(bars, row);
+  const stage = el("div"); stage.style.display = "grid";
+  const prev = el("button", "wnav wprev"), next = el("button", "wnav wnext"); prev.setAttribute("aria-label", "back"); next.setAttribute("aria-label", "next");
+  W.append(top, stage, prev, next); document.body.append(W); document.body.style.overflow = "hidden";
+  const DUR = 5200;
+  const show = k => {
+    i = Math.max(0, Math.min(S.length - 1, k)); const s = S[i];
+    W.style.setProperty("--wb", s.bg); W.style.setProperty("--wf", s.fg); W.style.setProperty("--wd", s.d);
+    const sl = el("div", "wslide");
+    s.html.forEach(([tag, txt, dot, after]) => { const [t, cls] = tag.split("."); const e = el(t, cls || null, txt); if (dot) e.append(el("i", null, dot)); if (after) e.append(after); sl.append(e); });
+    if (s.covers && s.covers.length) { const cv = el("div", "wcovers"); s.covers.forEach(r => { const im = el("img"); im.src = r.thumb || r.cover; im.alt = ""; cv.append(im); }); sl.append(cv); }
+    if (s.songs) { const l = el("div", "wlist"); s.songs.forEach(([c, so]) => { const d = el("div"); const dot = el("i"); dot.style.background = c.bg; d.append(dot, so.t); l.append(d); }); sl.append(l); }
+    if (s.end) { const b = el("button", "sharebtn", "close."); b.style.marginTop = "10px"; b.style.justifySelf = "start"; b.onclick = e => { e.stopPropagation(); close(); }; sl.append(b); }
+    stage.textContent = ""; stage.append(sl);
+    [...bars.children].forEach((b, j) => b.firstChild.style.width = j < i ? "100%" : "0");
+    t0 = performance.now();
+  };
+  const tick = t => { if (!paused) { const k = Math.min(1, (t - t0) / DUR); bars.children[i].firstChild.style.width = k * 100 + "%"; if (k >= 1) { if (i < S.length - 1) show(i + 1); else { bars.children[i].firstChild.style.width = "100%"; } } } else t0 += t - (tick.last || t); tick.last = t; raf = requestAnimationFrame(tick); };
+  const close = () => { cancelAnimationFrame(raf); removeEventListener("keydown", key); W.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: "forwards" }).onfinish = () => W.remove(); document.body.style.overflow = ""; };
+  const key = e => { if (e.key === "Escape") close(); if (e.key === "ArrowRight") show(i + 1); if (e.key === "ArrowLeft") show(i - 1); };
+  addEventListener("keydown", key);
+  x.onclick = close;
+  prev.onclick = () => { if (Date.now() - held < 250) show(i - 1); };
+  next.onclick = () => { if (Date.now() - held < 250) { if (i < S.length - 1) show(i + 1); else close(); } };
+  [prev, next].forEach(b => { b.onpointerdown = () => { held = Date.now(); paused = true; }; b.onpointerup = b.onpointerleave = () => { paused = false; }; });
+  show(0); raf = requestAnimationFrame(tick);
+}
+$("wrapCard").onclick = openWrapped;
+function renderWrapCard() { $("wrapCard").hidden = !(view === "colours" && filter === "all"); }
+
 function renderHof() {
   const g = $("hof"), show = view === "colours" && filter === "all";
   g.hidden = $("hofHead").hidden = $("wallHead").hidden = $("tl").hidden = $("tlHead").hidden = !show; if (!show) return;
@@ -1134,7 +1329,7 @@ function renderColours() {
     nx.append(a);
   }
   list.forEach((p, i) => {
-    const b = el("button", "tile");
+    const b = el("button", "tile"); b.dataset.k = p.src;
     const img = el("img"); setImg(img, p);
     img.alt = p.caption || (byId[p.chapter].label + " photo");
     b.append(img);
@@ -1252,6 +1447,8 @@ function render() {
   renderHof();
   renderOtd();
   renderGb();
+  renderTicker();
+  renderWrapCard();
   renderAboutExtras();
   if (view === "colours") renderColours();
   if (view === "recaps") renderRecaps();
@@ -1309,6 +1506,7 @@ function open(arr, i) {
   list = arr; idx = (i + list.length) % list.length; const p = list[idx];
   const label = byId[p.chapter] ? byId[p.chapter].label : "";
   $("lbImg").src = p.src; $("lbImg").alt = p.caption || "";
+  $("lb").style.setProperty("--lbc", byId[p.chapter] ? byId[p.chapter].bg : "#0A0A08");
   $("lbCap").textContent = p.caption || label;
   const subEl = $("lbSub"); subEl.textContent = "";
   const bits = [];
