@@ -221,6 +221,76 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .contact { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--fg); text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
 .contact.primary { background: var(--fg); color: var(--bg); }
 .contact small { font-size: 11px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
+
+/* chapter rooms */
+html.roomopen { overflow: hidden; }
+.room { position: fixed; inset: 0; z-index: 90; background: var(--rb); color: var(--rf); }
+.rtrack { display: flex; align-items: center; gap: clamp(40px, 8vw, 140px); height: 100%; overflow-x: auto; overflow-y: hidden; padding: 0 12vw; scroll-snap-type: x proximity; scrollbar-width: none; outline: none; }
+.rtrack::-webkit-scrollbar { display: none; }
+.rwall { flex: none; scroll-snap-align: center; margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.rintro { width: min(78vw, 640px); }
+.rintro small, .mlab b, .rnext small { font: 500 11px/1 Inter, sans-serif; letter-spacing: .2em; opacity: .7; }
+.rintro h2 { font: 800 clamp(64px, 13vw, 190px)/.85 Inter, sans-serif; margin: 0; letter-spacing: -.02em; }
+.rintro h2 i { font-style: normal; color: var(--rd); }
+.rintro p { font: 500 italic clamp(20px, 2.6vw, 34px)/1.2 "Bodoni Moda", serif; margin: 0; }
+.rdates { font: 500 13px/1 Inter, sans-serif; opacity: .7; }
+.rgo { font: 500 13px/1 Inter, sans-serif; margin-top: 24px; animation: rgo 1.6s ease-in-out infinite; }
+@keyframes rgo { 50% { transform: translateX(10px); } }
+.rframe { height: min(64vh, 740px); max-width: 78vw; background: #fff; padding: clamp(10px, 1.6vw, 22px); box-shadow: 0 30px 60px -30px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.12); cursor: zoom-in; }
+.rframe img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mlab { display: grid; gap: 4px; font: 400 13px/1.35 Inter, sans-serif; max-width: 260px; padding-left: 2px; }
+.mlab em { font: 500 italic 15px/1.3 "Bodoni Moda", serif; }
+.mlab span { opacity: .75; }
+.rend { width: min(78vw, 520px); gap: 26px; }
+.rend p { font: 500 italic clamp(22px, 3vw, 36px)/1.2 "Bodoni Moda", serif; margin: 0; }
+.rnext { all: unset; cursor: pointer; display: grid; gap: 8px; background: var(--nb); color: var(--nf); padding: 28px 34px; border-radius: 6px; font: 800 clamp(40px, 7vw, 90px)/.9 Inter, sans-serif; transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+.rnext:hover, .rnext:focus-visible { transform: translateY(-4px) rotate(-1deg); }
+.rnext:focus-visible, .rclose:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.rclose { all: unset; cursor: pointer; position: fixed; top: 18px; right: 20px; font: 500 13px/1 Inter, sans-serif; letter-spacing: .08em; padding: 10px 14px; border: 1px solid currentColor; border-radius: 99px; color: var(--rf); }
+.rprog { position: fixed; left: 20px; right: 20px; bottom: 22px; height: 2px; background: color-mix(in srgb, var(--rf) 18%, transparent); }
+.rprog i { display: block; height: 100%; background: var(--rd); transform-origin: left; transform: scaleX(0); }
+.walkbtn { background: var(--fg) !important; color: var(--bg) !important; }
+#lb { z-index: 100; }
+@media (prefers-reduced-motion: reduce) { .rgo { animation: none; } }
+/* ===== round five ===== */
+.sizes button.tbl { width: auto; padding: 5px 10px; }
+/* big MN. resting behind the photo wall */
+.wallbox { position: relative; }
+.mnback { position: sticky; top: 16vh; height: 0; z-index: 0; pointer-events: none; overflow: visible; }
+.mnback span { display: block; text-align: center; font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: min(40vw, 520px); line-height: .8; letter-spacing: .06em; color: var(--fg); opacity: .07; white-space: nowrap; }
+.wallbox .wall { position: relative; z-index: 1; }
+/* film grain, very soft, only behind the content */
+body::before { content: ""; position: fixed; inset: -50%; z-index: -1; pointer-events: none; opacity: .09;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(3) infinite; }
+@keyframes grain { 33% { transform: translate(-3%, 2%); } 66% { transform: translate(2%, -3%); } }
+@media (prefers-reduced-motion: reduce) { body::before { animation: none; } }
+/* "1": one photo at a time */
+.wall.m1 { display: block; }
+.one { display: grid; gap: 12px; }
+.one figure { margin: 0; position: relative; display: grid; place-items: center; height: min(78vh, 900px); border-radius: 4px; background: color-mix(in srgb, var(--c, #1C1C14) 22%, transparent); overflow: hidden; touch-action: pan-y; }
+.wall .one img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; cursor: zoom-in; transition: opacity .25s ease; }
+.one .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; border-radius: 50%; border: 0; background: rgba(255,255,255,.85); color: #1C1C14; font-size: 20px; cursor: pointer; box-shadow: 0 8px 20px -10px rgba(0,0,0,.5); }
+.one .nav.l { left: 10px; } .one .nav.r { right: 10px; }
+.one .bar { display: flex; justify-content: space-between; align-items: center; font-size: 12px; letter-spacing: .18em; color: var(--soft); }
+.one .bar b { color: var(--fg); font-weight: 800; letter-spacing: -.02em; font-size: 22px; }
+/* "table": prints scattered on a table, drag them around */
+.wall.mt { display: block; }
+.table { position: relative; height: clamp(620px, 130vh, 1250px); border-radius: 6px; overflow: hidden; touch-action: pan-y; }
+.table .hint { position: absolute; left: 50%; top: 14px; transform: translateX(-50%); z-index: 999; font-size: 11px; letter-spacing: .22em; color: var(--soft); background: var(--bg); padding: 4px 10px; border-radius: 999px; pointer-events: none; }
+.print { position: absolute; width: var(--w); padding: 7px 7px 26px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 14px 30px -14px rgba(0,0,0,.45); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; transition: box-shadow .2s ease; }
+.print img { display: block; width: 100%; height: auto; pointer-events: none; -webkit-user-drag: none; }
+.print span { position: absolute; left: 9px; bottom: 6px; font-size: 10px; letter-spacing: .12em; color: #6b6a55; }
+.print.drag { cursor: grabbing; box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 30px 50px -18px rgba(0,0,0,.55); }
+/* booking: availability + rates */
+.avail { display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 500; letter-spacing: -.01em; justify-self: start; }
+.avail i { width: 9px; height: 9px; border-radius: 50%; background: #7BD88F; box-shadow: 0 0 0 0 rgba(123,216,143,.7); animation: live 1.8s ease-out infinite; }
+@keyframes live { to { box-shadow: 0 0 0 10px rgba(123,216,143,0); } }
+.rates { display: grid; gap: 0; margin: 4px 0 0; max-width: 620px; }
+.rates div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.rates dt { font-weight: 800; letter-spacing: -.03em; font-size: 18px; }
+.rates dd { margin: 0; color: var(--soft); text-align: right; font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { .avail i { animation: none; } }
 /* ===== show more: the next photos wait as a deck of cards ===== */
 .more { display: grid; justify-items: center; gap: 14px; margin: 34px 0 10px; }
 .deck { position: relative; width: 210px; height: 150px; border: 0; padding: 0; background: none; cursor: pointer; color: var(--fg); }
@@ -718,9 +788,9 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="tl" id="tl" hidden></div>
   <div class="hof" id="hof" hidden></div>
   <div class="ticker" id="ticker" hidden aria-hidden="true"></div>
-  <div class="hofhead sec whead" id="wallHead" hidden><h2><b>03</b>every photo.</h2><span class="wtools"><span class="sizes" id="sizes" role="group" aria-label="photo size"><button type="button" data-s="s" aria-label="small photos">S</button><button type="button" data-s="m" aria-label="medium photos">M</button><button type="button" data-s="l" aria-label="large photos">L</button></span><button class="shufbtn" id="shuf" type="button">shuffle.</button></span></div>
+  <div class="hofhead sec whead" id="wallHead" hidden><h2><b>03</b>every photo.</h2><span class="wtools"><span class="sizes" id="sizes" role="group" aria-label="photo size"><button type="button" data-s="s" aria-label="small photos">S</button><button type="button" data-s="m" aria-label="medium photos">M</button><button type="button" data-s="l" aria-label="large photos">L</button><button type="button" data-s="1" aria-label="one photo at a time">1</button><button type="button" data-s="t" class="tbl" aria-label="table: prints to drag around">table</button></span><button class="shufbtn" id="shuf" type="button">shuffle.</button></span></div>
   <div class="chrecaps" id="chRecaps" hidden></div>
-  <div class="wall" id="wall"></div>
+  <div class="wallbox"><div class="mnback" aria-hidden="true"><span>MN.</span></div><div class="wall" id="wall"></div></div>
   <div class="more" id="more" hidden></div>
   <h2 class="hofhead sec" id="gbHead" hidden><b>04</b>leave a dot.</h2>
   <div class="gb" id="gb" hidden></div>
@@ -777,6 +847,8 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       <div class="wide"><dt>eyes</dt><dd>green · blue · grey · yellow</dd></div>
       <div><dt>skin</dt><dd>fair</dd></div>
       <div><dt>shoes</dt><dd>43.5 (43/44)</dd></div>
+      <div class="wide"><dt>languages</dt><dd>german · english</dd></div>
+      <div class="wide" id="skillsRow" hidden><dt>skills</dt><dd id="skills"></dd></div>
     </dl>
     <a class="sedcard" href="sedcard-markus-nindl.pdf" download>download sedcard. <small>PDF</small></a>
     <a class="sedprev" href="sedcard-markus-nindl.pdf" target="_blank" rel="noopener"><img src="sedcard-preview.jpg" alt="Sedcard of Markus Nindl" loading="lazy"></a>
@@ -926,11 +998,17 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       <a class="contact primary" href="mailto:booking@herrnindl.com"><small>MAIL</small> booking@herrnindl.com</a>
       <a class="contact" href="https://instagram.com/herrnindl" target="_blank" rel="noopener"><small>IG</small> @herrnindl</a>
     </div>
+    <div class="avail" id="avail"></div>
+    <dl class="rates" id="rates"></dl>
     <form class="bform" id="bform" novalidate>
       <label>WHAT<select id="bWhat"><option>shooting</option><option>campaign</option><option>fashion show</option><option>collaboration</option><option>something else</option></select></label>
       <label>WHEN<input id="bWhen" type="text" placeholder="date or month" autocomplete="off"></label>
       <label>WHERE<input id="bWhere" type="text" placeholder="city or location" autocomplete="off"></label>
       <label>YOUR NAME<input id="bName" type="text" placeholder="name · brand · @handle" autocomplete="name"></label>
+      <label>YOU ARE<select id="bWho"><option>a brand</option><option>a photographer</option><option>an agency</option><option>a magazine</option><option>someone else</option></select></label>
+      <label>USAGE<select id="bUse"><option>not sure yet</option><option>social media</option><option>website</option><option>print</option><option>campaign (all media)</option><option>no commercial use (tfp)</option></select></label>
+      <label>BUDGET<input id="bBudget" type="text" placeholder="range or tfp" autocomplete="off"></label>
+      <label>MOOD BOARD<input id="bMood" type="url" placeholder="link (optional)" autocomplete="off"></label>
       <label class="wide">IDEA<textarea id="bIdea" placeholder="a few words about it"></textarea></label>
       <button type="submit">write the mail.</button>
       <p class="note">opens your mail app with everything filled in.</p>
@@ -1084,6 +1162,7 @@ function renderCard() {
   });
   if ([].concat(SONGS[c.id] || []).some(x => x.id) && !soundOn) meta.append(el("span", "spotnote", "tap to play via spotify · spotify sets cookies"));
   { const sh = el("button", "sharebtn", "share."); sh.type = "button"; sh.setAttribute("aria-label", "share " + c.label + " as a story"); sh.onclick = () => shareChapter(c); meta.append(sh); }
+  if (photos.some(p => p.chapter === c.id && !p.video)) { const w = el("button", "sharebtn walkbtn", "walk through."); w.type = "button"; w.setAttribute("aria-label", "walk through " + c.label + " like an exhibition"); w.onclick = () => openRoom(c); meta.append(w); }
   if (soundOn) { const first = [].concat(SONGS[c.id] || []).find(x => x.id); if (first) playSong(first); }
 }
 
@@ -1321,7 +1400,7 @@ function renderSelected() {
     setImg(img, p, i === 0 ? "(max-width: 1000px) 100vw, 50vw" : "(max-width: 700px) 50vw, 25vw"); img.alt = byId[p.chapter].label + " photo";
     if (i === 0) { img.loading = "eager"; img.fetchPriority = "high"; loadImg(img); }
     b.append(img, el("span", "num", String(i + 1).padStart(2, "0")));
-    b.onclick = () => open(sel, i); g.append(b);
+    b.onclick = () => open(sel, i, img); g.append(b);
   });
   const all = el("button", "all"); all.append(el("b", null, photos.filter(p => !p.video).length + ""), el("span", null, "ALL PHOTOS ↓"));
   all.onclick = () => $("wallHead").scrollIntoView({ behavior: calm() ? "auto" : "smooth" }); g.append(all);
@@ -1345,7 +1424,7 @@ function renderFab() {
 $("bookFab").onclick = e => swap(() => { view = "booking"; updateHash(); render(); }, e);
 /* photo size: S / M / L, remembered on this device */
 let wallSize = "m"; try { wallSize = localStorage.getItem("mn-size") || "m"; } catch (e) {}
-function applySize() { const w = $("wall"); w.classList.remove("s", "l"); if (wallSize !== "m") w.classList.add(wallSize); document.querySelectorAll("#sizes button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s === wallSize))); }
+function applySize() { const w = $("wall"); w.classList.remove("s", "l"); if (wallSize === "s" || wallSize === "l") w.classList.add(wallSize); document.querySelectorAll("#sizes button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s === wallSize))); }
 document.querySelectorAll("#sizes button").forEach(b => b.onclick = () => { wallSize = b.dataset.s; try { localStorage.setItem("mn-size", wallSize); } catch (e) {} applySize(); if (view === "colours") { renderColours(); revealAll(); } });
 applySize();
 const shotBase = p => p.src.split("/").pop().replace(/\.[a-z0-9]+$/i, "").replace(/(swe?|_farbe|[abc]|x|_1|-bearbeitet)+$/gi, "").toLowerCase();
@@ -1374,6 +1453,7 @@ function renderTicker() {
 
 /* ---------- shuffle: the photo wall reorders itself, photos fly to their new place ---------- */
 $("shuf").onclick = () => {
+  if (wallSize === "1" || wallSize === "t") { mixed = shuffle(photos); W.oneIdx = 0; renderColours(); return; }
   const wall = $("wall"), before = new Map();
   wall.querySelectorAll(".tile").forEach(t => { const r = t.getBoundingClientRect(); if (r.bottom > -300 && r.top < innerHeight + 300) before.set(t.dataset.k, r); });
   mixed = shuffle(photos); renderColours();
@@ -1561,6 +1641,8 @@ function renderColours() {
     if (cur && QUOTES[cur.id] && items.length === Math.min(6, list.length)) items.push({ quote: true });
   });
   W.items = items; W.cur = cur;
+  wall.classList.toggle("m1", wallSize === "1"); wall.classList.toggle("mt", wallSize === "t");
+  if (wallSize === "1" || wallSize === "t") { W.cols = []; W.shown = items.length; if (items.some(it => it.p)) (wallSize === "1" ? renderOne : renderTable)(); $("more").hidden = true; return; }
   W.cols = []; W.h = [];
   const n = colCount();
   for (let c = 0; c < n; c++) { const d = el("div", "col"); wall.append(d); W.cols.push(d); W.h.push(0); }
@@ -1569,6 +1651,152 @@ function renderColours() {
   W.shown = 0; W.key = key;
   placeTiles(Math.min(items.length, Math.max(page, shownBy[key] || 0)));
   renderMore();
+}
+
+
+
+/* ---------- sound design: tiny generated sounds, only while sound is on ---------- */
+let actx = null;
+function sfx(kind) {
+  if (!soundOn || calm()) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === "suspended") actx.resume();
+    const t = actx.currentTime, out = actx.createGain(); out.gain.value = .18; out.connect(actx.destination);
+    const noise = (dur, f, q, type) => { const n = actx.sampleRate * dur | 0, b = actx.createBuffer(1, n, actx.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2);
+      const src = actx.createBufferSource(); src.buffer = b; const fl = actx.createBiquadFilter(); fl.type = type || "bandpass"; fl.frequency.value = f; fl.Q.value = q || 1; src.connect(fl); return [src, fl]; };
+    const tone = (f, dur, vol, type) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = type || "sine"; o.frequency.setValueAtTime(f, t); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + dur); o.connect(g); g.connect(out); o.start(t); o.stop(t + dur); return o; };
+    if (kind === "tick") tone(1800, .03, .25, "square");
+    else if (kind === "pick") tone(520, .06, .3, "triangle");
+    else if (kind === "drop") { const [s, f] = noise(.08, 900, 2); f.connect(out); s.start(t); }
+    else if (kind === "flick") { const [s, f] = noise(.05, 3200, 1.5); f.connect(out); s.start(t); }
+    else if (kind === "shutter") { const [a, fa] = noise(.04, 2400, 3); fa.connect(out); a.start(t); const [b, fb] = noise(.05, 1600, 3); fb.connect(out); b.start(t + .07); }
+    else if (kind === "whoosh") { const [s, f] = noise(.55, 300, .7, "lowpass"); f.frequency.setValueAtTime(200, t); f.frequency.exponentialRampToValueAtTime(2600, t + .45); f.connect(out); s.start(t); }
+    else if (kind === "chime") { tone(880, .9, .12); setTimeout(() => sfx("_c2"), 90); }
+    else if (kind === "_c2") tone(1320, .9, .08);
+  } catch (e) {}
+}
+
+/* ---------- chapter rooms: walk through a chapter like an exhibition ---------- */
+function openRoom(c, from) {
+  const ps = photos.filter(p => p.chapter === c.id && !p.video);
+  if (!ps.length) return;
+  const back = document.activeElement;
+  const room = el("div", "room"); room.setAttribute("role", "dialog"); room.setAttribute("aria-modal", "true"); room.setAttribute("aria-label", c.label + ", the exhibition");
+  room.style.setProperty("--rb", c.bg); room.style.setProperty("--rf", c.fg); room.style.setProperty("--rd", c.dot);
+  const track = el("div", "rtrack"); track.tabIndex = 0;
+  const intro = el("section", "rwall rintro"), nm = el("h2"); nm.append(c.name, el("i", null, "."));
+  if (c.suffix) nm.append(c.suffix);
+  intro.append(el("small", null, "MN. — ROOM " + String(CHAPTERS.indexOf(c) + 1).padStart(2, "0")), nm, el("p", null, c.line), el("span", "rdates", c.dates || ""), el("span", "rgo", "scroll →"));
+  track.append(intro);
+  ps.forEach((p, i) => {
+    const w = el("figure", "rwall"), fr = el("div", "rframe"), im = el("img");
+    im.src = p.thumb2 || p.src; im.alt = p.caption || c.label + " photo"; im.loading = i < 3 ? "eager" : "lazy"; im.decoding = "async";
+    if (p.w && p.h) fr.style.aspectRatio = p.w + " / " + p.h;
+    fr.append(im); fr.onclick = () => open(ps, i, im);
+    const lab = el("figcaption", "mlab");
+    lab.append(el("b", null, String(i + 1).padStart(2, "0")), el("span", null, c.label + (p.date ? "  " + p.date : "")));
+    if (p.caption) lab.append(el("em", null, p.caption));
+    if (p.credit) lab.append(el("span", null, "photo: " + p.credit.replace(/\s*@[\w.]+/, "")));
+    w.append(fr, lab); track.append(w);
+  });
+  const nx = CHAPTERS[(CHAPTERS.indexOf(c) + 1) % CHAPTERS.length], last = el("section", "rwall rend");
+  const nb = el("button", "rnext"); nb.type = "button"; nb.append(el("small", null, "next room"), nx.name + ".");
+  nb.style.setProperty("--nb", nx.bg); nb.style.setProperty("--nf", nx.fg);
+  nb.onclick = () => { close(true); if (photos.some(p => p.chapter === nx.id && !p.video)) setTimeout(() => openRoom(nx), 60); };
+  last.append(el("p", null, ps.length + " photos. thank you for walking through."), nb);
+  track.append(last);
+  const x = el("button", "rclose", "close ✕"); x.type = "button"; x.onclick = () => close();
+  const prog = el("div", "rprog"); const bar = el("i"); prog.append(bar);
+  room.append(track, x, prog); document.body.append(room); document.documentElement.classList.add("roomopen");
+  track.addEventListener("wheel", e => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.preventDefault(); track.scrollLeft += e.deltaY; } }, { passive: false });
+  let lastW = -1;
+  track.addEventListener("scroll", () => { const k = track.scrollLeft / Math.max(1, track.scrollWidth - track.clientWidth); bar.style.transform = `scaleX(${k})`; const wi = Math.round(track.scrollLeft / Math.max(1, innerWidth * .6)); if (wi !== lastW) { lastW = wi; sfx("tick"); } }, { passive: true });
+  const step = d => { const ws = [...track.children], cx = track.scrollLeft + track.clientWidth / 2; let k = ws.findIndex(w => w.offsetLeft + w.offsetWidth / 2 > cx - 4); if (k < 0) k = ws.length - 1; const t = ws[Math.max(0, Math.min(ws.length - 1, k + d))]; track.scrollTo({ left: t.offsetLeft + t.offsetWidth / 2 - track.clientWidth / 2, behavior: calm() ? "auto" : "smooth" }); };
+  const key = e => { if (!$("lb").hidden) return; if (e.key === "Escape") { e.preventDefault(); close(); } else if (e.key === "ArrowRight") { e.preventDefault(); step(1); } else if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+    else if (e.key === "Tab") { const f = [...room.querySelectorAll("button, [tabindex]")]; const a = f[0], z = f[f.length - 1]; if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } } };
+  document.addEventListener("keydown", key);
+  function close(quick) {
+    document.removeEventListener("keydown", key);
+    const done = () => { room.remove(); document.documentElement.classList.remove("roomopen"); if (back && back.focus && !quick) back.focus(); };
+    if (calm() || !room.animate || quick) done(); else room.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260 }).onfinish = done;
+  }
+  if (!calm() && room.animate) { room.animate([{ clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)" }], { duration: 560, easing: "cubic-bezier(.6,0,.3,1)" }); sfx("whoosh"); }
+  track.focus({ preventScroll: true });
+}
+
+/* ---------- "1": one photo at a time, big ---------- */
+function renderOne() {
+  const wall = $("wall"), ps = W.items.filter(it => it.p && !it.p.video).map(it => it.p);
+  let i = (W.oneIdx || 0) % ps.length;
+  const box = el("div", "one"), fig = el("figure"), img = el("img"), prev = el("button", "nav l", "‹"), next = el("button", "nav r", "›");
+  prev.type = next.type = "button"; prev.setAttribute("aria-label", "previous photo"); next.setAttribute("aria-label", "next photo");
+  fig.tabIndex = 0; fig.setAttribute("aria-label", "photos, one at a time. use the arrow keys.");
+  const bar = el("div", "bar"), lab = el("span"), num = el("b");
+  const show = k => {
+    i = (k + ps.length) % ps.length; W.oneIdx = i; const p = ps[i], c = byId[p.chapter];
+    img.style.opacity = .25; const n = new Image(); n.src = p.thumb2 || p.src; n.onload = () => { if (ps[i] === p) { img.src = n.src; img.style.opacity = 1; } };
+    img.alt = p.caption || c.label + " photo"; fig.style.setProperty("--c", c.bg);
+    num.textContent = String(i + 1).padStart(2, "0") + " / " + ps.length;
+    lab.textContent = c.label + (p.credit ? "  ·  photo: " + p.credit.replace(/\s*@[\w.]+/, "").toLowerCase() : "");
+    const nx = ps[(i + 1) % ps.length]; new Image().src = nx.thumb2 || nx.src;
+    sfx("tick");
+  };
+  prev.onclick = () => show(i - 1); next.onclick = () => show(i + 1);
+  img.onclick = () => open(ps, i, img);
+  fig.onkeydown = e => { if (e.key === "ArrowRight") { e.preventDefault(); show(i + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); show(i - 1); } if (e.key === "Enter") open(ps, i, img); };
+  let x0 = null; fig.addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true });
+  fig.addEventListener("touchend", e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1)); });
+  fig.append(img, prev, next); bar.append(lab, num); box.append(fig, bar); wall.append(box);
+  show(i);
+}
+
+/* ---------- "table": prints scattered on a table — drag them, tap to open ---------- */
+function renderTable() {
+  const wall = $("wall"), t = el("div", "table"); t.append(el("div", "hint", "DRAG THE PRINTS · TAP TO OPEN"));
+  wall.append(t);
+  const ps = W.items.filter(it => it.p && !it.p.video).map(it => it.p).slice(0, 36);
+  const Wd = t.clientWidth, Ht = t.clientHeight, cw = Wd < 600 ? 118 : 196;
+  const cols = Math.max(2, Math.floor(Wd / (cw * .8))), rows = Math.ceil(ps.length / cols);
+  let z = ps.length + 1;
+  ps.forEach((p, k) => {
+    const h = cw * ((p.h && p.w) ? p.h / p.w : 1.25) + 33;
+    const c = k % cols, r = Math.floor(k / cols);
+    let x = (c + .5) * Wd / cols - cw / 2 + (Math.random() - .5) * cw * .5;
+    let y = 40 + (r + .5) * (Ht - 80) / rows - h / 2 + (Math.random() - .5) * 70;
+    x = Math.max(-cw * .15, Math.min(Wd - cw * .85, x)); y = Math.max(30, Math.min(Ht - h * .8, y));
+    const rot = (Math.random() - .5) * 18;
+    const d = el("div", "print"); d.style.setProperty("--w", cw + "px"); d.style.left = x + "px"; d.style.top = y + "px"; d.style.transform = `rotate(${rot}deg)`; d.style.zIndex = k + 1;
+    d.tabIndex = 0; d.setAttribute("role", "button"); d.setAttribute("aria-label", byId[p.chapter].label + " photo, open");
+    const im = el("img"); im.src = p.thumb || p.src; im.alt = ""; im.loading = "lazy"; im.decoding = "async";
+    d.append(im, el("span", null, byId[p.chapter].label + (p.date ? " " + p.date.slice(3) : "")));
+    let sx = 0, sy = 0, ox = 0, oy = 0, moved = 0;
+    d.onpointerdown = e => { d.setPointerCapture(e.pointerId); d.classList.add("drag"); d.style.zIndex = ++z; sx = e.clientX; sy = e.clientY; ox = parseFloat(d.style.left); oy = parseFloat(d.style.top); moved = 0; sfx("pick"); };
+    d.onpointermove = e => { if (!d.classList.contains("drag")) return; const dx = e.clientX - sx, dy = e.clientY - sy; moved = Math.max(moved, Math.hypot(dx, dy)); d.style.left = ox + dx + "px"; d.style.top = oy + dy + "px"; };
+    d.onpointerup = d.onpointercancel = e => { if (!d.classList.contains("drag")) return; d.classList.remove("drag"); if (moved < 6 && e.type === "pointerup") open(ps, k, d); else sfx("drop"); };
+    d.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(ps, k, d); } };
+    t.append(d);
+    if (!calm() && document.body.animate) d.animate([{ transform: `translate(${(Wd / 2 - x - cw / 2)}px, ${-Ht * .6}px) rotate(${rot * 4}deg)`, opacity: 0 }, { transform: `rotate(${rot}deg)`, opacity: 1 }], { duration: 700, delay: k * 28, easing: "cubic-bezier(.2,.75,.2,1)", fill: "backwards" });
+  });
+}
+
+/* ---------- booking: availability and rates (change them here) ---------- */
+const BOOKING = {
+  available: "open for bookings",
+  rates: [
+    ["shootings & editorials", "on request"],
+    ["campaigns & commercial", "custom quote, incl. usage"],
+    ["fashion shows", "on request"],
+    ["tfp", "with photographers whose work i love"],
+  ],
+};
+const SKILLS = [];   /* e.g. "swimming", "skiing", "driving licence B" */
+function renderBooking() {
+  if (view === "booking") {
+    const a = $("avail"); a.textContent = ""; a.append(el("i"), BOOKING.available + ".");
+    const r = $("rates"); r.textContent = ""; BOOKING.rates.forEach(([k, v]) => { const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); r.append(d); });
+  }
+  if (view === "sedcard") { $("skillsRow").hidden = !SKILLS.length; $("skills").textContent = SKILLS.join(" · "); }
 }
 
 /* ---------- the photo wall: columns filled shortest-first, so new photos never move the old ones ---------- */
@@ -1596,7 +1824,7 @@ function makeTile(it) {
   const alt = it.alt;
   if (alt) { const a = el("img", "alt"); a.alt = ""; a.loading = "lazy"; a.decoding = "async"; a.src = alt.thumb || alt.src; if (alt.thumb2) { a.srcset = alt.thumb + " 600w, " + alt.thumb2 + " 1200w"; a.sizes = img.sizes; } b.append(a, el("span", "two")); b.title = "two versions"; }
   tag();
-  b.onclick = () => { const L = list.filter(x => !x.video); open(L, L.indexOf(p)); };
+  b.onclick = () => { const L = list.filter(x => !x.video); open(L, L.indexOf(p), img); };
   return [b, p.w && p.h ? p.h / p.w : 1.25];
 }
 function placeTiles(upto) {
@@ -1629,6 +1857,7 @@ function dealMore(n, deck) {
   const from = deck.getBoundingClientRect(), fx = from.left + from.width / 2, fy = from.top + from.height / 2;
   const added = placeTiles(W.shown + n);
   added.forEach(e => e.classList.add("reveal", "in"));
+  added.slice(0, 8).forEach((e, k) => setTimeout(() => sfx("flick"), k * 45));
   if (!calm() && document.body.animate) added.forEach((e, k) => {
     const r = e.getBoundingClientRect(); if (r.top > innerHeight + 200) return;
     const dx = fx - (r.left + r.width / 2), dy = fy - (r.top + r.height / 2), rot = (Math.random() - .5) * 26;
@@ -1738,7 +1967,7 @@ function renderPosts() {
 
 function render() {
   document.querySelectorAll(".view").forEach(v => v.setAttribute("aria-current", String(v.dataset.group ? GROUP_OF[view] === v.dataset.group : v.dataset.view === view)));
-  renderSubnav(); renderSelected(); renderDigitals(); renderFab();
+  renderSubnav(); renderSelected(); renderDigitals(); renderFab(); renderBooking();
   $("strip").hidden = view !== "colours";
   $("wall").hidden = view !== "colours";
   if (view !== "colours") $("chRecaps").hidden = true;
@@ -1812,10 +2041,20 @@ function openSet(s) {
 function closeSet() { $("sheet").hidden = true; document.body.style.overflow = ""; }
 $("sClose").onclick = closeSet;
 
-function open(arr, i) {
+function open(arr, i, from) {
+  const wasHidden = $("lb").hidden;
   list = arr; idx = (i + list.length) % list.length; const p = list[idx];
   const label = byId[p.chapter] ? byId[p.chapter].label : "";
-  $("lbImg").src = p.src; $("lbImg").alt = p.caption || "";
+  const im = $("lbImg"), quick = p.thumb2 || p.thumb;
+  im.src = quick || p.src; im.alt = p.caption || "";
+  if (quick) { const full = new Image(); full.src = p.src; full.onload = () => { if (list[idx] === p) im.src = p.src; }; }
+  if (wasHidden && from && !calm() && document.body.animate) {
+    const fr = from.getBoundingClientRect();
+    const go = () => requestAnimationFrame(() => { const tr = im.getBoundingClientRect(); if (!tr.width) return; const k = fr.width / tr.width;
+      im.animate([{ transform: `translate(${fr.left + fr.width / 2 - (tr.left + tr.width / 2)}px, ${fr.top + fr.height / 2 - (tr.top + tr.height / 2)}px) scale(${k})` }, { transform: "none" }], { duration: 520, easing: "cubic-bezier(.2,.75,.2,1)" });
+      sfx("shutter"); });
+    if (im.complete && im.naturalWidth) go(); else im.decode().then(go).catch(() => {});
+  }
   $("lb").style.setProperty("--lbc", byId[p.chapter] ? byId[p.chapter].bg : "#0A0A08");
   $("lbCap").textContent = p.caption || label;
   const subEl = $("lbSub"); subEl.textContent = "";
@@ -1837,7 +2076,11 @@ function open(arr, i) {
   $("prev").hidden = $("next").hidden = list.length < 2;
   $("lb").hidden = false;
 }
-const closeLb = () => { $("lb").hidden = true; $("lbImg").style.transform = ""; };
+const closeLb = () => {
+  const lb = $("lb"); if (lb.hidden) return;
+  if (calm() || !lb.animate) { lb.hidden = true; $("lbImg").style.transform = ""; return; }
+  lb.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: "ease-out" }).onfinish = () => { lb.hidden = true; $("lbImg").style.transform = ""; };
+};
 /* Swipe: left/right to browse, down to close. */
 (function swipe() {
   let x0 = 0, y0 = 0, on = false;
@@ -1899,7 +2142,7 @@ function flood(color, e, done) {
   if (calm() || !document.body.animate || cur === color.toLowerCase()) { done(); return; }
   const r = e.currentTarget.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
   const big = Math.hypot(innerWidth, innerHeight) * 2.1;
-  const f = el("div", "flood"); f.style.cssText = `left:${x}px;top:${y}px;width:${big}px;height:${big}px;background:${color}`; document.body.append(f);
+  const f = el("div", "flood"); f.style.cssText = `left:${x}px;top:${y}px;width:${big}px;height:${big}px;background:${color}`; document.body.append(f); sfx("whoosh");
   const a = f.animate([{ transform: "translate(-50%,-50%) scale(.01)" }, { transform: "translate(-50%,-50%) scale(1)" }], { duration: 480, easing: "cubic-bezier(.6,0,.3,1)", fill: "forwards" });
   a.onfinish = () => { done(); f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: "forwards" }).onfinish = () => f.remove(); };
 }
@@ -1911,7 +2154,7 @@ function enterChapter(c, e, stay) {
   if (calm() || !document.body.animate || cur === c.bg.toLowerCase()) { go(); return; }
   const r = e.currentTarget.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
   const big = Math.hypot(innerWidth, innerHeight) * 2.1;
-  const f = el("div", "flood"); f.style.cssText = `left:${x}px;top:${y}px;width:${big}px;height:${big}px;background:${c.bg}`; document.body.append(f);
+  const f = el("div", "flood"); f.style.cssText = `left:${x}px;top:${y}px;width:${big}px;height:${big}px;background:${c.bg}`; document.body.append(f); sfx("whoosh");
   const t = el("div", "intro"); t.style.color = c.fg;
   const nm = el("b", null, c.name); const dt = el("i", null, "."); dt.style.cssText = "font-style:normal;color:" + c.dot; nm.append(dt); if (c.suffix) nm.append(c.suffix);
   t.append(nm, el("span", null, c.line)); t.style.opacity = 0; document.body.append(t);
@@ -1987,7 +2230,7 @@ $("bform").addEventListener("submit", e => {
   const v = id => $(id).value.trim();
   const what = v("bWhat"), when = v("bWhen"), where = v("bWhere"), name = v("bName"), idea = v("bIdea");
   const subject = "booking. " + what + (when ? " · " + when : "");
-  const body = ["what: " + what, "when: " + (when || "–"), "where: " + (where || "–"), "from: " + (name || "–"), "", idea].join("\n");
+  const body = ["what: " + what, "when: " + (when || "–"), "where: " + (where || "–"), "from: " + (name || "–") + " (" + v("bWho") + ")", "usage: " + v("bUse"), "budget: " + (v("bBudget") || "–"), "mood board: " + (v("bMood") || "–"), "", idea].join("\n");
   location.href = "mailto:booking@herrnindl.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 });
 
