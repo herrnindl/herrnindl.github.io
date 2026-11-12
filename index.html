@@ -205,11 +205,20 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .mntile span { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: clamp(54px, 15vw, 120px); letter-spacing: .06em; line-height: 1; }
 .mntile i { font-style: normal; color: #B3202A; }
 .istory { display: grid; gap: 10px; max-width: 60ch; }
+.stone { height: 380px; border-radius: 14px; overflow: hidden; display: grid; place-items: center; color: #4A4436;
+  background: radial-gradient(120% 90% at 30% 20%, #E4DCCB 0%, #CFC5B1 55%, #B9AE97 100%); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06), inset 0 -40px 80px rgba(60,50,30,.12); }
+.stone span { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: clamp(34px, 9vw, 58px); letter-spacing: .1em; text-shadow: 0 1px 0 rgba(255,255,255,.55), 0 -1px 0 rgba(0,0,0,.18); }
+.stone i { font-style: normal; margin: 0 .04em; }
+.mntile.light { background: #FFF8BB; color: #1C1C14; box-shadow: inset 0 0 0 1px rgba(28,28,20,.14); }
+.nametile { height: 380px; border-radius: 14px; overflow: hidden; display: grid; place-items: center; background: #FFFFFF; color: #0F1419; box-shadow: inset 0 0 0 1px rgba(28,28,20,.1); }
+.nametile span { font-weight: 800; font-size: clamp(30px, 7vw, 52px); letter-spacing: -.035em; }
+.nametile i, .dotonly i { font-style: normal; color: #B3202A; }
+.dotonly span { font-size: clamp(54px, 15vw, 120px); }
 .istory small { font-size: 11px; letter-spacing: .22em; color: var(--soft); text-transform: uppercase; }
 .istory h3 { margin: 0; font-weight: 800; font-size: clamp(30px, 6vw, 48px); letter-spacing: -.05em; line-height: .95; }
 .istory h3 i { font-style: normal; color: #B3202A; }
 .istory p { margin: 0; color: var(--soft); }
-@media (max-width: 599px) { .pair { grid-template-columns: minmax(0, 1fr); } .mntile { height: auto; aspect-ratio: 16 / 10; } }
+@media (max-width: 599px) { .pair { grid-template-columns: minmax(0, 1fr); } .mntile, .stone, .nametile { height: auto; aspect-ratio: 16 / 10; } }
 @media (min-width: 900px) { .icard { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: 48px; align-items: center; } }
 /* booking form: fills in an email, nothing is sent from the site itself */
 .bform { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 16px; max-width: 620px; margin-top: 6px; }
@@ -554,10 +563,46 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
         </figure>
       </div>
       <div class="istory">
-        <small>01 · the logo</small>
+        <small>01 · the idea</small>
         <h3>DAMN<i>.</i> → MN<i>.</i></h3>
-        <p>the MN. logo comes from the cover of DAMN. by kendrick lamar. a few bold letters and a full stop. it doesn&#x27;t explain itself, it just stands there.</p>
-        <p>that&#x27;s what i wanted for MN.: my initials, a dot, and the rest is the work. at one point i even wanted ZE DAMN 1 as my licence plate. my car isn&#x27;t cool enough for that yet.</p>
+        <p>the idea for the MN. logo comes from the cover of DAMN. by kendrick lamar. one short word in capitals that doesn&#x27;t explain itself, it just stands there.</p>
+        <p>that&#x27;s what i wanted for MN.: my initials, and the rest is the work. at one point i even wanted ZE DAMN 1 as my licence plate. my car isn&#x27;t cool enough for that yet.</p>
+      </div>
+    </article>
+    <article class="icard">
+      <div class="pair">
+        <figure class="theirs">
+          <div class="stone" aria-label="Roman capitals: S·P·Q·R"><span>S<i>·</i>P<i>·</i>Q<i>·</i>R</span></div>
+          <figcaption>the romans</figcaption>
+        </figure>
+        <figure class="mine">
+          <div class="mntile light" aria-label="MN in the logo font"><span>MN</span></div>
+          <figcaption>the font</figcaption>
+        </figure>
+      </div>
+      <div class="istory">
+        <small>02 · the font</small>
+        <h3>roman capitals</h3>
+        <p>i always had something for this kind of font, because of the romans. capital letters with thick and thin lines that look like they were cut into stone and made to last.</p>
+        <p>that&#x27;s the feeling i want MN. to have.</p>
+      </div>
+    </article>
+    <article class="icard">
+      <div class="pair">
+        <figure class="theirs">
+          <div class="nametile" aria-label="Harry Styles."><span>Harry Styles<i>.</i></span></div>
+          <figcaption>harry styles on twitter</figcaption>
+        </figure>
+        <figure class="mine">
+          <div class="mntile dotonly" aria-label="the MN. dot"><span>MN<i>.</i></span></div>
+          <figcaption>the dot</figcaption>
+        </figure>
+      </div>
+      <div class="istory">
+        <small>03 · the dot</small>
+        <h3>the dot<i>.</i></h3>
+        <p>the dot comes from harry styles. on twitter he had a dot after his name, and i always thought it stood out. a name, a dot, done.</p>
+        <p>so MN. got one too. and on this site the dot after every chapter is the colour of the next one.</p>
       </div>
     </article>
   </section>
