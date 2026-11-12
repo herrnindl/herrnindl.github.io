@@ -338,6 +338,9 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .hof em { font-style: normal; font-size: 10px; letter-spacing: .14em; opacity: .75; }
 .hof .nowtag { position: absolute; bottom: 9px; right: 9px; font-size: 9px; letter-spacing: .16em; font-weight: 500; padding: 2px 7px; border-radius: 999px; background: var(--t); color: var(--c); }
 .hof button.locked { opacity: .9; }
+/* 11 chapters + one wide tile = full rows on every screen (3, 4 or 6 per row) */
+.hof button.wide { grid-column: span 2; aspect-ratio: auto; }
+.hof button.wide b { font-size: clamp(26px, 7vw, 40px); }
 .hofhead { margin-top: 26px; font-size: 11px; letter-spacing: .24em; color: var(--soft); text-transform: uppercase; }
 .next { margin-top: 18px; }
 .next b i { font-style: normal; }
@@ -754,6 +757,7 @@ function renderHof() {
     foot.style.display = "grid"; foot.style.gap = "4px";
     b.append(foot);
     if (c.id === cur) b.append(el("span", "nowtag", "now"));
+    if (c.id === "red") b.classList.add("wide");
     b.setAttribute("aria-label", c.label + " " + c.dates);
     b.onclick = e => enterChapter(c, e);
     g.append(b);
