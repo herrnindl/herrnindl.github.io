@@ -350,12 +350,22 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .wnav { position: absolute; top: 70px; bottom: 0; width: 34%; border: 0; background: none; cursor: pointer; }
 .wnav.wprev { left: 0; } .wnav.wnext { right: 0; width: 66%; }
 /* ticker */
-.ticker { margin-top: 56px; margin-left: calc(50% - 50vw); width: 100vw; padding: 16px 0; overflow: hidden; border-block: 1px solid var(--line); }
-html { overflow-x: clip; }
-.ticker .tr { display: flex; width: max-content; animation: tick 38s linear infinite; }
+/* ticker: two crossing tapes — chapters in full colour on top, a dark tape behind running the other way */
+.ticker { position: relative; margin-top: 56px; margin-left: calc(50% - 50vw); width: 100vw; height: clamp(150px, 26vw, 230px); overflow: hidden; }
+.ticker .tape { position: absolute; left: -5%; width: 110%; overflow: hidden; }
+.ticker .tape.a { top: 50%; transform: translateY(-50%) rotate(-3deg); z-index: 2; box-shadow: 0 14px 30px -16px rgba(0,0,0,.45); }
+.ticker .tape.b { top: 50%; transform: translateY(-50%) rotate(4.5deg); background: #1C1C14; color: #FFF8BB; z-index: 1; }
+.ticker .tr { display: flex; width: max-content; animation: tick 46s linear infinite; }
+.ticker .tape.b .tr { animation-duration: 60s; animation-direction: reverse; }
 .ticker:hover .tr { animation-play-state: paused; }
-.ticker span { white-space: nowrap; font-weight: 800; font-size: clamp(30px, 6vw, 56px); letter-spacing: -.05em; padding-right: .7em; }
-.ticker span i { font-style: normal; color: var(--d); -webkit-text-stroke: 1px rgba(0,0,0,.12); }
+.ticker .blk { display: inline-flex; align-items: baseline; white-space: nowrap; font-weight: 800; font-size: clamp(28px, 5.4vw, 52px); letter-spacing: -.05em; padding: .32em .7em .38em; background: var(--c); color: var(--t); cursor: pointer; transition: filter .2s ease; }
+.ticker .blk:hover { filter: brightness(1.06); }
+.ticker .blk i { font-style: normal; color: var(--d); }
+.ticker .blk small { font-size: .32em; letter-spacing: .14em; font-weight: 400; opacity: .7; margin-left: .9em; align-self: center; }
+.ticker .tape.b span { display: inline-flex; align-items: center; gap: .6em; white-space: nowrap; font-size: clamp(13px, 1.6vw, 16px); letter-spacing: .32em; padding: 14px 1.4em; }
+.ticker .tape.b b { font-family: var(--serif, "Bodoni Moda", Georgia, serif); font-weight: 500; letter-spacing: .06em; font-size: 1.2em; }
+.ticker .tape.b em { display: inline-flex; gap: 5px; font-style: normal; }
+.ticker .tape.b em i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
 @keyframes tick { to { transform: translateX(-50%); } }
 /* shuffle */
 .whead { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
@@ -1346,9 +1356,20 @@ const shotBase = p => p.src.split("/").pop().replace(/\.[a-z0-9]+$/i, "").replac
 function renderTicker() {
   const t = $("ticker"), show = view === "colours" && filter === "all";
   t.hidden = !show; if (!show || t.dataset.done) return; t.dataset.done = 1;
-  const tr = el("div", "tr");
-  for (let k = 0; k < 2; k++) CHAPTERS.forEach(c => { const sp = el("span", null, c.name); const d = el("i", null, "."); sp.style.setProperty("--d", c.dot === "#FFF8BB" ? "#1C1C14" : c.dot); sp.append(d); if (c.suffix) sp.append(c.suffix); tr.append(sp); });
-  t.append(tr);
+  /* front tape: every chapter as a block in its own colour; tap one to open it */
+  const a = el("div", "tape a"), ta = el("div", "tr");
+  for (let k = 0; k < 2; k++) CHAPTERS.forEach(c => {
+    const b = el("span", "blk", c.name); b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg); b.style.setProperty("--d", c.dot === c.bg ? c.fg : c.dot);
+    b.append(el("i", null, ".")); if (c.suffix) b.append(c.suffix); b.append(el("small", null, c.dates.toUpperCase()));
+    if (c.id === "white" || c.id === "vanilla") b.style.boxShadow = "inset 0 0 0 1px rgba(0,0,0,.06)";
+    b.onclick = e => enterChapter(c, e); ta.append(b);
+  });
+  a.append(ta);
+  /* back tape: dark, running the other way */
+  const bt = el("div", "tape b"), tb = el("div", "tr");
+  for (let k = 0; k < 8; k++) { const sp = el("span"); const em = el("em"); CHAPTERS.forEach(c => { const d = el("i"); d.style.background = c.bg; em.append(d); }); sp.append(el("b", null, "MN."), "MY LIFE IN COLOURS", em); tb.append(sp); }
+  bt.append(tb);
+  t.append(bt, a);
 }
 
 /* ---------- shuffle: the photo wall reorders itself, photos fly to their new place ---------- */
