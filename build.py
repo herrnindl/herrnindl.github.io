@@ -5,14 +5,18 @@ Optional captions/credits: put an info.txt in a chapter folder with lines like
     IMG_1234.jpg | Caption text | Photographer name
 Use * for every photo, or a pattern like name* for some of them:
     * | | Daniel Breuer @alpindis
+Videos (.mp4) in a chapter folder show as silent looping clips between the photos.
+photos/digitals/   plain, unedited photos (front, side, waist-up, headshot) -> digitals page
+photos/selected.txt  one photo per line (e.g. white/photo.jpg); the first is the big photo on the start page
 """
 import fnmatch
 import json
 import os
 
 CHAPTERS = ["red", "ember", "ber", "vanilla-2", "vanilla", "grey",
-            "navy-blue", "lavendel", "baby-blue", "white", "origin"]
-EXT = (".jpg", ".jpeg", ".png", ".webp", ".gif")
+            "navy-blue", "lavendel", "baby-blue", "white", "origin", "digitals"]
+VIDEO = (".mp4", ".webm")
+EXT = (".jpg", ".jpeg", ".png", ".webp", ".gif") + VIDEO
 
 DATES = {}
 if os.path.exists(os.path.join("photos", "dates.json")):
@@ -42,22 +46,28 @@ for ch in CHAPTERS:
                 return meta[i]
             return default[i] if len(default) > i else ""
         taken = ""
-        try:
+        if name.lower().endswith(VIDEO):
+            pass
+        else:
+          try:
             from PIL import Image
             with Image.open(os.path.join(folder, name)) as im:
                 ex = im.getexif()
                 d = ex.get_ifd(0x8769).get(36867) or ex.get(306) or ""
                 if d[:4].isdigit():
                     taken = f"{d[8:10]}.{d[5:7]}.{d[0:4]}"
-        except Exception:
+          except Exception:
             pass
-        out.append({
+        entry = {
             "date": taken or DATES.get(f"photos/{ch}/{name}", ""),
             "src": f"photos/{ch}/{name}",
             "chapter": ch,
             "caption": pick(1),
             "credit": pick(2),
-        })
+        }
+        if name.lower().endswith(VIDEO):
+            entry["video"] = True
+        out.append(entry)
 
 SIZES = {}
 if os.path.exists(os.path.join("thumbs", "sizes.json")):
@@ -73,7 +83,18 @@ def thumb(path):
 
 
 for p in out:
-    p.update(thumb(p["src"]))
+    if not p.get("video"):
+        p.update(thumb(p["src"]))
+
+# selected.txt: the photos that open the start page, in this order
+sel_path = os.path.join("photos", "selected.txt")
+if os.path.exists(sel_path):
+    with open(sel_path, encoding="utf-8") as f:
+        wanted = [l.strip().lstrip("/").lower() for l in f if l.strip() and not l.startswith("#")]
+    by = {p["src"].lower()[len("photos/"):]: p for p in out}
+    for i, w in enumerate(wanted):
+        if w in by:
+            by[w]["sel"] = i + 1
 
 with open("photos.json", "w", encoding="utf-8") as f:
     json.dump(out, f, ensure_ascii=False, indent=1)

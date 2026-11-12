@@ -217,6 +217,55 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .contact { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--fg); text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
 .contact.primary { background: var(--fg); color: var(--bg); }
 .contact small { font-size: 11px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
+/* ===== award round ===== */
+.subnav { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+.subnav button { font: inherit; font-size: 14px; font-weight: 500; letter-spacing: -.01em; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--soft); cursor: pointer; }
+.subnav button[aria-current="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+/* selected: the best work first */
+.selected { margin-top: 26px; }
+.selected .hofhead { margin: 0 0 12px; }
+.selgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.selgrid > button { position: relative; aspect-ratio: 4 / 5; padding: 0; border: 0; border-radius: 3px; overflow: hidden; background: var(--line); cursor: pointer; }
+.selgrid img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.selgrid > button:hover img { transform: scale(1.035); }
+.selgrid .hero { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+.selgrid .hero img { position: absolute; inset: 0; object-position: 50% 22%; }
+.selgrid .num { position: absolute; left: 8px; top: 7px; font-size: 10px; letter-spacing: .2em; color: #fff; mix-blend-mode: difference; }
+.selgrid .all { display: grid; place-content: center; text-align: center; gap: 4px; background: var(--fg); color: var(--bg); font: inherit; }
+.selgrid .all b { font-weight: 800; font-size: clamp(30px, 7vw, 54px); letter-spacing: -.05em; line-height: .9; }
+.selgrid .all span { font-size: 12px; letter-spacing: .16em; }
+@media (min-width: 700px) { .selgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .selgrid .hero { grid-column: span 3; aspect-ratio: 16 / 10; } .selgrid .hero img { object-position: 50% 18%; } }
+@media (min-width: 1000px) { .selgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } .selgrid .hero { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; } }
+/* digitals */
+.digi { display: grid; gap: 14px; }
+.digitxt { margin: 0; color: var(--soft); }
+.digigrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 900px; }
+@media (min-width: 800px) { .digigrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.digigrid button { padding: 0; border: 0; background: var(--line); border-radius: 3px; overflow: hidden; position: relative; cursor: pointer; aspect-ratio: 3 / 4; }
+.digigrid img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.digigrid span { position: absolute; left: 8px; bottom: 8px; font-size: 11px; letter-spacing: .16em; background: rgba(255,255,255,.88); color: #1C1C14; padding: 3px 8px; border-radius: 999px; }
+/* video tiles */
+.tile video { display: block; width: 100%; height: auto; background: #000; }
+/* floating book button */
+.bookfab { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 17; font: inherit; font-weight: 800; font-size: 17px; letter-spacing: -.03em; padding: 11px 20px; border-radius: 999px; border: 0; background: var(--fg); color: var(--bg); cursor: pointer; box-shadow: 0 10px 30px -10px rgba(0,0,0,.45); transition: transform .25s cubic-bezier(.2,.7,.2,1), opacity .25s ease; }
+.bookfab i { font-style: normal; color: #B3202A; }
+.bookfab:hover { transform: translateY(-2px) scale(1.04); }
+body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
+/* seen in */
+.seen { display: flex; flex-wrap: wrap; gap: 8px; }
+.seen span { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 10px; border-radius: 999px; border: 1px solid var(--line); font-weight: 500; letter-spacing: -.01em; }
+.seen i { font-style: normal; font-size: 22px; line-height: 1; }
+/* photo size switch */
+.wtools { display: inline-flex; align-items: center; gap: 10px; }
+.sizes { display: inline-flex; border: 1px solid var(--fg); border-radius: 999px; overflow: hidden; }
+.sizes button { font: inherit; font-size: 12px; font-weight: 500; text-transform: none; letter-spacing: .04em; width: 30px; padding: 5px 0; border: 0; background: none; color: var(--fg); cursor: pointer; }
+.sizes button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.wall.s { columns: 5 120px; column-gap: 6px; } .wall.s .tile { margin-bottom: 6px; } .wall.s .tag { display: none; }
+.wall.l { columns: 2 380px; column-gap: 14px; } .wall.l .tile { margin-bottom: 14px; }
+/* two versions of one shot: hover shows the other */
+.tile .alt { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .45s ease; }
+@media (hover: hover) { .tile:hover .alt { opacity: 1; } }
+.tile .two { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(90deg, #fff 50%, #1C1C14 50%); box-shadow: 0 0 0 1.5px rgba(255,255,255,.9); }
 /* ===== going full on ===== */
 /* wrapped card on the start page */
 .wrapcard { position: relative; display: grid; grid-template-columns: 74px minmax(0, 1fr); align-items: center; gap: 16px; width: 100%; max-width: 520px; margin-top: 14px; padding: 12px; border: 0; border-radius: 16px; background: #1C1C14; color: #FFF8BB; text-align: left; font: inherit; cursor: pointer; overflow: hidden; }
@@ -574,12 +623,9 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <button class="view" data-view="recaps">recaps.</button>
     <button class="view" data-view="posts">posts.</button>
     <button class="view" data-view="journal">journal.</button>
-    <button class="view" data-view="about">about.</button>
-    <button class="view" data-view="inspirations">inspirations.</button>
-    <button class="view" data-view="sedcard">sedcard.</button>
-    <button class="view" data-view="lebenslauf">lebenslauf.</button>
-    <button class="view" data-view="faq">faq.</button>
-    <button class="view" data-view="booking">booking.</button>
+    <button class="view" data-view="about" data-group="about">about.</button>
+    <button class="view" data-view="sedcard" data-group="brands">for brands.</button>
+    <button class="view" data-view="booking">book.</button>
   </nav>
 
   <section class="card" aria-live="polite">
@@ -590,7 +636,12 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="player" id="player"></div>
   </section>
 
+  <nav class="subnav" id="subnav" aria-label="More" hidden></nav>
   <nav class="strip" id="strip" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
+  <section class="selected" id="sel" hidden aria-label="selected photos">
+    <div class="hofhead">selected.</div>
+    <div class="selgrid" id="selGrid"></div>
+  </section>
 
   <div class="otd" id="otd" hidden></div>
   <button class="wrapcard" id="wrapCard" type="button" hidden><span class="wstripes" aria-hidden="true"></span><span class="wtxt"><small>MN. WRAPPED</small><b>2026<i>.</i></b><em>my year in colours. tap to play.</em></span></button>
@@ -601,7 +652,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="ticker" id="ticker" hidden aria-hidden="true"></div>
   <div class="hofhead" id="gbHead" hidden>leave a dot.</div>
   <div class="gb" id="gb" hidden></div>
-  <div class="hofhead whead" id="wallHead" hidden><span>every photo.</span><button class="shufbtn" id="shuf" type="button">shuffle.</button></div>
+  <div class="hofhead whead" id="wallHead" hidden><span>every photo.</span><span class="wtools"><span class="sizes" id="sizes" role="group" aria-label="photo size"><button type="button" data-s="s">S</button><button type="button" data-s="m">M</button><button type="button" data-s="l">L</button></span><button class="shufbtn" id="shuf" type="button">shuffle.</button></span></div>
   <div class="chrecaps" id="chRecaps" hidden></div>
   <div class="wall" id="wall"></div>
   <div class="grid2 rgrid" id="recapGrid" hidden></div>
@@ -626,6 +677,8 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       <div><span>shot wearing</span><p>s.Oliver · Calvin Klein · Nautica · Only &amp; Sons · Hidden Hills Watch · Cocoburry · Distorted People · Peso · BRTLwear · leder.ritsch · getdressedmittersill</p></div>
       <div><span>print</span><p>Platzhirsch · Bezirkszeitung</p></div>
     </div>
+    <div class="plabel">SEEN IN</div>
+    <div class="seen"><span><i aria-hidden="true">🦌</i>Platzhirsch</span><span><i aria-hidden="true">📰</i>Bezirkszeitung</span><span><i aria-hidden="true">👟</i>s.Oliver × INTERSPORT Harms</span></div>
     <div class="plabel">PRESS</div>
     <ul class="press">
       <li data-press="2026-11-bezirkszeitung"><span class="when">11/26</span><div><b>Bezirkszeitung</b> <span>· s.Oliver fashion show at INTERSPORT Harms</span></div></li>
@@ -769,6 +822,12 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     </article>
   </section>
 
+  <section class="digi panel" id="digitals" hidden>
+    <h2>digitals<span class="dot">.</span></h2>
+    <p class="digitxt">no styling, no editing. natural light, as i look right now.</p>
+    <div class="digigrid" id="digiGrid"></div>
+  </section>
+
   <section class="faq panel" id="faq" hidden>
     <h2>faq<span class="dot">.</span></h2>
     <div class="qs">
@@ -812,6 +871,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span><a href="https://instagram.com/herrnindl" target="_blank" rel="noopener">instagram</a> · <a href="https://www.tiktok.com/@herrnindl" target="_blank" rel="noopener">tiktok</a> · <a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
 </div>
 
+<button class="bookfab" id="bookFab" type="button" hidden>book<i>.</i></button>
 <div class="minibar" id="minibar" hidden><div id="spotbox"></div><button class="mclose" id="mclose" aria-label="Turn sound off">✕</button></div>
 
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true">
@@ -871,7 +931,7 @@ const SONGS = {
 /* "next." on the start page. Change the text when the next thing changes. */
 const NEXT = "wildkogel sundaze · december 2026";
 const nowId = () => new Date() >= new Date("2027-01-01T00:00:00+01:00") ? "red" : "ember";
-const INFO = { about: "who i am.", inspirations: "where MN. comes from.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
+const INFO = { about: "who i am.", inspirations: "where MN. comes from.", digitals: "as i am today.", sedcard: "the numbers.", lebenslauf: "the whole story.", faq: "you asked.", booking: "let's work." };
 const VIEWS = ["colours", "recaps", "posts", "journal", ...Object.keys(INFO)];
 let photos = [], sets = { recaps: [], posts: [], journal: [] }, view = "colours", filter = "all", list = [], idx = -1;
 (function readHash() {
@@ -1155,6 +1215,58 @@ async function renderGb() {
 }
 
 
+/* ===================== award round ===================== */
+let digitals = [];
+const GROUPS = { about: ["about", "inspirations", "faq"], brands: ["sedcard", "lebenslauf", "digitals"] };
+const GROUP_OF = {}; Object.entries(GROUPS).forEach(([g, vs]) => vs.forEach(v => GROUP_OF[v] = g));
+function renderSubnav() {
+  const n = $("subnav"), g = GROUP_OF[view];
+  n.hidden = !g; n.textContent = ""; if (!g) return;
+  GROUPS[g].filter(v => v !== "digitals" || digitals.length).forEach(v => {
+    const b = el("button", null, v + "."); b.type = "button"; b.setAttribute("aria-current", String(v === view));
+    b.onclick = () => { view = v; updateHash(); render(); }; n.append(b);
+  });
+}
+/* selected: the best photos open the start page (order from photos/selected.txt) */
+function renderSelected() {
+  const box = $("sel"), g = $("selGrid"), show = view === "colours" && filter === "all";
+  const sel = photos.filter(p => p.sel).sort((a, b) => a.sel - b.sel);
+  box.hidden = !show || !sel.length; if (box.hidden || g.dataset.n === String(sel.length)) return;
+  g.dataset.n = sel.length; g.textContent = "";
+  sel.forEach((p, i) => {
+    const b = el("button", i === 0 ? "hero" : null); const img = el("img");
+    setImg(img, p, i === 0 ? "(max-width: 1000px) 100vw, 50vw" : "(max-width: 700px) 50vw, 25vw"); img.alt = byId[p.chapter].label + " photo";
+    if (i === 0) { img.loading = "eager"; img.fetchPriority = "high"; loadImg(img); }
+    b.append(img, el("span", "num", String(i + 1).padStart(2, "0")));
+    b.onclick = () => open(sel, i); g.append(b);
+  });
+  const all = el("button", "all"); all.append(el("b", null, photos.filter(p => !p.video).length + ""), el("span", null, "ALL PHOTOS ↓"));
+  all.onclick = () => $("wallHead").scrollIntoView({ behavior: calm() ? "auto" : "smooth" }); g.append(all);
+}
+/* digitals: photos/digitals/ — shows up in "for brands" as soon as there are photos */
+function renderDigitals() {
+  if (view !== "digitals") return;
+  const g = $("digiGrid"); g.textContent = "";
+  digitals.forEach((p, i) => {
+    const b = el("button"); const img = el("img"); setImg(img, p, "(max-width: 800px) 50vw, 25vw"); img.alt = "digital";
+    const label = p.src.split("/").pop().replace(/\.[a-z0-9]+$/i, "").replace(/^\d+[-_ ]*/, "").replace(/[-_]+/g, " ").toLowerCase();
+    b.append(img); if (label) b.append(el("span", null, label)); b.onclick = () => open(digitals, i); g.append(b);
+  });
+}
+/* floating book button */
+function renderFab() {
+  const f = $("bookFab");
+  f.hidden = view === "booking" || document.documentElement.classList.contains("locked");
+  document.body.classList.toggle("mini", !$("minibar").hidden);
+}
+$("bookFab").onclick = () => { view = "booking"; updateHash(); render(); window.scrollTo({ top: 0, behavior: calm() ? "auto" : "smooth" }); };
+/* photo size: S / M / L, remembered on this device */
+let wallSize = "m"; try { wallSize = localStorage.getItem("mn-size") || "m"; } catch (e) {}
+function applySize() { const w = $("wall"); w.classList.remove("s", "l"); if (wallSize !== "m") w.classList.add(wallSize); document.querySelectorAll("#sizes button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s === wallSize))); }
+document.querySelectorAll("#sizes button").forEach(b => b.onclick = () => { wallSize = b.dataset.s; try { localStorage.setItem("mn-size", wallSize); } catch (e) {} applySize(); });
+applySize();
+const shotBase = p => p.src.split("/").pop().replace(/\.[a-z0-9]+$/i, "").replace(/(swe?|_farbe|[abc]|x|_1|-bearbeitet)+$/gi, "").toLowerCase();
+
 /* ===================== going full on ===================== */
 
 /* ---------- ticker: the chapters, endlessly ---------- */
@@ -1328,15 +1440,27 @@ function renderColours() {
     a.onclick = e => enterChapter(n, e);
     nx.append(a);
   }
+  /* on the start page, two versions of one shot share a tile: hover shows the other */
+  const alts = new Map(), skip = new Set();
+  if (filter === "all") { const seen = new Map(); list.forEach(p => { if (p.video) return; const k = p.chapter + "/" + shotBase(p); if (seen.has(k)) { const first = seen.get(k); if (!alts.has(first)) { alts.set(first, p); skip.add(p); } } else seen.set(k, p); }); }
   list.forEach((p, i) => {
+    if (skip.has(p)) return;
     const b = el("button", "tile"); b.dataset.k = p.src;
+    if (p.video) {
+      const v = el("video"); v.src = p.src; v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = !calm(); v.preload = "metadata"; v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-label", byId[p.chapter].label + " video");
+      b.append(v); b.onclick = () => { v.paused ? v.play() : v.pause(); };
+      if (filter === "all") { const t = el("span", "tag"); t.append(sw(byId[p.chapter]), el("span", null, byId[p.chapter].label)); b.append(t); }
+      wall.append(b); return;
+    }
     const img = el("img"); setImg(img, p);
     img.alt = p.caption || (byId[p.chapter].label + " photo");
     b.append(img);
+    const alt = alts.get(p);
+    if (alt) { const a = el("img", "alt"); a.alt = ""; a.loading = "lazy"; a.decoding = "async"; a.src = alt.thumb || alt.src; if (alt.thumb2) { a.srcset = alt.thumb + " 600w, " + alt.thumb2 + " 1200w"; a.sizes = img.sizes; } b.append(a, el("span", "two")); b.title = "two versions"; }
     if (filter === "all") {
       const t = el("span", "tag"); t.append(sw(byId[p.chapter]), el("span", null, byId[p.chapter].label)); b.append(t);
     }
-    b.onclick = () => open(list, i);
+    b.onclick = () => { const L = list.filter(x => !x.video); open(L, L.indexOf(p)); };
     wall.append(b);
     if (cur && QUOTES[cur.id] && i === Math.min(5, list.length - 1)) { const q = el("div", "quote"); q.style.setProperty("--dot", cur.dot === cur.fg ? cur.bg : cur.dot); q.append(QUOTES[cur.id].replace(/\.$/, "")); q.append(el("i", null, ".")); wall.append(q); }
   });
@@ -1430,7 +1554,8 @@ function renderPosts() {
 }
 
 function render() {
-  document.querySelectorAll(".view").forEach(v => v.setAttribute("aria-current", String(v.dataset.view === view)));
+  document.querySelectorAll(".view").forEach(v => v.setAttribute("aria-current", String(v.dataset.group ? GROUP_OF[view] === v.dataset.group : v.dataset.view === view)));
+  renderSubnav(); renderSelected(); renderDigitals(); renderFab();
   $("strip").hidden = view !== "colours";
   $("wall").hidden = view !== "colours";
   if (view !== "colours") $("chRecaps").hidden = true;
@@ -1713,7 +1838,7 @@ function loadSpotify(cb) {
 }
 function playSong(song) {
   if (!song || !song.id) return;
-  $("minibar").hidden = false;
+  $("minibar").hidden = false; document.body.classList.add("mini");
   if (current === song.id && ctrl) { try { ctrl.resume(); } catch (e) {} return; }
   current = song.id;
   loadSpotify(() => { try { ctrl.loadUri("spotify:track:" + song.id); ctrl.play(); } catch (e) {} });
@@ -1722,7 +1847,7 @@ function setSound(on) {
   soundOn = on;
   try { on ? localStorage.setItem("mn-sound", "1") : localStorage.removeItem("mn-sound"); } catch (e) {}
   $("sound").setAttribute("aria-pressed", String(on)); $("sound").querySelector("b").textContent = on ? "on" : "off";
-  if (!on) { if (ctrl) { try { ctrl.pause(); } catch (e) {} } $("minibar").hidden = true; }
+  if (!on) { if (ctrl) { try { ctrl.pause(); } catch (e) {} } $("minibar").hidden = true; document.body.classList.remove("mini"); }
   render();
   if (on && !current) { const first = [].concat(SONGS[filter] || []).find(x => x.id) || SONGS.vanilla; playSong(first); }
 }
@@ -1787,7 +1912,7 @@ function wirePress(press) {
 let loaded = false;
 function loadData() {
   if (loaded) return; loaded = true;
-  fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); mixed = shuffle(photos); render(); }).catch(() => {});
+  fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); digitals = d.filter(p => p.chapter === "digitals"); mixed = shuffle(photos); render(); }).catch(() => {});
   fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [] }; render(); wirePress(d.press || {}); }).catch(() => {});
 }
 if (document.documentElement.classList.contains("welcome")) {

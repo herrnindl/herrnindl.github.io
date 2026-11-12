@@ -1,0 +1,15 @@
+# selected. — the photos that open the start page, best first.
+# One per line, as chapter/filename. The first one is the big photo at the top.
+# Change the order or swap photos any time; delete a line to remove it.
+white/250223-Studioportrait-alpindis.at-0292-Bearbeitet.jpg
+navy-blue/0V4A9285x_1.jpg
+navy-blue/2025-06-17_00103.jpg
+navy-blue/0V4A9240x_1x.jpg
+baby-blue/wekreat-01b.jpg
+baby-blue/wekreat-05b.jpg
+lavendel/0V4A0268.jpg
+lavendel/2025-06-17_00050.jpg
+white/250223-Studioportrait-alpindis.at-0350.jpg
+white/lake-00233.jpg
+white/lake-00300.jpg
+origin/origin-05.jpg
