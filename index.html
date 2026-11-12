@@ -1108,8 +1108,18 @@ function renderHof() {
   });
 }
 
+/* The start page shows every photo in a new random order on each visit.
+   Versions of the same shot (colour / black & white, a / b) are kept apart. */
+let mixed = [];
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  const base = p => p.src.split("/").pop().replace(/\.[a-z]+$/i, "").replace(/(swe?|_farbe|[abc]|x|_1|-bearbeitet)+$/gi, "").toLowerCase();
+  for (let i = 1; i < a.length; i++) if (base(a[i]) === base(a[i - 1])) { const k = a.findIndex((q, j) => j > i && base(q) !== base(a[i - 1]) && (j + 1 >= a.length || base(q) !== base(a[j + 1]) || true)); if (k > 0) [a[i], a[k]] = [a[k], a[i]]; }
+  return a;
+}
 function renderColours() {
-  list = (filter === "all" ? photos : photos.filter(p => p.chapter === filter));
+  list = (filter === "all" ? (mixed.length === photos.length ? mixed : (mixed = shuffle(photos))) : photos.filter(p => p.chapter === filter));
   const wall = $("wall"); wall.textContent = "";
   const cur = byId[filter];
   const nr = renderChRecaps();
@@ -1579,7 +1589,7 @@ function wirePress(press) {
 let loaded = false;
 function loadData() {
   if (loaded) return; loaded = true;
-  fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); render(); }).catch(() => {});
+  fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); mixed = shuffle(photos); render(); }).catch(() => {});
   fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [] }; render(); wirePress(d.press || {}); }).catch(() => {});
 }
 if (document.documentElement.classList.contains("welcome")) {
