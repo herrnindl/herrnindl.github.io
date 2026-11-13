@@ -1225,7 +1225,7 @@ function renderCard() {
   if ([].concat(SONGS[c.id] || []).some(x => x.id) && !soundOn) meta.append(el("span", "spotnote", "tap to play via spotify · spotify sets cookies"));
   { const sh = el("button", "sharebtn", "share."); sh.type = "button"; sh.setAttribute("aria-label", "share " + c.label + " as a story"); sh.onclick = () => shareChapter(c); meta.append(sh); }
   if (photos.some(p => p.chapter === c.id && !p.video)) { const w = el("button", "sharebtn walkbtn", "walk through."); w.type = "button"; w.setAttribute("aria-label", "walk through " + c.label + " like an exhibition"); w.onclick = () => openRoom(c); meta.append(w); }
-  if (soundOn) { const first = [].concat(SONGS[c.id] || []).find(x => x.id); if (first) playSong(first); }
+  if (soundOn) { const first = [].concat(SONGS[c.id] || []).find(x => x.id); if (first) playSong(first); else hushSong(); }   /* a chapter without its own song is quiet */
 }
 
 function animateCard() {
@@ -2438,6 +2438,10 @@ function playSong(song) {
   if (current === song.id && ctrl) { try { ctrl.resume(); } catch (e) {} return; }
   current = song.id;
   loadSpotify(() => { try { ctrl.loadUri("spotify:track:" + song.id); ctrl.play(); } catch (e) {} });
+}
+function hushSong() {
+  if (ctrl) { try { ctrl.pause(); } catch (e) {} }
+  current = ""; $("minibar").hidden = true; document.body.classList.remove("mini");
 }
 function setSound(on) {
   soundOn = on;
