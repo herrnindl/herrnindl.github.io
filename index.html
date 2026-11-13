@@ -473,6 +473,9 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .film small { font-size: 12px; letter-spacing: .3em; opacity: .8; }
 .film b { font-weight: 800; font-size: clamp(56px, 16vw, 150px); letter-spacing: -.06em; line-height: .86; padding-bottom: .16em; }
 .film b i { font-style: normal; color: var(--fd); }
+.film b i { display: inline-block; }
+.film b .ftail { display: inline-block; font-size: 1em; opacity: 1; }
+.film .fspark { position: absolute; border-radius: 50%; z-index: 1; pointer-events: none; box-shadow: 0 0 8px 1px rgba(255,220,140,.6); }
 .film span { font-size: clamp(16px, 4vw, 22px); opacity: .85; }
 .film .fhint { z-index: 2; color: var(--ff); transition: color .6s ease; position: absolute; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center; font-size: 11px; letter-spacing: .24em; opacity: .55; }
 @media (prefers-reduced-motion: reduce) { .ticker .tr, .wpname { animation: none; } .wslide > *, .film .fin > * { animation: none; } }
@@ -1549,32 +1552,90 @@ function armFilm() { clearTimeout(filmTimer); if (filmOn) return; filmTimer = se
 const BEST = {"origin": ["origin-06.jpg", "origin-02.jpg", "origin-08.jpg"], "white": ["250223-Studioportrait-alpindis.at-0292-Bearbeitet.jpg", "lake-00275.jpg", "lake-00301.jpg"], "baby-blue": ["wekreat-01b.jpg", "wekreat-05b.jpg", "wekreat-07b.jpg"], "lavendel": ["0V4A0304.jpg", "2025-06-17_00009.jpg", "0V4A0231.jpg"], "navy-blue": ["0V4A9118x_1.jpg", "0V4A9324x_1.jpg", "0V4A9240x_1x.jpg"], "vanilla-2": ["2026-07-08_033.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_072.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_046.jpg"], "ber": ["2026-07-08_154.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_012.jpg", "2026-07-08_178.jpg"]};
 const isBest = p => (BEST[p.chapter] || []).includes(p.src.split("/").pop());
 const lastFilm = {};
+/* How each chapter hands over to the next, like in the colour chapters film:
+   dot   – the dot after the name takes on the next colour and grows over everything
+   fade  – one colour melts into the next          blind – the next colour comes down like a blind
+   dim   – the light goes down into the next one    tint  – the colour darkens into its second part
+   morph – the word turns into the next word (ber. → ember.)
+   spark – ember. burns down, sparks fly, and the word becomes red. */
+const FILM_TRANS = { "origin>white": "dot", "white>baby-blue": "dot", "baby-blue>lavendel": "fade", "lavendel>navy-blue": "blind", "navy-blue>grey": "dim",
+  "grey>vanilla": "dot", "vanilla>vanilla-2": "tint", "vanilla-2>ber": "dot", "ber>ember": "morph", "ember>red": "spark", "red>origin": "dot" };
 function playFilm() {
   const f = el("div", "film"); f.setAttribute("role", "dialog"); f.setAttribute("aria-label", "my life in colours. — tap to stop");
   const hint = el("div", "fhint", "TAP ANYWHERE TO GO BACK"); f.tabIndex = -1; f.append(hint); document.body.append(f); f.focus({ preventScroll: true });
-  let i = 0;
+  let i = 0, pc = null, timers = [];
+  const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+  const EASE = "cubic-bezier(.5,0,.2,1)";
+  /* types a word into the name, letter by letter; from = the word that is there now */
+  const typeName = (txt, from, to, at, tail) => {
+    let cur = from, seq = [];
+    while (cur && !to.endsWith(cur)) { cur = cur.slice(1); seq.push(cur); }                 /* take letters off the front until it fits */
+    if (!cur) { for (let k = 1; k <= to.length; k++) seq.push(to.slice(0, k)); }           /* nothing fits: write it new */
+    else { while (cur !== to) { cur = to.slice(to.length - cur.length - 1); seq.push(cur); } } /* letters slide in at the front: ber → mber → ember */
+    txt.data = from; tail.style.opacity = from ? 1 : 0;
+    seq.forEach((w, k) => later(() => { txt.data = w; if (k === seq.length - 1) tail.animate([{ opacity: 0, transform: "scale(.2)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: "cubic-bezier(.3,.7,.4,1.4)", fill: "forwards" }); }, at + k * 70));
+    if (!seq.length) tail.style.opacity = 1;
+  };
   const step = () => {
     const c = CHAPTERS[i % CHAPTERS.length]; i++;
+    const kind = pc ? (FILM_TRANS[pc.id + ">" + c.id] || "dot") : "first";
     const layer = el("div", "fl"); layer.style.setProperty("--fb", c.bg); layer.style.setProperty("--ff", c.fg); layer.style.setProperty("--fd", c.fg);
-    f.style.setProperty("--ff", c.fg);
     const box = el("div", "fin"), all = photos.filter(p => p.chapter === c.id && !p.video);
     const inColour = all.filter(p => (p.cm || 0) >= .06).sort((a, b) => b.cm - a.cm).slice(0, 3);   /* photos where the chapter's colour is really there */
     const top = inColour.length ? inColour : all.filter(isBest);
     let pics = top.length ? top : all; if (pics.length > 1) pics = pics.filter(p => p !== lastFilm[c.id]);
-    if (pics.length) { const im = el("img"); const p = pics[Math.floor(Math.random() * pics.length)]; lastFilm[c.id] = p; im.src = p.thumb2 || p.thumb || p.src; im.alt = ""; box.append(im); }
-    const nm = el("b", null, c.name); nm.append(el("i", null, ".")); if (c.suffix) nm.append(c.suffix);
-    box.append(el("small", null, c.dates.toUpperCase()), nm, el("span", null, c.line));
-    /* like the colour bomb on the lock screen: the next colour grows out of the dot after the last name */
-    const fls = f.querySelectorAll(".fl"), prev = fls.length ? fls[fls.length - 1].querySelector("b i") : null, r = prev ? prev.getBoundingClientRect() : null;
-    const ox = r ? r.left + r.width / 2 : innerWidth / 2, oy = r ? r.top + r.height * .8 : innerHeight / 2;
+    let im = null;
+    if (pics.length) { im = el("img"); const p = pics[Math.floor(Math.random() * pics.length)]; lastFilm[c.id] = p; im.src = p.thumb2 || p.thumb || p.src; im.alt = ""; box.append(im); }
+    const nm = el("b"), txt = document.createTextNode(""), tail = el("span", "ftail"); tail.append(el("i", null, ".")); if (c.suffix) tail.append(c.suffix);
+    nm.append(txt, tail);
+    const dates = el("small", null, c.dates.toUpperCase()), line = el("span", null, c.line);
+    box.append(dates, nm, line);
+    const old = [...f.querySelectorAll(".fl")].pop(), oldDot = old && old.querySelector("b i"), r = oldDot ? oldDot.getBoundingClientRect() : null;
     layer.append(box); f.insertBefore(layer, hint);
-    const far = Math.hypot(Math.max(ox, innerWidth - ox), Math.max(oy, innerHeight - oy)) + 20;
-    const a = layer.animate([{ clipPath: `circle(0px at ${ox}px ${oy}px)` }, { clipPath: `circle(${far}px at ${ox}px ${oy}px)` }], { duration: 1150, easing: "cubic-bezier(.5,0,.2,1)" });
-    box.animate([{ opacity: 0, transform: "translateY(14px) scale(.985)" }, { opacity: 1, transform: "none" }], { duration: 700, delay: 380, easing: "cubic-bezier(.2,.7,.2,1)", fill: "backwards" });
+    f.style.setProperty("--ff", c.fg);
+    const W = innerWidth, H = innerHeight, rest = [dates, line].concat(im ? [im] : []);
+    const show = (at, dur = 600) => rest.forEach((e, k) => e.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: dur, delay: at + k * 90, easing: "cubic-bezier(.2,.7,.2,1)", fill: "backwards" }));
+    let a, nameAt = 500, from = "";
+    if (kind === "dot" && r) {
+      /* the dot takes on the next colour, swells, and the colour spreads from there */
+      const ox = r.left + r.width / 2, oy = r.top + r.height * .78, far = Math.hypot(Math.max(ox, W - ox), Math.max(oy, H - oy)) + 30;
+      oldDot.animate([{ color: getComputedStyle(oldDot).color, transform: "none" }, { color: c.bg, transform: "scale(1.9)" }], { duration: 380, easing: "cubic-bezier(.3,.7,.4,1)", fill: "forwards" });
+      a = layer.animate([{ clipPath: `circle(${r.width * .4}px at ${ox}px ${oy}px)` }, { clipPath: `circle(${far}px at ${ox}px ${oy}px)` }], { duration: 1050, delay: 340, easing: EASE, fill: "backwards" });
+      nameAt = 1000; show(1150);
+    } else if (kind === "blind") {
+      a = layer.animate([{ clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)" }], { duration: 1000, easing: EASE });
+      nameAt = 700; show(800);
+    } else if (kind === "dim") {
+      old.animate([{ filter: "brightness(1)" }, { filter: "brightness(.55)" }], { duration: 900, fill: "forwards", easing: "ease-in" });
+      a = layer.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1100, delay: 450, easing: "ease-in-out", fill: "backwards" });
+      nameAt = 1100; show(1200);
+    } else if (kind === "morph" || kind === "spark") {
+      /* the word stays and changes: ber. → ember. / ember. → ber. → red. */
+      from = pc.name; old.querySelectorAll(".fin > :not(b)").forEach(e => e.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: "forwards" }));
+      const ob = old.querySelector(".fin b"), o0 = ob.getBoundingClientRect(), n0 = nm.getBoundingClientRect();
+      ob.style.visibility = "hidden";   /* the word glides from where it was to where it belongs now */
+      nm.animate([{ transform: `translate(${o0.left - n0.left}px, ${o0.top - n0.top}px)` }, { transform: "none" }], { duration: 1100, delay: 200, easing: EASE, fill: "backwards" });
+      /* the colour changes underneath the word, the word itself never disappears */
+      a = layer.animate([{ backgroundColor: pc.bg, color: pc.fg }, { backgroundColor: c.bg, color: c.fg }], { duration: kind === "spark" ? 1500 : 1100, delay: kind === "spark" ? 450 : 100, easing: "ease-in-out", fill: "backwards" });
+      nameAt = kind === "spark" ? 650 : 450; show(kind === "spark" ? 1500 : 1000);
+      if (kind === "spark") for (let k = 0; k < 46; k++) {                          /* embers fly up while it turns red */
+        const s = el("i", "fspark"), x = Math.random() * W, size = 2 + Math.random() * 4;
+        s.style.cssText = `left:${x}px;top:${H * (.55 + Math.random() * .5)}px;width:${size}px;height:${size}px;background:${Math.random() < .5 ? "#FFF8BB" : "#F6C46A"}`;
+        f.insertBefore(s, hint);
+        s.animate([{ transform: "translate(0,0)", opacity: 0 }, { opacity: 1, offset: .15 }, { transform: `translate(${(Math.random() - .5) * 120}px, ${-(H * (.4 + Math.random() * .6))}px)`, opacity: 0 }], { duration: 1600 + Math.random() * 1400, delay: Math.random() * 900, easing: "cubic-bezier(.2,.6,.3,1)", fill: "backwards" }).onfinish = () => s.remove();
+      }
+    } else {   /* fade, tint and the very first one */
+      a = layer.animate([{ opacity: 0 }, { opacity: 1 }], { duration: kind === "tint" ? 900 : kind === "fade" ? 1200 : 700, easing: "ease-in-out" });
+      nameAt = kind === "first" ? 200 : 650; show(nameAt + 100);
+    }
+    if (kind !== "morph" && kind !== "spark") box.querySelector("b").style.visibility = "visible";
+    typeName(txt, from, c.name, nameAt, tail);
     a.onfinish = () => { [...f.querySelectorAll(".fl")].forEach(x => { if (x !== layer) x.remove(); }); };
+    pc = c;
+    clearInterval(iv); iv = setTimeout(step, kind === "spark" ? 4200 : 3400);
   };
-  step(); const iv = setInterval(step, 3200);
-  const stop = () => { clearInterval(iv); ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => removeEventListener(ev, stop, true)); f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 350, fill: "forwards" }).onfinish = () => f.remove(); filmOn = null; armFilm(); };
+  let iv = null; step();
+  const stop = () => { clearTimeout(iv); timers.forEach(clearTimeout); ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => removeEventListener(ev, stop, true)); f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 350, fill: "forwards" }).onfinish = () => f.remove(); filmOn = null; armFilm(); };
   filmOn = stop;
   setTimeout(() => ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => addEventListener(ev, stop, true)), 300);
 }
