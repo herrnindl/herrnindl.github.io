@@ -474,8 +474,6 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .film b { font-weight: 800; font-size: clamp(56px, 16vw, 150px); letter-spacing: -.06em; line-height: .86; padding-bottom: .16em; }
 .film b i { font-style: normal; color: var(--fd); }
 .film span { font-size: clamp(16px, 4vw, 22px); opacity: .85; }
-.film .fin > * { animation: wIn .7s cubic-bezier(.2,.7,.2,1) both; }
-.film .fin > :nth-child(2) { animation-delay: .1s; } .film .fin > :nth-child(3) { animation-delay: .2s; } .film .fin > :nth-child(4) { animation-delay: .3s; }
 .film .fhint { z-index: 2; color: var(--ff); transition: color .6s ease; position: absolute; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center; font-size: 11px; letter-spacing: .24em; opacity: .55; }
 @media (prefers-reduced-motion: reduce) { .ticker .tr, .wpname { animation: none; } .wslide > *, .film .fin > * { animation: none; } }
 /* MN. in numbers */
@@ -1551,20 +1549,6 @@ function armFilm() { clearTimeout(filmTimer); if (filmOn) return; filmTimer = se
 const BEST = {"origin": ["origin-06.jpg", "origin-02.jpg", "origin-08.jpg"], "white": ["250223-Studioportrait-alpindis.at-0292-Bearbeitet.jpg", "lake-00275.jpg", "lake-00301.jpg"], "baby-blue": ["wekreat-01b.jpg", "wekreat-05b.jpg", "wekreat-07b.jpg"], "lavendel": ["0V4A0304.jpg", "2025-06-17_00009.jpg", "0V4A0231.jpg"], "navy-blue": ["0V4A9118x_1.jpg", "0V4A9324x_1.jpg", "0V4A9240x_1x.jpg"], "vanilla-2": ["2026-07-08_033.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_072.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_046.jpg"], "ber": ["2026-07-08_154.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_012.jpg", "2026-07-08_178.jpg"]};
 const isBest = p => (BEST[p.chapter] || []).includes(p.src.split("/").pop());
 const lastFilm = {};
-/* every chapter comes in its own way, the way its colour feels */
-const FILM_IN = {
-  origin: () => [{ opacity: 0 }, { opacity: 1 }],                                                             /* black: out of the dark */
-  white: () => [{ opacity: 0, filter: "brightness(1.8)" }, { opacity: 1, filter: "brightness(1)" }],          /* white: a flash */
-  "baby-blue": () => [{ clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0 0 0 0)" }],                    /* sky: rises from below */
-  lavendel: () => [{ opacity: 0, filter: "blur(28px)", transform: "scale(1.06)" }, { opacity: 1, filter: "blur(0)", transform: "scale(1)" }],   /* dreamy: out of the blur */
-  "navy-blue": () => [{ clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0 0)" }],                    /* night: falls from above */
-  grey: () => [{ opacity: 0, filter: "grayscale(1) contrast(.6)" }, { opacity: 1, filter: "none" }],          /* grey: like fog clearing */
-  vanilla: (w, h) => [{ clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(" + Math.hypot(w, h) + "px at 50% 50%)" }],   /* vanilla: a new colour opens */
-  "vanilla-2": () => [{ clipPath: "polygon(0 0, 0 0, 0 0, 0 0)" }, { clipPath: "polygon(0 0, 200% 0, 0 200%, 0 0)" }],          /* vanilla II: the same light, from the corner */
-  ber: () => [{ clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0)" }],                            /* ber.: turns over like a page */
-  ember: (w, h) => [{ clipPath: "circle(0% at 50% 100%)" }, { clipPath: "circle(" + Math.hypot(w, h) * 1.1 + "px at 50% 100%)" }],   /* ember: a spark from below */
-  red: () => [{ opacity: 0, transform: "scale(1.15)" }, { opacity: 1, transform: "scale(1)" }],              /* red: hits hard */
-};
 function playFilm() {
   const f = el("div", "film"); f.setAttribute("role", "dialog"); f.setAttribute("aria-label", "my life in colours. — tap to stop");
   const hint = el("div", "fhint", "TAP ANYWHERE TO GO BACK"); f.tabIndex = -1; f.append(hint); document.body.append(f); f.focus({ preventScroll: true });
@@ -1580,8 +1564,13 @@ function playFilm() {
     if (pics.length) { const im = el("img"); const p = pics[Math.floor(Math.random() * pics.length)]; lastFilm[c.id] = p; im.src = p.thumb2 || p.thumb || p.src; im.alt = ""; box.append(im); }
     const nm = el("b", null, c.name); nm.append(el("i", null, ".")); if (c.suffix) nm.append(c.suffix);
     box.append(el("small", null, c.dates.toUpperCase()), nm, el("span", null, c.line));
+    /* like the colour bomb on the lock screen: the next colour grows out of the dot after the last name */
+    const fls = f.querySelectorAll(".fl"), prev = fls.length ? fls[fls.length - 1].querySelector("b i") : null, r = prev ? prev.getBoundingClientRect() : null;
+    const ox = r ? r.left + r.width / 2 : innerWidth / 2, oy = r ? r.top + r.height * .8 : innerHeight / 2;
     layer.append(box); f.insertBefore(layer, hint);
-    const go = FILM_IN[c.id] || FILM_IN.origin, a = layer.animate(go(innerWidth, innerHeight), { duration: 1100, easing: "cubic-bezier(.65,0,.25,1)" });
+    const far = Math.hypot(Math.max(ox, innerWidth - ox), Math.max(oy, innerHeight - oy)) + 20;
+    const a = layer.animate([{ clipPath: `circle(0px at ${ox}px ${oy}px)` }, { clipPath: `circle(${far}px at ${ox}px ${oy}px)` }], { duration: 1150, easing: "cubic-bezier(.5,0,.2,1)" });
+    box.animate([{ opacity: 0, transform: "translateY(14px) scale(.985)" }, { opacity: 1, transform: "none" }], { duration: 700, delay: 380, easing: "cubic-bezier(.2,.7,.2,1)", fill: "backwards" });
     a.onfinish = () => { [...f.querySelectorAll(".fl")].forEach(x => { if (x !== layer) x.remove(); }); };
   };
   step(); const iv = setInterval(step, 3200);
