@@ -355,7 +355,7 @@ body.mini .topdot { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .tile video { display: block; width: 100%; height: auto; background: #000; }
 /* floating book button */
 .bookfab { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 17; font: inherit; font-weight: 800; font-size: 17px; letter-spacing: -.03em; padding: 11px 20px; border-radius: 999px; border: 0; background: var(--fg); color: var(--bg); cursor: pointer; box-shadow: 0 10px 30px -10px rgba(0,0,0,.45); transition: transform .25s cubic-bezier(.2,.7,.2,1), opacity .25s ease; }
-.bookfab i { font-style: normal; color: #B3202A; }
+.bookfab i { font-style: normal; color: inherit; }
 .bookfab:hover { transform: translateY(-2px) scale(1.04); }
 body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 /* seen in */
@@ -426,8 +426,8 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .ticker .tape { position: absolute; left: -5%; width: 110%; overflow: hidden; }
 .ticker .tape.a { top: 50%; transform: translateY(-50%) rotate(-3deg); z-index: 2; box-shadow: 0 14px 30px -16px rgba(0,0,0,.45); }
 .ticker .tape.b { top: 50%; transform: translateY(-50%) rotate(4.5deg); background: #1C1C14; color: #FFF8BB; z-index: 1; }
-.ticker .tr { display: flex; width: max-content; animation: tick 46s linear infinite; }
-.ticker .tape.b .tr { animation-duration: 60s; animation-direction: reverse; }
+.ticker .tr { display: flex; width: max-content; animation: tick 46s linear infinite reverse; }
+.ticker .tape.b .tr { animation-duration: 60s; animation-direction: normal; }
 .ticker:hover .tr { animation-play-state: paused; }
 .ticker .blk { display: inline-flex; align-items: baseline; white-space: nowrap; font-weight: 800; font-size: clamp(28px, 5.4vw, 52px); letter-spacing: -.05em; padding: .32em .7em .38em; background: var(--c); color: var(--t); cursor: pointer; transition: filter .2s ease; }
 .ticker .blk:hover { filter: brightness(1.06); }
@@ -1438,7 +1438,7 @@ function renderTicker() {
   t.hidden = !show; if (!show || t.dataset.done) return; t.dataset.done = 1;
   /* front tape: every chapter as a block in its own colour; tap one to open it */
   const a = el("div", "tape a"), ta = el("div", "tr");
-  for (let k = 0; k < 2; k++) CHAPTERS.forEach(c => {
+  for (let k = 0; k < 2; k++) [...CHAPTERS].reverse().forEach(c => {
     const b = el("span", "blk", c.name); b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg); b.style.setProperty("--d", c.dot === c.bg ? c.fg : c.dot);
     b.append(el("i", null, ".")); if (c.suffix) b.append(c.suffix); b.append(el("small", null, c.dates.toUpperCase()));
     if (c.id === "white" || c.id === "vanilla") b.style.boxShadow = "inset 0 0 0 1px rgba(0,0,0,.06)";
@@ -1447,7 +1447,7 @@ function renderTicker() {
   a.append(ta);
   /* back tape: dark, running the other way */
   const bt = el("div", "tape b"), tb = el("div", "tr");
-  for (let k = 0; k < 8; k++) { const sp = el("span"); const em = el("em"); CHAPTERS.forEach(c => { const d = el("i"); d.style.background = c.bg; em.append(d); }); sp.append(el("b", null, "MN."), "MY LIFE IN COLOURS", em); tb.append(sp); }
+  for (let k = 0; k < 8; k++) { const sp = el("span"); const em = el("em"); [...CHAPTERS].reverse().forEach(c => { const d = el("i"); d.style.background = c.bg; em.append(d); }); sp.append(el("b", null, "MN."), "MY LIFE IN COLOURS", em); tb.append(sp); }
   bt.append(tb);
   t.append(bt, a);
 }
