@@ -1672,8 +1672,16 @@ function shuffle(arr) {
   for (let i = 1; i < a.length; i++) if (base(a[i]) === base(a[i - 1])) { const k = a.findIndex((q, j) => j > i && base(q) !== base(a[i - 1]) && (j + 1 >= a.length || base(q) !== base(a[j + 1]) || true)); if (k > 0) [a[i], a[k]] = [a[k], a[i]]; }
   return a;
 }
+/* inside a chapter, every shoot shows up early: photographers take turns instead of one shoot after the other */
+function weave(arr) {
+  const g = new Map(); arr.forEach(p => { const k = p.credit || ""; if (!g.has(k)) g.set(k, []); g.get(k).push(p); });
+  if (g.size < 2) return arr;
+  const qs = [...g.values()], out = [], tot = arr.length;
+  while (out.length < tot) qs.forEach(q => { const share = Math.max(1, Math.round(q.length / tot * qs.length)); for (let i = 0; i < share && q.length; i++) out.push(q.shift()); });
+  return out;
+}
 function renderColours() {
-  list = (filter === "all" ? (mixed.length === photos.length ? mixed : (mixed = shuffle(photos))) : photos.filter(p => p.chapter === filter));
+  list = (filter === "all" ? (mixed.length === photos.length ? mixed : (mixed = shuffle(photos))) : weave(photos.filter(p => p.chapter === filter)));
   const wall = $("wall"); wall.textContent = "";
   const cur = byId[filter];
   const nr = renderChRecaps() + renderChTeasers();
@@ -1705,7 +1713,7 @@ function renderColours() {
   W.n = n;
   const key = filter, page = pageSize(n);
   W.shown = 0; W.key = key;
-  placeTiles(Math.min(items.length, Math.max(page, shownBy[key] || 0)));
+  placeTiles(filter === "all" ? Math.min(items.length, Math.max(page, shownBy[key] || 0)) : items.length);
   renderMore();
 }
 
