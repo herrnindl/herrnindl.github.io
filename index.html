@@ -21,7 +21,9 @@ if (location.hash === "#lock") {
   try { localStorage.removeItem("mn-key"); } catch (e) {}
   history.replaceState(null, "", location.pathname);
 }
-try { if (localStorage.getItem("mn-key") !== window.MN_KEY) document.documentElement.classList.add("locked");
+/* Opening day: from 01.12.2026 the site is open for everyone, no password. */
+window.MN_OPEN = Date.now() >= Date.parse("2026-12-01T00:00:00+01:00");
+try { if (!window.MN_OPEN && localStorage.getItem("mn-key") !== window.MN_KEY) document.documentElement.classList.add("locked");
   /* Already in: every time the site is opened (once per visit), the dots greet you and burst into colour. */
   else if (!sessionStorage.getItem("mn-hello") && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("locked", "welcome"); }
 catch (e) { document.documentElement.classList.add("locked"); }
@@ -2402,14 +2404,11 @@ function unlockWave(done) {
   last.onfinish = () => { done(); setTimeout(() => requestAnimationFrame(() => { w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: "forwards" }).onfinish = () => w.remove(); }), 260); };
 }
 
-/* From 1 December: days until 01.01.2027. From then on, the red dot joins the row. */
+/* On the lock screen: days until the site opens on 01.12.2026. */
 (function countdown() {
-  const now = new Date(), start = new Date(2026, 11, 1), red = new Date(2027, 0, 1);
-  if (now >= red) {
-    const d = el("i"); d.style.background = "currentColor"; $("gCount").hidden = true;
-    const row = document.querySelector(".gate .gdots"); if (row) row.prepend(d);
-  } else if (now >= start) {
-    const days = Math.ceil((red - now) / 864e5);
+  const now = new Date(), open = new Date("2026-12-01T00:00:00+01:00");
+  if (now < open) {
+    const days = Math.ceil((open - now) / 864e5);
     $("gCount").textContent = days === 1 ? "tomorrow." : "in " + days + " days.";
     $("gCount").hidden = false;
   }
