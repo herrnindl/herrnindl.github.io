@@ -1500,7 +1500,7 @@ function renderTicker() {
   const a = el("div", "tape a"), ta = el("div", "tr");
   for (let k = 0; k < 2; k++) [...CHAPTERS].reverse().forEach(c => {
     const b = el("span", "blk", c.name); b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg); b.style.setProperty("--d", c.dot === c.bg ? c.fg : c.dot);
-    b.append(el("i", null, ".")); if (c.suffix) b.append(c.suffix); b.append(el("small", null, c.dates.toUpperCase()));
+    b.append(el("i", null, ".")); if (c.suffix) b.append(c.suffix.replace(/^ /, "\u00a0")); b.append(el("small", null, c.dates.toUpperCase()));
     b.onclick = e => enterChapter(c, e); ta.append(b);
   });
   a.append(ta);
