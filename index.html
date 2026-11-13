@@ -540,6 +540,9 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .istory small { font-size: 11px; letter-spacing: .22em; color: var(--soft); text-transform: uppercase; }
 .istory h3 { margin: 0; font-weight: 800; font-size: clamp(30px, 6vw, 48px); letter-spacing: -.05em; line-height: .95; }
 .istory h3 i { font-style: normal; color: #B3202A; }
+.typetile { height: 380px; border-radius: 14px; overflow: hidden; background: var(--fg); color: var(--bg); display: flex; align-items: flex-start; justify-content: flex-end; padding: 22px 24px; box-sizing: border-box; }
+.typetile span { font-weight: 800; font-size: clamp(22px, 3vw, 30px); letter-spacing: -.03em; line-height: 1; }
+.typetile i { font-style: normal; }
 .istory p { margin: 0; color: var(--soft); }
 @media (max-width: 599px) { .pair { grid-template-columns: minmax(0, 1fr); } .mntile, .stone, .nametile { height: auto; aspect-ratio: 16 / 10; } }
 @media (min-width: 900px) { .icard { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: 48px; align-items: center; } }
@@ -960,6 +963,27 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
         <h3>the dot<i>.</i></h3>
         <p>the dot comes from harry styles. on twitter he had a dot after his name, and i always thought it stood out. a name, a dot, done.</p>
         <p>so MN. got one too. and on this site the dot after every chapter is the colour of the next one.</p>
+      </div>
+    </article>
+    <article class="icard">
+      <div class="pair">
+        <figure class="theirs">
+          <div class="embed" data-embed="https://open.spotify.com/embed/album/3mH6qwIy9crq0I9YQbOuDf?utm_source=generator" data-title="Blonde by Frank Ocean">
+            <button class="reveal-btn" type="button"><b>blond</b><span>frank ocean · 2016</span><em>tap to see the cover</em><small>loads spotify · spotify sets cookies</small></button>
+          </div>
+          <figcaption>the inspiration</figcaption>
+        </figure>
+        <figure class="mine">
+          <div class="typetile" aria-label="my life, in the site font"><span>my life<i>.</i></span></div>
+          <figcaption>the type</figcaption>
+        </figure>
+      </div>
+      <div class="istory">
+        <small>04 · the sound</small>
+        <h3>blonde<i>.</i></h3>
+        <p>blonde by frank ocean. the cover is a photo and one small word in the corner: blond. no big logo, nothing loud. it doesn&#x27;t need more.</p>
+        <p>his music does something to me that&#x27;s hard to explain. it&#x27;s quiet and honest, it doesn&#x27;t try to impress anyone, and it still hits harder than most loud things. that&#x27;s how i want MN. to feel.</p>
+        <p>so the big words on this site are set in a clean, round font in that spirit. less noise, more feeling.</p>
       </div>
     </article>
   </section>
