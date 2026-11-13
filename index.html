@@ -132,18 +132,23 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .rgrid .rtag { left: 7px; bottom: 7px; font-size: 11px; padding: 3px 8px 3px 6px; gap: 5px; }
 .rgrid .rtag i { width: 8px; height: 8px; }
 .chrecaps .hofhead { margin: 0 0 10px; }
-.chrecaps .row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-@media (min-width: 900px) { .chrecaps .row { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+/* recaps + teasers on a chapter page: one justified row, every cover the same height, edge to edge */
+.chrow { display: flex; gap: 8px; align-items: flex-start; margin-top: 18px; }
+.chrow .chrecaps { margin-top: 0; min-width: 0; }
+.chrecaps .row { display: flex; gap: 8px; }
+.chrecaps .row > * { min-width: 0; }
+.chrow.scroll .chteasers .row { overflow-x: auto; scrollbar-width: none; }
+@media (max-width: 899px) { .chrow { flex-direction: column; gap: 18px; } .chrow .chrecaps { width: 100%; } }
 .chrecaps .set { aspect-ratio: 4 / 5; border-radius: 3px; }
 .chrecaps .rtag { display: none; }
-.chteasers .row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-@media (max-width: 899px) { .chteasers .row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; } .chteasers .tz { flex: 0 0 34vw; scroll-snap-align: start; } }
+@media (max-width: 899px) { .chteasers .row { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; } .chteasers .tz { scroll-snap-align: start; } }
 .chteasers .hofhead small { opacity: .55; font-weight: 400; letter-spacing: .04em; text-transform: none; }
 .tz { all: unset; cursor: pointer; display: grid; gap: 6px; }
 .tz img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 3px; display: block; box-shadow: 0 1px 0 rgba(0,0,0,.08); transition: transform .35s cubic-bezier(.2,.7,.2,1); }
 .tz:hover img, .tz:focus-visible img { transform: translateY(-4px) rotate(-1deg); }
 .tz:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 4px; }
-.tz span { font: 500 10px/1 Inter, sans-serif; letter-spacing: .14em; opacity: .7; }
+.tz span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.tz { position: relative; }
 .chrecaps .rcover { border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); background: color-mix(in srgb, var(--c) 93%, #000); }
 .sheet .chlink { margin-left: auto; margin-right: 12px; padding: 5px 12px; border-radius: 999px; border: 1px solid currentColor; background: none; color: inherit; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; }
 .rlabel { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 12px 10px; background: linear-gradient(transparent, rgba(0,0,0,.55)); color: #fff; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -804,8 +809,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="hof" id="hof" hidden></div>
   <div class="ticker" id="ticker" hidden aria-hidden="true"></div>
   <div class="hofhead sec whead" id="wallHead" hidden><h2><b>03</b>every photo.</h2><span class="wtools"><span class="sizes" id="sizes" role="group" aria-label="photo size"><button type="button" data-s="s" aria-label="small photos">S</button><button type="button" data-s="m" aria-label="medium photos">M</button><button type="button" data-s="l" aria-label="large photos">L</button><button type="button" data-s="1" aria-label="one photo at a time">1</button><button type="button" data-s="t" class="tbl" aria-label="table: prints to drag around">table</button></span><button class="shufbtn" id="shuf" type="button">shuffle.</button></span></div>
-  <div class="chrecaps" id="chRecaps" hidden></div>
-  <div class="chrecaps chteasers" id="chTeasers" hidden></div>
+  <div class="chrow" id="chRow"><div class="chrecaps" id="chRecaps" hidden></div><div class="chrecaps chteasers" id="chTeasers" hidden></div></div>
   <div class="wallbox"><div class="mnback" aria-hidden="true"><span>MN.</span></div><div class="wall" id="wall"></div></div>
   <div class="more" id="more" hidden></div>
   <h2 class="hofhead sec" id="gbHead" hidden><b>04</b>leave a dot.</h2>
@@ -1125,7 +1129,7 @@ const SONGS = {
   origin: { t: "Good Luck, Babe! — Chappell Roan", id: "0WbMK4wrZ1wFSty9F7FCgu" },
   white: { t: "undressed — sombr", id: "4AajxCEwGEsmHmT4H1TwjY" },
   "baby-blue": { t: "Scott Street — Phoebe Bridgers", id: "21uFPefbgeR3QLVJWATlrr" },
-  lavendel: [{ t: "Let Down — Radiohead", id: "2fuYa3Lx06QQJAm0MjztKr" }, { t: "Daisies — Justin Bieber", id: "5BZsQlgw21vDOAjoqkNgKb" }],
+  lavendel: { t: "Daisies — Justin Bieber", id: "5BZsQlgw21vDOAjoqkNgKb" },
   "navy-blue": { t: "Hoppípolla — Sigur Rós", id: "6eTGxxQxiTFE6LfZHC33Wm" },
   grey: { t: "About You — The 1975", id: "3hEfpBHxgieRLz4t3kLNEg" },
   vanilla: { t: "Dreams — Fleetwood Mac", id: "0ofHAoxe9vBkTCp2UQIavz" },
@@ -1703,7 +1707,7 @@ function renderColours() {
   list = (filter === "all" ? (mixed.length === photos.length ? mixed : (mixed = shuffle(photos))) : chapterOrder(photos.filter(p => p.chapter === filter)));
   const wall = $("wall"); wall.textContent = "";
   const cur = byId[filter];
-  const nr = renderChRecaps() + renderChTeasers();
+  const nr = renderChRecaps() + renderChTeasers(); justifyChRow();
   $("empty").textContent = cur && cur.id === "red" ? "red. starts 01.01.2027." : (cur ? cur.label + " photos are coming." : "photos are coming.");
   $("empty").hidden = list.length > 0 || nr > 0;
   const nx = $("nextch"); nx.textContent = ""; nx.hidden = !cur;
@@ -2064,6 +2068,20 @@ function renderChTeasers() {
   box.append(h, row);
   return ts.length;
 }
+
+function justifyChRow() {
+  const row = $("chRow"), boxes = [$("chRecaps"), $("chTeasers")].filter(b => !b.hidden), phone = matchMedia("(max-width: 899px)").matches, G = 8;
+  const W = row.clientWidth || innerWidth - 32;
+  const sets = boxes.map(b => { const its = [...b.querySelectorAll(".row > *")]; return { b, its, ar: its.map(e => e.classList.contains("tz") ? 9 / 16 : .8) }; });
+  const fit = (group, width, maxH) => {   /* one height for everything in the group, exactly filling the width */
+    const sum = group.reduce((a, g) => a + g.ar.reduce((x, y) => x + y, 0), 0), n = group.reduce((a, g) => a + g.its.length, 0);
+    const H = Math.min(maxH, (width - (n - 1) * G) / sum);
+    group.forEach(g => { let w = 0; g.its.forEach((e, i) => { const px = g.ar[i] * H; e.style.flex = "0 0 " + px + "px"; w += px; }); g.b.style.flex = "0 0 " + (w + (g.its.length - 1) * G) + "px"; });
+  };
+  if (!phone) fit(sets, W, 420);
+  else sets.forEach(g => { g.b.style.flex = ""; if (g.its.length > 3) g.its.forEach((e, i) => { e.style.flex = "0 0 " + Math.round((W - 2 * G) / 3.3 * g.ar[i] / g.ar[0]) + "px"; }); else fit([g], W, 420); g.b.style.flex = ""; });
+}
+addEventListener("resize", () => { if (view === "colours" && byId[filter]) justifyChRow(); });
 
 function renderRecaps() {
   const g = $("recapGrid"); g.textContent = "";
