@@ -233,9 +233,9 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 /* chapter rooms */
 html.roomopen { overflow: hidden; }
 .room { position: fixed; inset: 0; z-index: 90; background: var(--rb); color: var(--rf); }
-.rtrack { display: flex; align-items: center; gap: clamp(40px, 8vw, 140px); height: 100%; overflow-x: auto; overflow-y: hidden; padding: 0 12vw; scroll-snap-type: x proximity; scrollbar-width: none; outline: none; }
+.rtrack { display: flex; align-items: center; gap: clamp(40px, 8vw, 140px); height: 100%; overflow-x: auto; overflow-y: hidden; padding: 0 12vw; scrollbar-width: none; outline: none; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .rtrack::-webkit-scrollbar { display: none; }
-.rwall { flex: none; scroll-snap-align: center; margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.rwall { flex: none; margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
 .rintro { width: min(78vw, 640px); }
 .rintro small, .mlab b, .rnext small { font: 500 11px/1 Inter, sans-serif; letter-spacing: .2em; opacity: .7; }
 .rintro h2 { font: 800 clamp(64px, 13vw, 190px)/.85 Inter, sans-serif; margin: 0; letter-spacing: -.02em; }
