@@ -259,6 +259,20 @@ for cand in (jfile, jfile + ".txt"):
         break
 sets["journal"].sort(key=lambda j: j["id"][:10], reverse=True)
 
+# Teasers: photos/<chapter>/teasers/ (sorted by file name), shown on the chapter page
+sets["teasers"] = {}
+for ch in CHAPTERS:
+    folder = os.path.join("photos", ch, "teasers")
+    if os.path.isdir(folder):
+        names = sorted(n for n in os.listdir(folder) if n.lower().endswith(EXT))
+        if names:
+            sets["teasers"][ch] = []
+            for n in names:
+                word = re.sub(r"^\d+[-_ ]*", "", os.path.splitext(n)[0]).replace("-", " ").strip(". ")
+                item = {"src": f"photos/{ch}/teasers/{n}", "word": word}
+                item.update(thumb(item["src"]))
+                sets["teasers"][ch].append(item)
+
 for group in ("recaps", "posts", "journal"):
     for item in sets[group]:
         if item.get("cover"):

@@ -135,6 +135,14 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 @media (min-width: 900px) { .chrecaps .row { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 .chrecaps .set { aspect-ratio: 4 / 5; border-radius: 3px; }
 .chrecaps .rtag { display: none; }
+.chteasers .row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 899px) { .chteasers .row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; } .chteasers .tz { flex: 0 0 34vw; scroll-snap-align: start; } }
+.chteasers .hofhead small { opacity: .55; font-weight: 400; letter-spacing: .04em; text-transform: none; }
+.tz { all: unset; cursor: pointer; display: grid; gap: 6px; }
+.tz img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 3px; display: block; box-shadow: 0 1px 0 rgba(0,0,0,.08); transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+.tz:hover img, .tz:focus-visible img { transform: translateY(-4px) rotate(-1deg); }
+.tz:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 4px; }
+.tz span { font: 500 10px/1 Inter, sans-serif; letter-spacing: .14em; opacity: .7; }
 .chrecaps .rcover { border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); background: color-mix(in srgb, var(--c) 93%, #000); }
 .sheet .chlink { margin-left: auto; margin-right: 12px; padding: 5px 12px; border-radius: 999px; border: 1px solid currentColor; background: none; color: inherit; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; }
 .rlabel { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 12px 10px; background: linear-gradient(transparent, rgba(0,0,0,.55)); color: #fff; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -543,6 +551,8 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .typetile { height: 380px; border-radius: 14px; overflow: hidden; background: var(--fg); color: var(--bg); display: flex; align-items: flex-start; justify-content: flex-end; padding: 22px 24px; box-sizing: border-box; }
 .typetile span { font-weight: 800; font-size: clamp(22px, 3vw, 30px); letter-spacing: -.03em; line-height: 1; }
 .typetile i { font-style: normal; }
+.tzmine { display: block; height: 380px; border-radius: 14px; overflow: hidden; }
+.tzmine img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .istory p { margin: 0; color: var(--soft); }
 @media (max-width: 599px) { .pair { grid-template-columns: minmax(0, 1fr); } .mntile, .stone, .nametile { height: auto; aspect-ratio: 16 / 10; } }
 @media (min-width: 900px) { .icard { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: 48px; align-items: center; } }
@@ -794,6 +804,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="ticker" id="ticker" hidden aria-hidden="true"></div>
   <div class="hofhead sec whead" id="wallHead" hidden><h2><b>03</b>every photo.</h2><span class="wtools"><span class="sizes" id="sizes" role="group" aria-label="photo size"><button type="button" data-s="s" aria-label="small photos">S</button><button type="button" data-s="m" aria-label="medium photos">M</button><button type="button" data-s="l" aria-label="large photos">L</button><button type="button" data-s="1" aria-label="one photo at a time">1</button><button type="button" data-s="t" class="tbl" aria-label="table: prints to drag around">table</button></span><button class="shufbtn" id="shuf" type="button">shuffle.</button></span></div>
   <div class="chrecaps" id="chRecaps" hidden></div>
+  <div class="chrecaps chteasers" id="chTeasers" hidden></div>
   <div class="wallbox"><div class="mnback" aria-hidden="true"><span>MN.</span></div><div class="wall" id="wall"></div></div>
   <div class="more" id="more" hidden></div>
   <h2 class="hofhead sec" id="gbHead" hidden><b>04</b>leave a dot.</h2>
@@ -984,6 +995,27 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
         <p>blonde by frank ocean. the cover is a photo and one small word in the corner: blond. no big logo, nothing loud. it doesn&#x27;t need more.</p>
         <p>his music does something to me that&#x27;s hard to explain. it&#x27;s quiet and honest, it doesn&#x27;t try to impress anyone, and it still hits harder than most loud things. that&#x27;s how i want MN. to feel.</p>
         <p>so the big words on this site are set in a clean, round font in that spirit. less noise, more feeling.</p>
+      </div>
+    </article>
+    <article class="icard">
+      <div class="pair">
+        <figure class="theirs">
+          <div class="embed" data-embed="https://open.spotify.com/embed/album/4XPUXLAWXqM3uWMTucItjd?utm_source=generator" data-title="Dear April by Frank Ocean">
+            <button class="reveal-btn" type="button"><b>the last four.</b><span>frank ocean · dhl · in my room · dear april · cayendo</span><em>tap to listen</em><small>loads spotify · spotify sets cookies</small></button>
+          </div>
+          <figcaption>the inspiration</figcaption>
+        </figure>
+        <figure class="mine">
+          <a class="tzmine" href="#ber" aria-label="my teasers, in the ber. chapter"><img src="thumbs/photos/ber/teasers/02-tomorrow-600.webp" alt="" loading="lazy"></a>
+          <figcaption>the teasers</figcaption>
+        </figure>
+      </div>
+      <div class="istory">
+        <small>05 · the teasers</small>
+        <h3>who&#x27;s that<i>?</i></h3>
+        <p>frank ocean&#x27;s last four singles inspired my teasers: dhl, in my room, dear april and cayendo.</p>
+        <p>a shape, one word, a colour. SOON. TOMORROW. you see the outline and have to guess what&#x27;s coming, like &ldquo;who&#x27;s that pokémon?&rdquo; when we were kids.</p>
+        <p>i started doing it in lavendel. the ones from ber. are in the chapter.</p>
       </div>
     </article>
   </section>
@@ -1644,7 +1676,7 @@ function renderColours() {
   list = (filter === "all" ? (mixed.length === photos.length ? mixed : (mixed = shuffle(photos))) : photos.filter(p => p.chapter === filter));
   const wall = $("wall"); wall.textContent = "";
   const cur = byId[filter];
-  const nr = renderChRecaps();
+  const nr = renderChRecaps() + renderChTeasers();
   $("empty").textContent = cur && cur.id === "red" ? "red. starts 01.01.2027." : (cur ? cur.label + " photos are coming." : "photos are coming.");
   $("empty").hidden = list.length > 0 || nr > 0;
   const nx = $("nextch"); nx.textContent = ""; nx.hidden = !cur;
@@ -1956,6 +1988,25 @@ function renderChRecaps() {
   return mine.length;
 }
 
+/* teasers: photos/<chapter>/teasers/ — the silhouettes that announced the chapter */
+function renderChTeasers() {
+  const box = $("chTeasers"); box.textContent = "";
+  const cur = view === "colours" && byId[filter];
+  const ts = cur && sets.teasers ? (sets.teasers[cur.id] || []) : [];
+  box.hidden = !ts.length; if (!ts.length) return 0;
+  const L = ts.map(t => ({ src: t.src, thumb: t.thumb, thumb2: t.thumb2, w: t.w, h: t.h, chapter: cur.id, caption: "teaser · " + t.word }));
+  const row = el("div", "row");
+  ts.forEach((t, i) => {
+    const b = el("button", "tz"), im = el("img"); b.type = "button";
+    im.src = t.thumb; im.alt = "teaser: " + t.word; im.loading = "lazy"; im.decoding = "async";
+    b.append(im, el("span", null, /^[a-z]+$/.test(t.word) ? t.word.toUpperCase() + "." : t.word));
+    b.onclick = () => open(L, i, im); row.append(b);
+  });
+  const h = el("div", "hofhead"); h.append("teasers.", el("small", null, " who's that?"));
+  box.append(h, row);
+  return ts.length;
+}
+
 function renderRecaps() {
   const g = $("recapGrid"); g.textContent = "";
   $("empty").textContent = "No recaps yet.";
@@ -1994,7 +2045,7 @@ function render() {
   renderSubnav(); renderSelected(); renderDigitals(); renderFab(); renderBooking();
   $("strip").hidden = view !== "colours";
   $("wall").hidden = view !== "colours";
-  if (view !== "colours") $("chRecaps").hidden = true;
+  if (view !== "colours") { $("chRecaps").hidden = true; $("chTeasers").hidden = true; }
   if (view !== "colours") $("more").hidden = true;
   updTop();
   /* sections without anything in them stay out of the menu until the first post */
@@ -2382,7 +2433,7 @@ let loaded = false;
 function loadData() {
   if (loaded) return; loaded = true;
   fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); digitals = d.filter(p => p.chapter === "digitals"); mixed = shuffle(photos); render(); }).catch(() => {});
-  fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [] }; render(); wirePress(d.press || {}); }).catch(() => {});
+  fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [], teasers: d.teasers || {} }; render(); wirePress(d.press || {}); }).catch(() => {});
 }
 if (document.documentElement.classList.contains("welcome")) {
   try { sessionStorage.setItem("mn-hello", "1"); } catch (e) {}
