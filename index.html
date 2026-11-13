@@ -85,6 +85,7 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .wall .col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--wg); }
 .tile { margin: 0; display: block; width: 100%; padding: 0; border: 0; background: var(--line); border-radius: 3px; overflow: hidden; position: relative; }
 .tile img { display: block; width: 100%; height: auto; background: var(--line); transition: transform .5s ease; }
+.tile.fit img, .tile.fit video { height: 100%; object-fit: cover; object-position: 50% 28%; }
 .tile:hover img { transform: scale(1.02); }
 .tag { position: absolute; left: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.86); color: #1C1C14; font-size: 11px; font-weight: 500; padding: 3px 9px 3px 6px; border-radius: 999px; }
 .tag .sw { width: 9px; height: 9px; }
@@ -1540,6 +1541,10 @@ if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
 let filmTimer = 0, filmOn = null;
 function filmReady() { return view === "colours" && filter === "all" && !document.documentElement.classList.contains("locked") && $("lb").hidden && $("sheet").hidden && !document.querySelector(".wrapped, .launch, .egg") && document.visibilityState === "visible" && !calm(); }
 function armFilm() { clearTimeout(filmTimer); if (filmOn) return; filmTimer = setTimeout(() => { if (filmReady()) playFilm(); else armFilm(); }, 40000); }
+/* the best 3 of each chapter: the screensaver only shows these, and they open each chapter */
+const BEST = {"origin": ["origin-06.jpg", "origin-02.jpg", "origin-08.jpg"], "white": ["250223-Studioportrait-alpindis.at-0292-Bearbeitet.jpg", "lake-00275.jpg", "lake-00301.jpg"], "baby-blue": ["wekreat-01b.jpg", "wekreat-05b.jpg", "wekreat-07b.jpg"], "lavendel": ["0V4A0304.jpg", "2025-06-17_00009.jpg", "0V4A0231.jpg"], "navy-blue": ["0V4A9118x_1.jpg", "0V4A9324x_1.jpg", "0V4A9240x_1x.jpg"], "vanilla-2": ["2026-07-08_033.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_072.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_046.jpg"], "ber": ["2026-07-08_154.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_012.jpg", "2026-07-08_178.jpg"]};
+const isBest = p => (BEST[p.chapter] || []).includes(p.src.split("/").pop());
+const lastFilm = {};
 function playFilm() {
   const f = el("div", "film"); f.setAttribute("role", "dialog"); f.setAttribute("aria-label", "my life in colours. — tap to stop");
   const hint = el("div", "fhint", "TAP ANYWHERE TO GO BACK"); f.tabIndex = -1; document.body.append(f); f.focus({ preventScroll: true });
@@ -1547,8 +1552,9 @@ function playFilm() {
   const step = () => {
     const c = CHAPTERS[i % CHAPTERS.length]; i++;
     f.style.setProperty("--fb", c.bg); f.style.setProperty("--ff", c.fg); f.style.setProperty("--fd", c.dot === c.bg ? c.fg : c.dot);
-    const box = el("div", "fin"), pics = photos.filter(p => p.chapter === c.id);
-    if (pics.length) { const im = el("img"); const p = pics[Math.floor(Math.random() * pics.length)]; im.src = p.thumb2 || p.thumb || p.src; im.alt = ""; box.append(im); }
+    const box = el("div", "fin"), all = photos.filter(p => p.chapter === c.id && !p.video), top = all.filter(isBest);
+    let pics = top.length ? top : all; if (pics.length > 1) pics = pics.filter(p => p !== lastFilm[c.id]);
+    if (pics.length) { const im = el("img"); const p = pics[Math.floor(Math.random() * pics.length)]; lastFilm[c.id] = p; im.src = p.thumb2 || p.thumb || p.src; im.alt = ""; box.append(im); }
     const nm = el("b", null, c.name); nm.append(el("i", null, ".")); if (c.suffix) nm.append(c.suffix);
     box.append(el("small", null, c.dates.toUpperCase()), nm, el("span", null, c.line));
     f.textContent = ""; f.append(box, hint);
@@ -1672,8 +1678,29 @@ function shuffle(arr) {
   for (let i = 1; i < a.length; i++) if (base(a[i]) === base(a[i - 1])) { const k = a.findIndex((q, j) => j > i && base(q) !== base(a[i - 1]) && (j + 1 >= a.length || base(q) !== base(a[j + 1]) || true)); if (k > 0) [a[i], a[k]] = [a[k], a[i]]; }
   return a;
 }
+/* chapter order: the best 3 open the chapter, then the shoots take turns,
+   and inside a shoot similar frames are spread apart so neighbours never look alike */
+function chapterOrder(arr) {
+  const top = BEST[arr[0] && arr[0].chapter] || [], name = p => p.src.split("/").pop();
+  const first = top.map(n => arr.find(p => name(p) === n)).filter(Boolean);
+  const rest = arr.filter(p => !first.includes(p));
+  const shoot = p => (p.credit || name(p).replace(/[\d_().\- ]+.*$/, "")) + "|" + (p.date || "");
+  const g = new Map(), num = p => { const m = name(p).match(/(\d+)\D*$/); return m ? +m[1] : NaN; }, prev = {};
+  rest.forEach(p => { let k = shoot(p); const n = num(p), pv = prev[k];   /* a jump in frame numbers = a new set/look */
+    if (pv && !isNaN(n) && Math.abs(n - pv.n) > 3) pv.part++; prev[k] = { n, part: pv ? pv.part : 0 };
+    k += "#" + prev[k].part; if (!g.has(k)) g.set(k, []); g.get(k).push(p); });
+  const spread = q => { const k = q.length > 6 ? 3 : 2, o = []; for (let s = 0; s < k; s++) for (let i = s; i < q.length; i += k) o.push(q[i]); return o; };
+  const qs = [...g.values()].map(spread).sort((a, b) => b.length - a.length), tot = rest.length, out = [];
+  const len = qs.map(q => q.length), used = qs.map(() => 0);
+  while (out.length < tot) {   /* every set gets its fair turn, spread evenly over the chapter */
+    let b = -1; qs.forEach((q, i) => { if (q.length && (b < 0 || (used[i] + .5) / len[i] < (used[b] + .5) / len[b])) b = i; });
+    if (out.length && qs[b].length && shoot(out[out.length - 1]) === shoot(qs[b][0])) { const alt = qs.findIndex((q, i) => i !== b && q.length && shoot(q[0]) !== shoot(out[out.length - 1])); if (alt >= 0) b = alt; }
+    out.push(qs[b].shift()); used[b]++;
+  }
+  return first.concat(out);
+}
 function renderColours() {
-  list = (filter === "all" ? (mixed.length === photos.length ? mixed : (mixed = shuffle(photos))) : photos.filter(p => p.chapter === filter));
+  list = (filter === "all" ? (mixed.length === photos.length ? mixed : (mixed = shuffle(photos))) : chapterOrder(photos.filter(p => p.chapter === filter)));
   const wall = $("wall"); wall.textContent = "";
   const cur = byId[filter];
   const nr = renderChRecaps() + renderChTeasers();
@@ -1703,6 +1730,7 @@ function renderColours() {
   const n = colCount();
   for (let c = 0; c < n; c++) { const d = el("div", "col"); wall.append(d); W.cols.push(d); W.h.push(0); }
   W.n = n;
+  { const c0 = W.cols[0], cs = getComputedStyle(c0), cw = c0.clientWidth; W.g = cw ? (parseFloat(cs.rowGap) || parseFloat(cs.gap) || 10) / cw : .04; }
   const key = filter, page = pageSize(n);
   W.shown = 0; W.key = key;
   placeTiles(Math.min(items.length, Math.max(page, shownBy[key] || 0)));
@@ -1883,13 +1911,43 @@ function makeTile(it) {
   b.onclick = () => { const L = list.filter(x => !x.video); open(L, L.indexOf(p), img); };
   return [b, p.w && p.h ? p.h / p.w : 1.25];
 }
+/* even bottoms: the last photos are picked to fill the short columns, then the last one or two
+   in each column are trimmed a little so all columns end on one line */
+function unEven() {
+  W.cols.forEach((col, c) => col.querySelectorAll(".fit").forEach(t => { W.h[c] -= +t.dataset.adj; t.classList.remove("fit"); t.style.aspectRatio = ""; delete t.dataset.adj; }));
+}
+function evenBottoms() {
+  if (W.cols.length < 2) return;
+  const tails = W.cols.map(col => [...col.children].slice(-3).filter(t => t.classList.contains("tile")));
+  const room = (c, f) => tails[c].reduce((a, t) => a + (f > 0 ? Math.min(1.9, +t.dataset.r * 1.4) - +t.dataset.r : Math.max(.55, +t.dataset.r * .75) - +t.dataset.r), 0);
+  const lo = W.h.map((h, c) => h + room(c, -1)), hi = W.h.map((h, c) => h + room(c, 1));
+  const mean = W.h.reduce((a, b) => a + b, 0) / W.h.length;
+  const T = Math.min(Math.max(mean, Math.max(...lo)), Math.min(...hi));
+  W.cols.forEach((col, c) => {
+    let need = T - W.h[c];
+    tails[c].slice().reverse().forEach(t => {
+      if (Math.abs(need) < .005) return;
+      const r = +t.dataset.r, nr = Math.min(Math.max(r + need, Math.max(.55, r * .75)), Math.min(1.9, r * 1.4)), d = nr - r;
+      if (Math.abs(d) < .005) return;
+      t.classList.add("fit"); t.style.aspectRatio = "1 / " + nr.toFixed(4); t.dataset.adj = d; W.h[c] += d; need -= d;
+    });
+  });
+}
 function placeTiles(upto) {
+  unEven();
   const added = [];
   while (W.shown < upto && W.shown < W.items.length) {
-    const [e, r] = makeTile(W.items[W.shown]);
     let c = 0; W.h.forEach((h, j) => { if (h < W.h[c] - 0.01) c = j; });
-    W.cols[c].append(e); W.h[c] += r + 0.04; W.shown++; added.push(e);
+    if (upto - W.shown <= W.cols.length) {   /* last few of this page: take the photo that fills the gap best */
+      const gap = Math.max(...W.h) - W.h[c], rat = it => it.p && it.p.w && it.p.h ? it.p.h / it.p.w : 1.25;
+      let best = W.shown, bd = 1e9;
+      for (let k = W.shown; k < Math.min(W.items.length, W.shown + 10); k++) { if (!W.items[k].p) continue; const d = Math.abs(rat(W.items[k]) + (W.g || .04) - gap); if (d < bd) { bd = d; best = k; } }
+      if (best !== W.shown && gap > .2) { const [x] = W.items.splice(best, 1); W.items.splice(W.shown, 0, x); }
+    }
+    const [e, r] = makeTile(W.items[W.shown]);
+    e.dataset.r = r; W.cols[c].append(e); W.h[c] += r + (W.g || .04); W.shown++; added.push(e);
   }
+  evenBottoms();
   shownBy[W.key] = W.shown;
   return added;
 }
