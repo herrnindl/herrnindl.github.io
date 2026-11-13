@@ -1584,7 +1584,7 @@ function wrapSlides() {
   S.push({ bg: ink, fg: van, d: red.bg, html: [["small", "MN. WRAPPED"], ["h2", Y + "", "."], ["p", "my year in colours."]] });
   S.push({ bg: van, fg: ink, d: red.bg, html: [["small", "THIS YEAR"], ["div.big", chs.length + ""], ["h3", "chapters", "."], ["p", days + " days. " + chs.map(c => c.label).join(" ")]] });
   chs.forEach((c, k) => {
-    const rc = recapMonths().filter(r => r.chapter === c.id && !r.placeholder).reverse().slice(0, 3);
+    const rc = recapMonths().filter(r => r.chapter === c.id && !r.placeholder).slice(0, 3);
     S.push({ bg: c.bg, fg: c.fg, d: c.dot === c.bg ? c.fg : c.dot, chapter: c, covers: rc, html: [["small", "CHAPTER " + String(k + 1).padStart(2, "0") + " · " + c.dates.toUpperCase()], ["h2", c.name, ".", c.suffix || ""], ["p", c.line + (c.place ? " · " + c.place : "")]] });
   });
   S.push({ bg: ink, fg: van, d: "#E9A283", html: [["small", "SINCE 01.01.2025"], ["div.big", photos.length + ""], ["h3", "photos", "."], ["p", cr.length + " photographers. " + document.querySelectorAll(".press li").length + " times in print. " + RUNWAYS + " runway."]] });
@@ -2043,7 +2043,7 @@ function recapTile(r, small) {
 function renderChRecaps() {
   const box = $("chRecaps"); box.textContent = "";
   const cur = view === "colours" && byId[filter];
-  const mine = cur ? recapMonths().filter(r => r.chapter === cur.id).reverse() : [];
+  const mine = cur ? recapMonths().filter(r => r.chapter === cur.id) : [];   /* newest first, like everywhere */
   box.hidden = !mine.length; if (!mine.length) return 0;
   const row = el("div", "row"); mine.forEach(r => row.append(recapTile(r, true)));
   box.append(el("div", "hofhead", "recaps."), row);
@@ -2054,7 +2054,7 @@ function renderChRecaps() {
 function renderChTeasers() {
   const box = $("chTeasers"); box.textContent = "";
   const cur = view === "colours" && byId[filter];
-  const ts = cur && sets.teasers ? (sets.teasers[cur.id] || []) : [];
+  const ts = cur && sets.teasers ? (sets.teasers[cur.id] || []).slice().reverse() : [];   /* newest first */
   box.hidden = !ts.length; if (!ts.length) return 0;
   const L = ts.map(t => ({ src: t.src, thumb: t.thumb, thumb2: t.thumb2, w: t.w, h: t.h, chapter: cur.id, caption: "teaser · " + t.word }));
   const row = el("div", "row");
