@@ -9,6 +9,7 @@ Videos (.mp4) in a chapter folder show as silent looping clips between the photo
 photos/digitals/   plain, unedited photos (front, side, waist-up, headshot) -> digitals page
 photos/selected.txt  one photo per line (e.g. white/photo.jpg); the first is the big photo on the start page
 """
+import re
 import fnmatch
 import json
 import os
@@ -58,6 +59,10 @@ for ch in CHAPTERS:
                     taken = f"{d[8:10]}.{d[5:7]}.{d[0:4]}"
           except Exception:
             pass
+        if not taken:
+            m = re.match(r"(20\d\d)-(\d\d)-(\d\d)", name)
+            if m:
+                taken = f"{m.group(3)}.{m.group(2)}.{m.group(1)}"
         entry = {
             "date": taken or DATES.get(f"photos/{ch}/{name}", ""),
             "src": f"photos/{ch}/{name}",
