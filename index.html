@@ -466,16 +466,17 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
   .wall .tile:hover img { transform: none; }
 }
 /* the film: plays the chapters when nobody touches the start page */
-.film { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; background: var(--fb); color: var(--ff); transition: background .9s ease, color .9s ease; cursor: none; overflow: hidden; }
+.film { position: fixed; inset: 0; z-index: 45; background: #000; cursor: none; overflow: hidden; }
+.film .fl { position: absolute; inset: 0; display: grid; place-items: center; background: var(--fb); color: var(--ff); will-change: clip-path, transform, opacity, filter; }
 .film .fin { display: grid; justify-items: center; gap: 12px; text-align: center; padding: 24px; }
 .film img { width: min(54vw, 300px); aspect-ratio: 4 / 5; object-fit: cover; border-radius: 8px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
 .film small { font-size: 12px; letter-spacing: .3em; opacity: .8; }
-.film b { font-weight: 800; font-size: clamp(56px, 16vw, 150px); letter-spacing: -.06em; line-height: .86; }
+.film b { font-weight: 800; font-size: clamp(56px, 16vw, 150px); letter-spacing: -.06em; line-height: .86; padding-bottom: .16em; }
 .film b i { font-style: normal; color: var(--fd); }
 .film span { font-size: clamp(16px, 4vw, 22px); opacity: .85; }
 .film .fin > * { animation: wIn .7s cubic-bezier(.2,.7,.2,1) both; }
 .film .fin > :nth-child(2) { animation-delay: .1s; } .film .fin > :nth-child(3) { animation-delay: .2s; } .film .fin > :nth-child(4) { animation-delay: .3s; }
-.film .fhint { position: absolute; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center; font-size: 11px; letter-spacing: .24em; opacity: .55; }
+.film .fhint { z-index: 2; color: var(--ff); transition: color .6s ease; position: absolute; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center; font-size: 11px; letter-spacing: .24em; opacity: .55; }
 @media (prefers-reduced-motion: reduce) { .ticker .tr, .wpname { animation: none; } .wslide > *, .film .fin > * { animation: none; } }
 /* MN. in numbers */
 .nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 12px; max-width: 640px; }
@@ -1550,19 +1551,36 @@ function armFilm() { clearTimeout(filmTimer); if (filmOn) return; filmTimer = se
 const BEST = {"origin": ["origin-06.jpg", "origin-02.jpg", "origin-08.jpg"], "white": ["250223-Studioportrait-alpindis.at-0292-Bearbeitet.jpg", "lake-00275.jpg", "lake-00301.jpg"], "baby-blue": ["wekreat-01b.jpg", "wekreat-05b.jpg", "wekreat-07b.jpg"], "lavendel": ["0V4A0304.jpg", "2025-06-17_00009.jpg", "0V4A0231.jpg"], "navy-blue": ["0V4A9118x_1.jpg", "0V4A9324x_1.jpg", "0V4A9240x_1x.jpg"], "vanilla-2": ["2026-07-08_033.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_072.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_046.jpg"], "ber": ["2026-07-08_154.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_012.jpg", "2026-07-08_178.jpg"]};
 const isBest = p => (BEST[p.chapter] || []).includes(p.src.split("/").pop());
 const lastFilm = {};
+/* every chapter comes in its own way, the way its colour feels */
+const FILM_IN = {
+  origin: () => [{ opacity: 0 }, { opacity: 1 }],                                                             /* black: out of the dark */
+  white: () => [{ opacity: 0, filter: "brightness(1.8)" }, { opacity: 1, filter: "brightness(1)" }],          /* white: a flash */
+  "baby-blue": () => [{ clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0 0 0 0)" }],                    /* sky: rises from below */
+  lavendel: () => [{ opacity: 0, filter: "blur(28px)", transform: "scale(1.06)" }, { opacity: 1, filter: "blur(0)", transform: "scale(1)" }],   /* dreamy: out of the blur */
+  "navy-blue": () => [{ clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0 0)" }],                    /* night: falls from above */
+  grey: () => [{ opacity: 0, filter: "grayscale(1) contrast(.6)" }, { opacity: 1, filter: "none" }],          /* grey: like fog clearing */
+  vanilla: (w, h) => [{ clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(" + Math.hypot(w, h) + "px at 50% 50%)" }],   /* vanilla: a new colour opens */
+  "vanilla-2": () => [{ clipPath: "polygon(0 0, 0 0, 0 0, 0 0)" }, { clipPath: "polygon(0 0, 200% 0, 0 200%, 0 0)" }],          /* vanilla II: the same light, from the corner */
+  ber: () => [{ clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0)" }],                            /* ber.: turns over like a page */
+  ember: (w, h) => [{ clipPath: "circle(0% at 50% 100%)" }, { clipPath: "circle(" + Math.hypot(w, h) * 1.1 + "px at 50% 100%)" }],   /* ember: a spark from below */
+  red: () => [{ opacity: 0, transform: "scale(1.15)" }, { opacity: 1, transform: "scale(1)" }],              /* red: hits hard */
+};
 function playFilm() {
   const f = el("div", "film"); f.setAttribute("role", "dialog"); f.setAttribute("aria-label", "my life in colours. — tap to stop");
-  const hint = el("div", "fhint", "TAP ANYWHERE TO GO BACK"); f.tabIndex = -1; document.body.append(f); f.focus({ preventScroll: true });
+  const hint = el("div", "fhint", "TAP ANYWHERE TO GO BACK"); f.tabIndex = -1; f.append(hint); document.body.append(f); f.focus({ preventScroll: true });
   let i = 0;
   const step = () => {
     const c = CHAPTERS[i % CHAPTERS.length]; i++;
-    f.style.setProperty("--fb", c.bg); f.style.setProperty("--ff", c.fg); f.style.setProperty("--fd", c.dot === c.bg ? c.fg : c.dot);
+    const layer = el("div", "fl"); layer.style.setProperty("--fb", c.bg); layer.style.setProperty("--ff", c.fg); layer.style.setProperty("--fd", c.fg);
+    f.style.setProperty("--ff", c.fg);
     const box = el("div", "fin"), all = photos.filter(p => p.chapter === c.id && !p.video), top = all.filter(isBest);
     let pics = top.length ? top : all; if (pics.length > 1) pics = pics.filter(p => p !== lastFilm[c.id]);
     if (pics.length) { const im = el("img"); const p = pics[Math.floor(Math.random() * pics.length)]; lastFilm[c.id] = p; im.src = p.thumb2 || p.thumb || p.src; im.alt = ""; box.append(im); }
     const nm = el("b", null, c.name); nm.append(el("i", null, ".")); if (c.suffix) nm.append(c.suffix);
     box.append(el("small", null, c.dates.toUpperCase()), nm, el("span", null, c.line));
-    f.textContent = ""; f.append(box, hint);
+    layer.append(box); f.insertBefore(layer, hint);
+    const go = FILM_IN[c.id] || FILM_IN.origin, a = layer.animate(go(innerWidth, innerHeight), { duration: 1100, easing: "cubic-bezier(.65,0,.25,1)" });
+    a.onfinish = () => { [...f.querySelectorAll(".fl")].forEach(x => { if (x !== layer) x.remove(); }); };
   };
   step(); const iv = setInterval(step, 3200);
   const stop = () => { clearInterval(iv); ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => removeEventListener(ev, stop, true)); f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 350, fill: "forwards" }).onfinish = () => f.remove(); filmOn = null; armFilm(); };
