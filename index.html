@@ -317,7 +317,7 @@ body::before { content: ""; position: fixed; inset: -50%; z-index: -1; pointer-e
 .deck:hover .dcard:nth-child(1), .deck:focus-visible .dcard:nth-child(1) { transform: rotate(-20deg) translate(-62px, 6px); }
 .deck:hover .dcard:nth-child(2), .deck:focus-visible .dcard:nth-child(2) { transform: rotate(18deg) translate(60px, 6px); }
 .deck:hover .dcard:nth-child(3), .deck:focus-visible .dcard:nth-child(3) { transform: translateY(-14px) scale(1.05); }
-.deck .count { position: absolute; z-index: 3; right: 38px; top: 0; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 999px; background: #B3202A; color: #FFF8BB; font-weight: 800; font-size: 14px; letter-spacing: -.02em; display: grid; place-items: center; box-shadow: 0 0 0 3px var(--bg); }
+.deck .count { position: absolute; z-index: 3; right: 38px; top: 0; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 800; font-size: 14px; letter-spacing: -.02em; display: grid; place-items: center; box-shadow: 0 0 0 3px var(--bg); }
 .more .go { font: inherit; font-weight: 800; font-size: clamp(30px, 7vw, 44px); letter-spacing: -.05em; line-height: 1; border: 0; background: none; color: var(--fg); cursor: pointer; padding: 0; }
 .more .go i { font-style: normal; color: var(--dot); }
 .more .all { font: inherit; font-size: 13px; padding: 8px 4px; letter-spacing: .14em; border: 0; background: none; color: var(--soft); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
@@ -399,14 +399,13 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .wpbars i.on { opacity: 1; }
 .wpname { font-weight: 800; font-size: 15px; letter-spacing: -.04em; line-height: .95; animation: wIn .45s cubic-bezier(.2,.7,.2,1) both; }
 .wpname i { font-style: normal; color: var(--cd); }
-.wrapcard .wtxt b i { color: var(--cb) !important; transition: color .35s ease; }
 .wdots { display: flex; gap: 5px; margin-top: 8px; }
 .wdots i { width: 9px; height: 9px; border-radius: 50%; transition: transform .35s cubic-bezier(.2,.7,.2,1); box-shadow: 0 0 0 1px rgba(255,248,187,.18); }
 .wdots i.on { transform: scale(1.5); }
 @keyframes wstripe { to { background-position: 0 -192px; } }
 .wtxt small { font-size: 10px; letter-spacing: .26em; opacity: .7; }
 .wtxt b { display: block; font-weight: 800; font-size: 40px; letter-spacing: -.055em; line-height: .95; }
-.wtxt b i { font-style: normal; color: #B3202A; }
+.wtxt b i { font-style: normal; color: inherit; }
 .wtxt em { font-style: normal; font-size: 13px; opacity: .8; }
 /* wrapped stories */
 .wrapped { position: fixed; inset: 0; z-index: 50; background: var(--wb, #1C1C14); color: var(--wf, #FFF8BB); display: grid; grid-template-rows: auto 1fr; padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px)); transition: background .45s ease, color .45s ease; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
@@ -540,7 +539,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .reveal-btn small { font-size: 10px; letter-spacing: .08em; opacity: .5; margin-top: 4px; }
 .mntile { background: var(--fg); color: var(--bg); display: grid; place-items: center; }
 .mntile span { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: clamp(54px, 15vw, 120px); letter-spacing: .06em; line-height: 1; }
-.mntile i { font-style: normal; color: #B3202A; }
+.mntile i { font-style: normal; color: inherit; }
 .istory { display: grid; gap: 10px; max-width: 60ch; }
 .stone { height: 380px; border-radius: 14px; overflow: hidden; display: grid; place-items: center; color: #4A4436;
   background: radial-gradient(120% 90% at 30% 20%, #E4DCCB 0%, #CFC5B1 55%, #B9AE97 100%); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06), inset 0 -40px 80px rgba(60,50,30,.12); }
@@ -549,11 +548,11 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .mntile.light { background: #FFF8BB; color: #1C1C14; box-shadow: inset 0 0 0 1px rgba(28,28,20,.14); }
 .nametile { height: 380px; border-radius: 14px; overflow: hidden; display: grid; place-items: center; background: #FFFFFF; color: #0F1419; box-shadow: inset 0 0 0 1px rgba(28,28,20,.1); }
 .nametile span { font-weight: 800; font-size: clamp(30px, 7vw, 52px); letter-spacing: -.035em; }
-.nametile i, .dotonly i { font-style: normal; color: #B3202A; }
+.nametile i, .dotonly i { font-style: normal; color: inherit; }
 .dotonly span { font-size: clamp(54px, 15vw, 120px); }
 .istory small { font-size: 11px; letter-spacing: .22em; color: var(--soft); text-transform: uppercase; }
 .istory h3 { margin: 0; font-weight: 800; font-size: clamp(30px, 6vw, 48px); letter-spacing: -.05em; line-height: .95; }
-.istory h3 i { font-style: normal; color: #B3202A; }
+.istory h3 i { font-style: normal; color: inherit; }
 .typetile { height: 380px; border-radius: 14px; overflow: hidden; background: var(--fg); color: var(--bg); display: flex; align-items: flex-start; justify-content: flex-end; padding: 22px 24px; box-sizing: border-box; }
 .typetile span { font-weight: 800; font-size: clamp(22px, 3vw, 30px); letter-spacing: -.03em; line-height: 1; }
 .typetile i { font-style: normal; }
@@ -800,7 +799,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   </section>
 
   <div class="duo">
-    <button class="wrapcard" id="wrapCard" type="button" hidden><span class="wphone" aria-hidden="true"><span class="wpbars"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="wpname"></span></span><span class="wtxt"><small>MN. WRAPPED</small><b>2026<i>.</i></b><em>my year in colours. tap to play.</em><span class="wdots"></span></span></button>
+    <button class="wrapcard" id="wrapCard" type="button" hidden><span class="wphone" aria-hidden="true"><span class="wpbars"><i></i><i></i><i></i><i></i><i></i></span><span class="wpname"></span></span><span class="wtxt"><small>MN. WRAPPED</small><b>2026<i>.</i></b><em>my year in colours. tap to play.</em><span class="wdots"></span></span></button>
     <div class="otd" id="otd" hidden></div>
   </div>
   <h2 class="hofhead sec" id="hofHead" hidden><b>02</b>the chapters.</h2>
@@ -978,7 +977,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
         <small>03 · the dot</small>
         <h3>the dot<i>.</i></h3>
         <p>the dot comes from harry styles. on twitter he had a dot after his name, and i always thought it stood out. a name, a dot, done.</p>
-        <p>so MN. got one too. and on this site the dot after every chapter is the colour of the next one.</p>
+        <p>so MN. got one too.</p>
       </div>
     </article>
     <article class="icard">
@@ -1119,7 +1118,7 @@ const CHAPTERS = [
   { id: "red",       name: "red",        bg: "#B3202A", fg: "#FFF8BB", dates: "2027 · all year", line: "is coming", vanilla: true, mn: true },
 ];
 /* The dot after each name is the colour of the next chapter, as in the video. */
-CHAPTERS.forEach((c, i) => { c.dot = i < CHAPTERS.length - 1 ? CHAPTERS[i + 1].bg : "#FFF8BB"; c.label = c.name + (c.suffix ? "." + c.suffix : "."); });
+CHAPTERS.forEach((c, i) => { c.dot = c.fg;   /* every dot has the colour of the text */ c.label = c.name + (c.suffix ? "." + c.suffix : "."); });
 const ALL = { id: "all", bg: "#FFF8BB", fg: "#1C1C14", dot: "#1C1C14" };
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
@@ -1593,7 +1592,7 @@ function wrapSlides() {
   S.push({ bg: "#B8C98B", fg: "#234C3D", d: "#E9A283", html: [["small", "30.10." + Y], ["h3", "first runway", "."], ["p", "s.Oliver × INTERSPORT Harms, neukirchen. the start of something."]] });
   if (songs.length) S.push({ bg: "#343A4E", fg: "#E8EAF0", d: "#A9A9A9", songs, html: [["small", "THE SOUNDTRACK OF " + Y], ["h3", "on repeat", "."]] });
   const left = Math.max(0, Math.ceil((new Date((Y + 1) + "-01-01T00:00:00+01:00") - Date.now()) / 864e5));
-  S.push({ bg: red.bg, fg: red.fg, d: van, end: true, html: [["small", left ? "IN " + left + (left === 1 ? " DAY" : " DAYS") : (Y + 1) + ""], ["h2", "red", "."], ["p", (Y + 1) + ". the next chapter. thank you for watching."]] });
+  S.push({ bg: ink, fg: van, end: true, html: [["small", left ? "IN " + left + (left === 1 ? " DAY" : " DAYS") : (Y + 1) + ""], ["h2", (Y + 1) + "", "."], ["p", "the next chapter. thank you for watching."]] });
   return S;
 }
 function openWrapped() {
@@ -1608,7 +1607,7 @@ function openWrapped() {
   const DUR = 5200;
   const show = k => {
     i = Math.max(0, Math.min(S.length - 1, k)); const s = S[i];
-    W.style.setProperty("--wb", s.bg); W.style.setProperty("--wf", s.fg); W.style.setProperty("--wd", s.d);
+    W.style.setProperty("--wb", s.bg); W.style.setProperty("--wf", s.fg); W.style.setProperty("--wd", s.fg);
     const sl = el("div", "wslide");
     s.html.forEach(([tag, txt, dot, after]) => { const [t, cls] = tag.split("."); const e = el(t, cls || null, txt); if (dot) e.append(el("i", null, dot)); if (after) e.append(after); sl.append(e); });
     if (s.covers && s.covers.length) { const cv = el("div", "wcovers"); s.covers.forEach(r => { const im = el("img"); im.src = r.thumb || r.cover; im.alt = ""; cv.append(im); }); sl.append(cv); }
@@ -1634,8 +1633,8 @@ function renderWrapCard() { $("wrapCard").hidden = !(view === "colours" && filte
 (function wrapLoop() {
   const card = $("wrapCard"), name = card.querySelector(".wpname"), bars = [...card.querySelectorAll(".wpbars i")], dots = card.querySelector(".wdots");
   let k = 0;
-  ["grey", "vanilla", "vanilla-2", "ber", "ember", "red"].forEach(id => { const d = el("i"); d.style.background = byId[id].bg; dots.append(d); });
-  const steps = () => { const ids = ["grey", "vanilla", "vanilla-2", "ber", "ember", "red"]; return ids.map(id => byId[id]).filter(Boolean); };
+  ["grey", "vanilla", "vanilla-2", "ber", "ember"].forEach(id => { const d = el("i"); d.style.background = byId[id].bg; dots.append(d); });
+  const steps = () => { const ids = ["grey", "vanilla", "vanilla-2", "ber", "ember"]; return ids.map(id => byId[id]).filter(Boolean); };
   const step = () => {
     const S = steps(), c = S[k % S.length]; k++;
     card.style.setProperty("--cb", c.bg); card.style.setProperty("--cf", c.fg); card.style.setProperty("--cd", c.dot === c.bg ? c.fg : c.dot);
@@ -2407,7 +2406,7 @@ function unlockWave(done) {
 (function countdown() {
   const now = new Date(), start = new Date(2026, 11, 1), red = new Date(2027, 0, 1);
   if (now >= red) {
-    const d = el("i"); d.style.background = "#B3202A"; $("gCount").hidden = true;
+    const d = el("i"); d.style.background = "currentColor"; $("gCount").hidden = true;
     const row = document.querySelector(".gate .gdots"); if (row) row.prepend(d);
   } else if (now >= start) {
     const days = Math.ceil((red - now) / 864e5);
