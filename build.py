@@ -91,6 +91,15 @@ for p in out:
     if not p.get("video"):
         p.update(thumb(p["src"]))
 
+# colour match from make_thumbs.py: how much of the photo is in its chapter's colour
+COLOUR = {}
+if os.path.exists(os.path.join("thumbs", "colour.json")):
+    with open(os.path.join("thumbs", "colour.json")) as f:
+        COLOUR = json.load(f)
+for p in out:
+    if p["src"] in COLOUR:
+        p["cm"] = COLOUR[p["src"]]
+
 # selected.txt: the photos that open the start page, in this order
 sel_path = os.path.join("photos", "selected.txt")
 if os.path.exists(sel_path):

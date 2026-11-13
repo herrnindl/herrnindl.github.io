@@ -1573,7 +1573,9 @@ function playFilm() {
     const c = CHAPTERS[i % CHAPTERS.length]; i++;
     const layer = el("div", "fl"); layer.style.setProperty("--fb", c.bg); layer.style.setProperty("--ff", c.fg); layer.style.setProperty("--fd", c.fg);
     f.style.setProperty("--ff", c.fg);
-    const box = el("div", "fin"), all = photos.filter(p => p.chapter === c.id && !p.video), top = all.filter(isBest);
+    const box = el("div", "fin"), all = photos.filter(p => p.chapter === c.id && !p.video);
+    const inColour = all.filter(p => (p.cm || 0) >= .06).sort((a, b) => b.cm - a.cm).slice(0, 3);   /* photos where the chapter's colour is really there */
+    const top = inColour.length ? inColour : all.filter(isBest);
     let pics = top.length ? top : all; if (pics.length > 1) pics = pics.filter(p => p !== lastFilm[c.id]);
     if (pics.length) { const im = el("img"); const p = pics[Math.floor(Math.random() * pics.length)]; lastFilm[c.id] = p; im.src = p.thumb2 || p.thumb || p.src; im.alt = ""; box.append(im); }
     const nm = el("b", null, c.name); nm.append(el("i", null, ".")); if (c.suffix) nm.append(c.suffix);
