@@ -1600,6 +1600,15 @@ function playFilm() {
     k.meta.forEach((x, n) => x.animate([{ opacity: 0, transform: "translateY(12px)" }, {}], { duration: 800, delay: at + 260 + n * 110, easing: IN, fill: "backwards" }));
     if (k.im) k.im.animate([{ transform: "scale(1.09)" }, { transform: "scale(1)" }], { duration: 5200, delay: at, easing: "cubic-bezier(.2,.6,.2,1)", fill: "both" });   /* the photo slowly settles */
   };
+  /* where the ink of the dot really is: its exact centre and size, whatever the layout (photo or not, long name or short) */
+  const dotInk = k => {
+    const cs = getComputedStyle(k.b), fs = parseFloat(cs.fontSize), r = k.dot.getBoundingClientRect();
+    const probe = el("span"); probe.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline"; k.dot.before(probe);
+    const base = probe.getBoundingClientRect().bottom; probe.remove();
+    const cv = dotInk.cv || (dotInk.cv = document.createElement("canvas").getContext("2d")); cv.font = cs.fontWeight + " " + fs + "px " + cs.fontFamily;
+    const m = cv.measureText(".");
+    return { x: r.left + (m.actualBoundingBoxRight - m.actualBoundingBoxLeft) / 2, y: base + (m.actualBoundingBoxDescent - m.actualBoundingBoxAscent) / 2, d: m.actualBoundingBoxAscent + m.actualBoundingBoxDescent };
+  };
   const leave = (els, ms = 460) => els.map((x, n) => x.animate([{}, { opacity: 0, transform: "translateY(-12px)" }], { duration: ms, delay: n * 40, easing: OUT, fill: "forwards" }));
   const layer = (cls, bg, z) => { const w = el("div", cls); w.style.background = bg; w.style.zIndex = z; f.insertBefore(w, hint); return w; };
 
@@ -1609,12 +1618,11 @@ function playFilm() {
     const swap = w => { paint(c); old.box.remove(); if (w) w.remove(); };
     if (kind === "dot") {
       /* the dot turns into the next colour, takes a breath, and grows over everything */
-      const r = old.dot.getBoundingClientRect(), fs = parseFloat(getComputedStyle(old.b).fontSize);
-      const ox = r.left + r.width / 2, oy = r.bottom - fs * .2, d = fs * .19;
-      const big = 2 * Math.hypot(Math.max(ox, W - ox), Math.max(oy, H - oy)) + 40, s0 = d / big;
+      const { x: ox, y: oy, d } = dotInk(old);   /* measured, so it sits exactly on the dot wherever the name stands */
+      const big = 2 * Math.hypot(Math.max(ox, W - ox), Math.max(oy, H - oy)) + 40, s0 = (d * 1.1 + 1) / big;   /* a hair bigger than the dot, so it covers it completely */
       const w = layer("fbomb", c.bg, 3); w.style.cssText += `;left:${ox}px;top:${oy}px;width:${big}px;height:${big}px`;
       const T = "translate(-50%,-50%) scale(";
-      await fin(w.animate([{ transform: T + s0 + ")", opacity: 0 }, { transform: T + s0 * 1.25 + ")", opacity: 1, offset: .16 }, { transform: T + s0 * 2.6 + ")", opacity: 1, offset: .36, easing: "cubic-bezier(.7,0,.25,1)" }, { transform: T + "1)", opacity: 1 }], { duration: 1500, fill: "forwards" }));
+      await fin(w.animate([{ transform: T + s0 + ")", opacity: 0 }, { transform: T + s0 + ")", opacity: 1, offset: .14 }, { transform: T + s0 * 2.4 + ")", opacity: 1, offset: .36, easing: "cubic-bezier(.7,0,.25,1)" }, { transform: T + "1)", opacity: 1 }], { duration: 1500, fill: "forwards" }));
       if (dead) return k; swap(w); f.insertBefore(k.box, hint); enter(k, 60);
     } else if (kind === "blind") {
       const w = layer("fwash", c.bg, 3);
@@ -2032,19 +2040,18 @@ function unEven() {
 }
 function evenBottoms() {
   if (W.cols.length < 2) return;
-  const tails = W.cols.map(col => [...col.children].slice(-3).filter(t => t.classList.contains("tile")));
-  const room = (c, f) => tails[c].reduce((a, t) => a + (f > 0 ? Math.min(1.9, +t.dataset.r * 1.4) - +t.dataset.r : Math.max(.55, +t.dataset.r * .75) - +t.dataset.r), 0);
+  const tails = W.cols.map(col => [...col.children].slice(-6).filter(t => t.classList.contains("tile")));
+  const span = (t, f) => { const r = +t.dataset.r; return f > 0 ? Math.min(1.9, r * 1.4) - r : Math.max(.55, r * .75) - r; };
+  const room = (c, f) => tails[c].reduce((a, t) => a + span(t, f), 0);
   const lo = W.h.map((h, c) => h + room(c, -1)), hi = W.h.map((h, c) => h + room(c, 1));
   const mean = W.h.reduce((a, b) => a + b, 0) / W.h.length;
   const T = Math.min(Math.max(mean, Math.max(...lo)), Math.min(...hi));
-  W.cols.forEach((col, c) => {
-    let need = T - W.h[c];
-    tails[c].slice().reverse().forEach(t => {
-      if (Math.abs(need) < .005) return;
-      const r = +t.dataset.r, nr = Math.min(Math.max(r + need, Math.max(.55, r * .75)), Math.min(1.9, r * 1.4)), d = nr - r;
-      if (Math.abs(d) < .005) return;
-      t.classList.add("fit"); t.style.aspectRatio = "1 / " + nr.toFixed(4); t.dataset.adj = d; W.h[c] += d; need -= d;
-    });
+  W.cols.forEach((col, c) => {   /* the difference is shared by the last photos of the column, so each one changes only a little */
+    const need = T - W.h[c], f = need > 0 ? 1 : -1, R = room(c, f);
+    if (Math.abs(need) < .004 || !R) return;
+    const k = Math.min(1, need / R);
+    tails[c].forEach(t => { const d = span(t, f) * k; if (Math.abs(d) < .002) return;
+      t.classList.add("fit"); t.style.aspectRatio = "1 / " + (+t.dataset.r + d).toFixed(4); t.dataset.adj = d; W.h[c] += d; });
   });
 }
 function placeTiles(upto) {
@@ -2512,16 +2519,6 @@ function unlockWave(done) {
   /* The site is built while the screen is fully vanilla, then the cover fades away. */
   last.onfinish = () => { done(); setTimeout(() => requestAnimationFrame(() => { w.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: "forwards" }).onfinish = () => w.remove(); }), 260); };
 }
-
-/* On the lock screen: days until the site opens on 01.12.2026. */
-(function countdown() {
-  const now = new Date(), open = new Date("2026-12-01T00:00:00+01:00");
-  if (now < open) {
-    const days = Math.ceil((open - now) / 864e5);
-    $("gCount").textContent = days === 1 ? "tomorrow." : "in " + days + " days.";
-    $("gCount").hidden = false;
-  }
-})();
 
 /* Sound: one tap turns music on. Then every chapter plays its song by itself.
    Spotify is only loaded after that tap (that tap is the consent). */
