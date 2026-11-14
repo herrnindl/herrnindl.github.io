@@ -102,6 +102,11 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
 #red p { margin: 12px 0 0; font-size: 12px; letter-spacing: .26em; }
 #red .count { font-weight: 800; font-size: 22px; letter-spacing: -.03em; margin-top: 30px; }
 #red button { position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: 20px; background: none; border: 0; color: #FFF8BB; font-size: 22px; }
+.more { display: flex; gap: 14px; font-size: 13px; color: var(--soft); flex-wrap: wrap; justify-content: flex-end; margin-top: 6px; }
+.more a { color: inherit; text-decoration: none; }
+.more a[aria-current] { color: var(--fg); font-weight: 800; }
+.foot { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 11px; letter-spacing: .14em; color: var(--soft); }
+.foot a { color: inherit; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
 </head>
@@ -111,6 +116,7 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
     <a class="mark" href="./" id="mark">MN.</a>
     <button class="back" id="back" hidden>← play.</button>
   </header>
+  <nav class="more" aria-label="more"><a href="play.html" aria-current="page">play.</a><a href="now.html">now.</a><a href="glowup.html">glow up.</a><a href="wardrobe.html">wardrobe.</a><a href="ask.html">ask me.</a><a href="capsule.html">time capsule.</a></nav>
 
   <!-- start -->
   <section class="view on" id="v-home">
@@ -191,6 +197,8 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
   </section>
 </div>
 
+<div class="wrap" style="padding-top:0"><footer class="foot"><span>© 2026 MN. · designed &amp; built by markus nindl.</span><span><a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer></div>
+
 <!-- red. (hidden: type "red" or tap MN. five times) -->
 <div id="red" aria-hidden="true">
   <button id="red-close" aria-label="Close">✕</button>
@@ -240,9 +248,28 @@ function standIn(c) {
   return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
 }
 const big = p => p.thumb2 || p.thumb || p.src;
+/* Point the photo at the face and zoom in around it without ever showing an empty edge.
+   z = zoom (1 = whole frame). Returns nothing; uses p.f = [x, y, size] from photos/faces.json. */
+function aim(img, p, z) {
+  const f = p.f || [.5, .35, .2];
+  img.style.objectPosition = (f[0] * 100).toFixed(1) + "% " + (f[1] * 100).toFixed(1) + "%";
+  const r = img.parentElement.getBoundingClientRect(), W = r.width || 1, H = r.height || 1;
+  const iw = p.w || 600, ih = p.h || 800, k = Math.max(W / iw, H / ih), dw = iw * k, dh = ih * k;
+  const ox = ((W - dw) * f[0] + f[0] * dw) / W, oy = ((H - dh) * f[1] + f[1] * dh) / H;
+  const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
+  const tx = clamp(.5, 1 - (1 - ox) * z, ox * z), ty = clamp(.5, 1 - (1 - oy) * z, oy * z);
+  img.style.transformOrigin = (ox * 100).toFixed(2) + "% " + (oy * 100).toFixed(2) + "%";
+  img.style.transform = z > 1.001 ? `translate(${((tx - ox) * 100).toFixed(2)}%, ${((ty - oy) * 100).toFixed(2)}%) scale(${z.toFixed(3)})` : "none";
+}
+/* how big the face is in the frame at zoom 1 (share of the frame height) */
+function faceShare(img, p) {
+  const r = img.parentElement.getBoundingClientRect(), W = r.width || 1, H = r.height || 1;
+  const iw = p.w || 600, ih = p.h || 800, k = Math.max(W / iw, H / ih);
+  return ((p.f ? p.f[2] : .2) * ih * k) / H;
+}
 const photoFor = id => { const l = pool.filter(p => p.chapter === id); return l.length ? big(l[Math.floor(Math.random() * l.length)]) : standIn(byId[id]); };
 const ready = fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(list => {
-  pool = list.filter(p => !p.video && byId[p.chapter]);
+  pool = list.filter(p => !p.video && byId[p.chapter] && p.f && !p.nf);   /* only photos where the face is clearly visible (photos/faces.json) */
 }).catch(() => {}).then(() => {
   if (!pool.length) pool = CHAPTERS.map(c => ({ chapter: c.id, src: standIn(c) }));
 });
@@ -282,8 +309,8 @@ function showRound() {
   $("c-reveal").textContent = ""; $("c-next").hidden = true;
   img.style.transition = "none";
   img.className = "crop";
-  img.style.transform = `scale(3.2) translate(${(Math.random() * 30 - 15).toFixed(1)}%, ${(Math.random() * 30 - 15).toFixed(1)}%)`;
   img.src = big(p);
+  aim(img, p, Math.min(Math.max(.5 / faceShare(img, p), 1.4), 6));   /* close on the face */
   void img.offsetWidth; img.style.transition = "";
   const options = shuffle([byId[p.chapter], ...shuffle(CHAPTERS.filter(c => c.id !== p.chapter)).slice(0, 3)]);
   const box = $("c-choices"); box.textContent = "";
@@ -299,7 +326,7 @@ function answer(id) {
   const p = rounds[ri], c = byId[p.chapter];
   if (id === p.chapter) score++;
   document.querySelectorAll(".choice").forEach(b => { b.disabled = true; b.classList.add(b.dataset.id === p.chapter ? "right" : "wrong"); });
-  const img = $("c-img"); img.className = ""; img.style.transform = "none";
+  const img = $("c-img"); img.className = ""; aim(img, p, 1);
   paint(c);
   $("c-score").textContent = `${score} RIGHT`;
   $("c-reveal").innerHTML = `<b>${c.label}</b><p>${c.line}</p>`;
@@ -326,7 +353,9 @@ function newMix() {
   $("m-target").style.background = target.bg;
   $("m-title").textContent = "mix the colour.";
   $("m-sub").textContent = "match the chapter on the left.";
-  $("m-img").src = photoFor(target.id);
+  const mp = pool.filter(p => p.chapter === target.id), pick = mp[Math.floor(Math.random() * mp.length)];
+  $("m-img").src = pick ? big(pick) : standIn(target);
+  if (pick) aim($("m-img"), pick, 1); else $("m-img").style.objectPosition = "";
   $("m-reveal").textContent = "";
   $("m-lock").hidden = false; $("m-new").hidden = true;
   paint(); updateMix();
@@ -430,7 +459,7 @@ function startDaily() {
   dd.answer = p.chapter;
   const d = new Date();
   $("dd-date").textContent = String(d.getDate()).padStart(2, "0") + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + d.getFullYear();
-  $("dd-img").src = big(p);
+  $("dd-img").src = big(p); dd.photo = p;
   const box = $("dd-choices"); box.textContent = "";
   CHAPTERS.forEach(c => {
     const b = document.createElement("button");
@@ -446,9 +475,9 @@ function drawDaily() {
   $("dd-streak").textContent = "STREAK " + (alive ? s.n : 0);
   const n = dd.guesses.length, img = $("dd-img");
   img.className = dd.done ? "" : "crop";
-  const z = dd.done ? 1 : ZOOM[Math.min(n, ZOOM.length - 1)];
-  const h = hash(dd.day), ox = (h % 21) - 10, oy = ((h >> 5) % 21) - 10;
-  img.style.transform = z === 1 ? "none" : `scale(${z}) translate(${ox * (z - 1) / 4}%, ${oy * (z - 1) / 4}%)`;
+  /* try 1: the face fills the frame; every wrong guess zooms further out */
+  const z0 = Math.min(Math.max(.8 / faceShare(img, dd.photo), 2), 9), step = Math.min(n, ZOOM.length - 1) / (ZOOM.length - 1);
+  aim(img, dd.photo, dd.done ? 1 : Math.pow(z0, 1 - step) * (step === 1 ? 1.15 : 1));
   $("dd-tries").innerHTML = ZOOM.map((_, i) => `<i class="${i < n ? (dd.won && i === n - 1 ? "won" : "used") : ""}"></i>`).join("");
   $("dd-left").textContent = dd.done ? "" : (5 - n) + (5 - n === 1 ? " TRY" : " TRIES");
   document.querySelectorAll("#dd-choices .choice").forEach(b => {
@@ -530,7 +559,7 @@ const QUIZ = [
     ["warm.", ["ember", "vanilla-2"]],
     ["green.", ["ber"]] ] },
 ];
-let qi = 0, tally = {}, qResult = null, qPhoto = null;
+let qi = 0, tally = {}, qResult = null, qPhoto = null, qFace = null;
 function startQuiz() {
   qi = 0; tally = {}; paint();
   $("qz-ask").hidden = false; $("qz-result").hidden = true;
@@ -553,13 +582,14 @@ function showQuiz() {
   const tied = CHAPTERS.filter(c => Math.abs((tally[c.id] || 0) - top) < 1e-9);
   qResult = tied[Math.floor(Math.random() * tied.length)];
   const own = pool.filter(p => p.chapter === qResult.id && p.src && !p.src.startsWith("data:"));
-  qPhoto = own.length ? big(own[Math.floor(Math.random() * own.length)]) : null;
+  const qp = own.length ? own[Math.floor(Math.random() * own.length)] : null;
+  qPhoto = qp ? big(qp) : null; qFace = qp && qp.f ? qp.f : [.5, .3, .2];
   paint(qResult);
   $("qz-ask").hidden = true; $("qz-result").hidden = false;
   $("qz-name").textContent = qResult.label;
   $("qz-line").textContent = qResult.line;
   $("qz-img").hidden = !qPhoto;
-  if (qPhoto) $("qz-img").src = qPhoto;
+  if (qPhoto) { $("qz-img").src = qPhoto; $("qz-img").style.objectPosition = (qFace[0] * 100) + "% " + (qFace[1] * 100) + "%"; }
   scrollTo(0, 0);
 }
 $("qz-again").onclick = startQuiz;
@@ -576,7 +606,8 @@ $("qz-share").onclick = async () => {
       const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = qPhoto; });
       const s = Math.max(bw / img.naturalWidth, bh / img.naturalHeight), sw = bw / s, sh = bh / s;
       x.save(); x.beginPath(); x.roundRect ? x.roundRect(bx, by, bw, bh, 36) : x.rect(bx, by, bw, bh); x.clip();
-      x.drawImage(img, (img.naturalWidth - sw) / 2, (img.naturalHeight - sh) / 2, sw, sh, bx, by, bw, bh); x.restore();
+      const cx = Math.max(0, Math.min(img.naturalWidth - sw, qFace[0] * img.naturalWidth - sw / 2)), cy = Math.max(0, Math.min(img.naturalHeight - sh, qFace[1] * img.naturalHeight - sh / 2));
+      x.drawImage(img, cx, cy, sw, sh, bx, by, bw, bh); x.restore();
     } else {   /* no photos in this chapter yet: one big dot in the text colour */
       x.fillStyle = c.fg; x.beginPath(); x.arc(W / 2, by + bh / 2, 300, 0, Math.PI * 2); x.fill();
     }

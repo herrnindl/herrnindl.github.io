@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — now.</title>
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="extra.css">
+<script src="analytics.js"></script>
+<style>
+.nav-gap { height: 0; }
+.big { font-weight: 800; font-size: clamp(64px, 20vw, 112px); letter-spacing: -.06em; line-height: .85; margin: 6px 0 6px; }
+.list { list-style: none; padding: 0; margin: 26px 0 0; border-top: 1px solid var(--line); }
+.list li { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.list li span:first-child { font-size: 12px; letter-spacing: .2em; color: var(--soft); padding-top: 3px; }
+.list li b { font-weight: 800; letter-spacing: -.03em; text-align: right; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a class="mark" href="./">MN.</a></header>
+  <nav class="more" aria-label="more"></nav>
+
+  <h1>now.</h1>
+  <p class="sub" id="upd"></p>
+  <div class="small">CHAPTER</div>
+  <div class="big" id="chap"></div>
+  <p id="line" style="margin:0"></p>
+  <ul class="list" id="list"></ul>
+  <footer class="foot"></footer>
+</div>
+<script src="extra.js"></script>
+<script>
+/* ===== edit here ===== (empty "" = line is hidden) */
+const NOW = {
+  updated: "14.11.2026",
+  onRepeat: "",        // e.g. "Coming Up Roses — Harry Styles"
+  workingOn: "",       // e.g. "the website"
+  reading: "",
+};
+/* chapters by date — the current one is picked automatically */
+const RANGES = [["origin","2024-08-26"],["white","2025-03-03"],["baby-blue","2025-05-23"],["lavendel","2025-07-07"],["navy-blue","2025-10-21"],["grey","2026-01-01"],["vanilla","2026-04-01"],["vanilla-2","2026-06-23"],["ber","2026-09-01"],["ember","2026-11-01"],["red","2027-01-01"]];
+const PLACE = { origin: "pinzgau.", white: "neukirchen.", "baby-blue": "fürstenfeld · graz.", lavendel: "italia.", "navy-blue": "dublin.", grey: "munich.", vanilla: "france.", "vanilla-2": "königsleiten · salzburg.", ember: "wildkogel." };
+const EVENTS = [["website opens.", "2026-12-01"], ["red. begins.", "2027-01-01"], ["two years of MN.", "2027-01-01"]];
+/* ===================== */
+const today = new Date(); today.setHours(0, 0, 0, 0);
+const d = s => new Date(s + "T00:00:00");
+const cur = byId[[...RANGES].reverse().find(r => d(r[1]) <= today)[0]];
+paint(cur);
+$("chap").textContent = cur.label; $("line").textContent = cur.line;
+$("upd").textContent = "updated " + NOW.updated + ".";
+const rows = [];
+if (PLACE[cur.id]) rows.push(["WHERE", PLACE[cur.id]]);
+if (NOW.onRepeat) rows.push(["ON REPEAT", NOW.onRepeat]);
+if (NOW.workingOn) rows.push(["WORKING ON", NOW.workingOn]);
+if (NOW.reading) rows.push(["READING", NOW.reading]);
+const next = EVENTS.filter(e => d(e[1]) > today);
+if (next.length) {
+  const days = Math.round((d(next[0][1]) - today) / 864e5);
+  rows.push(["NEXT", next.filter(e => e[1] === next[0][1]).map(e => e[0]).join(" ") + " " + (days === 1 ? "tomorrow." : "in " + days + " days.")]);
+}
+rows.forEach(([k, v]) => { const li = el("li"); li.append(el("span", null, k), el("b", null, v)); $("list").append(li); });
+</script>
+</body>
+</html>

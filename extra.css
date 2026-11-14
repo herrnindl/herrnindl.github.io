@@ -1,0 +1,35 @@
+/* shared look for the small pages: now. · glow up. · wardrobe. · ask me. · time capsule. */
+@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("fonts/inter-400.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-display: swap; src: url("fonts/inter-500.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 800; font-display: swap; src: url("fonts/jost-700.woff?v=1") format("woff"); }
+@font-face { font-family: "Bodoni Moda"; font-weight: 500; font-display: swap; src: url("fonts/bodoni-500.woff") format("woff"); }
+:root { --bg: #FFF8BB; --fg: #1C1C14; --soft: rgba(28,28,20,.62); --line: rgba(28,28,20,.16); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--fg); font-family: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif; font-size: 15px; line-height: 1.45; min-height: 100vh; min-height: 100dvh; transition: background-color .5s ease, color .5s ease; }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+.wrap { max-width: 520px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
+header { display: flex; justify-content: space-between; align-items: center; }
+.mark { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: 30px; letter-spacing: .06em; line-height: 1; text-decoration: none; }
+.more { display: flex; gap: 14px; font-size: 13px; color: var(--soft); flex-wrap: wrap; justify-content: flex-end; }
+.more a { text-decoration: none; }
+.more a[aria-current] { color: var(--fg); font-weight: 800; }
+h1 { font-weight: 800; font-size: clamp(56px, 16vw, 84px); letter-spacing: -.055em; line-height: .9; margin: 34px 0 8px; }
+.sub { color: var(--soft); margin: 0 0 24px; }
+.small { font-size: 12px; letter-spacing: .2em; color: var(--soft); }
+.btn { display: inline-block; background: var(--fg); color: var(--bg); border: 0; border-radius: 999px; padding: 11px 22px; font-weight: 800; letter-spacing: -.02em; text-decoration: none; }
+.btn.ghost { background: none; color: var(--fg); border: 1px solid var(--fg); }
+.btn:disabled { opacity: .35; cursor: default; }
+.card { border: 1px solid var(--line); border-radius: 16px; padding: 18px; margin-bottom: 10px; }
+.card b { display: block; font-weight: 800; font-size: 24px; letter-spacing: -.04em; line-height: 1.05; }
+input, textarea { width: 100%; background: none; border: 1px solid var(--line); border-radius: 14px; padding: 13px 15px; outline: none; }
+input:focus, textarea:focus { border-color: var(--fg); }
+textarea { min-height: 120px; resize: vertical; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+.note { font-size: 12px; color: var(--soft); margin: 10px 0 0; }
+.foot { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 11px; letter-spacing: .14em; color: var(--soft); }
+.foot a { text-decoration: none; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

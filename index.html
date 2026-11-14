@@ -1094,7 +1094,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     </form>
   </section>
 
-  <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span><a href="https://instagram.com/herrnindl" target="_blank" rel="noopener">instagram</a> · <a href="https://www.tiktok.com/@herrnindl" target="_blank" rel="noopener">tiktok</a> · <a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
+  <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span>© 2026 MN. · designed &amp; built by markus nindl.</span><span><a href="https://instagram.com/herrnindl" target="_blank" rel="noopener">instagram</a> · <a href="https://www.tiktok.com/@herrnindl" target="_blank" rel="noopener">tiktok</a> · <a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
 </div>
 
 <button class="bookfab" id="bookFab" type="button" hidden>book<i>.</i></button>
@@ -1173,9 +1173,12 @@ function soften(hex, a) {
   return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
 }
 /* Grid images: small WebP previews with their real size, so only visible ones load and nothing jumps. */
+/* cropped frames keep the face in view: photos.json has "f": [x, y, size] from photos/faces.json */
+function facePos(img, it) { if (it && it.f) img.style.objectPosition = Math.round(it.f[0] * 100) + "% " + Math.round(it.f[1] * 100) + "%"; }
 function setImg(img, it, sizes) {
   if (it.w && it.h) { img.width = it.w; img.height = it.h; }
   img.decoding = "async";
+  facePos(img, it);
   img.dataset.src = it.thumb || it.src || it.cover;
   if (it.thumb2) { img.dataset.srcset = it.thumb + " 600w, " + it.thumb2 + " 1200w"; img.sizes = sizes || "(max-width: 600px) 100vw, 33vw"; }
   if (lazyIO) lazyIO.observe(img); else loadImg(img);
@@ -1402,7 +1405,8 @@ async function shareChapter(c) {
   if (pics.length) {
     const p = pics[0], img = new Image(); img.src = p.thumb2 || p.src;
     try { await img.decode(); const bw = 900, bh = 1000, r = Math.max(bw / img.width, bh / img.height), sw = bw / r, sh = bh / r;
-      x.save(); x.beginPath(); x.roundRect(90, y, bw, bh, 28); x.clip(); x.drawImage(img, (img.width - sw) / 2, (img.height - sh) / 2, sw, sh, 90, y, bw, bh); x.restore(); y += bh + 120; } catch (e) { y = 900; }
+      x.save(); x.beginPath(); x.roundRect(90, y, bw, bh, 28); x.clip(); const fx = p.f ? p.f[0] : .5, fy = p.f ? p.f[1] : .3;
+      x.drawImage(img, Math.max(0, Math.min(img.width - sw, fx * img.width - sw / 2)), Math.max(0, Math.min(img.height - sh, fy * img.height - sh / 2)), sw, sh, 90, y, bw, bh); x.restore(); y += bh + 120; } catch (e) { y = 900; }
   } else y = 1000;
   x.font = '400 34px Inter, Arial, sans-serif'; x.letterSpacing = "10px"; x.fillText(c.dates.toUpperCase(), 90, y); x.letterSpacing = "0px";
   let fs = 210; x.font = `800 ${fs}px Inter, Arial, sans-serif`;
@@ -1591,7 +1595,7 @@ function playFilm() {
     let pics = top.length ? top : all; if (pics.length > 1) pics = pics.filter(p => p !== lastFilm[c.id]);
     if (!pics.length) return Promise.resolve(null);
     const p = pics[Math.floor(Math.random() * pics.length)]; lastFilm[c.id] = p;
-    const im = new Image(); im.alt = ""; im.src = p.thumb2 || p.thumb || p.src;
+    const im = new Image(); im.alt = ""; facePos(im, p); im.src = p.thumb2 || p.thumb || p.src;
     return Promise.race([im.decode().then(() => im, () => im), new Promise(r => setTimeout(() => r(im.complete && im.naturalWidth ? im : null), 2500))]);
   };
   /* a chapter's card: photo, dates, the name letter by letter, its line */
@@ -2042,7 +2046,7 @@ function makeTile(it) {
   img.alt = p.caption || (byId[p.chapter].label + " photo");
   b.append(img);
   const alt = it.alt;
-  if (alt) { const a = el("img", "alt"); a.alt = ""; a.loading = "lazy"; a.decoding = "async"; a.src = alt.thumb || alt.src; if (alt.thumb2) { a.srcset = alt.thumb + " 600w, " + alt.thumb2 + " 1200w"; a.sizes = img.sizes; } b.append(a, el("span", "two")); b.title = "two versions"; }
+  if (alt) { const a = el("img", "alt"); a.alt = ""; a.loading = "lazy"; a.decoding = "async"; facePos(a, alt); a.src = alt.thumb || alt.src; if (alt.thumb2) { a.srcset = alt.thumb + " 600w, " + alt.thumb2 + " 1200w"; a.sizes = img.sizes; } b.append(a, el("span", "two")); b.title = "two versions"; }
   tag();
   b.onclick = () => { const L = list.filter(x => !x.video); open(L, L.indexOf(p), img); };
   return [b, p.w && p.h ? p.h / p.w : 1.25];
@@ -2093,7 +2097,7 @@ function renderMore() {
   const cur = W.cur || ALL;
   m.style.setProperty("--dot", cur.dot === cur.bg ? cur.fg : (cur.dot || "#B3202A"));
   const deck = el("button", "deck"); deck.type = "button"; deck.setAttribute("aria-label", "show more photos");
-  left.slice(0, 3).reverse().forEach(it => { const c = el("span", "dcard"); const im = el("img"); im.src = it.p.thumb || it.p.src; im.alt = ""; im.loading = "lazy"; c.append(im); deck.append(c); });
+  left.slice(0, 3).reverse().forEach(it => { const c = el("span", "dcard"); const im = el("img"); facePos(im, it.p); im.src = it.p.thumb || it.p.src; im.alt = ""; im.loading = "lazy"; c.append(im); deck.append(c); });
   deck.append(el("span", "count", "+" + left.length));
   const go = el("button", "go", "show more"); go.type = "button"; go.append(el("i", null, "."));
   const all = el("button", "all", "SHOW ALL " + (W.shown + left.length)); all.type = "button";

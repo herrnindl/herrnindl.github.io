@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — glow up.</title>
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="extra.css">
+<script src="analytics.js"></script>
+<style>
+.stage { position: relative; width: 100%; aspect-ratio: 1; border-radius: 16px; overflow: hidden; background: var(--fg); margin-top: 8px; }
+.stage img { position: absolute; max-width: none; opacity: 0; transition: opacity .35s ease; user-select: none; -webkit-user-drag: none; }
+.stage img.on { opacity: 1; }
+.lab { display: flex; justify-content: space-between; align-items: baseline; margin: 14px 0 6px; }
+.lab b { font-weight: 800; font-size: 30px; letter-spacing: -.045em; }
+input[type=range] { -webkit-appearance: none; appearance: none; padding: 0; height: 8px; border: 0; border-radius: 4px; outline: none; margin: 16px 0 6px; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: var(--fg); border: 3px solid var(--bg); box-shadow: 0 0 0 1px var(--fg); }
+input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--fg); border: 3px solid var(--bg); }
+.ends { display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a class="mark" href="./">MN.</a></header>
+  <nav class="more" aria-label="more"></nav>
+
+  <h1>glow up.</h1>
+  <p class="sub">from origin. to now. drag.</p>
+  <div class="stage" id="stage"></div>
+  <input type="range" id="t" min="0" max="0" value="0" aria-label="time">
+  <div class="ends small"><span>ORIGIN.</span><span>NOW.</span></div>
+  <div class="lab"><b id="lab"></b><span class="small" id="when"></span></div>
+  <div class="row"><button class="btn" id="play">play</button></div>
+  <footer class="foot"></footer>
+</div>
+<script src="extra.js"></script>
+<script>
+/* oldest chapter first; per chapter the photos where the face is biggest, so the face stays the same size */
+const ORDER = ["origin", "white", "baby-blue", "lavendel", "navy-blue", "grey", "vanilla", "vanilla-2", "ber", "ember", "red"];
+const PER = 4;
+let pics = [], imgs = [], i = 0, timer = null;
+const ymd = s => s ? s.split(".").reverse().join("") : "";
+loadPhotos().then(list => {
+  list = list.filter(p => p.f && !p.nf && p.f[2] >= .06);
+  ORDER.forEach(id => {
+    const own = list.filter(p => p.chapter === id).sort((a, b) => b.f[2] - a.f[2]);
+    const seen = new Set(), pick = [];
+    for (const p of own) { const k = p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""); if (pick.length < PER && !seen.has(k)) { seen.add(k); pick.push(p); } }
+    pick.sort((a, b) => ymd(a.date) < ymd(b.date) ? -1 : 1);
+    pics.push(...pick);
+  });
+  const st = $("stage");
+  imgs = pics.map(p => { const im = new Image(); im.alt = byId[p.chapter].label + " photo"; im.decoding = "async"; st.append(im); return im; });
+  $("t").max = pics.length - 1;
+  place(); show(0);
+  addEventListener("resize", place);
+});
+/* face in the middle, same size every time, image always covers the square */
+function place() {
+  const F = $("stage").getBoundingClientRect().width;
+  pics.forEach((p, k) => {
+    const im = imgs[k], ar = (p.w || 600) / (p.h || 800);
+    let h = .36 * F / p.f[2], w = h * ar;
+    if (w < F) { w = F; h = w / ar; } if (h < F) { h = F; w = h * ar; }
+    const left = Math.min(0, Math.max(F - w, F / 2 - p.f[0] * w)), top = Math.min(0, Math.max(F - h, F * .46 - p.f[1] * h));
+    Object.assign(im.style, { width: w + "px", height: h + "px", left: left + "px", top: top + "px" });
+  });
+}
+function show(k) {
+  i = k; const p = pics[k]; if (!p) return;
+  [k, k + 1, k + 2, k - 1].forEach(j => { const im = imgs[j]; if (im && !im.src) im.src = big(pics[j]); });
+  imgs.forEach((im, j) => im.classList.toggle("on", j === k));
+  const c = byId[p.chapter]; paint(c);
+  $("t").style.background = `linear-gradient(90deg, ${ORDER.filter(id => pics.some(q => q.chapter === id)).map(id => byId[id].bg).join(", ")})`;
+  $("lab").textContent = c.label; $("when").textContent = p.date || "";
+  $("t").value = k;
+}
+$("t").addEventListener("input", e => { stop(); show(+e.target.value); });
+function stop() { clearInterval(timer); timer = null; $("play").textContent = "play"; }
+$("play").onclick = () => {
+  if (timer) return stop();
+  if (i >= pics.length - 1) show(0);
+  $("play").textContent = "pause";
+  timer = setInterval(() => { if (i >= pics.length - 1) return stop(); show(i + 1); }, 900);
+};
+</script>
+</body>
+</html>

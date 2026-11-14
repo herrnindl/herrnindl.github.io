@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — wardrobe.</title>
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="extra.css">
+<script src="analytics.js"></script>
+<style>
+.brands { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 30px; }
+.brands span, .tags span { border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 13px; }
+.look { margin: 0 0 34px; }
+.look h2 { font-weight: 800; font-size: 30px; letter-spacing: -.045em; line-height: 1; margin: 0 0 4px; display: flex; align-items: center; gap: 10px; }
+.look h2 i { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+.pics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0 10px; }
+.pics img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; display: block; background: var(--line); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a class="mark" href="./">MN.</a></header>
+  <nav class="more" aria-label="more"></nav>
+  <h1>wardrobe.</h1>
+  <p class="sub">what i wore, chapter by chapter.</p>
+  <div class="small" style="margin-bottom:10px">BRANDS I'VE WORN</div>
+  <div class="brands" id="brands"></div>
+  <div id="looks"></div>
+  <footer class="foot"></footer>
+</div>
+<script src="extra.js"></script>
+<script>
+/* ===== edit here =====
+   One line per shoot: "chapter|photographer|date" (exactly as on the site) → brands you wore.
+   Shoots without a line still show, just without brand tags. */
+const BRANDS = ["Calvin Klein", "s.Oliver", "Only & Sons", "Nautica", "BRTLwear", "Distorted People", "Peso", "Cocoburry", "Hidden Hills Watch", "getdressedmittersill", "leder.ritsch"];
+const LOOKS = {
+  "vanilla-2|Ronald Mitterer @ronaldmitterer|08.07.2026": ["BRTLwear"],
+  "navy-blue|Daniel Rieder @danielriederfotografie|30.10.2025": ["Calvin Klein"],
+};
+/* ===================== */
+BRANDS.forEach(b => $("brands").append(el("span", null, b)));
+const ORDER = CHAPTERS.map(c => c.id);              /* newest chapter first */
+const ymd = s => s ? s.split(".").reverse().join("") : "";
+loadPhotos().then(list => {
+  const groups = new Map();
+  list.forEach(p => { const k = p.chapter + "|" + (p.credit || "") + "|" + (p.date || ""); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(p); });
+  [...groups.entries()]
+    .sort((a, b) => ORDER.indexOf(a[1][0].chapter) - ORDER.indexOf(b[1][0].chapter) || (ymd(b[1][0].date) > ymd(a[1][0].date) ? 1 : -1))
+    .forEach(([k, ps]) => {
+      const c = byId[ps[0].chapter], box = el("section", "look");
+      const h = el("h2"); const dot = el("i"); dot.style.background = c.bg; h.append(dot, c.label); box.append(h);
+      const who = (ps[0].credit || "").replace(/\s*@\S+/, "");
+      box.append(el("div", "small", [ps[0].date, who ? "PHOTOS " + who.toUpperCase() : ""].filter(Boolean).join(" · ")));
+      const g = el("div", "pics");
+      ps.filter(p => p.f && !p.nf).sort((a, b) => b.f[2] - a.f[2]).filter((p, i, arr) => i === arr.findIndex(q => q.src.replace(/(x?sw|swe|[abc])?\.\w+$/, "") === p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""))).slice(0, 3)
+        .forEach(p => { const im = el("img"); im.alt = c.label + " outfit"; im.loading = "lazy"; im.style.objectPosition = (p.f[0] * 100) + "% " + (p.f[1] * 100 + 8) + "%"; im.src = p.thumb || p.src; g.append(im); });
+      box.append(g);
+      const t = LOOKS[k] || [];
+      if (t.length) { const tg = el("div", "tags"); t.forEach(b => tg.append(el("span", null, b))); box.append(tg); }
+      $("looks").append(box);
+    });
+});
+</script>
+</body>
+</html>

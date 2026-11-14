@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — time capsule.</title>
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="extra.css">
+<script src="analytics.js"></script>
+<style>
+.big { font-weight: 800; font-size: clamp(64px, 20vw, 112px); letter-spacing: -.06em; line-height: .85; margin: 0 0 6px; font-variant-numeric: tabular-nums; }
+form { margin: 26px 0 0; display: grid; gap: 8px; }
+.wall { columns: 2 160px; column-gap: 10px; margin-top: 20px; }
+.wall div { break-inside: avoid; border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin: 0 0 10px; }
+.wall b { display: block; font-size: 12px; letter-spacing: .2em; color: var(--soft); font-weight: 400; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a class="mark" href="./">MN.</a></header>
+  <nav class="more" aria-label="more"></nav>
+  <h1>time capsule.</h1>
+  <p class="sub" id="lead">leave a message. it stays locked until red. begins on 01.01.2027. then everyone can read them.</p>
+  <div class="big" id="days"></div>
+  <div class="small" id="count"></div>
+  <form id="f">
+    <textarea id="m" maxlength="280" placeholder="your message to 2027 …" aria-label="your message"></textarea>
+    <input id="nm" maxlength="20" placeholder="first name (optional)" aria-label="first name">
+    <div class="row"><button class="btn" id="send" type="submit">lock it in.</button><span class="small" id="msg"></span></div>
+    <p class="note" id="info">your message and first name are shown here from 01.01.2027. nothing else is saved. details in the <a href="datenschutz.html">datenschutz</a>.</p>
+  </form>
+  <div class="wall" id="wall"></div>
+  <footer class="foot"></footer>
+</div>
+<script src="extra.js"></script>
+<script>
+const OPENS = new Date("2027-01-01T00:00:00+01:00");
+const isOpen = () => new Date() >= OPENS;
+paint(isOpen() ? byId.red : byId.ember);
+function draw(v) {
+  const open = v ? v.open : isOpen();
+  if (open) {
+    paint(byId.red); $("f").hidden = true; $("days").textContent = "open.";
+    $("lead").textContent = "written in 2026. opened on 01.01.2027.";
+    $("count").textContent = v ? v.count + (v.count === 1 ? " MESSAGE" : " MESSAGES") : "";
+    $("wall").textContent = "";
+    (v ? v.messages : []).forEach(x => { const d = el("div"); d.append(el("span", null, x.m)); if (x.n) d.append(el("b", null, x.n.toUpperCase())); $("wall").append(d); });
+    return;
+  }
+  const days = Math.ceil((OPENS - new Date()) / 864e5);
+  $("days").textContent = days + (days === 1 ? " day." : " days.");
+  $("count").textContent = v ? v.count + (v.count === 1 ? " MESSAGE INSIDE" : " MESSAGES INSIDE") : "";
+}
+draw(null);
+if (!API) { $("m").disabled = $("nm").disabled = $("send").disabled = true; $("m").placeholder = "opens soon."; $("info").hidden = true; }
+else fetch(API.replace(/\/$/, "") + "/capsule").then(r => r.json()).then(draw).catch(() => {});
+let sent = false; try { sent = !!localStorage.getItem("mn-capsule"); } catch (e) {}
+if (sent && !isOpen()) { $("f").hidden = true; $("count").after(el("p", "note", "your message is inside. see you in 2027.")); }
+$("f").onsubmit = async e => {
+  e.preventDefault();
+  const m = $("m").value.trim(); if (m.length < 2 || !API) return;
+  $("send").disabled = true; $("msg").textContent = "…";
+  try {
+    const r = await fetch(API.replace(/\/$/, "") + "/capsule", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ m, n: $("nm").value.trim() }) });
+    if (r.status === 429) { $("msg").textContent = "one a day. come back tomorrow."; return; }
+    if (!r.ok) throw 0;
+    try { localStorage.setItem("mn-capsule", "1"); } catch (err) {}
+    draw(await r.json()); $("f").hidden = true; $("count").after(el("p", "note", "locked in. see you in 2027."));
+  } catch (err) { $("msg").textContent = "didn't work. try again later."; }
+  finally { $("send").disabled = false; }
+};
+</script>
+</body>
+</html>

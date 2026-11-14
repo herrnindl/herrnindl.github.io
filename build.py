@@ -100,6 +100,20 @@ for p in out:
     if p["src"] in COLOUR:
         p["cm"] = COLOUR[p["src"]]
 
+# photos/faces.json: where the face is in each photo -> "f": [x, y, size] (0-1), so crops never cut the face off.
+# "nf": true = no clear face (back view, landscape, detail): fine in the galleries, left out of the games.
+FACES = {}
+if os.path.exists(os.path.join("photos", "faces.json")):
+    with open(os.path.join("photos", "faces.json")) as f:
+        FACES = json.load(f)
+for p in out:
+    fc = FACES.get(p["src"])
+    if fc:
+        if fc[2]:
+            p["f"] = fc[:3]
+        if not fc[3]:
+            p["nf"] = True
+
 # selected.txt: the photos that open the start page, in this order
 sel_path = os.path.join("photos", "selected.txt")
 if os.path.exists(sel_path):
