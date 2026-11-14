@@ -2,8 +2,8 @@
   MN. worker — one Cloudflare Worker with one KV namespace bound as DOTS. Three things:
 
   "leave a dot." (guestbook, start page)        path /
-  GET  → list of dots   [{ c: "#E9A283", n: "anna", t: 1731400000000 }, …]
-  POST → { c, n }       adds one dot, returns the new list
+  GET  → list of dots   [{ c: "#E9A283", t: 1731400000000 }, …]
+  POST → { c }          adds one dot (colour only, one per visitor per day), returns the new list
 
   "ask me." (ask.html)                          path /ask
   POST → { q }          stores the question privately (key "ask"). Nothing is shown on the site
@@ -14,7 +14,7 @@
   POST → { m, n }       stores one message (key "capsule")
   To read or delete questions/messages: Cloudflare → Workers & Pages → KV → DOTS → key "ask" / "capsule".
 
-  Stored per dot: colour, optional first name, time. Nothing else.
+  Stored per dot: colour and time. Nothing else.
   The visitor's IP is only used as a one-way hash for 24 h to stop spam, then deleted automatically.
   To remove a dot: Cloudflare → Workers & Pages → KV → DOTS → key "all" → edit the list.
 */
@@ -75,11 +75,10 @@ export default {
     if (req.method === "GET") return json(list);
     const c = String(body.c || "").toUpperCase();
     if (!COLOURS.includes(c)) return json({ error: "colour" }, 400);
-    const n = String(body.n || "").replace(/[^\p{L}\p{N} .\-_']/gu, "").trim().slice(0, 20);
 
     if (!(await limit("ip", 1))) return json({ error: "once a day" }, 429);
 
-    list.push({ c, n, t: Date.now() });
+    list.push({ c, t: Date.now() });
     while (list.length > MAX) list.shift();
     await env.DOTS.put("all", JSON.stringify(list));
     return json(list);
