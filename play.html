@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — play.</title>
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<script src="analytics.js"></script>
+<style>
+@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("fonts/inter-400.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-display: swap; src: url("fonts/inter-500.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 800; font-display: swap; src: url("fonts/jost-700.woff?v=1") format("woff"); }
+@font-face { font-family: "Bodoni Moda"; font-weight: 500; font-display: swap; src: url("fonts/bodoni-500.woff") format("woff"); }
+:root { --bg: #FFF8BB; --fg: #1C1C14; --soft: rgba(28,28,20,.62); --line: rgba(28,28,20,.16); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--fg); font-family: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif; font-size: 15px; line-height: 1.45; min-height: 100vh; min-height: 100dvh; transition: background-color .5s ease, color .5s ease; }
+button { font: inherit; color: inherit; cursor: pointer; }
+.wrap { max-width: 520px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
+header { display: flex; justify-content: space-between; align-items: center; }
+.mark { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: 30px; letter-spacing: .06em; line-height: 1; text-decoration: none; color: inherit; user-select: none; }
+.back { background: none; border: 0; font-size: 14px; color: var(--soft); padding: 6px 0; }
+.view { display: none; }
+.view.on { display: block; animation: fade .35s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+h1 { font-weight: 800; font-size: clamp(56px, 16vw, 84px); letter-spacing: -.055em; line-height: .9; margin: 34px 0 8px; }
+h2 { font-weight: 800; font-size: 34px; letter-spacing: -.045em; line-height: 1; margin: 22px 0 4px; }
+.sub { color: var(--soft); margin: 0 0 24px; }
+.card { display: block; width: 100%; text-align: left; background: none; border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; margin-bottom: 10px; transition: transform .15s ease, border-color .2s; }
+.card:hover { border-color: var(--fg); }
+.card:active { transform: scale(.985); }
+.card b { display: block; font-weight: 800; font-size: 24px; letter-spacing: -.04em; line-height: 1.05; margin-bottom: 4px; }
+.card span { color: var(--soft); font-size: 13px; }
+.btn { background: var(--fg); color: var(--bg); border: 0; border-radius: 999px; padding: 11px 22px; font-weight: 800; letter-spacing: -.02em; }
+.btn.ghost { background: none; color: var(--fg); border: 1px solid var(--fg); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
+.meta { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .2em; color: var(--soft); margin: 26px 0 12px; }
+.hint { color: var(--soft); font-size: 11px; letter-spacing: .24em; text-align: center; margin-top: 36px; opacity: .7; }
+
+/* who's that chapter? */
+.frame { position: relative; width: 100%; aspect-ratio: 4/5; border-radius: 16px; overflow: hidden; background: #1C1C14; margin-bottom: 14px; }
+.frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .9s cubic-bezier(.2,.8,.2,1), filter .9s ease; }
+.frame img.crop { filter: grayscale(1) contrast(1.1); }
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.choice { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 999px; border: 1px solid var(--line); background: none; text-align: left; font-weight: 500; }
+.choice i { width: 14px; height: 14px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+.choice.right { border-color: var(--fg); background: var(--fg); color: var(--bg); }
+.choice.wrong { opacity: .3; }
+.reveal { min-height: 58px; margin-top: 16px; }
+.reveal b { display: block; font-weight: 800; font-size: 30px; letter-spacing: -.045em; line-height: 1; }
+.reveal p { margin: 4px 0 0; color: var(--soft); }
+
+/* mix the colour */
+.swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.sw { aspect-ratio: 1; border-radius: 16px; position: relative; box-shadow: inset 0 0 0 1px var(--line); }
+.sw small { position: absolute; left: 12px; bottom: 10px; font-size: 11px; letter-spacing: .18em; mix-blend-mode: difference; color: #fff; }
+.slider { display: flex; align-items: center; gap: 12px; margin: 12px 0; }
+.slider label { width: 14px; font-weight: 800; }
+.slider output { width: 30px; text-align: right; font-variant-numeric: tabular-nums; color: var(--soft); font-size: 13px; }
+input[type=range] { flex: 1; -webkit-appearance: none; appearance: none; height: 8px; border-radius: 4px; outline: none; box-shadow: inset 0 0 0 1px var(--line); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 2px solid #1C1C14; }
+input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 2px solid #1C1C14; }
+.match { font-weight: 800; font-size: 56px; letter-spacing: -.055em; line-height: 1; margin: 6px 0 14px; font-variant-numeric: tabular-nums; }
+.mixphoto { width: 100%; aspect-ratio: 4/3; border-radius: 16px; overflow: hidden; background: #1C1C14; }
+.mixphoto img { width: 100%; height: 100%; object-fit: cover; transition: filter .25s; }
+
+/* catch the dot */
+.arena { position: relative; width: 100%; height: 60vh; min-height: 340px; border-radius: 16px; border: 1px solid var(--line); overflow: hidden; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.arena .ghost { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-family: "Bodoni Moda", Georgia, serif; font-size: 96px; letter-spacing: .06em; opacity: .08; pointer-events: none; }
+.dot { position: absolute; border-radius: 50%; background: var(--fg); transform: translate(-50%,-50%); transition: left .12s, top .12s, width .2s, height .2s; }
+.dot::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; }
+.arena .msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding: 20px; }
+.big { font-weight: 800; font-size: 72px; letter-spacing: -.055em; line-height: .9; font-variant-numeric: tabular-nums; }
+
+/* red. */
+#red { position: fixed; inset: 0; z-index: 50; background: #B3202A; color: #FFF8BB; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; }
+#red.on { display: flex; animation: redin 1.1s ease; }
+@keyframes redin { from { clip-path: circle(0% at 50% 50%); } to { clip-path: circle(150% at 50% 50%); } }
+#red .r { font-weight: 800; font-size: min(36vw, 220px); letter-spacing: -.06em; line-height: .85; }
+#red p { margin: 12px 0 0; font-size: 12px; letter-spacing: .26em; }
+#red .count { font-weight: 800; font-size: 22px; letter-spacing: -.03em; margin-top: 30px; }
+#red button { position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: 20px; background: none; border: 0; color: #FFF8BB; font-size: 22px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="mark" href="./" id="mark">MN.</a>
+    <button class="back" id="back" hidden>← play.</button>
+  </header>
+
+  <!-- start -->
+  <section class="view on" id="v-home">
+    <h1>play.</h1>
+    <p class="sub">three small games. one story in colours.</p>
+    <button class="card" data-go="chapter"><b>who's that chapter?</b><span>guess the colour behind the photo.</span></button>
+    <button class="card" data-go="mix"><b>mix the colour.</b><span>match a chapter. code-exact.</span></button>
+    <button class="card" data-go="dot"><b>catch the dot.</b><span>20 seconds. how many?</span></button>
+    <p class="hint">SOMETHING IS HIDDEN</p>
+  </section>
+
+  <!-- who's that chapter? -->
+  <section class="view" id="v-chapter">
+    <div class="meta"><span id="c-round">1 / 10</span><span id="c-score">0 RIGHT</span></div>
+    <div class="frame"><img id="c-img" alt=""></div>
+    <div class="choices" id="c-choices"></div>
+    <div class="reveal" id="c-reveal"></div>
+    <div class="row"><button class="btn" id="c-next" hidden>next</button></div>
+  </section>
+
+  <!-- mix the colour -->
+  <section class="view" id="v-mix">
+    <h2 id="m-title">mix the colour.</h2>
+    <p class="sub" id="m-sub">match the chapter on the left.</p>
+    <div class="swatches">
+      <div class="sw" id="m-target"><small>CHAPTER</small></div>
+      <div class="sw" id="m-yours"><small id="m-hex">#808080</small></div>
+    </div>
+    <div class="slider"><label>R</label><input type="range" id="m-r" min="0" max="255" value="128" aria-label="red"><output id="o-r">128</output></div>
+    <div class="slider"><label>G</label><input type="range" id="m-g" min="0" max="255" value="128" aria-label="green"><output id="o-g">128</output></div>
+    <div class="slider"><label>B</label><input type="range" id="m-b" min="0" max="255" value="128" aria-label="blue"><output id="o-b">128</output></div>
+    <div class="match" id="m-match">0%</div>
+    <div class="mixphoto"><img id="m-img" alt=""></div>
+    <div class="reveal" id="m-reveal"></div>
+    <div class="row"><button class="btn" id="m-lock">lock it in</button><button class="btn ghost" id="m-new" hidden>another one</button></div>
+  </section>
+
+  <!-- catch the dot -->
+  <section class="view" id="v-dot">
+    <div class="meta"><span id="d-time">20.0</span><span id="d-best">BEST 0</span></div>
+    <div class="arena" id="arena">
+      <span class="ghost">MN</span>
+      <div class="dot" id="dot" hidden></div>
+      <div class="msg" id="d-msg">
+        <div class="big" id="d-big">.</div>
+        <div id="d-text">tap the dot as often as you can.</div>
+        <button class="btn" id="d-start">start</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- red. (hidden: type "red" or tap MN. five times) -->
+<div id="red" aria-hidden="true">
+  <button id="red-close" aria-label="Close">✕</button>
+  <div class="r">red.</div>
+  <p>01.01.2027</p>
+  <p>TWO YEARS OF MN.</p>
+  <div class="count" id="red-count"></div>
+</div>
+
+<script>
+/* Same colours and lines as the chapters on the start page (index.html). red. stays hidden. */
+const CHAPTERS = [
+  { id: "ember",     label: "ember.",      bg: "#E9A283", fg: "#3A1E14", line: "the spark" },
+  { id: "ber",       label: "ber.",        bg: "#B8C98B", fg: "#234C3D", line: "septem·ber to decem·ber" },
+  { id: "vanilla-2", label: "vanilla. II", bg: "#B8B05F", fg: "#24220F", line: "i mog di" },
+  { id: "vanilla",   label: "vanilla.",    bg: "#FFF8BB", fg: "#1C1C14", line: "a new colour" },
+  { id: "grey",      label: "grey.",       bg: "#A9A9A9", fg: "#262626", line: "searching for vanilla" },
+  { id: "navy-blue", label: "navy blue.",  bg: "#343A4E", fg: "#E8EAF0", line: "the end?" },
+  { id: "lavendel",  label: "lavendel.",   bg: "#BAB6DE", fg: "#2A2342", line: "love" },
+  { id: "baby-blue", label: "baby blue.",  bg: "#91B2EB", fg: "#1D2547", line: "the beginning" },
+  { id: "white",     label: "white.",      bg: "#FFFFFF", fg: "#1A1A1A", line: "my first photoshoot" },
+  { id: "origin",    label: "origin.",     bg: "#000000", fg: "#FFFFFF", line: "my 22nd birthday" },
+];
+const HOME = { bg: "#FFF8BB", fg: "#1C1C14" };
+const ROUNDS = 10, DOT_SECONDS = 20;
+const RED_DATE = new Date("2027-01-01T00:00:00+01:00");
+
+const $ = id => document.getElementById(id);
+const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const rgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+const toHex = (r, g, b) => "#" + [r, g, b].map(v => v.toString(16).padStart(2, "0")).join("").toUpperCase();
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+function paint(c) {
+  c = c || HOME;
+  const [r, g, b] = rgb(c.fg), s = document.documentElement.style;
+  s.setProperty("--bg", c.bg); s.setProperty("--fg", c.fg);
+  s.setProperty("--soft", `rgba(${r},${g},${b},.62)`); s.setProperty("--line", `rgba(${r},${g},${b},.18)`);
+  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = c.bg;
+}
+
+/* ---------- photos: the same photos.json the start page uses ---------- */
+let pool = [];
+function standIn(c) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500"><rect width="400" height="500" fill="${c.bg}"/><circle cx="200" cy="190" r="70" fill="${c.fg}" opacity=".85"/><path d="M60 500C70 330 330 330 340 500Z" fill="${c.fg}" opacity=".85"/></svg>`;
+  return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+}
+const big = p => p.thumb2 || p.thumb || p.src;
+const photoFor = id => { const l = pool.filter(p => p.chapter === id); return l.length ? big(l[Math.floor(Math.random() * l.length)]) : standIn(byId[id]); };
+const ready = fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(list => {
+  pool = list.filter(p => !p.video && byId[p.chapter]);
+}).catch(() => {}).then(() => {
+  if (!pool.length) pool = CHAPTERS.map(c => ({ chapter: c.id, src: standIn(c) }));
+});
+
+/* ---------- navigation ---------- */
+function go(name) {
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + name));
+  $("back").hidden = name === "home";
+  paint(); stopDot();
+  if (name === "chapter") ready.then(startChapter);
+  if (name === "mix") ready.then(newMix);
+  if (name === "dot") resetDot();
+  history.replaceState(null, "", name === "home" ? location.pathname : "#" + name);
+  scrollTo(0, 0);
+}
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
+$("back").onclick = () => go("home");
+
+/* ---------- 1. who's that chapter? ---------- */
+let rounds = [], ri = 0, score = 0;
+function startChapter() {
+  /* one photo per chapter first, so every round is a different colour where possible */
+  const per = shuffle(CHAPTERS).map(c => shuffle(pool.filter(p => p.chapter === c.id))[0]).filter(Boolean);
+  rounds = per.concat(shuffle(pool.filter(p => !per.includes(p)))).slice(0, Math.min(ROUNDS, pool.length));
+  rounds = shuffle(rounds);
+  ri = 0; score = 0;
+  $("c-next").onclick = next;
+  showRound();
+}
+function showRound() {
+  paint();
+  const p = rounds[ri], img = $("c-img");
+  $("c-round").textContent = `${ri + 1} / ${rounds.length}`;
+  $("c-score").textContent = `${score} RIGHT`;
+  $("c-reveal").textContent = ""; $("c-next").hidden = true;
+  img.style.transition = "none";
+  img.className = "crop";
+  img.style.transform = `scale(3.2) translate(${(Math.random() * 30 - 15).toFixed(1)}%, ${(Math.random() * 30 - 15).toFixed(1)}%)`;
+  img.src = big(p);
+  void img.offsetWidth; img.style.transition = "";
+  const options = shuffle([byId[p.chapter], ...shuffle(CHAPTERS.filter(c => c.id !== p.chapter)).slice(0, 3)]);
+  const box = $("c-choices"); box.textContent = "";
+  options.forEach(c => {
+    const b = document.createElement("button");
+    b.className = "choice"; b.dataset.id = c.id;
+    b.innerHTML = `<i style="background:${c.bg}"></i>${c.label}`;
+    b.onclick = () => answer(c.id);
+    box.appendChild(b);
+  });
+}
+function answer(id) {
+  const p = rounds[ri], c = byId[p.chapter];
+  if (id === p.chapter) score++;
+  document.querySelectorAll(".choice").forEach(b => { b.disabled = true; b.classList.add(b.dataset.id === p.chapter ? "right" : "wrong"); });
+  const img = $("c-img"); img.className = ""; img.style.transform = "none";
+  paint(c);
+  $("c-score").textContent = `${score} RIGHT`;
+  $("c-reveal").innerHTML = `<b>${c.label}</b><p>${c.line}</p>`;
+  $("c-next").textContent = ri === rounds.length - 1 ? "see score" : "next";
+  $("c-next").hidden = false;
+}
+function next() {
+  if (ri < rounds.length - 1) { ri++; showRound(); return; }
+  paint();
+  const n = rounds.length, pct = score / n;
+  const verdict = pct === 1 ? "you know the whole story." : pct >= .7 ? "you know the story." : pct >= .4 ? "you know some chapters." : "start from origin.";
+  $("c-img").removeAttribute("src"); $("c-choices").textContent = "";
+  $("c-round").textContent = "DONE";
+  $("c-reveal").innerHTML = `<b style="font-size:64px">${score}/${n}</b><p>${verdict}</p>`;
+  $("c-next").textContent = "play again"; $("c-next").onclick = startChapter;
+}
+
+/* ---------- 2. mix the colour ---------- */
+let target = null;
+function newMix() {
+  const prev = target;
+  do { target = CHAPTERS[Math.floor(Math.random() * CHAPTERS.length)]; } while (prev && target.id === prev.id);
+  ["r", "g", "b"].forEach(k => { $("m-" + k).value = 128; $("m-" + k).disabled = false; });
+  $("m-target").style.background = target.bg;
+  $("m-title").textContent = "mix the colour.";
+  $("m-sub").textContent = "match the chapter on the left.";
+  $("m-img").src = photoFor(target.id);
+  $("m-reveal").textContent = "";
+  $("m-lock").hidden = false; $("m-new").hidden = true;
+  paint(); updateMix();
+}
+const mix = () => ["r", "g", "b"].map(k => +$("m-" + k).value);
+function matchPct() { const [a, b, c] = mix(), [x, y, z] = rgb(target.bg); return Math.max(0, Math.round(100 - Math.hypot(a - x, b - y, c - z) / 2.2)); }
+function updateMix() {
+  const v = mix(), hex = toHex(...v);
+  $("m-yours").style.background = hex; $("m-hex").textContent = hex;
+  ["r", "g", "b"].forEach((k, i) => {
+    $("o-" + k).textContent = v[i];
+    const lo = v.slice(), hi = v.slice(); lo[i] = 0; hi[i] = 255;
+    $("m-" + k).style.background = `linear-gradient(90deg, ${toHex(...lo)}, ${toHex(...hi)})`;
+  });
+  const pct = matchPct();
+  $("m-match").textContent = pct + "%";
+  $("m-img").style.filter = `blur(${((100 - pct) / 4).toFixed(1)}px) saturate(${(pct / 100).toFixed(2)})`;
+}
+["r", "g", "b"].forEach(k => $("m-" + k).addEventListener("input", updateMix));
+$("m-lock").onclick = () => {
+  const pct = matchPct();
+  ["r", "g", "b"].forEach(k => $("m-" + k).disabled = true);
+  $("m-img").style.filter = "none";
+  paint(target);
+  $("m-title").textContent = target.label;
+  $("m-sub").textContent = target.line;
+  const verdict = pct === 100 ? "code-exact." : pct >= 95 ? "almost exact." : pct >= 85 ? "close." : "not quite.";
+  $("m-reveal").innerHTML = `<b>${verdict}</b><p>chapter ${target.bg} · yours ${toHex(...mix())}</p>`;
+  $("m-lock").hidden = true; $("m-new").hidden = false;
+};
+$("m-new").onclick = newMix;
+
+/* ---------- 3. catch the dot ---------- */
+let dScore = 0, dEnd = 0, dTimer = null, dSize = 34;
+const best = () => +(store.get("mn-dot-best") || 0);
+function resetDot() {
+  $("d-best").textContent = "BEST " + best();
+  $("d-time").textContent = DOT_SECONDS.toFixed(1);
+  $("dot").hidden = true; $("d-msg").hidden = false;
+  $("d-big").textContent = ".";
+  $("d-text").textContent = "tap the dot as often as you can.";
+  $("d-start").textContent = "start";
+}
+function moveDot() {
+  const a = $("arena").getBoundingClientRect(), pad = 32, d = $("dot");
+  d.style.width = d.style.height = dSize + "px";
+  d.style.left = (pad + Math.random() * (a.width - pad * 2)) + "px";
+  d.style.top = (pad + Math.random() * (a.height - pad * 2)) + "px";
+}
+function startDot() {
+  dScore = 0; dSize = 34; dEnd = performance.now() + DOT_SECONDS * 1000;
+  $("d-msg").hidden = true; $("dot").hidden = false; moveDot();
+  clearInterval(dTimer);
+  dTimer = setInterval(() => {
+    const left = Math.max(0, (dEnd - performance.now()) / 1000);
+    $("d-time").textContent = left.toFixed(1);
+    if (left <= 0) endDot();
+  }, 50);
+}
+function endDot() {
+  stopDot();
+  $("dot").hidden = true; $("d-msg").hidden = false;
+  const b = best(), record = dScore > b;
+  if (record) store.set("mn-dot-best", dScore);
+  $("d-best").textContent = "BEST " + Math.max(b, dScore);
+  $("d-big").textContent = dScore;
+  $("d-text").textContent = record && dScore > 0 ? "new best." : dScore === 1 ? "dot." : "dots.";
+  $("d-start").textContent = "again";
+}
+function stopDot() { clearInterval(dTimer); dTimer = null; }
+$("dot").addEventListener("pointerdown", e => {
+  e.preventDefault();
+  if (!dTimer) return;
+  dScore++; dSize = Math.max(14, 34 - dScore * .8); moveDot();
+});
+$("d-start").onclick = startDot;
+
+/* ---------- red. ---------- */
+function openRed() {
+  const days = Math.ceil((RED_DATE - new Date()) / 86400000);
+  $("red-count").textContent = days > 1 ? days + " days." : days === 1 ? "tomorrow." : "now.";
+  $("red").classList.add("on");
+}
+$("red-close").onclick = () => $("red").classList.remove("on");
+let keys = "";
+addEventListener("keydown", e => {
+  if (e.key && e.key.length === 1) { keys = (keys + e.key.toLowerCase()).slice(-3); if (keys === "red") openRed(); }
+  if (e.key === "Escape") $("red").classList.remove("on");
+});
+/* one tap on MN. goes home; five quick taps open red. */
+let taps = 0, tapTimer = null;
+$("mark").addEventListener("click", e => {
+  e.preventDefault();
+  taps++; clearTimeout(tapTimer);
+  if (taps >= 5) { taps = 0; openRed(); return; }
+  tapTimer = setTimeout(() => { if (taps === 1) location.href = "./"; taps = 0; }, 450);
+});
+
+const start = location.hash.slice(1);
+go(["chapter", "mix", "dot"].includes(start) ? start : "home");
+</script>
+</body>
+</html>

@@ -727,9 +727,21 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .hofhead.sec b, .hofhead.sec h2 b { font-weight: 800; font-size: 11px; color: var(--fg); letter-spacing: .1em; }
 .whead h2 { margin: 0; font: inherit; letter-spacing: inherit; display: flex; gap: 14px; align-items: baseline; }
 #tlHead { display: none !important; }
+/* start page: link to the games (play.html) */
+.playcard { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; max-width: 520px; padding: 10px; border-radius: 14px; border: 1px solid var(--line); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .3s cubic-bezier(.2,.7,.2,1); }
+.playcard:hover { border-color: var(--fg); transform: translateY(-2px); }
+.playcard small { font-size: 11px; letter-spacing: .22em; color: var(--soft); }
+.playcard b { display: block; font-weight: 800; font-size: 24px; letter-spacing: -.04em; line-height: 1.05; margin-top: 2px; }
+.playcard em { font-style: normal; font-size: 13px; color: var(--soft); }
+.pdots { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 96px; height: 96px; padding: 14px; border-radius: 8px; background: var(--fg); }
+.pdots i { border-radius: 50%; animation: pdot 4s ease-in-out infinite; }
+.pdots i:nth-child(1) { background: #91B2EB; } .pdots i:nth-child(2) { background: #BAB6DE; animation-delay: -1s; }
+.pdots i:nth-child(3) { background: #B8C98B; animation-delay: -2s; } .pdots i:nth-child(4) { background: #E9A283; animation-delay: -3s; }
+@keyframes pdot { 0%, 100% { transform: scale(.72); } 50% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .pdots i { animation: none; } }
 .duo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin-top: 10px; }
 .duo > [hidden] { display: none; }
-@media (min-width: 760px) { .duo { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); } .duo .wrapcard, .duo .otd { max-width: none; } }
+@media (min-width: 760px) { .duo { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); } .duo .wrapcard, .duo .otd, .duo .playcard { max-width: none; } }
 .next { margin-top: 18px; }
 .next b i { font-style: normal; }
 @media (prefers-reduced-motion: reduce) { .hof button { transition: none; } }
@@ -806,6 +818,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="duo">
     <button class="wrapcard" id="wrapCard" type="button" hidden><span class="wphone" aria-hidden="true"><span class="wpbars"><i></i><i></i><i></i><i></i><i></i></span><span class="wpname"></span></span><span class="wtxt"><small>MN. WRAPPED</small><b>2026<i>.</i></b><em>my year in colours. tap to play.</em><span class="wdots"></span></span></button>
     <div class="otd" id="otd" hidden></div>
+    <a class="playcard" id="playCard" href="play.html" hidden><span class="pdots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><small>PLAY.</small><b>who's that chapter?</b><em>three small games. something is hidden.</em></span></a>
   </div>
   <h2 class="hofhead sec" id="hofHead" hidden><b>02</b>the chapters.</h2>
   <div class="hofhead" id="tlHead" hidden>the timeline.</div>
@@ -1746,7 +1759,7 @@ function openWrapped() {
   show(0); raf = requestAnimationFrame(tick); W.lastFocus = document.activeElement; x.focus();
 }
 $("wrapCard").onclick = openWrapped;
-function renderWrapCard() { $("wrapCard").hidden = !(view === "colours" && filter === "all"); }
+function renderWrapCard() { $("wrapCard").hidden = $("playCard").hidden = !(view === "colours" && filter === "all"); }
 /* the wrapped card cycles through the year's chapters, like the stories inside it */
 (function wrapLoop() {
   const card = $("wrapCard"), name = card.querySelector(".wpname"), bars = [...card.querySelectorAll(".wpbars i")], dots = card.querySelector(".wdots");
