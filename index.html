@@ -471,7 +471,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .film .fbomb { position: absolute; border-radius: 50%; will-change: transform; backface-visibility: hidden; }
 .film .fin { grid-area: 1 / 1; position: relative; z-index: 1; display: grid; justify-items: center; gap: 12px; text-align: center; padding: 24px; }
 .film .fph { width: min(54vw, 300px); aspect-ratio: 4 / 5; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); will-change: transform, opacity; }
-.film .fph img { width: 100%; height: 100%; object-fit: cover; display: block; will-change: transform; }
+.film .fph img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .film .fdates { font-size: 12px; letter-spacing: .3em; opacity: .8; }
 .film b { font-weight: 800; font-size: clamp(56px, 16vw, 150px); letter-spacing: -.06em; line-height: .86; padding-bottom: .16em; white-space: nowrap; will-change: transform; }
 .film b .fc { display: inline-block; white-space: pre; font-style: normal; will-change: transform, opacity; }
@@ -504,6 +504,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .places .pd:hover circle { r: 14; }
 .places .home { font-size: 15px; letter-spacing: .2em; fill: var(--fg); }
 .embed.plist { height: 352px; max-width: 640px; }
+.reveal-btn b.mnlogo { font-family: "Bodoni Moda", "Bodoni 72", Didot, serif; font-weight: 500; letter-spacing: .04em; font-size: clamp(44px, 11vw, 72px); line-height: 1; }
 /* on this day */
 .otd { margin-top: 0; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; max-width: 520px; padding: 10px; border-radius: 14px; border: 1px solid var(--line); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; width: 100%; }
 .otd img { width: 96px; height: 120px; object-fit: cover; border-radius: 8px; display: block; }
@@ -631,8 +632,8 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
 .gate .glinks a { text-decoration: none; border-bottom: 1px solid rgba(28,28,20,.25); }
 @media (prefers-reduced-motion: reduce) { .gate .gdots i, .gate .shake { animation: none; } }
 
-/* journal titles: the dot takes the colour of the post's chapter */
-.jdot { color: var(--jd); }
+/* journal titles: the dot has the colour of the text, like everywhere */
+.jdot { color: inherit; }
 /* now. */
 .now { margin: 0; font-size: 14px; color: var(--soft); }
 .now b { color: var(--fg); font-weight: 800; letter-spacing: -.02em; margin-right: 6px; }
@@ -852,7 +853,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="places" id="places"></div>
     <div class="plabel">THE SOUNDTRACK</div>
     <div class="embed plist" data-embed="https://open.spotify.com/embed/playlist/0ikp5Gii48zfVnC9Ybgvkt?utm_source=generator" data-title="MN. playlist on Spotify">
-      <button class="reveal-btn" type="button"><b>MN.</b><span>colors, memories, and moments — the sound behind the name.</span><em>tap to load the playlist</em><small>loads spotify · spotify sets cookies</small></button>
+      <button class="reveal-btn" type="button"><b class="mnlogo">MN.</b><span>colors, memories, and moments — the sound behind the name.</span><em>tap to load the playlist</em><small>loads spotify · spotify sets cookies</small></button>
     </div>
   </section>
 
@@ -890,7 +891,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <h2>Model &amp; MN.</h2>
     <div class="row"><div class="when">01/2025 – heute</div><div class="what"><b>MN.</b><span>Eigene Marke als Model und Creator</span></div></div>
     <div class="row"><div class="when">10/2026</div><div class="what"><b>Erster Catwalk</b><span>s.Oliver Modenschau bei INTERSPORT Harms, Neukirchen</span></div></div>
-    <div class="row"><div class="when">2024 – 2026</div><div class="what"><b>Presse</b><span>Platzhirsch (Single des Monats, 2024), Bezirkszeitung (2026)</span></div></div>
+    <div class="row"><div class="when">2024 – 2026</div><div class="what"><b>Presse</b><span>Platzhirsch (Mächtige Mähnen und Single des Monats, 2024), Bezirkszeitung (2026)</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Berufserfahrung</h2>
@@ -1598,7 +1599,6 @@ function playFilm() {
     t += ls.length * 42 + 180;
     if (!only) k.dot.animate([{ opacity: 0, transform: "scale(0)" }, { opacity: 1, transform: "scale(1.35)", offset: .6 }, {}], { duration: 420, delay: t, easing: "ease-out", fill: "backwards" });
     k.meta.forEach((x, n) => x.animate([{ opacity: 0, transform: "translateY(12px)" }, {}], { duration: 800, delay: at + 260 + n * 110, easing: IN, fill: "backwards" }));
-    if (k.im) k.im.animate([{ transform: "scale(1.09)" }, { transform: "scale(1)" }], { duration: 5200, delay: at, easing: "cubic-bezier(.2,.6,.2,1)", fill: "both" });   /* the photo slowly settles */
   };
   /* where the ink of the dot really is: its exact centre and size, whatever the layout (photo or not, long name or short) */
   const dotInk = k => {
@@ -1652,7 +1652,6 @@ function playFilm() {
       const fresh = k.toks.slice(0, at).reverse().concat(k.toks.slice(at + old.toks.length));   /* the letter next to the word comes first */
       fresh.forEach((x, n) => x.animate([{ opacity: 0, transform: `translateX(${k.toks.indexOf(x) < at ? "-.3em" : ".3em"})` }, {}], { duration: 700, delay: 850 + n * 110, easing: IN, fill: "backwards" }));
       k.meta.forEach((x, n) => x.animate([{ opacity: 0, transform: "translateY(12px)" }, {}], { duration: 800, delay: 1250 + n * 110, easing: IN, fill: "backwards" }));
-      if (k.im) k.im.animate([{ transform: "scale(1.09)" }, { transform: "scale(1)" }], { duration: 5200, delay: 1250, easing: "cubic-bezier(.2,.6,.2,1)", fill: "both" });
       await wait(1350); if (dead) return k; swap(w); await wait(700);
     } else {   /* spark */
       leave(old.meta);
@@ -1961,9 +1960,11 @@ function renderOne() {
 function renderTable() {
   const wall = $("wall"), t = el("div", "table"); t.append(el("div", "hint", "DRAG THE PRINTS · TAP TO OPEN"));
   wall.append(t);
-  const ps = W.items.filter(it => it.p && !it.p.video).map(it => it.p).slice(0, 36);
   const Wd = t.clientWidth, Ht = t.clientHeight, cw = Wd < 600 ? 118 : 196;
-  const cols = Math.max(2, Math.floor(Wd / (cw * .8))), rows = Math.ceil(ps.length / cols);
+  const cols = Math.max(2, Math.floor(Wd / (cw * .8)));
+  let ps = W.items.filter(it => it.p && !it.p.video).map(it => it.p).slice(0, 36);
+  if (ps.length > cols) ps = ps.slice(0, Math.floor(ps.length / cols) * cols);   /* only full rows, so no print is left alone in a corner */
+  const rows = Math.ceil(ps.length / cols);
   let z = ps.length + 1;
   ps.forEach((p, k) => {
     const h = cw * ((p.h && p.w) ? p.h / p.w : 1.25) + 33;
