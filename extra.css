@@ -14,7 +14,8 @@ a { color: inherit; }
 .wrap { max-width: 520px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
 header { display: flex; justify-content: space-between; align-items: center; }
 .mark { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: 30px; letter-spacing: .06em; line-height: 1; text-decoration: none; }
-.more { display: flex; gap: 14px; font-size: 13px; color: var(--soft); flex-wrap: wrap; justify-content: flex-end; }
+.more { display: flex; gap: 16px; font-size: 13px; color: var(--soft); white-space: nowrap; overflow-x: auto; scrollbar-width: none; margin: 14px -18px 0; padding: 0 18px 2px; }
+.more::-webkit-scrollbar { display: none; }
 .more a { text-decoration: none; }
 .more a[aria-current] { color: var(--fg); font-weight: 800; }
 h1 { font-weight: 800; font-size: clamp(56px, 16vw, 84px); letter-spacing: -.055em; line-height: .9; margin: 34px 0 8px; }

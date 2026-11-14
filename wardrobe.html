@@ -55,11 +55,12 @@ loadPhotos().then(list => {
     .forEach(([k, ps]) => {
       const c = byId[ps[0].chapter], box = el("section", "look");
       const h = el("h2"); const dot = el("i"); dot.style.background = c.bg; h.append(dot, c.label); box.append(h);
-      const who = (ps[0].credit || "").replace(/\s*@\S+/, "");
+      const who = (ps[0].credit || "").replace(/\s*@\S+/, "") || (ps[0].credit || "").replace("@", "");
       box.append(el("div", "small", [ps[0].date, who ? "PHOTOS " + who.toUpperCase() : ""].filter(Boolean).join(" · ")));
       const g = el("div", "pics");
-      ps.filter(p => p.f && !p.nf).sort((a, b) => b.f[2] - a.f[2]).filter((p, i, arr) => i === arr.findIndex(q => q.src.replace(/(x?sw|swe|[abc])?\.\w+$/, "") === p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""))).slice(0, 3)
-        .forEach(p => { const im = el("img"); im.alt = c.label + " outfit"; im.loading = "lazy"; im.style.objectPosition = (p.f[0] * 100) + "% " + (p.f[1] * 100 + 8) + "%"; im.src = p.thumb || p.src; g.append(im); });
+      ps.filter(p => p.f).sort((a, b) => a.f[2] - b.f[2])   /* smallest face first = most of the outfit */
+        .filter((p, i, arr) => i === arr.findIndex(q => q.src.replace(/(x?sw|swe|[abc])?\.\w+$/, "") === p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""))).slice(0, 3)
+        .forEach(p => { const im = el("img"); im.alt = c.label + " outfit"; im.loading = "lazy"; im.style.objectPosition = (p.f[0] * 100) + "% " + Math.min(100, p.f[1] * 100 + 25) + "%"; im.src = p.thumb || p.src; g.append(im); });
       box.append(g);
       const t = LOOKS[k] || [];
       if (t.length) { const tg = el("div", "tags"); t.forEach(b => tg.append(el("span", null, b))); box.append(tg); }

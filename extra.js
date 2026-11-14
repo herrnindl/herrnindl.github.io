@@ -33,6 +33,7 @@ function paint(c) {
   const pages = [["play.html", "play."], ["now.html", "now."], ["glowup.html", "glow up."], ["wardrobe.html", "wardrobe."], ["ask.html", "ask me."], ["capsule.html", "time capsule."]];
   const nav = document.querySelector("nav.more");
   if (nav) pages.forEach(([href, label]) => { const a = el("a", null, label); a.href = href; if (href === here) a.setAttribute("aria-current", "page"); nav.append(a); });
+  const cur = nav && nav.querySelector("[aria-current]"); if (cur) nav.scrollLeft = Math.max(0, cur.offsetLeft - nav.clientWidth / 2 + cur.offsetWidth / 2);
   const foot = document.querySelector("footer.foot");
   if (foot) foot.innerHTML = '<span>© 2026 MN. · designed &amp; built by markus nindl.</span><span><a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span>';
 })();

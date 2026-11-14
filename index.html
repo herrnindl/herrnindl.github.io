@@ -314,8 +314,8 @@ body::before { content: ""; position: fixed; inset: -50%; z-index: -1; pointer-e
 .lang button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 .bkmain { display: grid; gap: 14px; min-width: 0; }
 .bkpic { margin: 0; }
-.bkpic img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 22%; border-radius: 14px; display: block; }
-@media (max-width: 899px) { .bkpic img { aspect-ratio: 4 / 3; object-position: 50% 18%; } }
+.bkpic img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 22%; border-radius: 14px; display: block; }
+@media (max-width: 899px) { .bkpic img { aspect-ratio: 1; object-position: 50% 6%; } }
 @media (min-width: 900px) {
   .bk { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 14px 56px; align-items: start; }
   .bkpic { grid-column: 2; grid-row: 1 / span 20; position: sticky; top: 90px; }
@@ -926,7 +926,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <h2>Model &amp; MN.</h2>
     <div class="row"><div class="when">01/2025 – heute</div><div class="what"><b>MN.</b><span>Eigene Marke als Model und Creator</span></div></div>
     <div class="row"><div class="when">10/2026</div><div class="what"><b>Erster Catwalk</b><span>s.Oliver Modenschau bei INTERSPORT Harms, Neukirchen</span></div></div>
-    <div class="row"><div class="when">2024 – 2026</div><div class="what"><b>Presse</b><span>Platzhirsch (Mächtige Mähnen und Single des Monats, 2024), Bezirkszeitung (2026)</span></div></div>
+    <div class="row"><div class="when">2024 – 2026</div><div class="what"><b>Presse</b><span>Platzhirsch (Mächtige Mähnen und Single des Monats, 2024 · Leserecho, 2025), Bezirkszeitung (2026)</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Berufserfahrung</h2>
@@ -1741,7 +1741,7 @@ function wrapSlides() {
     const rc = recapMonths().filter(r => r.chapter === c.id && !r.placeholder).slice(0, 3);
     S.push({ bg: c.bg, fg: c.fg, d: c.dot === c.bg ? c.fg : c.dot, chapter: c, covers: rc, html: [["small", "CHAPTER " + String(k + 1).padStart(2, "0") + " · " + c.dates.toUpperCase()], ["h2", c.name, ".", c.suffix || ""], ["p", c.line + (c.place ? " · " + c.place : "")]] });
   });
-  S.push({ bg: ink, fg: van, d: "#E9A283", html: [["small", "SINCE 01.01.2025"], ["div.big", photos.length + ""], ["h3", "photos", "."], ["p", cr.length + " photographers. " + document.querySelectorAll(".press li").length + " times in print. " + RUNWAYS + " runway."]] });
+  S.push({ bg: ink, fg: van, d: "#E9A283", html: [["small", "SO FAR"], ["div.big", photos.length + ""], ["h3", "photos", "."], ["p", cr.length + " photographers. " + document.querySelectorAll(".press li").length + " times in print. " + RUNWAYS + " runway."]] });
   if (top) S.push({ bg: "#91B2EB", fg: "#1D2547", d: "#BAB6DE", html: [["small", "MOST PHOTOGRAPHED BY"], ["h3", top.name.toLowerCase(), "."], ["p", top.list.length + " photos together" + (top.handle ? " · @" + top.handle : "") + "."]] });
   if (far) S.push({ bg: byId[far[0].id].bg, fg: byId[far[0].id].fg, d: byId[far[0].id].dot, html: [["small", "FURTHEST FROM HOME"], ["h2", far[0].name, "."], ["p", Math.round(far[1]).toLocaleString("de-AT") + " km from pinzgau. " + byId[far[0].id].label]] });
   S.push({ bg: "#B8C98B", fg: "#234C3D", d: "#E9A283", html: [["small", "30.10." + Y], ["h3", "first runway", "."], ["p", "s.Oliver × INTERSPORT Harms, neukirchen. the start of something."]] });
