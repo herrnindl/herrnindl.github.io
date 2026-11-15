@@ -119,6 +119,7 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 
 .views { display: flex; gap: 18px; padding-block: 4px 0; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * max(18px, env(safe-area-inset-left, 0px))); padding-inline: max(18px, env(safe-area-inset-left, 0px)); }
 .views::-webkit-scrollbar { display: none; }
+a.view { text-decoration: none; display: inline-block; }
 .view { flex: none; white-space: nowrap; background: none; border: 0; padding: 4px 0; font-size: 15px; font-weight: 500; letter-spacing: -.01em; color: var(--soft); border-bottom: 2px solid transparent; }
 .view[aria-current="true"] { color: var(--fg); border-color: var(--fg); }
 
@@ -186,6 +187,11 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .about h2 { margin: 0; font-weight: 800; font-size: clamp(36px, 7vw, 64px); letter-spacing: -.05em; line-height: .95; }
 .about h2 .dot { color: var(--dot); }
 .about .text { margin: 0; font-size: clamp(18px, 2.6vw, 22px); letter-spacing: -.015em; max-width: 34ch; text-wrap: pretty; }
+.donate { display: grid; gap: 2px; max-width: 520px; margin: 18px 0 6px; padding: 16px 18px; border-radius: 14px; background: #0E478F; color: #FFFFFF; text-decoration: none; }
+.donate small { font-size: 10px; letter-spacing: .24em; opacity: .75; }
+.donate b { font-weight: 800; font-size: 30px; letter-spacing: -.045em; line-height: 1; }
+.donate b i { font-style: normal; color: inherit; }
+.donate span { font-size: 13px; opacity: .85; }
 .facts { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; letter-spacing: .22em; color: var(--soft); }
 .press { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 0; max-width: 560px; }
 .press li { display: grid; grid-template-columns: 4.5em 1fr; gap: 12px; padding-block: 10px; border-top: 1px solid var(--line); }
@@ -221,7 +227,9 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .cv .what span { color: var(--soft); font-size: 14px; }
 @media (max-width: 480px) { .cv .row { grid-template-columns: 1fr; } }
 /* Lebenslauf: each company in its own colour (taken from its website / logo), as a marker so yellow stays readable */
-.cv .what b.co { justify-self: start; width: fit-content; background: var(--c); color: var(--t); padding: 2px 9px 3px; border-radius: 6px; margin-bottom: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.cv .what a.co { display: block; font-weight: 500; text-decoration: none; }
+.cv .what a.co i { font-style: normal; font-size: .8em; margin-left: 5px; opacity: .7; }
+.cv .what .co { justify-self: start; width: fit-content; background: var(--c); color: var(--t); padding: 2px 9px 3px; border-radius: 6px; margin-bottom: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .worked { display: grid; gap: 12px; max-width: 640px; }
 .worked div { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 12px; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
 .worked span { font-size: 12px; letter-spacing: .16em; color: var(--soft); }
@@ -328,8 +336,8 @@ body::before { content: ""; position: fixed; inset: -50%; z-index: -1; pointer-e
 .lang button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 .bkmain { display: grid; gap: 14px; min-width: 0; }
 .bkpic { margin: 0; }
-.bkpic img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 22%; border-radius: 14px; display: block; }
-@media (max-width: 899px) { .bkpic img { aspect-ratio: 1; object-position: 50% 6%; } }
+.bkpic img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 38%; border-radius: 14px; display: block; }
+@media (max-width: 899px) { .bkpic img { aspect-ratio: 1; object-position: 50% 30%; } }
 @media (min-width: 900px) {
   .bk { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 14px 56px; align-items: start; }
   .bkpic { grid-column: 2; grid-row: 1 / span 20; position: sticky; top: 90px; }
@@ -456,7 +464,14 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .wslide h2 i, .wslide h3 i { font-style: normal; color: var(--wd); }
 .wslide h3 { margin: 0; font-weight: 800; font-size: clamp(40px, 11vw, 84px); letter-spacing: -.055em; line-height: .9; }
 .wslide p { margin: 0; font-size: clamp(17px, 4.4vw, 22px); letter-spacing: -.015em; opacity: .9; max-width: 30ch; }
-.wslide p.one { max-width: none; }   /* one fact per line, never split */
+.wslide p.one { max-width: none; }
+.wslide .wstrip { display: flex; height: 64px; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 22%, transparent); }
+.wslide .wstrip i { flex-basis: 0; min-width: 4px; transform-origin: left; animation: wgrow .9s cubic-bezier(.2,.7,.2,1) both; }
+.wslide .wstrip i:nth-child(2) { animation-delay: .12s; } .wslide .wstrip i:nth-child(3) { animation-delay: .24s; } .wslide .wstrip i:nth-child(4) { animation-delay: .36s; } .wslide .wstrip i:nth-child(5) { animation-delay: .48s; } .wslide .wstrip i:nth-child(6) { animation-delay: .6s; }
+@keyframes wgrow { from { transform: scaleX(0); } }
+.wslide .wlist span { margin-left: auto; opacity: .7; font-size: .85em; }
+.wslide .wend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.wslide .wend .sharebtn:first-child { background: var(--wf); color: var(--wb); border-color: var(--wf); font-weight: 800; }   /* one fact per line, never split */
 .wslide p.one + p.one { margin-top: -10px; }
 .wslide .wlist { display: grid; gap: 8px; font-size: clamp(16px, 4.2vw, 20px); }
 .wslide .wlist div { display: flex; align-items: center; gap: 10px; }
@@ -594,20 +609,23 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .stone i { font-style: normal; margin: 0 .04em; }
 .mntile.light { background: #FFF8BB; color: #1C1C14; box-shadow: inset 0 0 0 1px rgba(28,28,20,.14); }
 .nametile { height: 380px; border-radius: 14px; overflow: hidden; display: grid; place-items: center; background: #FFFFFF; color: #0F1419; box-shadow: inset 0 0 0 1px rgba(28,28,20,.1); }
+.nametile { position: relative; text-decoration: none; }
+.nametile small { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; font-size: 12px; letter-spacing: .04em; color: #536471; }
 .nametile span { font-weight: 800; font-size: clamp(30px, 7vw, 52px); letter-spacing: -.035em; }
 .nametile i, .dotonly i { font-style: normal; color: inherit; }
 .dotonly span { font-size: clamp(54px, 15vw, 120px); }
 .istory small { font-size: 11px; letter-spacing: .22em; color: var(--soft); text-transform: uppercase; }
 .istory h3 { margin: 0; font-weight: 800; font-size: clamp(30px, 6vw, 48px); letter-spacing: -.05em; line-height: .95; }
 .istory h3 i { font-style: normal; color: inherit; }
-.typetile { position: relative; height: 380px; border-radius: 14px; overflow: hidden; background: var(--fg); box-sizing: border-box; }
-.typetile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }
-.typetile span { position: absolute; top: 20px; right: 22px; color: #fff; font-weight: 800; font-size: clamp(20px, 2.6vw, 26px); letter-spacing: -.03em; line-height: 1; }
-.typetile i { font-style: normal; }
+.typetile { position: relative; height: 380px; border-radius: 14px; overflow: hidden; background: #FFFFFF; color: #1C1C14; box-shadow: inset 0 0 0 1px rgba(28,28,20,.1); display: grid; place-items: center; box-sizing: border-box; }
+.typetile span { font-weight: 800; font-size: clamp(54px, 15vw, 120px); letter-spacing: -.045em; line-height: 1; }
+.typetile i { font-style: normal; color: inherit; }
+.typetile small, .typetile em { position: absolute; left: 0; right: 0; text-align: center; font-style: normal; font-size: 11px; letter-spacing: .24em; opacity: .55; }
+.typetile small { top: 20px; } .typetile em { bottom: 20px; font-weight: 800; letter-spacing: .12em; font-size: 14px; }
 .tzmine { display: block; height: 380px; border-radius: 14px; overflow: hidden; }
 .tzmine img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .istory p { margin: 0; color: var(--soft); }
-@media (max-width: 599px) { .pair { grid-template-columns: minmax(0, 1fr); } .mntile, .stone, .nametile { height: auto; aspect-ratio: 16 / 10; } }
+@media (max-width: 599px) { .pair { grid-template-columns: minmax(0, 1fr); } .mntile, .stone, .nametile, .typetile { height: auto; aspect-ratio: 16 / 10; } }
 @media (min-width: 900px) { .icard { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: 48px; align-items: center; } }
 /* booking form: fills in an email, nothing is sent from the site itself */
 .bform { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 16px; max-width: 620px; margin-top: 6px; }
@@ -775,6 +793,15 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .whead h2 { margin: 0; font: inherit; letter-spacing: inherit; display: flex; gap: 14px; align-items: baseline; }
 #tlHead { display: none !important; }
 /* start page: link to the games (play.html) */
+.moregrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 10px; margin-top: 12px; }
+.moregrid a { display: grid; gap: 2px; align-content: start; padding: 16px; border-radius: 14px; border: 1px solid var(--line); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
+.moregrid a:hover { border-color: var(--fg); transform: translateY(-2px); }
+.moregrid small { font-size: 10px; letter-spacing: .24em; color: var(--soft); }
+.moregrid b { font-weight: 800; font-size: 26px; letter-spacing: -.045em; line-height: 1; }
+.moregrid b i { font-style: normal; color: inherit; }
+.moregrid span { font-size: 13px; color: var(--soft); }
+.mgdots { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; font-style: normal; }
+.mgdots i { width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); }
 .playcard { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; max-width: 520px; padding: 10px; border-radius: 14px; border: 1px solid var(--line); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .3s cubic-bezier(.2,.7,.2,1); }
 .playcard:hover { border-color: var(--fg); transform: translateY(-2px); }
 .playcard small { font-size: 11px; letter-spacing: .22em; color: var(--soft); }
@@ -845,7 +872,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <button class="view" data-view="about" data-group="about">about.</button>
     <button class="view" data-view="sedcard" data-group="brands">for brands.</button>
     <button class="view" data-view="booking">book.</button>
-    <button class="view vjump" type="button" id="gbJump" hidden>leave a dot.</button>
+    <a class="view vjump" href="dots.html">leave a dot.</a>
   </nav>
 
   <section class="card" aria-live="polite">
@@ -877,8 +904,15 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="chrow" id="chRow"><div class="chrecaps" id="chRecaps" hidden></div><div class="chrecaps chteasers" id="chTeasers" hidden></div></div>
   <div class="wallbox"><div class="mnback" aria-hidden="true"><span>MN.</span></div><div class="wall" id="wall"></div></div>
   <div class="more" id="more" hidden></div>
-  <h2 class="hofhead sec" id="gbHead" hidden><b>04</b>leave a dot.</h2>
-  <div class="gb" id="gb" hidden></div>
+  <h2 class="hofhead sec" id="gbHead" hidden><b>04</b>more.</h2>
+  <nav class="moregrid" id="gb" aria-label="More pages" hidden>
+    <a href="dots.html" class="mg-dot"><small>LEAVE A DOT.</small><b>one colour<i>.</i></b><span id="gbCount">one a day. no name.</span><em class="mgdots" id="gbDots" aria-hidden="true"></em></a>
+    <a href="ask.html"><small>ASK ME.</small><b>anything<i>.</i></b><span>i answer the best ones.</span></a>
+    <a href="now.html"><small>NOW.</small><b>right now<i>.</i></b><span>what i'm doing this month.</span></a>
+    <a href="glowup.html"><small>GLOW UP.</small><b>origin. to now<i>.</i></b><span>drag through every chapter.</span></a>
+    <a href="wardrobe.html"><small>WARDROBE.</small><b>what i wore<i>.</i></b><span>brands, chapter by chapter.</span></a>
+    <a href="play.html"><small>PLAY.</small><b>five games<i>.</i></b><span>and the daily dot.</span></a>
+  </nav>
   <div class="grid2 rgrid" id="recapGrid" hidden></div>
   <div class="grid3" id="postGrid" hidden></div>
   <div class="jlist" id="journalList" hidden></div>
@@ -902,6 +936,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       <div><span>print</span><p>Platzhirsch · Bezirkszeitung</p></div>
       <div><span>off duty</span><p>water rescuer at the Wasserrettung Mittersill · <a href="https://sbg.owr.at/mittersill/services/spenden/" target="_blank" rel="noopener">support them</a></p></div>
     </div>
+    <a class="donate" href="https://sbg.owr.at/mittersill/services/spenden/" target="_blank" rel="noopener"><small>WASSERRETTUNG MITTERSILL</small><b>support them<i>.</i></b><span>donate on their own page →</span></a>
     <div class="plabel">SEEN IN</div>
     <div class="seen"><span><i aria-hidden="true">🦌</i>Platzhirsch</span><span><i aria-hidden="true">📰</i>Bezirkszeitung</span><span><i aria-hidden="true">👟</i>s.Oliver × INTERSPORT Harms</span></div>
     <div class="plabel">PRESS</div>
@@ -958,28 +993,28 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="cvsec">
     <h2>Berufserfahrung</h2>
     <div class="row"><div class="when">ab 12/2026</div><div class="what"><b class="co" style="--c:#D04A25;--t:#FFFFFF">Wildkogel Sundaze</b><span>Gastronomie · Nebenjob am Wochenende</span></div></div>
-    <div class="row"><div class="when">07/2022 – heute</div><div class="what"><b class="co" style="--c:#FFDC00;--t:#1C1C14">Österreichische Post AG</b><span>seit 11/2025 Stv. Standortleitung, Hollersbach, von Königsleiten bis Uttendorf</span></div></div>
-    <div class="row"><div class="when">06/2023 – 09/2023</div><div class="what"><b class="co" style="--c:#A4B244;--t:#1C1C14">Alpengasthof Rechtegg</b><span>Küchengehilfe, geringfügig · Neukirchen am Großvenediger</span></div></div>
-    <div class="row"><div class="when">01/2023 – 04/2023</div><div class="what"><b class="co" style="--c:#FEDA32;--t:#1C1C14">Alpinlodge Sonnalm</b><span>Küchengehilfe, geringfügig · Jochberg</span></div></div>
+    <div class="row"><div class="when">07/2022 – heute</div><div class="what"><a class="co" style="--c:#FFDC00;--t:#1C1C14" href="https://www.post.at/" target="_blank" rel="noopener">Österreichische Post AG<i aria-hidden="true">↗</i></a><span>seit 11/2025 Stv. Standortleitung, Hollersbach, von Königsleiten bis Uttendorf</span></div></div>
+    <div class="row"><div class="when">06/2023 – 09/2023</div><div class="what"><a class="co" style="--c:#A4B244;--t:#1C1C14" href="https://www.rechtegg.com/" target="_blank" rel="noopener">Alpengasthof Rechtegg<i aria-hidden="true">↗</i></a><span>Küchengehilfe, geringfügig · Neukirchen am Großvenediger</span></div></div>
+    <div class="row"><div class="when">01/2023 – 04/2023</div><div class="what"><a class="co" style="--c:#FEDA32;--t:#1C1C14" href="https://www.sonnalm.net/" target="_blank" rel="noopener">Alpinlodge Sonnalm<i aria-hidden="true">↗</i></a><span>Küchengehilfe, geringfügig · Jochberg</span></div></div>
     <div class="row"><div class="when">06/2022</div><div class="what"><b class="co" style="--c:#808080;--t:#1C1C14">Café &amp; Bar Chic OG</b><span>Kellner · Mittersill</span></div></div>
     <div class="row"><div class="when">07/2021 – 05/2022</div><div class="what"><b class="co" style="--c:#3399FF;--t:#1C1C14">Weiszhaus</b><span>Küchengehilfe · Mittersill (02/2023 geringfügig)</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Berufsausbildung</h2>
-    <div class="row"><div class="when">08/2019 – 01/2020</div><div class="what"><b class="co" style="--c:#921A1D;--t:#FFFFFF">Restaurant Fliegerbichl</b><span>Restaurantfachmann · Bramberg am Wildkogel</span></div></div>
-    <div class="row"><div class="when">06/2018 – 05/2019</div><div class="what"><b class="co" style="--c:#E30613;--t:#FFFFFF">Seminarzentrum Felbertal, Bundesheer</b><span>Hotel- und Gastgewerbeassistent · Mittersill</span></div></div>
-    <div class="row"><div class="when">08/2017 – 09/2017</div><div class="what"><b class="co" style="--c:#FF0090;--t:#FFFFFF">Dankl.net GmbH</b><span>Elektriker · Neukirchen am Großvenediger</span></div></div>
+    <div class="row"><div class="when">08/2019 – 01/2020</div><div class="what"><a class="co" style="--c:#921A1D;--t:#FFFFFF" href="https://fliegerbichl.com/" target="_blank" rel="noopener">Restaurant Fliegerbichl<i aria-hidden="true">↗</i></a><span>Restaurantfachmann · Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">06/2018 – 05/2019</div><div class="what"><a class="co" style="--c:#E30613;--t:#FFFFFF" href="https://www.bundesheer.at/" target="_blank" rel="noopener">Seminarzentrum Felbertal, Bundesheer<i aria-hidden="true">↗</i></a><span>Hotel- und Gastgewerbeassistent · Mittersill</span></div></div>
+    <div class="row"><div class="when">08/2017 – 09/2017</div><div class="what"><a class="co" style="--c:#FF0090;--t:#FFFFFF" href="https://www.dankl.net/" target="_blank" rel="noopener">Dankl.net GmbH<i aria-hidden="true">↗</i></a><span>Elektriker · Neukirchen am Großvenediger</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Schulbildung</h2>
-    <div class="row"><div class="when">09/2016 – 07/2017</div><div class="what"><b class="co" style="--c:#C10A25;--t:#FFFFFF">Höhere Technische Bundeslehranstalt</b><span>Bautechnik · Saalfelden</span></div></div>
-    <div class="row"><div class="when">09/2012 – 07/2016</div><div class="what"><b class="co" style="--c:#039147;--t:#FFFFFF">Hauptschule</b><span>Bramberg am Wildkogel</span></div></div>
-    <div class="row"><div class="when">09/2008 – 07/2012</div><div class="what"><b class="co" style="--c:#00B050;--t:#1C1C14">Volksschule</b><span>Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">09/2016 – 07/2017</div><div class="what"><a class="co" style="--c:#C10A25;--t:#FFFFFF" href="https://www.htlsaalfelden.at/" target="_blank" rel="noopener">Höhere Technische Bundeslehranstalt<i aria-hidden="true">↗</i></a><span>Bautechnik · Saalfelden</span></div></div>
+    <div class="row"><div class="when">09/2012 – 07/2016</div><div class="what"><a class="co" style="--c:#039147;--t:#FFFFFF" href="https://www.ms-bramberg.salzburg.at/" target="_blank" rel="noopener">Hauptschule<i aria-hidden="true">↗</i></a><span>Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">09/2008 – 07/2012</div><div class="what"><a class="co" style="--c:#00B050;--t:#1C1C14" href="https://www.vs-bramberg.salzburg.at/" target="_blank" rel="noopener">Volksschule<i aria-hidden="true">↗</i></a><span>Bramberg am Wildkogel</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Vereine</h2>
-    <div class="row"><div class="when">seit 11/2022</div><div class="what"><b class="co" style="--c:#0E478F;--t:#FFFFFF">Österreichische Wasserrettung, Ortsstelle Mittersill</b><span>Fließwasserretter (FW&#8209;R), absolviert am 19.05.2024 · aktive Einsatzkraft seit 10.03.2024 · Retterschein, absolviert am 18.06.2023</span></div></div>
-    <div class="row"><div class="when">2010 – 2016</div><div class="what"><b class="co" style="--c:#0DD5D5;--t:#1C1C14">TaeKwonDo Club</b><span>9. KUP · Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">seit 11/2022</div><div class="what"><a class="co" style="--c:#0E478F;--t:#FFFFFF" href="https://sbg.owr.at/mittersill/" target="_blank" rel="noopener">Österreichische Wasserrettung, Ortsstelle Mittersill<i aria-hidden="true">↗</i></a><span>Fließwasserretter (FW&#8209;R), absolviert am 19.05.2024 · aktive Einsatzkraft seit 10.03.2024 · Retterschein, absolviert am 18.06.2023</span></div></div>
+    <div class="row"><div class="when">2010 – 2016</div><div class="what"><a class="co" style="--c:#0DD5D5;--t:#1C1C14" href="https://www.taekwondo-bramberg.at/" target="_blank" rel="noopener">TaeKwonDo Club<i aria-hidden="true">↗</i></a><span>9. KUP · Bramberg am Wildkogel</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Sprachen</h2>
@@ -1024,15 +1059,16 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       </div>
       <div class="istory">
         <small>02 · the font</small>
-        <h3>roman capitals</h3>
+        <h3>roman capitals<i>.</i></h3>
         <p>i always had something for this kind of font, because of the romans. capital letters with thick and thin lines that look like they were cut into stone and made to last.</p>
+        <p>part of that comes from assassin&#x27;s creed. my brother got me to play the first one when it came out in 2007. old cities, history, names carved in stone. i was a kid, and that probably had a bigger impact on me than i knew back then.</p>
         <p>that&#x27;s the feeling i want MN. to have.</p>
       </div>
     </article>
     <article class="icard">
       <div class="pair">
         <figure class="theirs">
-          <div class="nametile" aria-label="Harry Styles."><span>Harry Styles<i>.</i></span></div>
+          <a class="nametile" href="https://x.com/Harry_Styles" target="_blank" rel="noopener" aria-label="Harry Styles. on X (Twitter)"><span>Harry Styles<i>.</i></span><small>@Harry_Styles</small></a>
           <figcaption>harry styles on twitter</figcaption>
         </figure>
         <figure class="mine">
@@ -1056,8 +1092,8 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
           <figcaption>the inspiration</figcaption>
         </figure>
         <figure class="mine">
-          <div class="typetile" aria-label="nindl. wordmark on a photo"><img src="thumbs/photos/ber/2026-07-08_148-600.webp" alt="" loading="lazy"><span>nindl<i>.</i></span></div>
-          <figcaption>the wordmark</figcaption>
+          <div class="typetile" aria-label="the font: Jost Bold, example word nindl."><small>JOST · BOLD</small><span>nindl<i>.</i></span><em>aa bb cc · 0 1 2 3</em></div>
+          <figcaption>the font</figcaption>
         </figure>
       </div>
       <div class="istory">
@@ -1122,7 +1158,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       <a class="contact primary" href="#" data-mail><small>MAIL</small> <span>booking<span>@</span>herrnindl.com</span></a>
       <a class="contact" href="https://instagram.com/herrnindl" target="_blank" rel="noopener"><small>IG</small> @herrnindl</a>
     </div>
-    <figure class="bkpic"><img src="thumbs/photos/ber/2026-07-08_148-600.webp" srcset="thumbs/photos/ber/2026-07-08_148-600.webp 600w, thumbs/photos/ber/2026-07-08_148-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 380px" alt="Markus Nindl" width="600" height="900" loading="lazy" decoding="async"></figure>
+    <figure class="bkpic"><img src="thumbs/photos/vanilla-2/MP_2026_Brand-Shootings_Markus-Nindl_046-600.webp" srcset="thumbs/photos/vanilla-2/MP_2026_Brand-Shootings_Markus-Nindl_046-600.webp 600w, thumbs/photos/vanilla-2/MP_2026_Brand-Shootings_Markus-Nindl_046-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 380px" alt="Markus Nindl" width="600" height="900" loading="lazy" decoding="async"></figure>
     <div class="avail" id="avail"></div>
     <dl class="rates" id="rates"></dl>
     <form class="bform" id="bform" novalidate>
@@ -1142,7 +1178,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     </div>
   </section>
 
-  <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span>© 2026 MN. · designed &amp; built by markus nindl.</span><span><a href="https://instagram.com/herrnindl" target="_blank" rel="noopener">instagram</a> · <a href="https://www.tiktok.com/@herrnindl" target="_blank" rel="noopener">tiktok</a> · <a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
+  <footer><span><b>MN.</b>&nbsp; EST. 01.01.2025</span><span>© 2026 MN. · designed &amp; built by <span style="white-space:nowrap">M A R K U S&nbsp;&nbsp;N I N D L</span></span><span><a href="https://instagram.com/herrnindl" target="_blank" rel="noopener">instagram</a> · <a href="https://www.tiktok.com/@herrnindl" target="_blank" rel="noopener">tiktok</a> · <a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer>
 </div>
 
 <button class="bookfab" id="bookFab" type="button" hidden>book<i>.</i></button>
@@ -1472,33 +1508,15 @@ async function shareChapter(c) {
 
 /* ---------- guestbook: leave a dot (switches on when GB_API is set) ---------- */
 const GB_API = "https://mn-dots.herrnindl.workers.dev";
-/* menu: "leave a dot." jumps to the dots at the end of the start page */
-if (GB_API) {
-  $("gbJump").hidden = false;
-  $("gbJump").onclick = () => {
-    const jump = () => setTimeout(() => $("gbHead").scrollIntoView({ behavior: calm() ? "auto" : "smooth", block: "start" }), 120);
-    if (view === "colours" && filter === "all") jump(); else { swap(() => select("all")); setTimeout(jump, 700); }
-  };
-}
+/* "more." at the end of the start page: the small pages, with the dots from the wall */
 async function renderGb() {
-  const box = $("gb"), head = $("gbHead"), show = !!GB_API && view === "colours" && filter === "all";
-  box.hidden = head.hidden = !show; if (!show || box.dataset.done) return; box.dataset.done = 1;
-  const wall = el("div", "gbwall"); box.append(wall);
-  const draw = list => { wall.textContent = ""; list.slice(-400).forEach(d => { const i = el("i"); i.style.background = d.c; wall.append(i); }); };
-  try { draw(await (await fetch(GB_API)).json()); } catch (e) {}
-  let mine = null; try { mine = localStorage.getItem("mn-dot"); } catch (e) {}
-  if (mine) { box.append(el("p", "gbnote", "your dot is on the wall. thank you.")); return; }
-  const f = el("form", "gbform"), cols = el("div", "cols"); let pick = CHAPTERS[CHAPTERS.length - 2].bg;
-  CHAPTERS.forEach(c => { const b = el("button"); b.type = "button"; b.style.setProperty("--c", c.bg); b.title = c.label; b.setAttribute("aria-label", c.label); b.setAttribute("aria-pressed", String(c.bg === pick)); b.onclick = () => { pick = c.bg; cols.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); }; cols.append(b); });
-  const go = el("button", "go", "leave it."); go.type = "submit";
-  f.append(cols, go); box.append(f, el("p", "gbnote", "only your colour is shown. no names, no text. details in the datenschutz."));
-  f.onsubmit = async e => {
-    e.preventDefault(); go.disabled = true;
-    try { const r = await fetch(GB_API, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ c: pick }) });
-      if (!r.ok) throw 0; draw(await r.json()); try { localStorage.setItem("mn-dot", "1"); } catch (e) {}
-      f.replaceWith(el("p", "gbnote", "your dot is on the wall. thank you."));
-    } catch (err) { go.disabled = false; go.textContent = "try again."; }
-  };
+  const box = $("gb"), head = $("gbHead"), show = view === "colours" && filter === "all";
+  box.hidden = head.hidden = !show; if (!show || box.dataset.done || !GB_API) return; box.dataset.done = 1;
+  try {
+    const list = await (await fetch(GB_API)).json();
+    const d = $("gbDots"); list.slice(-24).forEach(x => { const i = el("i"); i.style.background = x.c; d.append(i); });
+    if (list.length) $("gbCount").textContent = list.length + (list.length === 1 ? " dot so far." : " dots so far.");
+  } catch (e) {}
 }
 
 
@@ -1786,19 +1804,51 @@ function wrapSlides() {
   const S = [];
   S.push({ bg: ink, fg: van, d: red.bg, html: [["small", "MN. WRAPPED"], ["h2", Y + "", "."], ["p", "my year in colours."]] });
   S.push({ bg: van, fg: ink, d: red.bg, html: [["small", "THIS YEAR"], ["div.big", chs.length + ""], ["h3", "chapters", "."], ["p.one", days + " days."], ["p.one", chs.map(c => c.label.replace(/ /g, "\u00a0")).join(" ")]] });
+  /* the year as one line: every chapter as long as it lasted */
+  const DAY = 864e5, y0 = new Date(Y + "-01-01T00:00:00Z").getTime(), y1 = new Date((Y + 1) + "-01-01T00:00:00Z").getTime();
+  const span = chs.map(c => { const i = TL.findIndex(t => t[0] === c.id), a = Math.max(y0, new Date(TL[i][1] + "T00:00:00Z").getTime()), b = Math.min(y1, new Date((TL[i + 1] || ["", TL_END])[1] + "T00:00:00Z").getTime()); return { c, d: Math.round((b - a) / DAY) }; });
+  S.push({ bg: ink, fg: van, strip: span, html: [["small", Y + " IN ONE LINE"], ["h3", "every day, a colour", "."]] });
   chs.forEach((c, k) => {
     const rc = recapMonths().filter(r => r.chapter === c.id && !r.placeholder).slice(0, 3);
     S.push({ bg: c.bg, fg: c.fg, d: c.dot === c.bg ? c.fg : c.dot, chapter: c, covers: rc, html: [["small", "CHAPTER " + String(k + 1).padStart(2, "0") + " · " + c.dates.toUpperCase()], ["h2", c.name, ".", c.suffix || ""], ["p", c.line + (c.place ? " · " + c.place : "")]] });
   });
+  const per = chs.map(c => ({ c, n: photos.filter(p => p.chapter === c.id).length })).sort((a, b) => b.n - a.n)[0];
+  if (per && per.n) S.push({ bg: per.c.bg, fg: per.c.fg, html: [["small", "MOST PHOTOS IN"], ["h2", per.c.name, ".", per.c.suffix || ""], ["p.one", per.n + " photos in one chapter."]] });
   S.push({ bg: ink, fg: van, d: "#E9A283", html: [["small", "SO FAR"], ["div.big", photos.length + ""], ["h3", "photos", "."], ["p.one", cr.length + " photographers."], ["p.one", document.querySelectorAll(".press li").length + " times in print."], ["p.one", RUNWAYS + (RUNWAYS === 1 ? " runway." : " runways.")]] });
   if (top) S.push({ bg: "#91B2EB", fg: "#1D2547", d: "#BAB6DE", html: [["small", "MOST PHOTOGRAPHED BY"], ["h3", top.name.toLowerCase(), "."], ["p", top.list.length + " photos together" + (top.handle ? " · @" + top.handle : "") + "."]] });
-  S.push({ bg: byId["navy-blue"].bg, fg: byId["navy-blue"].fg, html: [["small", "FURTHEST FROM HOME"], ["h2", "dublin", "."]] });
+  S.push({ bg: byId.vanilla.bg, fg: byId.vanilla.fg, html: [["small", "FURTHEST FROM HOME ALONE"], ["h2", "france", "."]] });
   S.push({ bg: "#B8C98B", fg: "#234C3D", d: "#E9A283", html: [["small", "30.10." + Y], ["h3", "first runway", "."], ["p", "s.Oliver × INTERSPORT Harms, neukirchen. the start of something."]] });
   /* his own Spotify "On Repeat" playlist: Spotify keeps it up to date; loads only after a tap */
   S.push({ bg: "#343A4E", fg: "#E8EAF0", spotify: "https://open.spotify.com/embed/playlist/37i9dQZF1EptrRTUVe7iiW?utm_source=generator", html: [["small", "THE SOUNDTRACK OF " + Y], ["h3", "on repeat", "."]] });
   const left = Math.max(0, Math.ceil((new Date((Y + 1) + "-01-01T00:00:00+01:00") - Date.now()) / 864e5));
   S.push({ bg: ink, fg: van, end: true, html: [["small", left ? "IN " + left + (left === 1 ? " DAY" : " DAYS") : (Y + 1) + ""], ["h2", (Y + 1) + "", "."], ["p", "the next chapter. thank you for watching."]] });
   return S;
+}
+/* a story picture of the year (1080 × 1920) for instagram */
+async function shareWrapped(S) {
+  const st = S.find(x => x.strip); if (!st) return;
+  try { await document.fonts.load('800 80px "Inter"'); await document.fonts.load('500 80px "Bodoni Moda"'); } catch (e) {}
+  const W = 1080, H = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = H; const g = cv.getContext("2d");
+  g.fillStyle = "#1C1C14"; g.fillRect(0, 0, W, H); g.fillStyle = "#FFF8BB";
+  g.font = '500 96px "Bodoni Moda", Georgia, serif'; g.textBaseline = "alphabetic"; g.fillText("MN.", 90, 220);
+  g.font = '400 30px "Inter", sans-serif'; g.globalAlpha = .7; g.fillText("M A R K U S   N I N D L", 90, 280); g.globalAlpha = 1;
+  g.font = '800 250px "Inter", sans-serif'; g.fillText(WRAP_YEAR + ".", 74, 620);
+  g.font = '400 44px "Inter", sans-serif'; g.globalAlpha = .85; g.fillText("my year in colours.", 90, 700); g.globalAlpha = 1;
+  const tot = st.strip.reduce((a, x) => a + x.d, 0); let x = 90; const bw = W - 180, top = 800, bh = 150;
+  g.save(); g.beginPath(); g.roundRect ? g.roundRect(90, top, bw, bh, 28) : g.rect(90, top, bw, bh); g.clip();
+  st.strip.forEach(({ c, d }) => { const w = bw * d / tot; g.fillStyle = c.bg; g.fillRect(x, top, w + 1, bh); x += w; }); g.restore();
+  let yy = top + bh + 110;
+  st.strip.slice().reverse().forEach(({ c, d }) => {
+    g.fillStyle = c.bg; g.beginPath(); g.arc(112, yy - 17, 22, 0, 7); g.fill();
+    g.fillStyle = "#FFF8BB"; g.font = '800 62px "Inter", sans-serif'; g.fillText(c.label, 160, yy);
+    g.font = '400 38px "Inter", sans-serif'; g.globalAlpha = .7; const t = d + " days"; g.fillText(t, W - 90 - g.measureText(t).width, yy); g.globalAlpha = 1;
+    yy += 110;
+  });
+  g.font = '400 32px "Inter", sans-serif'; g.globalAlpha = .7; g.fillText("herrnindl.com", 90, H - 120); g.globalAlpha = 1;
+  const blob = await new Promise(ok => cv.toBlob(ok, "image/png")); if (!blob) return;
+  const file = new File([blob], "mn-wrapped-" + WRAP_YEAR + ".png", { type: "image/png" });
+  try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file] }); return; } } catch (e) { if (e && e.name === "AbortError") return; }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 }
 function openWrapped() {
   const S = wrapSlides(); let i = 0, t0 = 0, raf = 0, paused = false, held = 0;
@@ -1816,6 +1866,11 @@ function openWrapped() {
     const sl = el("div", "wslide");
     s.html.forEach(([tag, txt, dot, after]) => { const [t, cls] = tag.split("."); const e = el(t, cls || null, txt); if (dot) e.append(el("i", null, dot)); if (after) e.append(after); sl.append(e); });
     if (s.covers && s.covers.length) { const cv = el("div", "wcovers"); s.covers.forEach(r => { const im = el("img"); im.src = r.thumb || r.cover; im.alt = ""; cv.append(im); }); sl.append(cv); }
+    if (s.strip) {
+      const bar = el("div", "wstrip"), leg = el("div", "wlist");
+      s.strip.forEach(({ c, d }) => { const seg = el("i"); seg.style.background = c.bg; seg.style.flexGrow = d; bar.append(seg); const row = el("div"); const dot = el("i"); dot.style.background = c.bg; row.append(dot, c.label, el("span", null, d + " days")); leg.append(row); });
+      sl.append(bar, leg);
+    }
     if (s.songs) { const l = el("div", "wlist"); s.songs.forEach(([c, so]) => { const d = el("div"); const dot = el("i"); dot.style.background = c.bg; d.append(dot, so.t); l.append(d); }); sl.append(l); }
     if (s.spotify) {
       const box = el("div", "wembed"), b = el("button", "wplay");
@@ -1828,7 +1883,11 @@ function openWrapped() {
       };
       box.append(b); sl.append(box);
     }
-    if (s.end) { const b = el("button", "sharebtn", "close."); b.style.marginTop = "10px"; b.style.justifySelf = "start"; b.onclick = e => { e.stopPropagation(); close(); }; sl.append(b); }
+    if (s.end) {
+      const row = el("div", "wend"), sh = el("button", "sharebtn", "share my year."), b = el("button", "sharebtn ghost", "close.");
+      sh.onclick = e => { e.stopPropagation(); paused = true; shareWrapped(S).finally(() => { paused = false; }); };
+      b.onclick = e => { e.stopPropagation(); close(); }; row.append(sh, b); sl.append(row);
+    }
     stage.textContent = ""; stage.append(sl);
     [...bars.children].forEach((b, j) => b.firstChild.style.width = j < i ? "100%" : "0");
     t0 = performance.now();

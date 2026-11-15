@@ -55,7 +55,7 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
 const ORDER = ["origin", "white", "baby-blue", "lavendel", "navy-blue", "grey", "vanilla", "vanilla-2", "ber", "ember", "red"];
 const PER = 4;
 let pics = [], imgs = [], i = 0, timer = null;
-const ymd = s => s ? s.split(".").reverse().join("") : "";
+const ymd = s => s ? s.split(".").reverse().join("") : "99999999";   /* no date yet = newest (the Marla Pilz shoot came after Ronald Mitterer) */
 loadPhotos().then(list => {
   list = list.filter(p => p.f && !p.nf && p.f[2] >= .06);
   ORDER.forEach(id => {

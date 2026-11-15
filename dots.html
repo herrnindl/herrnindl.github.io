@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — leave a dot.</title>
+<!--LAUNCH-PREVIEW link preview: build.py switches these on from 01.12.2026
+<meta name="description" content="Markus Nindl. Model from Pinzgau, Austria. MN.: my life in colours.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MN.">
+<meta property="og:title" content="MN. — leave a dot.">
+<meta property="og:description" content="Markus Nindl. Model from Pinzgau, Austria. MN.: my life in colours.">
+<meta property="og:url" content="https://herrnindl.com/dots.html">
+<meta property="og:image" content="https://herrnindl.com/launch/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+LAUNCH-PREVIEW-->
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="extra.css">
+<script src="analytics.js"></script>
+<style>
+.wall { display: flex; flex-wrap: wrap; gap: 8px; min-height: 30px; margin: 4px 0 10px; }
+.wall i { width: 26px; height: 26px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); animation: pop .5s cubic-bezier(.2,.7,.2,1) both; }
+.wall i.me { box-shadow: inset 0 0 0 1px rgba(0,0,0,.14), 0 0 0 2px var(--bg), 0 0 0 4px var(--fg); }
+@keyframes pop { from { transform: scale(0); } }
+.count { font-weight: 800; font-size: 22px; letter-spacing: -.035em; margin: 0 0 26px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 10px; margin: 6px 0 14px; }
+.cols button { aspect-ratio: 1; border-radius: 50%; border: 0; padding: 0; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.cols button[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--fg); }
+.picked { font-weight: 800; font-size: 26px; letter-spacing: -.045em; margin: 0; }
+.picked span { display: block; font-weight: 400; font-size: 14px; letter-spacing: 0; color: var(--soft); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a class="mark" href="./">MN.</a></header>
+  <nav class="more" aria-label="more"></nav>
+  <h1>leave a dot.</h1>
+  <p class="sub">pick the chapter that feels like you. one dot a day. no name, no text.</p>
+  <div class="wall" id="wall" aria-label="dots left so far"></div>
+  <p class="count" id="count"></p>
+  <div id="form">
+    <div class="small">YOUR COLOUR</div>
+    <div class="cols" id="cols"></div>
+    <p class="picked" id="picked"></p>
+    <div class="row"><button class="btn" id="go" type="button">leave it.</button><span class="small" id="msg"></span></div>
+  </div>
+  <p class="note">only your colour and the time are saved. details in the <a href="datenschutz.html">datenschutz</a>.</p>
+  <footer class="foot"></footer>
+</div>
+<script src="extra.js"></script>
+<script>
+let list = [], pick = byId.ember, mine = null;
+try { mine = +localStorage.getItem("mn-dot-t") || null; } catch (e) {}
+function draw() {
+  const w = $("wall"); w.textContent = "";
+  list.forEach((d, k) => { const i = el("i"); i.style.background = d.c; i.style.animationDelay = Math.min(k, 60) * 12 + "ms"; if (mine && d.t === mine) i.className = "me"; w.append(i); });
+  $("count").textContent = list.length === 0 ? "no dots yet. be the first." : list.length === 1 ? "1 dot so far." : list.length + " dots so far.";
+  /* your dot is still on the wall: no second one today */
+  $("form").hidden = !!(mine && list.some(d => d.t === mine));
+  if ($("form").hidden) $("count").textContent += " yours is the one with the ring.";
+}
+function choose(c) {
+  pick = c; paint(c);
+  $("cols").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.id === c.id)));
+  $("picked").textContent = c.label; $("picked").append(el("span", null, c.line));
+}
+CHAPTERS.forEach(c => { const b = el("button"); b.type = "button"; b.dataset.id = c.id; b.style.setProperty("--c", c.bg); b.setAttribute("aria-label", c.label); b.onclick = () => choose(c); $("cols").append(b); });
+choose(pick);
+fetch(API).then(r => r.json()).then(l => { list = l; draw(); }).catch(() => { $("count").textContent = "the wall is resting. try again later."; });
+$("go").onclick = async () => {
+  $("go").disabled = true; $("msg").textContent = "…";
+  try {
+    const r = await fetch(API, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ c: pick.bg }) });
+    if (r.status === 429) { $("msg").textContent = "one a day. come back tomorrow."; return; }
+    if (!r.ok) throw 0;
+    list = await r.json(); const me = [...list].reverse().find(d => d.c === pick.bg); mine = me ? me.t : null;
+    try { localStorage.setItem("mn-dot-t", String(mine)); } catch (e) {}
+    $("msg").textContent = ""; draw();
+  } catch (e) { $("msg").textContent = "didn't work. try again later."; }
+  finally { $("go").disabled = false; }
+};
+</script>
+</body>
+</html>

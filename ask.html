@@ -37,7 +37,7 @@ form { margin: 0 0 36px; }
   <header><a class="mark" href="./">MN.</a></header>
   <nav class="more" aria-label="more"></nav>
   <h1>ask me.</h1>
-  <p class="sub">anything. no name needed. i answer the best ones here.</p>
+  <p class="sub">anything. no name needed. nothing goes online right away: i read every question and answer the best ones here.</p>
   <form id="f">
     <textarea id="q" maxlength="300" placeholder="your question …" aria-label="your question"></textarea>
     <div class="small count" id="n">0 / 300</div>
@@ -67,7 +67,7 @@ $("f").onsubmit = async e => {
     const r = await fetch(API.replace(/\/$/, "") + "/ask", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ q }) });
     if (r.status === 429) { $("msg").textContent = "three a day. come back tomorrow."; return; }
     if (!r.ok) throw 0;
-    $("q").value = ""; $("n").textContent = "0 / 300"; $("msg").textContent = "sent. thank you.";
+    $("q").value = ""; $("n").textContent = "0 / 300"; $("msg").textContent = "sent. if i answer it, it shows up below.";
   } catch (err) { $("msg").textContent = "didn't work. try again later."; }
   finally { $("send").disabled = false; }
 };

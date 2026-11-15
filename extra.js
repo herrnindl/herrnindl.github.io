@@ -30,12 +30,12 @@ function paint(c) {
 /* menu + footer on every small page */
 (function () {
   const here = location.pathname.split("/").pop() || "index.html";
-  const pages = [["play.html", "play."], ["now.html", "now."], ["glowup.html", "glow up."], ["wardrobe.html", "wardrobe."], ["ask.html", "ask me."]];
+  const pages = [["play.html", "play."], ["now.html", "now."], ["glowup.html", "glow up."], ["wardrobe.html", "wardrobe."], ["ask.html", "ask me."], ["dots.html", "leave a dot."]];
   const nav = document.querySelector("nav.more");
   if (nav) pages.forEach(([href, label]) => { const a = el("a", null, label); a.href = href; if (href === here) a.setAttribute("aria-current", "page"); nav.append(a); });
   const cur = nav && nav.querySelector("[aria-current]"); if (cur) nav.scrollLeft = Math.max(0, cur.offsetLeft - nav.clientWidth / 2 + cur.offsetWidth / 2);
   const foot = document.querySelector("footer.foot");
-  if (foot) foot.innerHTML = '<span>© 2026 MN. · designed &amp; built by markus nindl.</span><span><a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span>';
+  if (foot) foot.innerHTML = '<span>© 2026 MN. · designed &amp; built by <span style="white-space:nowrap">M A R K U S&nbsp;&nbsp;N I N D L</span></span><span><a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span>';
 })();
 
 /* photos.json from the site build (only photos with a clearly visible face for close crops) */
