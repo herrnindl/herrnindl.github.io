@@ -35,6 +35,7 @@ LAUNCH-PREVIEW-->
 .lhead small { display: block; font-size: 12px; color: var(--soft); }
 .lhead a { color: inherit; font-size: 12px; text-decoration: none; border-bottom: 1px solid var(--line); }
 .story { margin: 4px 0 12px; font-size: 15px; line-height: 1.5; }
+b.story { display: block; font-weight: 800; letter-spacing: -.03em; font-size: 17px; margin: 14px 0 2px; }
 .look h2 { font-weight: 800; font-size: 30px; letter-spacing: -.045em; line-height: 1; margin: 14px 0 4px; display: flex; align-items: center; gap: 10px; }
 .look h2 i { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
 .pics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0 10px; }
@@ -73,11 +74,25 @@ const BRANDS = {
 };
 const LOOKS = {
   "vanilla-2|Ronald Mitterer @ronaldmitterer|08.07.2026": ["BRTLwear"],
+  "ber|Ronald Mitterer @ronaldmitterer|08.07.2026": ["s.Oliver"],
+  "ber|Marla Pilz @marlapilzphotos|25.07.2026": ["s.Oliver", "leder.ritsch"],
   "navy-blue|Daniel Rieder @danielriederfotografie|30.10.2025": ["Calvin Klein"],
 };
-/* The story of each outfit: same key as in LOOKS, then your text. It shows up under the photos. */
+/* The stories of the outfits: same key as in LOOKS, then [title, text] per outfit (blank line = new paragraph). They show up under the photos. */
 const STORIES = {
-  /* "vanilla-2|Ronald Mitterer @ronaldmitterer|08.07.2026": "your story here", */
+  "ber|Marla Pilz @marlapilzphotos|25.07.2026": [
+    ["white shirt, black pants", "a basic white shirt, and the pants are from s.Oliver."],
+    ["tracht", "i bought my lederhosen for my job as a waiter at fliegerbichl in 2019. they are a bit too big since i've lost some weight since then, but i love them. maybe one day i'll take them to a schneider and have them made tighter and smaller.\n\nmy first tracht, in grey, i wore to the oktoberfest in 2025. it hasn't been posted yet. i bought it at leder.ritsch, and in 2026 i decided i wanted a new colour. we came to the conclusion that green fits me best. first i wanted vanilla, but that is rare and gets dirty more easily. i told them it was for a photoshoot, and about a month later i offered them the photos to use.\n\nthe tracht has a special place in my heart. in 2026 i decided to wear it as often as possible, at any event. it makes you stand out, and you should always put on your best clothes whenever you can. it kind of became a meme."]
+  ],
+  "ber|Ronald Mitterer @ronaldmitterer|08.07.2026": [
+    ["the suit from s.Oliver", "a few days before the photoshoot with ronald mitterer, i decided that i needed one more outfit. i went into the local s.Oliver store in neukirchen and bought the jogging suit in 20 minutes.\n\nfunny enough, they then asked me to take part in the runway on 30.10.2026, and i showed them the pictures i had made with it a few days before. a funny coincidence."]
+  ],
+  "vanilla-2|Marla Pilz @marlapilzphotos|25.07.2026": [
+    ["the black hoodie jacket", "i went shopping at kik in mittersill for the first time in a long time and found this jacket for about 20 €. i looked so cool that i had to get it. i wear it very often nowadays, and it's a bit too big for me.\n\nit also looks a bit like the jacket from daniel rieder that i wore for the spontaneous photoshoot at the getreidegasse in salzburg. he gave me his jacket so we could take different shots."]
+  ],
+  "vanilla-2|Ronald Mitterer @ronaldmitterer|08.07.2026": [
+    ["brtlwear", "support old local friends who are making their own brand. the owner brought me the stuff i ordered personally."]
+  ],
 };
 /* ===================== */
 Object.entries(BRANDS).forEach(([b, u]) => { const a = el("a", null, b); a.href = u; a.target = "_blank"; a.rel = "noopener"; $("brands").append(a); });
@@ -103,7 +118,7 @@ loadPhotos().then(list => {
         .filter((p, i, arr) => i === arr.findIndex(q => q.src.replace(/(x?sw|swe|[abc])?\.\w+$/, "") === p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""))).slice(0, 3)
         .forEach(p => { const im = el("img"); im.alt = c.label + " outfit"; im.loading = "lazy"; im.style.objectPosition = (p.f[0] * 100) + "% " + Math.min(100, p.f[1] * 100 + 25) + "%"; im.src = p.thumb || p.src; g.append(im); });
       box.append(g);
-      if (STORIES[k]) box.append(el("p", "story", STORIES[k]));
+      (STORIES[k] || []).forEach(([t, x]) => { box.append(el("b", "story", t)); x.split("\n\n").forEach(para => box.append(el("p", "story", para))); });
       const t = LOOKS[k] || [];
       if (t.length) { const tg = el("div", "tags"); t.forEach(b => { if (BRANDS[b]) { const a = el("a", null, b); a.href = BRANDS[b]; a.target = "_blank"; a.rel = "noopener"; tg.append(a); } else tg.append(el("span", null, b)); }); box.append(tg); }
       $("looks").append(box);
