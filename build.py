@@ -335,6 +335,8 @@ if datetime.datetime.now(datetime.timezone.utc) >= LAUNCH:
         with open(page, encoding="utf-8") as f:
             html = f.read()
         html = html.replace('<meta name="robots" content="noindex">\n', "").replace('<meta name="robots" content="noindex">', "")
+        # link preview (image + description) only from launch day; before that the old preview stays
+        html = re.sub(r"<!--LAUNCH-PREVIEW[^\n]*\n", "", html).replace("\nLAUNCH-PREVIEW-->", "")
         with open(page, "w", encoding="utf-8") as f:
             f.write(html)
         public.append("https://herrnindl.com/" + ("" if page == "index.html" else page))

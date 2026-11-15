@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>MN.</title>
+<!--LAUNCH-PREVIEW link preview: build.py switches these on from 01.12.2026
 <meta name="description" content="Markus Nindl. Model from Pinzgau, Austria. MN.: my life in colours.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MN.">
@@ -14,6 +15,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+LAUNCH-PREVIEW-->
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#FFF8BB">
 <link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
@@ -460,6 +462,11 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .wslide .wlist div { display: flex; align-items: center; gap: 10px; }
 .wslide .wlist i { width: 14px; height: 14px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
 .wslide .wcovers { display: flex; gap: 8px; }
+.wslide .wembed { position: relative; z-index: 5; height: 352px; border-radius: 14px; overflow: hidden; background: rgba(0,0,0,.25); }
+.wslide .wembed iframe { width: 100%; height: 100%; border: 0; display: block; }
+.wslide .wplay { width: 100%; height: 100%; border: 0; background: none; color: inherit; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; cursor: pointer; font: inherit; }
+.wslide .wplay span { padding: 9px 18px; border-radius: 999px; background: var(--wf); color: var(--wb); font-weight: 800; letter-spacing: -.02em; }
+.wslide .wplay small { font-size: 10px; letter-spacing: .08em; opacity: .6; }
 .wslide .wcovers img, .wslide .wcovers span { width: 30%; max-width: 150px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; display: block; }
 .wslide .big { font-weight: 800; font-size: clamp(90px, 30vw, 220px); letter-spacing: -.07em; line-height: .8; font-variant-numeric: tabular-nums; }
 .wslide > * { animation: wIn .55s cubic-bezier(.2,.7,.2,1) both; }
@@ -950,7 +957,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <h2>Berufserfahrung</h2>
     <div class="row"><div class="when">ab 12/2026</div><div class="what"><b class="co" style="--c:#D04A25;--t:#FFFFFF">Wildkogel Sundaze</b><span>Gastronomie · Nebenjob am Wochenende</span></div></div>
     <div class="row"><div class="when">07/2022 – heute</div><div class="what"><b class="co" style="--c:#FFDC00;--t:#1C1C14">Österreichische Post AG</b><span>seit 11/2025 Stv. Standortleitung, Hollersbach, von Königsleiten bis Uttendorf</span></div></div>
-    <div class="row"><div class="when">06/2023 – 09/2023</div><div class="what"><b>Alpengasthof Rechtegg</b><span>Küchengehilfe, geringfügig · Neukirchen am Großvenediger</span></div></div>
+    <div class="row"><div class="when">06/2023 – 09/2023</div><div class="what"><b class="co" style="--c:#A4B244;--t:#1C1C14">Alpengasthof Rechtegg</b><span>Küchengehilfe, geringfügig · Neukirchen am Großvenediger</span></div></div>
     <div class="row"><div class="when">01/2023 – 04/2023</div><div class="what"><b class="co" style="--c:#FEDA32;--t:#1C1C14">Alpinlodge Sonnalm</b><span>Küchengehilfe, geringfügig · Jochberg</span></div></div>
     <div class="row"><div class="when">06/2022</div><div class="what"><b>Café &amp; Bar Chic OG</b><span>Kellner · Mittersill</span></div></div>
     <div class="row"><div class="when">07/2021 – 05/2022</div><div class="what"><b>Weiszhaus</b><span>Küchengehilfe · Mittersill (02/2023 geringfügig)</span></div></div>
@@ -964,13 +971,13 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="cvsec">
     <h2>Schulbildung</h2>
     <div class="row"><div class="when">09/2016 – 07/2017</div><div class="what"><b class="co" style="--c:#C10A25;--t:#FFFFFF">Höhere Technische Bundeslehranstalt</b><span>Bautechnik · Saalfelden</span></div></div>
-    <div class="row"><div class="when">09/2012 – 07/2016</div><div class="what"><b>Hauptschule</b><span>Bramberg am Wildkogel</span></div></div>
-    <div class="row"><div class="when">09/2008 – 07/2012</div><div class="what"><b>Volksschule</b><span>Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">09/2012 – 07/2016</div><div class="what"><b class="co" style="--c:#039147;--t:#FFFFFF">Hauptschule</b><span>Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">09/2008 – 07/2012</div><div class="what"><b class="co" style="--c:#00B050;--t:#1C1C14">Volksschule</b><span>Bramberg am Wildkogel</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Vereine</h2>
     <div class="row"><div class="when">seit 11/2022</div><div class="what"><b class="co" style="--c:#0E478F;--t:#FFFFFF">Österreichische Wasserrettung, Ortsstelle Mittersill</b><span>Fließwasserretter (FW&#8209;R), absolviert am 19.05.2024 · aktive Einsatzkraft seit 10.03.2024 · Retterschein, absolviert am 18.06.2023</span></div></div>
-    <div class="row"><div class="when">2010 – 2016</div><div class="what"><b>TaeKwonDo Club</b><span>9. KUP · Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">2010 – 2016</div><div class="what"><b class="co" style="--c:#0DD5D5;--t:#1C1C14">TaeKwonDo Club</b><span>9. KUP · Bramberg am Wildkogel</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Sprachen</h2>
@@ -1764,7 +1771,6 @@ const WRAP_YEAR = 2026;
 function wrapSlides() {
   const Y = WRAP_YEAR, inYear = c => { const st = TL.find(t => t[0] === c.id)[1]; const i = TL.findIndex(t => t[0] === c.id); const en = i + 1 < TL.length ? TL[i + 1][1] : "9999"; return st < (Y + 1) + "-01-01" && en > Y + "-01-01"; };
   const chs = CHAPTERS.filter(inYear), red = byId.red, ink = "#1C1C14", van = "#FFF8BB";
-  const songs = chs.map(c => [c, [].concat(SONGS[c.id] || [])[0]]).filter(x => x[1]);
   const cr = credits(), top = cr[0];
   const days = Math.min(365, Math.floor((Math.min(Date.now(), new Date(Y + "-12-31T23:59:59+01:00").getTime()) - new Date(Y + "-01-01T00:00:00+01:00").getTime()) / 864e5) + 1);
   const S = [];
@@ -1778,7 +1784,8 @@ function wrapSlides() {
   if (top) S.push({ bg: "#91B2EB", fg: "#1D2547", d: "#BAB6DE", html: [["small", "MOST PHOTOGRAPHED BY"], ["h3", top.name.toLowerCase(), "."], ["p", top.list.length + " photos together" + (top.handle ? " · @" + top.handle : "") + "."]] });
   S.push({ bg: byId["navy-blue"].bg, fg: byId["navy-blue"].fg, html: [["small", "FURTHEST FROM HOME"], ["h2", "dublin", "."]] });
   S.push({ bg: "#B8C98B", fg: "#234C3D", d: "#E9A283", html: [["small", "30.10." + Y], ["h3", "first runway", "."], ["p", "s.Oliver × INTERSPORT Harms, neukirchen. the start of something."]] });
-  if (songs.length) S.push({ bg: "#343A4E", fg: "#E8EAF0", d: "#A9A9A9", songs, html: [["small", "THE SOUNDTRACK OF " + Y], ["h3", "on repeat", "."]] });
+  /* his own Spotify "On Repeat" playlist: Spotify keeps it up to date; loads only after a tap */
+  S.push({ bg: "#343A4E", fg: "#E8EAF0", spotify: "https://open.spotify.com/embed/playlist/37i9dQZF1EptrRTUVe7iiW?utm_source=generator", html: [["small", "THE SOUNDTRACK OF " + Y], ["h3", "on repeat", "."]] });
   const left = Math.max(0, Math.ceil((new Date((Y + 1) + "-01-01T00:00:00+01:00") - Date.now()) / 864e5));
   S.push({ bg: ink, fg: van, end: true, html: [["small", left ? "IN " + left + (left === 1 ? " DAY" : " DAYS") : (Y + 1) + ""], ["h2", (Y + 1) + "", "."], ["p", "the next chapter. thank you for watching."]] });
   return S;
@@ -1794,12 +1801,23 @@ function openWrapped() {
   W.append(top, stage, prev, next); document.body.append(W); document.body.style.overflow = "hidden";
   const DUR = 5200;
   const show = k => {
-    i = Math.max(0, Math.min(S.length - 1, k)); const s = S[i];
+    i = Math.max(0, Math.min(S.length - 1, k)); const s = S[i]; paused = false;
     W.style.setProperty("--wb", s.bg); W.style.setProperty("--wf", s.fg); W.style.setProperty("--wd", s.fg);
     const sl = el("div", "wslide");
     s.html.forEach(([tag, txt, dot, after]) => { const [t, cls] = tag.split("."); const e = el(t, cls || null, txt); if (dot) e.append(el("i", null, dot)); if (after) e.append(after); sl.append(e); });
     if (s.covers && s.covers.length) { const cv = el("div", "wcovers"); s.covers.forEach(r => { const im = el("img"); im.src = r.thumb || r.cover; im.alt = ""; cv.append(im); }); sl.append(cv); }
     if (s.songs) { const l = el("div", "wlist"); s.songs.forEach(([c, so]) => { const d = el("div"); const dot = el("i"); dot.style.background = c.bg; d.append(dot, so.t); l.append(d); }); sl.append(l); }
+    if (s.spotify) {
+      const box = el("div", "wembed"), b = el("button", "wplay");
+      b.type = "button"; b.append(el("span", null, "tap to play."), el("small", null, "loads spotify · spotify sets cookies"));
+      b.onclick = e => {
+        e.stopPropagation(); paused = true;   /* the story stops while the music plays */
+        const f = el("iframe"); f.src = s.spotify; f.title = "On Repeat on Spotify";
+        f.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
+        box.textContent = ""; box.append(f);
+      };
+      box.append(b); sl.append(box);
+    }
     if (s.end) { const b = el("button", "sharebtn", "close."); b.style.marginTop = "10px"; b.style.justifySelf = "start"; b.onclick = e => { e.stopPropagation(); close(); }; sl.append(b); }
     stage.textContent = ""; stage.append(sl);
     [...bars.children].forEach((b, j) => b.firstChild.style.width = j < i ? "100%" : "0");
