@@ -845,6 +845,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <button class="view" data-view="about" data-group="about">about.</button>
     <button class="view" data-view="sedcard" data-group="brands">for brands.</button>
     <button class="view" data-view="booking">book.</button>
+    <button class="view vjump" type="button" id="gbJump" hidden>leave a dot.</button>
   </nav>
 
   <section class="card" aria-live="polite">
@@ -1470,7 +1471,15 @@ async function shareChapter(c) {
 }
 
 /* ---------- guestbook: leave a dot (switches on when GB_API is set) ---------- */
-const GB_API = "";
+const GB_API = "https://mn-dots.herrnindl.workers.dev";
+/* menu: "leave a dot." jumps to the dots at the end of the start page */
+if (GB_API) {
+  $("gbJump").hidden = false;
+  $("gbJump").onclick = () => {
+    const jump = () => setTimeout(() => $("gbHead").scrollIntoView({ behavior: calm() ? "auto" : "smooth", block: "start" }), 120);
+    if (view === "colours" && filter === "all") jump(); else { swap(() => select("all")); setTimeout(jump, 700); }
+  };
+}
 async function renderGb() {
   const box = $("gb"), head = $("gbHead"), show = !!GB_API && view === "colours" && filter === "all";
   box.hidden = head.hidden = !show; if (!show || box.dataset.done) return; box.dataset.done = 1;
@@ -1482,7 +1491,7 @@ async function renderGb() {
   const f = el("form", "gbform"), cols = el("div", "cols"); let pick = CHAPTERS[CHAPTERS.length - 2].bg;
   CHAPTERS.forEach(c => { const b = el("button"); b.type = "button"; b.style.setProperty("--c", c.bg); b.title = c.label; b.setAttribute("aria-label", c.label); b.setAttribute("aria-pressed", String(c.bg === pick)); b.onclick = () => { pick = c.bg; cols.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); }; cols.append(b); });
   const go = el("button", "go", "leave it."); go.type = "submit";
-  f.append(cols, go); box.append(f, el("p", "gbnote", "only your colour is shown. no names, no text, nothing else is saved."));
+  f.append(cols, go); box.append(f, el("p", "gbnote", "only your colour is shown. no names, no text. details in the datenschutz."));
   f.onsubmit = async e => {
     e.preventDefault(); go.disabled = true;
     try { const r = await fetch(GB_API, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ c: pick }) });
@@ -2384,7 +2393,7 @@ function updateHash() {
   history.replaceState(null, "", h ? "#" + h : location.pathname);
 }
 function select(id) { view = "colours"; filter = id; updateHash(); render(); }
-document.querySelectorAll(".view").forEach(v => v.onclick = e => { if (v.dataset.view === view || (v.dataset.view === "colours" && view === "colours" && filter === "all")) return; swap(() => { view = v.dataset.view; if (view === "colours") filter = "all"; updateHash(); render(); }, e); v.scrollIntoView({ inline: "nearest", block: "nearest" }); });
+document.querySelectorAll(".view:not(.vjump)").forEach(v => v.onclick = e => { if (v.dataset.view === view || (v.dataset.view === "colours" && view === "colours" && filter === "all")) return; swap(() => { view = v.dataset.view; if (view === "colours") filter = "all"; updateHash(); render(); }, e); v.scrollIntoView({ inline: "nearest", block: "nearest" }); });
 $("home").onclick = e => { e.preventDefault(); if (view === "colours" && filter === "all") { window.scrollTo({ top: 0, behavior: calm() ? "auto" : "smooth" }); return; } swap(() => select("all"), e); };
 window.addEventListener("hashchange", () => {
   const h = location.hash.slice(1);

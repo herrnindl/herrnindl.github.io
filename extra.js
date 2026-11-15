@@ -14,7 +14,7 @@ const CHAPTERS = [
 ];
 /* address of the Cloudflare worker (cloudflare/guestbook-worker.js) — the same one as GB_API in index.html.
    While it is empty, ask me. shows "opens soon." and send nothing. */
-const API = "";
+const API = "https://mn-dots.herrnindl.workers.dev";
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
 const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt != null) e.textContent = txt; return e; };
