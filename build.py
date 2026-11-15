@@ -304,3 +304,44 @@ for group in ("recaps", "posts", "journal"):
 with open("sets.json", "w", encoding="utf-8") as f:
     json.dump(sets, f, ensure_ascii=False, indent=1)
 print(f"{len(sets['recaps'])} recaps, {len(sets['posts'])} posts, {len(sets['journal'])} journal")
+
+
+# ---- launch day: from 01.12.2026 Google may list the site ----
+# The pages carry <meta name="robots" content="noindex"> until then. From launch on, the build
+# removes it from the public pages (only in what gets published, the files in the repo stay as they are)
+# and writes robots.txt + sitemap.xml. The Lebenslauf and the 404 page stay hidden from Google.
+import datetime, glob
+LAUNCH = datetime.datetime(2026, 12, 1, tzinfo=datetime.timezone(datetime.timedelta(hours=1)))
+HIDDEN = {"lebenslauf.html", "404.html"}
+if datetime.datetime.now(datetime.timezone.utc) >= LAUNCH:
+    # the CV stays on the site but out of Google: its text moves to cv.html (blocked in robots.txt)
+    # and the Lebenslauf tab loads it when someone opens it
+    with open("index.html", encoding="utf-8") as f:
+        idx = f.read()
+    tag = '<section class="cv panel" id="lebenslauf" lang="de" hidden>'
+    if tag in idx:
+        a = idx.index(tag) + len(tag); z = idx.index("</section>", a)
+        with open("cv.html", "w", encoding="utf-8") as f:
+            f.write(idx[a:z])
+        idx = idx[:a - len(tag)] + tag.replace(" hidden>", ' hidden data-src="cv.html">') + "\n  " + idx[z:]
+        with open("index.html", "w", encoding="utf-8") as f:
+            f.write(idx)
+    public = []
+    for page in sorted(glob.glob("*.html")):
+        if page == "cv.html":
+            continue
+        if page in HIDDEN:
+            continue
+        with open(page, encoding="utf-8") as f:
+            html = f.read()
+        html = html.replace('<meta name="robots" content="noindex">\n', "").replace('<meta name="robots" content="noindex">', "")
+        with open(page, "w", encoding="utf-8") as f:
+            f.write(html)
+        public.append("https://herrnindl.com/" + ("" if page == "index.html" else page))
+    with open("robots.txt", "w") as f:
+        f.write("User-agent: *\nDisallow: /lebenslauf.html\nDisallow: /cv.html\n\nSitemap: https://herrnindl.com/sitemap.xml\n")
+    with open("sitemap.xml", "w") as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+                + "".join("  <url><loc>%s</loc></url>\n" % u for u in public) + "</urlset>\n")
+    print("launch: %d pages open for Google" % len(public))
+

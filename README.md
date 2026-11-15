@@ -34,4 +34,4 @@ New photos without a line still work, they are just cropped from the middle and 
 - `now.html` — edit the NOW block at the top (song on repeat, working on, …). The chapter changes by itself.
 - `wardrobe.html` — brands per shoot in LOOKS at the top.
 - `ask.html` — your answers in ANSWERS at the top.
-- `ask.html` and `capsule.html` switch on when the worker address is set in `extra.js` (API) — the same worker as the guestbook (`cloudflare/guestbook-worker.js`).
+- `ask.html` switches on when the worker address is set in `extra.js` (API) — the same worker as the guestbook (`cloudflare/guestbook-worker.js`).

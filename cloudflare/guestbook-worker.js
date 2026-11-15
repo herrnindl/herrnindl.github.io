@@ -9,10 +9,7 @@
   POST → { q }          stores the question privately (key "ask"). Nothing is shown on the site
                         until Markus answers it himself in ask.html.
 
-  "time capsule." (capsule.html)                path /capsule
-  GET  → { open, count, messages }   messages stay locked (empty) until 01.01.2027
-  POST → { m, n }       stores one message (key "capsule")
-  To read or delete questions/messages: Cloudflare → Workers & Pages → KV → DOTS → key "ask" / "capsule".
+  To read or delete questions/messages: Cloudflare → Workers & Pages → KV → DOTS → key "ask".
 
   Stored per dot: colour and time. Nothing else.
   The visitor's IP is only used as a one-way hash for 24 h to stop spam, then deleted automatically.
@@ -21,7 +18,6 @@
 const ORIGINS = ["https://herrnindl.com", "https://www.herrnindl.com", "https://herrnindl.github.io"];
 const COLOURS = ["#000000", "#FFFFFF", "#91B2EB", "#BAB6DE", "#343A4E", "#A9A9A9", "#FFF8BB", "#B8B05F", "#B8C98B", "#E9A283", "#B3202A"];
 const MAX = 3000;
-const OPENS = Date.parse("2027-01-01T00:00:00+01:00");
 const clean = (v, n) => String(v || "").replace(/[\u0000-\u001f\u007f<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, n);
 
 export default {
@@ -56,19 +52,6 @@ export default {
       all.push({ q, t: Date.now() }); while (all.length > MAX) all.shift();
       await env.DOTS.put("ask", JSON.stringify(all));
       return json({ ok: true });
-    }
-
-    if (path === "/capsule") {
-      const all = JSON.parse((await env.DOTS.get("capsule")) || "[]"), open = Date.now() >= OPENS;
-      const view = () => ({ open, count: all.length, messages: open ? all.map(x => ({ m: x.m, n: x.n })) : [] });
-      if (req.method === "GET") return json(view());
-      if (open) return json({ error: "closed" }, 403);
-      const m = clean(body.m, 280), n = clean(body.n, 20);
-      if (m.length < 2) return json({ error: "empty" }, 400);
-      if (!(await limit("cap", 1))) return json({ error: "once a day" }, 429);
-      all.push({ m, n, t: Date.now() }); while (all.length > MAX) all.shift();
-      await env.DOTS.put("capsule", JSON.stringify(all));
-      return json(view());
     }
 
     const list = JSON.parse((await env.DOTS.get("all")) || "[]");

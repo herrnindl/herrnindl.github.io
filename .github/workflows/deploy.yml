@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: "2 23 30 11 *"   # 01.12. 00:02 in Austria: launch day, opens the site for Google
 
 permissions:
   contents: read

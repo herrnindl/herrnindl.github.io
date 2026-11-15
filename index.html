@@ -438,10 +438,12 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .wtop button { border: 0; background: none; color: inherit; font-size: 22px; cursor: pointer; padding: 4px 8px; }
 .wslide { align-self: center; justify-self: center; width: min(100%, 620px); display: grid; gap: 14px; }
 .wslide small { font-size: 12px; letter-spacing: .26em; opacity: .75; }
-.wslide h2 { margin: 0; font-weight: 800; font-size: clamp(64px, 20vw, 150px); letter-spacing: -.06em; line-height: .86; }
+.wslide h2 { margin: 0; padding-bottom: .1em; font-weight: 800; font-size: clamp(64px, 20vw, 150px); letter-spacing: -.06em; line-height: .86; }   /* room for g, y below the line */
 .wslide h2 i, .wslide h3 i { font-style: normal; color: var(--wd); }
 .wslide h3 { margin: 0; font-weight: 800; font-size: clamp(40px, 11vw, 84px); letter-spacing: -.055em; line-height: .9; }
 .wslide p { margin: 0; font-size: clamp(17px, 4.4vw, 22px); letter-spacing: -.015em; opacity: .9; max-width: 30ch; }
+.wslide p.one { max-width: none; }   /* one fact per line, never split */
+.wslide p.one + p.one { margin-top: -10px; }
 .wslide .wlist { display: grid; gap: 8px; font-size: clamp(16px, 4.2vw, 20px); }
 .wslide .wlist div { display: flex; align-items: center; gap: 10px; }
 .wslide .wlist i { width: 14px; height: 14px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
@@ -1725,6 +1727,22 @@ function playFilm() {
 ["pointermove", "pointerdown", "keydown", "scroll", "wheel", "touchstart"].forEach(ev => addEventListener(ev, () => { if (!filmOn) armFilm(); }, { passive: true }));
 armFilm();
 
+/* Lebenslauf: after launch its text lives in cv.html (kept out of Google) and is loaded when the tab opens */
+(function () {
+  const box = document.getElementById("lebenslauf");
+  if (!box || !box.dataset.src) return;
+  const load = () => {
+    if (box.hidden || !box.dataset.src) return;
+    const u = box.dataset.src; delete box.dataset.src;
+    fetch(u).then(r => r.text()).then(h => {
+      box.innerHTML = h;
+      box.querySelectorAll("a[data-mail]").forEach(l => l.href = "mailto:" + ["booking", "herrnindl.com"].join("@"));
+    }).catch(() => { box.dataset.src = u; });
+  };
+  new MutationObserver(load).observe(box, { attributes: true, attributeFilter: ["hidden"] });
+  load();
+})();
+
 /* ---------- MN. wrapped: the year as stories ---------- */
 const WRAP_YEAR = 2026;
 function wrapSlides() {
@@ -1732,18 +1750,17 @@ function wrapSlides() {
   const chs = CHAPTERS.filter(inYear), red = byId.red, ink = "#1C1C14", van = "#FFF8BB";
   const songs = chs.map(c => [c, [].concat(SONGS[c.id] || [])[0]]).filter(x => x[1]);
   const cr = credits(), top = cr[0];
-  const far = PLACES.filter(p => chs.some(c => c.id === p.id)).map(p => { const x = (p.lon - HOME.lon) * Math.cos(HOME.lat * Math.PI / 180) * 111.32, y = (HOME.lat - p.lat) * 110.57; return [p, Math.hypot(x, y)]; }).sort((a, b) => b[1] - a[1])[0];
   const days = Math.min(365, Math.floor((Math.min(Date.now(), new Date(Y + "-12-31T23:59:59+01:00").getTime()) - new Date(Y + "-01-01T00:00:00+01:00").getTime()) / 864e5) + 1);
   const S = [];
   S.push({ bg: ink, fg: van, d: red.bg, html: [["small", "MN. WRAPPED"], ["h2", Y + "", "."], ["p", "my year in colours."]] });
-  S.push({ bg: van, fg: ink, d: red.bg, html: [["small", "THIS YEAR"], ["div.big", chs.length + ""], ["h3", "chapters", "."], ["p", days + " days. " + chs.map(c => c.label).join(" ")]] });
+  S.push({ bg: van, fg: ink, d: red.bg, html: [["small", "THIS YEAR"], ["div.big", chs.length + ""], ["h3", "chapters", "."], ["p.one", days + " days."], ["p.one", chs.map(c => c.label.replace(/ /g, "\u00a0")).join(" ")]] });
   chs.forEach((c, k) => {
     const rc = recapMonths().filter(r => r.chapter === c.id && !r.placeholder).slice(0, 3);
     S.push({ bg: c.bg, fg: c.fg, d: c.dot === c.bg ? c.fg : c.dot, chapter: c, covers: rc, html: [["small", "CHAPTER " + String(k + 1).padStart(2, "0") + " · " + c.dates.toUpperCase()], ["h2", c.name, ".", c.suffix || ""], ["p", c.line + (c.place ? " · " + c.place : "")]] });
   });
-  S.push({ bg: ink, fg: van, d: "#E9A283", html: [["small", "SO FAR"], ["div.big", photos.length + ""], ["h3", "photos", "."], ["p", cr.length + " photographers. " + document.querySelectorAll(".press li").length + " times in print. " + RUNWAYS + " runway."]] });
+  S.push({ bg: ink, fg: van, d: "#E9A283", html: [["small", "SO FAR"], ["div.big", photos.length + ""], ["h3", "photos", "."], ["p.one", cr.length + " photographers."], ["p.one", document.querySelectorAll(".press li").length + " times in print."], ["p.one", RUNWAYS + (RUNWAYS === 1 ? " runway." : " runways.")]] });
   if (top) S.push({ bg: "#91B2EB", fg: "#1D2547", d: "#BAB6DE", html: [["small", "MOST PHOTOGRAPHED BY"], ["h3", top.name.toLowerCase(), "."], ["p", top.list.length + " photos together" + (top.handle ? " · @" + top.handle : "") + "."]] });
-  if (far) S.push({ bg: byId[far[0].id].bg, fg: byId[far[0].id].fg, d: byId[far[0].id].dot, html: [["small", "FURTHEST FROM HOME"], ["h2", far[0].name, "."], ["p", Math.round(far[1]).toLocaleString("de-AT") + " km from pinzgau. " + byId[far[0].id].label]] });
+  S.push({ bg: byId["navy-blue"].bg, fg: byId["navy-blue"].fg, html: [["small", "FURTHEST FROM HOME"], ["h2", "dublin", "."]] });
   S.push({ bg: "#B8C98B", fg: "#234C3D", d: "#E9A283", html: [["small", "30.10." + Y], ["h3", "first runway", "."], ["p", "s.Oliver × INTERSPORT Harms, neukirchen. the start of something."]] });
   if (songs.length) S.push({ bg: "#343A4E", fg: "#E8EAF0", d: "#A9A9A9", songs, html: [["small", "THE SOUNDTRACK OF " + Y], ["h3", "on repeat", "."]] });
   const left = Math.max(0, Math.ceil((new Date((Y + 1) + "-01-01T00:00:00+01:00") - Date.now()) / 864e5));

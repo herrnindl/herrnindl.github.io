@@ -13,7 +13,7 @@ const CHAPTERS = [
   { id: "origin",    label: "origin.",     bg: "#000000", fg: "#FFFFFF", line: "my 22nd birthday" },
 ];
 /* address of the Cloudflare worker (cloudflare/guestbook-worker.js) — the same one as GB_API in index.html.
-   While it is empty, ask me. and time capsule. show "opens soon." and send nothing. */
+   While it is empty, ask me. shows "opens soon." and send nothing. */
 const API = "";
 const byId = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
 const $ = id => document.getElementById(id);
@@ -30,7 +30,7 @@ function paint(c) {
 /* menu + footer on every small page */
 (function () {
   const here = location.pathname.split("/").pop() || "index.html";
-  const pages = [["play.html", "play."], ["now.html", "now."], ["glowup.html", "glow up."], ["wardrobe.html", "wardrobe."], ["ask.html", "ask me."], ["capsule.html", "time capsule."]];
+  const pages = [["play.html", "play."], ["now.html", "now."], ["glowup.html", "glow up."], ["wardrobe.html", "wardrobe."], ["ask.html", "ask me."]];
   const nav = document.querySelector("nav.more");
   if (nav) pages.forEach(([href, label]) => { const a = el("a", null, label); a.href = href; if (href === here) a.setAttribute("aria-current", "page"); nav.append(a); });
   const cur = nav && nav.querySelector("[aria-current]"); if (cur) nav.scrollLeft = Math.max(0, cur.offsetLeft - nav.clientWidth / 2 + cur.offsetWidth / 2);
