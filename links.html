@@ -44,10 +44,16 @@ ul { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; gap: 1
 a.btn { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-radius: 14px; text-decoration: none; background: var(--b); color: var(--t); font-weight: 800; font-size: 20px; letter-spacing: -.035em; transition: transform .15s ease; }
 a.btn:active { transform: scale(.98); }
 a.btn small { font-weight: 400; font-size: 12px; letter-spacing: .16em; opacity: .75; }
-.sub { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; width: 100%; }
-.sub a { grid-column: span 2; }
-.sub a:nth-child(n+4) { grid-column: span 3; }
-.sub a { text-align: center; padding: 12px 6px; border: 1px solid rgba(28,28,20,.2); border-radius: 12px; text-decoration: none; color: inherit; font-weight: 500; font-size: 15px; letter-spacing: -.01em; }
+.sub { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; width: 100%; }
+.sub a { display: grid; place-items: center; text-align: center; min-height: 56px; padding: 8px 4px; border: 1px solid rgba(28,28,20,.2); border-radius: 12px; text-decoration: none; color: inherit; font-weight: 800; font-size: clamp(11px, 3.2vw, 14px); letter-spacing: -.03em; line-height: 1.05; }
+details.morelinks { width: 100%; }
+details.morelinks summary { cursor: pointer; list-style: none; text-align: center; font-size: 12px; letter-spacing: .24em; color: var(--soft); padding: 8px 0; }
+details.morelinks summary::-webkit-details-marker { display: none; }
+details.morelinks summary::after { content: " +"; }
+details.morelinks[open] summary::after { content: " –"; }
+details.morelinks ul { margin-top: 10px; gap: 6px; }
+details.morelinks a { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 12px 16px; border: 1px solid rgba(28,28,20,.2); border-radius: 12px; text-decoration: none; color: inherit; font-weight: 800; font-size: 16px; letter-spacing: -.03em; }
+details.morelinks a small { font-weight: 400; font-size: 11px; letter-spacing: .16em; color: var(--soft); text-align: right; }
 footer { font-size: 11px; letter-spacing: .24em; color: var(--soft); text-align: center; display: grid; gap: 8px; }
 footer a { color: inherit; }
 @media (prefers-reduced-motion: reduce) { a.btn { transition: none; } }
@@ -81,6 +87,24 @@ footer a { color: inherit; }
     <a href="ask.html">ask me.</a>
     <a href="dots.html">leave a dot.</a>
   </nav>
+
+  <details class="morelinks">
+    <summary>MORE LINKS</summary>
+    <ul>
+      <li><a href="https://open.spotify.com/user/31jh5h4tagvyl6gg56m5istiz3jq" target="_blank" rel="noopener">spotify. <small>WHAT I LISTEN TO</small></a></li>
+      <li><a href="https://www.last.fm/user/Nindl123" target="_blank" rel="noopener">last.fm. <small>NINDL123</small></a></li>
+      <li><a href="https://www.snapchat.com/@markusnindl" target="_blank" rel="noopener">snapchat. <small>@MARKUSNINDL</small></a></li>
+      <li><a href="https://at.pinterest.com/nindl22/_profile/" target="_blank" rel="noopener">pinterest. <small>NINDL22</small></a></li>
+      <li><a href="https://www.linkedin.com/in/nindl/" target="_blank" rel="noopener">linkedin. <small>NINDL</small></a></li>
+      <li><a href="https://m.cocoburry.co/nindl" target="_blank" rel="noopener">cocoburry. <small>MY PROFILE</small></a></li>
+      <li><a href="https://www.vinted.at/member/3142776749" target="_blank" rel="noopener">vinted. <small>CLOTHES I SELL</small></a></li>
+      <li><a href="https://www.imdb.com/user/p.ar5gvmwdvb4yaezeyx7dtmxh44" target="_blank" rel="noopener">imdb. <small>WHAT I WATCH</small></a></li>
+      <li><a href="https://profile.playstation.com/herrnindl" target="_blank" rel="noopener">playstation. <small>HERRNINDL</small></a></li>
+      <li><a href="https://profile.playstation.com/Nindl123" target="_blank" rel="noopener">playstation. <small>NINDL123</small></a></li>
+      <li><a href="https://www.facebook.com/profile.php?id=61571572013869" target="_blank" rel="noopener">facebook. <small>INACTIVE</small></a></li>
+      <li><a href="https://www.behance.net/nindl" target="_blank" rel="noopener">behance. <small>INACTIVE</small></a></li>
+    </ul>
+  </details>
 
   <footer><span>MN. EST. 01.01.2025 · <a href="impressum.html">impressum</a></span><span>© 2026 MN. · designed &amp; built by <span style="white-space:nowrap">M A R K U S&nbsp;&nbsp;N I N D L</span></span></footer>
 </main>

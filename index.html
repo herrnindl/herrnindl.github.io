@@ -85,11 +85,13 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 14px; }
 .place { font-size: 12px; letter-spacing: .24em; color: var(--soft); }
 .pill { font-size: 12px; letter-spacing: .14em; background: #FFF8BB; color: #3A3624; padding: 2px 10px; border-radius: 999px; }
-.mnline { font-size: 12px; letter-spacing: .24em; color: var(--soft); }
-.mnline b { font-family: var(--serif); font-weight: 500; font-size: 22px; letter-spacing: .06em; color: var(--fg); vertical-align: -2px; margin-left: 4px; }
+.mnlogo { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: 1.5em; letter-spacing: .06em; line-height: 1; vertical-align: -.08em; }
+.mnline { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .24em; color: var(--soft); }
+.mnline b { font-family: var(--serif); font-weight: 500; font-size: 22px; letter-spacing: .06em; line-height: 1; color: var(--fg); position: relative; top: .09em; }   /* the serif sits high in its box: nudged down to the middle of the small text */
 
 .strip { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); margin-inline: calc(-1 * max(18px, env(safe-area-inset-left, 0px))); padding: 10px max(18px, env(safe-area-inset-left, 0px)); border-block: 1px solid var(--line); transition: background-color .5s ease; }
 .chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.chips > .chip { flex: 1 0 auto; justify-content: center; }   /* stretched over the whole line when there is room */
 .chips::-webkit-scrollbar { display: none; }
 .chip { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px 6px 9px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 13px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
 .chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
@@ -211,6 +213,9 @@ a.view { text-decoration: none; display: inline-block; }
 .stats .wide { grid-column: span 2; }
 .stats dt { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--soft); }
 .stats dd { margin: 0; font-weight: 800; font-size: 18px; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.sedrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 6px; }
+.sedrow .sedcard { margin-top: 0; }
+.sedcard.ghost { background: none; color: var(--fg); border: 1px solid var(--fg); font: inherit; font-weight: 800; cursor: pointer; }
 .sedcard { justify-self: start; width: fit-content; display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; padding: 10px 18px; border-radius: 999px; background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 800; letter-spacing: -.02em; }
 .docs { display: flex; flex-wrap: wrap; gap: 8px; }
 .sedcard.ghost { background: transparent; color: var(--fg); border: 1px solid var(--fg); }
@@ -871,12 +876,12 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 
   <nav class="views" aria-label="Sections">
     <button class="view" data-view="colours">colours.</button>
-    <button class="view" data-view="recaps">recaps.</button>
     <button class="view" data-view="posts">posts.</button>
     <button class="view" data-view="journal">journal.</button>
     <button class="view" data-view="about" data-group="about">about.</button>
     <button class="view" data-view="sedcard" data-group="brands">for brands.</button>
     <button class="view" data-view="booking">book.</button>
+    <button class="view" data-view="recaps">recaps.</button>
     <a class="view vjump" href="dots.html">leave a dot.</a>
   </nav>
 
@@ -896,7 +901,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   </section>
 
   <div class="duo">
-    <button class="wrapcard" id="wrapCard" type="button" hidden><span class="wphone" aria-hidden="true"><span class="wpbars"><i></i><i></i><i></i><i></i><i></i></span><span class="wpname"></span></span><span class="wtxt"><small>MN. WRAPPED</small><b>2026<i>.</i></b><em>my year in colours. tap to play.</em><span class="wdots"></span></span></button>
+    <button class="wrapcard" id="wrapCard" type="button" hidden><span class="wphone" aria-hidden="true"><span class="wpbars"><i></i><i></i><i></i><i></i><i></i></span><span class="wpname"></span></span><span class="wtxt"><small><span class="mnlogo">MN.</span> WRAPPED</small><b>2026<i>.</i></b><em>my year in colours. tap to play.</em><span class="wdots"></span></span></button>
     <div class="otd" id="otd" hidden></div>
     <a class="playcard" id="playCard" href="play.html" hidden><span class="pdots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><small>PLAY.</small><b>the daily dot.</b><em>a new photo every day. and four more games.</em></span></a>
   </div>
@@ -911,11 +916,11 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="more" id="more" hidden></div>
   <h2 class="hofhead sec" id="gbHead" hidden><b>04</b>more.</h2>
   <nav class="moregrid" id="gb" aria-label="More pages" hidden>
-    <a href="dots.html" class="mg-dot"><small>LEAVE A DOT.</small><b>one colour<i>.</i></b><span id="gbCount">one a day. no name.</span><em class="mgdots" id="gbDots" aria-hidden="true"></em></a>
-    <a href="ask.html"><small>ASK ME.</small><b>anything<i>.</i></b><span>i answer the best ones.</span></a>
+    <a href="play.html"><small>PLAY.</small><b>five games<i>.</i></b><span>and the daily dot.</span></a>
     <a href="glowup.html"><small>GLOW UP.</small><b>origin. to now<i>.</i></b><span>drag through every chapter.</span></a>
     <a href="wardrobe.html"><small>WARDROBE.</small><b>what i wore<i>.</i></b><span>brands, chapter by chapter.</span></a>
-    <a href="play.html"><small>PLAY.</small><b>five games<i>.</i></b><span>and the daily dot.</span></a>
+    <a href="ask.html"><small>ASK ME.</small><b>anything<i>.</i></b><span>i answer the best ones.</span></a>
+    <a href="dots.html" class="mg-dot"><small>LEAVE A DOT.</small><b>one colour<i>.</i></b><span id="gbCount">one a day. no name.</span><em class="mgdots" id="gbDots" aria-hidden="true"></em></a>
   </nav>
   <div class="grid2 rgrid" id="recapGrid" hidden></div>
   <div class="grid3" id="postGrid" hidden></div>
@@ -975,7 +980,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       <div class="wide"><dt>languages</dt><dd>german · english</dd></div>
       <div class="wide" id="skillsRow" hidden><dt>skills</dt><dd id="skills"></dd></div>
     </dl>
-    <a class="sedcard" href="sedcard-markus-nindl.pdf" download>download sedcard. <small>PDF</small></a>
+    <span class="sedrow"><a class="sedcard" href="sedcard-markus-nindl.pdf" download>download sedcard. <small>PDF</small></a><button class="sedcard ghost" id="sedShare" type="button">share.</button></span>
     <a class="sedprev" href="sedcard-markus-nindl.pdf" target="_blank" rel="noopener"><img src="sedcard-preview.jpg" alt="Sedcard of Markus Nindl" loading="lazy"></a>
   </section>
 
@@ -1332,7 +1337,6 @@ function renderCard() {
     }
   });
   if ([].concat(SONGS[c.id] || []).some(x => x.id) && !soundOn) meta.append(el("span", "spotnote", "tap to play via spotify · spotify sets cookies"));
-  { const sh = el("button", "sharebtn", "share."); sh.type = "button"; sh.setAttribute("aria-label", "share " + c.label + " as a story"); sh.onclick = () => shareChapter(c); meta.append(sh); }
   if (photos.some(p => p.chapter === c.id && !p.video)) { const w = el("button", "sharebtn walkbtn", "walk through."); w.type = "button"; w.setAttribute("aria-label", "walk through " + c.label + " like an exhibition"); w.onclick = () => openRoom(c); meta.append(w); }
   if (soundOn) { const first = [].concat(SONGS[c.id] || []).find(x => x.id); if (first) playSong(first); else hushSong(); }   /* a chapter without its own song is quiet */
 }
@@ -1481,34 +1485,6 @@ const QUOTES = {
   /* "navy-blue": "the end? no. a new start.", */
 };
 
-/* ---------- share a chapter as a story image ---------- */
-async function shareChapter(c) {
-  const W = 1080, H = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
-  const x = cv.getContext("2d");
-  try { await Promise.all(['800 100px Inter', '400 40px Inter', '500 60px "Bodoni Moda"'].map(f => document.fonts.load(f))); } catch (e) {}
-  x.fillStyle = c.bg; x.fillRect(0, 0, W, H); x.fillStyle = c.fg; x.textBaseline = "alphabetic";
-  x.font = '500 70px "Bodoni Moda", Georgia, serif'; x.fillText("MN.", 90, 170);
-  const pics = photos.filter(p => p.chapter === c.id);
-  let y = 300;
-  if (pics.length) {
-    const p = pics[0], img = new Image(); img.src = p.thumb2 || p.src;
-    try { await img.decode(); const bw = 900, bh = 1000, r = Math.max(bw / img.width, bh / img.height), sw = bw / r, sh = bh / r;
-      x.save(); x.beginPath(); x.roundRect(90, y, bw, bh, 28); x.clip(); const fx = p.f ? p.f[0] : .5, fy = p.f ? p.f[1] : .3;
-      x.drawImage(img, Math.max(0, Math.min(img.width - sw, fx * img.width - sw / 2)), Math.max(0, Math.min(img.height - sh, fy * img.height - sh / 2)), sw, sh, 90, y, bw, bh); x.restore(); y += bh + 120; } catch (e) { y = 900; }
-  } else y = 1000;
-  x.font = '400 34px Inter, Arial, sans-serif'; x.letterSpacing = "10px"; x.fillText(c.dates.toUpperCase(), 90, y); x.letterSpacing = "0px";
-  let fs = 210; x.font = `800 ${fs}px Inter, Arial, sans-serif`;
-  const name = c.name, nameW = () => x.measureText(name + ".").width;
-  while (nameW() > 900 && fs > 90) { fs -= 6; x.font = `800 ${fs}px Inter, Arial, sans-serif`; }
-  x.letterSpacing = `${-fs * .05}px`; y += fs * .95; x.fillText(name, 84, y);
-  const nw = x.measureText(name).width; x.fillStyle = c.dot === c.bg ? c.fg : c.dot; x.fillText(".", 84 + nw, y); x.fillStyle = c.fg; x.letterSpacing = "0px";
-  x.font = '400 56px Inter, Arial, sans-serif'; x.fillText(c.line, 90, y + 90);
-  x.font = '400 30px Inter, Arial, sans-serif'; x.letterSpacing = "8px"; x.globalAlpha = .75; x.fillText("MY LIFE IN COLOURS.  ·  HERRNINDL.COM", 90, H - 110); x.globalAlpha = 1; x.letterSpacing = "0px";
-  const blob = await new Promise(r => cv.toBlob(r, "image/png"));
-  const file = new File([blob], "mn-" + c.id + ".png", { type: "image/png" });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: c.label }); return; } catch (e) { if (e.name === "AbortError") return; } }
-  const a = el("a"); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-}
 
 /* ---------- guestbook: leave a dot (switches on when GB_API is set) ---------- */
 const GB_API = "https://mn-dots.herrnindl.workers.dev";
@@ -1806,7 +1782,7 @@ function wrapSlides() {
   const cr = credits(), top = cr[0];
   const days = 365;   /* the whole year */
   const S = [];
-  S.push({ bg: ink, fg: van, d: red.bg, html: [["small", "MN. WRAPPED"], ["h2", Y + "", "."], ["p", "my year in colours."]] });
+  S.push({ bg: ink, fg: van, d: red.bg, html: [["small.mnw", "MN. WRAPPED"], ["h2", Y + "", "."], ["p", "my year in colours."]] });
   S.push({ bg: van, fg: ink, d: red.bg, html: [["small", "THIS YEAR"], ["div.big", chs.length + ""], ["h3", "chapters", "."], ["p.one", days + " days."], ["p.one", chs.map(c => c.label.replace(/ /g, "\u00a0")).join(" ")]] });
   /* the year as one line: every chapter as long as it lasted */
   const DAY = 864e5, y0 = new Date(Y + "-01-01T00:00:00Z").getTime(), y1 = new Date((Y + 1) + "-01-01T00:00:00Z").getTime();
@@ -1866,7 +1842,7 @@ function openWrapped() {
     i = Math.max(0, Math.min(S.length - 1, k)); const s = S[i]; paused = false;
     W.style.setProperty("--wb", s.bg); W.style.setProperty("--wf", s.fg); W.style.setProperty("--wd", s.fg);
     const sl = el("div", "wslide");
-    s.html.forEach(([tag, txt, dot, after]) => { const [t, cls] = tag.split("."); const e = el(t, cls || null, txt); if (dot) e.append(el("i", null, dot)); if (after) e.append(after); sl.append(e); });
+    s.html.forEach(([tag, txt, dot, after]) => { const [t, cls] = tag.split("."); const e = el(t, cls || null, txt); if (cls === "mnw") { e.textContent = ""; e.append(el("span", "mnlogo", "MN."), " WRAPPED"); } if (dot) e.append(el("i", null, dot)); if (after) e.append(after); sl.append(e); });
     if (s.covers && s.covers.length) { const cv = el("div", "wcovers"); s.covers.forEach(r => { const im = el("img"); im.src = r.thumb || r.cover; im.alt = ""; cv.append(im); }); sl.append(cv); }
     if (s.strip) {
       const bar = el("div", "wstrip"), leg = el("div", "wlist");
@@ -2768,6 +2744,16 @@ function edgeFade(row) {
   row.addEventListener("scroll", upd, { passive: true }); window.addEventListener("resize", upd); upd();
   return upd;
 }
+/* share the sedcard: the PDF itself where the phone can, otherwise the link */
+$("sedShare").onclick = async () => {
+  const btn = $("sedShare"), url = new URL("sedcard-markus-nindl.pdf", location.href).href;
+  try {
+    const file = new File([await (await fetch(url)).blob()], "sedcard-markus-nindl.pdf", { type: "application/pdf" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: "Markus Nindl · sedcard" }); return; }
+    if (navigator.share) { await navigator.share({ title: "Markus Nindl · sedcard", url }); return; }
+  } catch (e) { if (e && e.name === "AbortError") return; }
+  try { await navigator.clipboard.writeText(url); btn.textContent = "link copied."; setTimeout(() => btn.textContent = "share.", 1600); } catch (e) {}
+};
 window.fadeViews = edgeFade(document.querySelector(".views")); window.fadeChips = edgeFade($("chips"));
 new MutationObserver(() => fadeChips()).observe($("chips"), { childList: true });
 

@@ -33,14 +33,15 @@ LAUNCH-PREVIEW-->
 html, body { margin: 0; }
 body { background: var(--bg); color: var(--fg); font-family: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif; font-size: 15px; line-height: 1.45; min-height: 100vh; min-height: 100dvh; transition: background-color .5s ease, color .5s ease; }
 button { font: inherit; color: inherit; cursor: pointer; }
-.wrap { max-width: 520px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
-header { display: flex; justify-content: space-between; align-items: center; }
+.wrap { max-width: 1236px; margin: 0 auto; padding: env(safe-area-inset-top, 0px) max(18px, env(safe-area-inset-right, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
+.wrap > *:not(header):not(nav):not(footer) { max-width: 560px; }
+header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-block: 22px 8px; }
 .mark { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: 30px; letter-spacing: .06em; line-height: 1; text-decoration: none; color: inherit; user-select: none; }
 .back { background: none; border: 0; font-size: 14px; color: var(--soft); padding: 6px 0; }
 .view { display: none; }
 .view.on { display: block; animation: fade .35s ease; }
 @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-h1 { font-weight: 800; font-size: clamp(56px, 16vw, 84px); letter-spacing: -.055em; line-height: .9; margin: 34px 0 8px; }
+h1 { font-weight: 800; font-size: clamp(56px, 13vw, 132px); letter-spacing: -.055em; line-height: .9; margin: clamp(44px, 8vw, 88px) 0 10px; }
 h2 { font-weight: 800; font-size: 34px; letter-spacing: -.045em; line-height: 1; margin: 22px 0 4px; }
 .sub { color: var(--soft); margin: 0 0 24px; }
 .card { display: block; width: 100%; text-align: left; background: none; border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; margin-bottom: 10px; transition: transform .15s ease, border-color .2s; }
@@ -52,7 +53,6 @@ h2 { font-weight: 800; font-size: 34px; letter-spacing: -.045em; line-height: 1;
 .btn.ghost { background: none; color: var(--fg); border: 1px solid var(--fg); }
 .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
 .meta { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .2em; color: var(--soft); margin: 26px 0 12px; }
-.hint { color: var(--soft); font-size: 11px; letter-spacing: .24em; text-align: center; margin-top: 36px; opacity: .7; }
 
 /* who's that chapter? */
 .frame { position: relative; width: 100%; aspect-ratio: 4/5; border-radius: 16px; overflow: hidden; background: #1C1C14; margin-bottom: 14px; }
@@ -106,11 +106,12 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
 .youare { font-weight: 800; font-size: clamp(64px, 19vw, 104px); letter-spacing: -.06em; line-height: .85; margin: 6px 0 8px; }
 .resphoto { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 16px; margin-top: 20px; display: block; background: rgba(0,0,0,.1); }
 
-.more { display: flex; gap: 16px; font-size: 13px; color: var(--soft); white-space: nowrap; overflow-x: auto; scrollbar-width: none; margin: 14px -18px 0; padding: 0 18px 2px; }
+.more { display: flex; gap: 18px; font-size: 15px; font-weight: 500; letter-spacing: -.01em; color: var(--soft); white-space: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -18px; padding: 4px 18px 0; }
 .more::-webkit-scrollbar { display: none; }
 .more a { color: inherit; text-decoration: none; }
-.more a[aria-current] { color: var(--fg); font-weight: 800; }
-.foot { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 11px; letter-spacing: .14em; color: var(--soft); }
+.more a { padding: 4px 0; border-bottom: 2px solid transparent; }
+.more a[aria-current] { color: var(--fg); border-color: var(--fg); }
+.foot { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 11px; letter-spacing: .24em; color: var(--soft); }
 .foot a { color: inherit; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
@@ -132,7 +133,6 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
     <button class="card" data-go="chapter"><b>who's that chapter?</b><span>guess the colour behind the photo.</span></button>
     <button class="card" data-go="mix"><b>mix the colour.</b><span>match a chapter. code-exact.</span></button>
     <button class="card" data-go="dot"><b>catch the dot.</b><span>20 seconds. how many?</span></button>
-    <p class="hint">SOMETHING IS HIDDEN ON THIS PAGE.</p>
   </section>
 
   <!-- the daily dot -->
@@ -142,7 +142,7 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
     <div class="row" style="justify-content:space-between;margin:0 0 14px"><div class="tries" id="dd-tries"></div><span class="small" id="dd-left">5 TRIES</span></div>
     <div class="dgrid" id="dd-choices"></div>
     <div class="reveal" id="dd-reveal"></div>
-    <div class="row" id="dd-after" hidden><button class="btn" id="dd-share">share</button><span class="small" id="dd-next"></span></div>
+    <div class="row" id="dd-after" hidden><span class="small" id="dd-next"></span></div>
   </section>
 
   <!-- which chapter are you? -->
@@ -157,7 +157,7 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
       <div class="youare" id="qz-name"></div>
       <p class="sub" id="qz-line" style="margin:0"></p>
       <img class="resphoto" id="qz-img" alt="">
-      <div class="row"><button class="btn" id="qz-share">share as story</button><button class="btn ghost" id="qz-again">again</button></div>
+      <div class="row"><button class="btn ghost" id="qz-again">again</button></div>
     </div>
   </section>
 
@@ -517,16 +517,6 @@ function tickNext() {
   };
   f(); nextTimer = setInterval(f, 1000);
 }
-$("dd-share").onclick = () => {
-  const d = dd.day.split("-");
-  const dots = dd.guesses.map((g, i) => dd.won && i === dd.guesses.length - 1 ? "◉" : "●").join(" ") + " ○".repeat(ZOOM.length - dd.guesses.length);
-  const text = `the daily dot. ${d[2]}.${d[1]}.\n${dots}\n${dd.won ? dd.guesses.length + "/5" : "x/5"} · streak ${streak().n}\nherrnindl.com/play.html#daily`;
-  shareText(text, $("dd-share"));
-};
-async function shareText(text, btn) {
-  try { if (navigator.share) { await navigator.share({ text }); return; } } catch (e) { if (e && e.name === "AbortError") return; }
-  try { await navigator.clipboard.writeText(text); const o = btn.textContent; btn.textContent = "copied."; setTimeout(() => btn.textContent = o, 1600); } catch (e) {}
-}
 
 /* ---------- 5. which chapter are you? ---------- */
 const QUIZ = [
@@ -590,40 +580,6 @@ function showQuiz() {
   scrollTo(0, 0);
 }
 $("qz-again").onclick = startQuiz;
-$("qz-share").onclick = async () => {
-  const btn = $("qz-share"), c = qResult;
-  btn.textContent = "…";
-  try {
-    await document.fonts.ready;
-    const W = 1080, H = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
-    const x = cv.getContext("2d");
-    x.fillStyle = c.bg; x.fillRect(0, 0, W, H);
-    const bx = 90, by = 300, bw = W - 180, bh = 1050;
-    if (qPhoto) {
-      const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = qPhoto; });
-      const s = Math.max(bw / img.naturalWidth, bh / img.naturalHeight), sw = bw / s, sh = bh / s;
-      x.save(); x.beginPath(); x.roundRect ? x.roundRect(bx, by, bw, bh, 36) : x.rect(bx, by, bw, bh); x.clip();
-      const cx = Math.max(0, Math.min(img.naturalWidth - sw, qFace[0] * img.naturalWidth - sw / 2)), cy = Math.max(0, Math.min(img.naturalHeight - sh, qFace[1] * img.naturalHeight - sh / 2));
-      x.drawImage(img, cx, cy, sw, sh, bx, by, bw, bh); x.restore();
-    } else {   /* no photos in this chapter yet: one big dot in the text colour */
-      x.fillStyle = c.fg; x.beginPath(); x.arc(W / 2, by + bh / 2, 300, 0, Math.PI * 2); x.fill();
-    }
-    x.fillStyle = c.fg;
-    x.font = '500 72px "Bodoni Moda", Georgia, serif'; x.textAlign = "center"; x.fillText("MN.", W / 2, 190);
-    x.textAlign = "left";
-    x.font = '400 34px Inter, Arial, sans-serif'; x.globalAlpha = .7; x.fillText("W H I C H   C H A P T E R   A R E   Y O U ?", bx, 1440); x.globalAlpha = 1;
-    let size = 190; x.font = `800 ${size}px Inter, Arial, sans-serif`;
-    while (x.measureText(c.label).width > bw && size > 80) { size -= 8; x.font = `800 ${size}px Inter, Arial, sans-serif`; }
-    x.fillText(c.label, bx - 6, 1440 + size * .95);
-    x.font = '400 46px Inter, Arial, sans-serif'; x.fillText(c.line, bx, 1440 + size * .95 + 80);
-    x.font = '400 30px Inter, Arial, sans-serif'; x.globalAlpha = .7; x.textAlign = "center"; x.fillText("herrnindl.com", W / 2, H - 90);
-    const blob = await new Promise(ok => cv.toBlob(ok, "image/png"));
-    const file = new File([blob], `mn-${c.id}.png`, { type: "image/png" });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file] }).catch(() => {}); }
-    else { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
-  } catch (e) {}
-  btn.textContent = "share as story";
-};
 
 
 const GAMES = ["daily", "quiz", "chapter", "mix", "dot"];
