@@ -28,8 +28,14 @@ LAUNCH-PREVIEW-->
 .brands a, .tags a { color: inherit; text-decoration: none; }
 .brands a::after, .tags a::after { content: " ↗"; opacity: .5; font-size: .85em; }
 .brands a, .tags a, .tags span { border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 13px; }
-.look { margin: 0 0 34px; }
-.look h2 { font-weight: 800; font-size: 30px; letter-spacing: -.045em; line-height: 1; margin: 0 0 4px; display: flex; align-items: center; gap: 10px; }
+.look { margin: 0 0 12px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; }
+.lhead { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px; align-items: center; }
+.lhead img { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; display: block; background: var(--line); }
+.lhead b { display: block; font-weight: 800; letter-spacing: -.03em; font-size: 17px; }
+.lhead small { display: block; font-size: 12px; color: var(--soft); }
+.lhead a { color: inherit; font-size: 12px; text-decoration: none; border-bottom: 1px solid var(--line); }
+.story { margin: 4px 0 12px; font-size: 15px; line-height: 1.5; }
+.look h2 { font-weight: 800; font-size: 30px; letter-spacing: -.045em; line-height: 1; margin: 14px 0 4px; display: flex; align-items: center; gap: 10px; }
 .look h2 i { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
 .pics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0 10px; }
 .pics img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; display: block; background: var(--line); }
@@ -69,6 +75,10 @@ const LOOKS = {
   "vanilla-2|Ronald Mitterer @ronaldmitterer|08.07.2026": ["BRTLwear"],
   "navy-blue|Daniel Rieder @danielriederfotografie|30.10.2025": ["Calvin Klein"],
 };
+/* The story of each outfit: same key as in LOOKS, then your text. It shows up under the photos. */
+const STORIES = {
+  /* "vanilla-2|Ronald Mitterer @ronaldmitterer|08.07.2026": "your story here", */
+};
 /* ===================== */
 Object.entries(BRANDS).forEach(([b, u]) => { const a = el("a", null, b); a.href = u; a.target = "_blank"; a.rel = "noopener"; $("brands").append(a); });
 const ORDER = CHAPTERS.map(c => c.id);              /* newest chapter first */
@@ -80,19 +90,26 @@ loadPhotos().then(list => {
     .sort((a, b) => ORDER.indexOf(a[1][0].chapter) - ORDER.indexOf(b[1][0].chapter) || (ymd(b[1][0].date) > ymd(a[1][0].date) ? 1 : -1))
     .forEach(([k, ps]) => {
       const c = byId[ps[0].chapter], box = el("section", "look");
-      const h = el("h2"); const dot = el("i"); dot.style.background = c.bg; h.append(dot, c.label); box.append(h);
-      const who = (ps[0].credit || "").replace(/\s*@\S+/, "") || (ps[0].credit || "").replace("@", "");
-      box.append(el("div", "small", [ps[0].date, who ? "PHOTOS " + who.toUpperCase() : ""].filter(Boolean).join(" · ")));
+      const cr = ps[0].credit || "", m = cr.match(/^(.*?)\s*@([\w.]+)\s*$/), who = (m ? (m[1] || m[2]) : cr).trim(), handle = m ? m[2] : "";
+      const head = el("div", "lhead"), av = el("img"); av.alt = ""; av.loading = "lazy";
+      const pf = ps.find(p => p.f) || ps[0]; av.src = pf.thumb || pf.src; if (pf.f) av.style.objectPosition = (pf.f[0] * 100) + "% " + (pf.f[1] * 100) + "%";
+      const info = el("div"), dot = el("i"); dot.style.cssText = "display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);background:" + c.bg;
+      const nm = el("b"); nm.append(dot, c.label); info.append(nm);
+      info.append(el("small", null, [ps[0].date, who ? "photos by " + who.toLowerCase() : ""].filter(Boolean).join(" · ")));
+      if (handle) { const a = el("a", null, "@" + handle); a.href = "https://instagram.com/" + handle; a.target = "_blank"; a.rel = "noopener"; info.append(a); }
+      head.append(av, info); box.append(head);
       const g = el("div", "pics");
       ps.filter(p => p.f).sort((a, b) => a.f[2] - b.f[2])   /* smallest face first = most of the outfit */
         .filter((p, i, arr) => i === arr.findIndex(q => q.src.replace(/(x?sw|swe|[abc])?\.\w+$/, "") === p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""))).slice(0, 3)
         .forEach(p => { const im = el("img"); im.alt = c.label + " outfit"; im.loading = "lazy"; im.style.objectPosition = (p.f[0] * 100) + "% " + Math.min(100, p.f[1] * 100 + 25) + "%"; im.src = p.thumb || p.src; g.append(im); });
       box.append(g);
+      if (STORIES[k]) box.append(el("p", "story", STORIES[k]));
       const t = LOOKS[k] || [];
       if (t.length) { const tg = el("div", "tags"); t.forEach(b => { if (BRANDS[b]) { const a = el("a", null, b); a.href = BRANDS[b]; a.target = "_blank"; a.rel = "noopener"; tg.append(a); } else tg.append(el("span", null, b)); }); box.append(tg); }
       $("looks").append(box);
     });
 });
 </script>
+<script src="egg.js"></script>
 </body>
 </html>

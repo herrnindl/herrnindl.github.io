@@ -29,7 +29,7 @@ LAUNCH-PREVIEW-->
 .wall i.me { box-shadow: inset 0 0 0 1px rgba(0,0,0,.14), 0 0 0 2px var(--bg), 0 0 0 4px var(--fg); }
 @keyframes pop { from { transform: scale(0); } }
 .count { font-weight: 800; font-size: 22px; letter-spacing: -.035em; margin: 0 0 26px; }
-.cols { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 10px; margin: 6px 0 14px; }
+.cols { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 6px; margin: 6px 0 14px; }
 .cols button { aspect-ratio: 1; border-radius: 50%; border: 0; padding: 0; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
 .cols button[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--fg); }
 .picked { font-weight: 800; font-size: 26px; letter-spacing: -.045em; margin: 0; }
@@ -86,5 +86,6 @@ $("go").onclick = async () => {
   finally { $("go").disabled = false; }
 };
 </script>
+<script src="egg.js"></script>
 </body>
 </html>

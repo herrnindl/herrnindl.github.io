@@ -44,7 +44,9 @@ ul { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; gap: 1
 a.btn { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-radius: 14px; text-decoration: none; background: var(--b); color: var(--t); font-weight: 800; font-size: 20px; letter-spacing: -.035em; transition: transform .15s ease; }
 a.btn:active { transform: scale(.98); }
 a.btn small { font-weight: 400; font-size: 12px; letter-spacing: .16em; opacity: .75; }
-.sub { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.sub { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.sub a { grid-column: span 2; }
+.sub a:nth-child(n+4) { grid-column: span 3; }
 .sub a { text-align: center; padding: 12px 6px; border: 1px solid rgba(28,28,20,.2); border-radius: 12px; text-decoration: none; color: inherit; font-weight: 500; font-size: 15px; letter-spacing: -.01em; }
 footer { font-size: 11px; letter-spacing: .24em; color: var(--soft); text-align: center; display: grid; gap: 8px; }
 footer a { color: inherit; }
@@ -74,7 +76,6 @@ footer a { color: inherit; }
 
   <nav class="sub" aria-label="Website sections">
     <a href="play.html">play.</a>
-    <a href="now.html">now.</a>
     <a href="glowup.html">glow up.</a>
     <a href="wardrobe.html">wardrobe.</a>
     <a href="ask.html">ask me.</a>
@@ -83,5 +84,6 @@ footer a { color: inherit; }
 
   <footer><span>MN. EST. 01.01.2025 · <a href="impressum.html">impressum</a></span><span>© 2026 MN. · designed &amp; built by <span style="white-space:nowrap">M A R K U S&nbsp;&nbsp;N I N D L</span></span></footer>
 </main>
+<script src="egg.js"></script>
 </body>
 </html>

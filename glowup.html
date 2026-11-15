@@ -51,15 +51,15 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
 </div>
 <script src="extra.js"></script>
 <script>
-/* oldest chapter first; per chapter the photos where the face is biggest, so the face stays the same size */
+/* oldest chapter first; per chapter only the best photos (picked ones first), the face is kept at the same size */
 const ORDER = ["origin", "white", "baby-blue", "lavendel", "navy-blue", "grey", "vanilla", "vanilla-2", "ber", "ember", "red"];
-const PER = 4;
+const PER = 3;
 let pics = [], imgs = [], i = 0, timer = null;
 const ymd = s => s ? s.split(".").reverse().join("") : "99999999";   /* no date yet = newest (the Marla Pilz shoot came after Ronald Mitterer) */
 loadPhotos().then(list => {
   list = list.filter(p => p.f && !p.nf && p.f[2] >= .06);
   ORDER.forEach(id => {
-    const own = list.filter(p => p.chapter === id).sort((a, b) => b.f[2] - a.f[2]);
+    const own = list.filter(p => p.chapter === id).sort((a, b) => (a.sel ? 0 : 1) - (b.sel ? 0 : 1) || (a.sel || 0) - (b.sel || 0) || (b.cm || 0) - (a.cm || 0) || b.f[2] - a.f[2]);   /* the best ones first: picked photos, then the ones most in the chapter colour */
     const seen = new Set(), pick = [];
     for (const p of own) { const k = p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""); if (pick.length < PER && !seen.has(k)) { seen.add(k); pick.push(p); } }
     pick.sort((a, b) => ymd(a.date) < ymd(b.date) ? -1 : 1);
@@ -100,5 +100,6 @@ $("play").onclick = () => {
   timer = setInterval(() => { if (i >= pics.length - 1) return stop(); show(i + 1); }, 900);
 };
 </script>
+<script src="egg.js"></script>
 </body>
 </html>

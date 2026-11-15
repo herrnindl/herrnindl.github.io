@@ -106,14 +106,6 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
 .youare { font-weight: 800; font-size: clamp(64px, 19vw, 104px); letter-spacing: -.06em; line-height: .85; margin: 6px 0 8px; }
 .resphoto { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 16px; margin-top: 20px; display: block; background: rgba(0,0,0,.1); }
 
-/* red. */
-#red { position: fixed; inset: 0; z-index: 50; background: #B3202A; color: #FFF8BB; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; }
-#red.on { display: flex; animation: redin 1.1s ease; }
-@keyframes redin { from { clip-path: circle(0% at 50% 50%); } to { clip-path: circle(150% at 50% 50%); } }
-#red .r { font-weight: 800; font-size: min(36vw, 220px); letter-spacing: -.06em; line-height: .85; }
-#red p { margin: 12px 0 0; font-size: 12px; letter-spacing: .26em; }
-#red .count { font-weight: 800; font-size: 22px; letter-spacing: -.03em; margin-top: 30px; }
-#red button { position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: 20px; background: none; border: 0; color: #FFF8BB; font-size: 22px; }
 .more { display: flex; gap: 16px; font-size: 13px; color: var(--soft); white-space: nowrap; overflow-x: auto; scrollbar-width: none; margin: 14px -18px 0; padding: 0 18px 2px; }
 .more::-webkit-scrollbar { display: none; }
 .more a { color: inherit; text-decoration: none; }
@@ -212,14 +204,6 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
 
 <div class="wrap" style="padding-top:0"><footer class="foot"><span>© 2026 MN. · designed &amp; built by <span style="white-space:nowrap">M A R K U S&nbsp;&nbsp;N I N D L</span></span><span><a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span></footer></div>
 
-<!-- red. (hidden: type "red" or tap MN. five times) -->
-<div id="red" aria-hidden="true">
-  <button id="red-close" aria-label="Close">✕</button>
-  <div class="r">red.</div>
-  <p>01.01.2027</p>
-  <p>TWO YEARS OF MN.</p>
-  <div class="count" id="red-count"></div>
-</div>
 
 <script>
 /* Same colours and lines as the chapters on the start page (index.html). red. stays hidden. */
@@ -641,31 +625,12 @@ $("qz-share").onclick = async () => {
   btn.textContent = "share as story";
 };
 
-/* ---------- red. ---------- */
-function openRed() {
-  const days = Math.ceil((RED_DATE - new Date()) / 86400000);
-  $("red-count").textContent = days > 1 ? days + " days." : days === 1 ? "tomorrow." : "now.";
-  $("red").classList.add("on");
-}
-$("red-close").onclick = () => $("red").classList.remove("on");
-let keys = "";
-addEventListener("keydown", e => {
-  if (e.key && e.key.length === 1) { keys = (keys + e.key.toLowerCase()).slice(-3); if (keys === "red") openRed(); }
-  if (e.key === "Escape") $("red").classList.remove("on");
-});
-/* one tap on MN. goes home; five quick taps open red. */
-let taps = 0, tapTimer = null;
-$("mark").addEventListener("click", e => {
-  e.preventDefault();
-  taps++; clearTimeout(tapTimer);
-  if (taps >= 5) { taps = 0; openRed(); return; }
-  tapTimer = setTimeout(() => { if (taps === 1) location.href = "./"; taps = 0; }, 450);
-});
 
 const GAMES = ["daily", "quiz", "chapter", "mix", "dot"];
 const fromHash = () => { const h = location.hash.slice(1); go(GAMES.includes(h) ? h : "home"); };
 addEventListener("hashchange", fromHash);
 fromHash();
 </script>
+<script src="egg.js"></script>
 </body>
 </html>
