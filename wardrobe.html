@@ -28,16 +28,14 @@ LAUNCH-PREVIEW-->
 .brands a, .tags a { color: inherit; text-decoration: none; }
 .brands a::after, .tags a::after { content: " ↗"; opacity: .5; font-size: .85em; }
 .brands a, .tags a, .tags span { border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 13px; }
-.look { margin: 0 0 12px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; }
-.lhead { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px; align-items: center; }
-.lhead img { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; display: block; background: var(--line); }
-.lhead b { display: block; font-weight: 800; letter-spacing: -.03em; font-size: 17px; }
-.lhead small { display: block; font-size: 12px; color: var(--soft); }
-.lhead a { color: inherit; font-size: 12px; text-decoration: none; border-bottom: 1px solid var(--line); }
-.story { margin: 4px 0 12px; font-size: 15px; line-height: 1.5; }
-b.story { display: block; font-weight: 800; letter-spacing: -.03em; font-size: 17px; margin: 14px 0 2px; }
-.look h2 { font-weight: 800; font-size: 30px; letter-spacing: -.045em; line-height: 1; margin: 14px 0 4px; display: flex; align-items: center; gap: 10px; }
-.look h2 i { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+.look { margin: 0 0 22px; padding: 0 0 22px; border-bottom: 1px solid var(--line); }
+.look h2 { font-weight: 800; font-size: 34px; letter-spacing: -.05em; line-height: 1; margin: 0 0 6px; display: flex; align-items: center; gap: 10px; }
+.look h2 i { width: 14px; height: 14px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+.meta { font-size: 12px; letter-spacing: .16em; color: var(--soft); text-transform: uppercase; }
+details.story { margin: 4px 0 12px; }
+details.story summary { cursor: pointer; list-style: none; display: inline-block; border-bottom: 1px solid var(--fg); font-weight: 500; }
+details.story summary::-webkit-details-marker { display: none; }
+details.story p { margin: 10px 0 0; font-size: 15px; line-height: 1.5; }
 .pics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0 10px; }
 .pics img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; display: block; background: var(--line); }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -72,26 +70,20 @@ const BRANDS = {
   "getdressedmittersill": "https://www.instagram.com/getdressedmittersill/",
   "leder.ritsch": "https://www.leder.ritsch.at/",
 };
-const LOOKS = {
-  "vanilla-2|Ronald Mitterer @ronaldmitterer|08.07.2026": ["BRTLwear"],
-  "ber|Ronald Mitterer @ronaldmitterer|08.07.2026": ["s.Oliver"],
-  "ber|Marla Pilz @marlapilzphotos|25.07.2026": ["s.Oliver", "leder.ritsch"],
-  "navy-blue|Daniel Rieder @danielriederfotografie|30.10.2025": ["Calvin Klein"],
-};
-/* The stories of the outfits: same key as in LOOKS, then [title, text] per outfit (blank line = new paragraph). They show up under the photos. */
-const STORIES = {
-  "ber|Marla Pilz @marlapilzphotos|25.07.2026": [
-    ["white shirt, black pants", "a basic white shirt, and the pants are from s.Oliver."],
-    ["tracht", "i bought my lederhosen for my job as a waiter at fliegerbichl in 2019. they are a bit too big since i've lost some weight since then, but i love them. maybe one day i'll take them to a schneider and have them made tighter and smaller.\n\nmy first tracht, in grey, i wore to the oktoberfest in 2025. it hasn't been posted yet. i bought it at leder.ritsch, and in 2026 i decided i wanted a new colour. we came to the conclusion that green fits me best. first i wanted vanilla, but that is rare and gets dirty more easily. i told them it was for a photoshoot, and about a month later i offered them the photos to use.\n\nthe tracht has a special place in my heart. in 2026 i decided to wear it as often as possible, at any event. it makes you stand out, and you should always put on your best clothes whenever you can. it kind of became a meme."]
+/* One entry per shoot ("chapter|photographer|date"), then one block per outfit: title, the photos (part of the file name),
+   brands, and the story (blank line = new paragraph). Photos that match no outfit get a card of their own. */
+const OUTFITS = {
+  "Marla Pilz @marlapilzphotos|25.07.2026": [
+    { title: "white shirt, black pants", files: ["_054", "_046"], brands: ["s.Oliver"], story: "a basic white shirt, and the pants are from s.Oliver." },
+    { title: "tracht", files: ["_012", "_019", "_011"], brands: ["leder.ritsch"], story: "i bought my lederhosen for my job as a waiter at fliegerbichl in 2019. they are a bit too big since i've lost some weight since then, but i love them. maybe one day i'll take them to a schneider and have them made tighter and smaller.\n\nmy first tracht, in grey, i wore to the oktoberfest in 2025. it hasn't been posted yet. i bought it at leder.ritsch, and in 2026 i decided i wanted a new colour. we came to the conclusion that green fits me best. first i wanted vanilla, but that is rare and gets dirty more easily. i told them it was for a photoshoot, and about a month later i offered them the photos to use.\n\nthe tracht has a special place in my heart. in 2026 i decided to wear it as often as possible, at any event. it makes you stand out, and you should always put on your best clothes whenever you can. it kind of became a meme." },
+    { title: "the black hoodie jacket", files: ["_062", "_072", "_073"], brands: [], story: "i went shopping at kik in mittersill for the first time in a long time and found this jacket for about 20 €. i looked so cool that i had to get it. i wear it very often nowadays, and it's a bit too big for me.\n\nit also looks a bit like the jacket from daniel rieder that i wore for the spontaneous photoshoot at the getreidegasse in salzburg. he gave me his jacket so we could take different shots." },
   ],
-  "ber|Ronald Mitterer @ronaldmitterer|08.07.2026": [
-    ["the suit from s.Oliver", "a few days before the photoshoot with ronald mitterer on 08.07., i decided that i needed one more outfit. i went into the local s.Oliver store in neukirchen and bought the jogging suit in 20 minutes.\n\nfunny enough, s.Oliver then asked me to take part in the runway on 30.10.2026. after they asked, i posted the first picture of the shoot, before the runway. a funny coincidence."]
+  "Ronald Mitterer @ronaldmitterer|08.07.2026": [
+    { title: "the suit from s.Oliver", files: ["photos/ber/"], brands: ["s.Oliver"], story: "a few days before the photoshoot with ronald mitterer on 08.07., i decided that i needed one more outfit. i went into the local s.Oliver store in neukirchen and bought the jogging suit in 20 minutes.\n\nfunny enough, s.Oliver then asked me to take part in the runway on 30.10.2026. after they asked, i posted the first picture of the shoot, before the runway. a funny coincidence." },
+    { title: "brtlwear", files: ["_184", "_186", "_190", "_191"], brands: ["BRTLwear"], story: "support old local friends who are making their own brand. the owner brought me the stuff i ordered personally." },
   ],
-  "vanilla-2|Marla Pilz @marlapilzphotos|25.07.2026": [
-    ["the black hoodie jacket", "i went shopping at kik in mittersill for the first time in a long time and found this jacket for about 20 €. i looked so cool that i had to get it. i wear it very often nowadays, and it's a bit too big for me.\n\nit also looks a bit like the jacket from daniel rieder that i wore for the spontaneous photoshoot at the getreidegasse in salzburg. he gave me his jacket so we could take different shots."]
-  ],
-  "vanilla-2|Ronald Mitterer @ronaldmitterer|08.07.2026": [
-    ["brtlwear", "support old local friends who are making their own brand. the owner brought me the stuff i ordered personally."]
+  "navy-blue|Daniel Rieder @danielriederfotografie|30.10.2025": [
+    { title: "", files: [""], brands: ["Calvin Klein"], story: "" },
   ],
 };
 /* ===================== */
@@ -100,29 +92,30 @@ const ORDER = CHAPTERS.map(c => c.id);              /* newest chapter first */
 const ymd = s => s ? s.split(".").reverse().join("") : "99999999";   /* no date yet = newest (the Marla Pilz shoot came after Ronald Mitterer) */
 loadPhotos().then(list => {
   const groups = new Map();
-  list.forEach(p => { const k = p.chapter + "|" + (p.credit || "") + "|" + (p.date || ""); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(p); });
+  list.forEach(p => { let k = (p.credit || "") + "|" + (p.date || ""); if (!OUTFITS[k]) k = p.chapter + "|" + k;   /* outfits listed above can cover several chapter folders of one shoot */ if (!groups.has(k)) groups.set(k, []); groups.get(k).push(p); });
+  const dedupe = (p, i, arr) => i === arr.findIndex(q => q.src.replace(/(x?sw|swe|[abc])?\.\w+$/, "") === p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""));
+  const cards = [];
   [...groups.entries()]
-    .sort((a, b) => ORDER.indexOf(a[1][0].chapter) - ORDER.indexOf(b[1][0].chapter) || (ymd(b[1][0].date) > ymd(a[1][0].date) ? 1 : -1))
+    .sort((a, b) => ORDER.indexOf(a[1][0].chapter) - ORDER.indexOf(b[1][0].chapter) || (ymd(b[1][0].date) > ymd(a[1][0].date) ? 1 : -1))   /* newest first */
     .forEach(([k, ps]) => {
-      const c = byId[ps[0].chapter], box = el("section", "look");
-      const cr = ps[0].credit || "", m = cr.match(/^(.*?)\s*@([\w.]+)\s*$/), who = (m ? (m[1] || m[2]) : cr).trim(), handle = m ? m[2] : "";
-      const head = el("div", "lhead"), av = el("img"); av.alt = ""; av.loading = "lazy";
-      const pf = ps.find(p => p.f) || ps[0]; av.src = pf.thumb || pf.src; if (pf.f) av.style.objectPosition = (pf.f[0] * 100) + "% " + (pf.f[1] * 100) + "%";
-      const info = el("div"), dot = el("i"); dot.style.cssText = "display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);background:" + c.bg;
-      const nm = el("b"); nm.append(dot, c.label); info.append(nm);
-      info.append(el("small", null, [ps[0].date, who ? "photos by " + who.toLowerCase() : ""].filter(Boolean).join(" · ")));
-      if (handle) { const a = el("a", null, "@" + handle); a.href = "https://instagram.com/" + handle; a.target = "_blank"; a.rel = "noopener"; info.append(a); }
-      head.append(av, info); box.append(head);
-      const g = el("div", "pics");
-      ps.filter(p => p.f).sort((a, b) => a.f[2] - b.f[2])   /* smallest face first = most of the outfit */
-        .filter((p, i, arr) => i === arr.findIndex(q => q.src.replace(/(x?sw|swe|[abc])?\.\w+$/, "") === p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""))).slice(0, 3)
-        .forEach(p => { const im = el("img"); im.alt = c.label + " outfit"; im.loading = "lazy"; im.style.objectPosition = (p.f[0] * 100) + "% " + Math.min(100, p.f[1] * 100 + 25) + "%"; im.src = p.thumb || p.src; g.append(im); });
-      box.append(g);
-      (STORIES[k] || []).forEach(([t, x]) => { box.append(el("b", "story", t)); x.split("\n\n").forEach(para => box.append(el("p", "story", para))); });
-      const t = LOOKS[k] || [];
-      if (t.length) { const tg = el("div", "tags"); t.forEach(b => { if (BRANDS[b]) { const a = el("a", null, b); a.href = BRANDS[b]; a.target = "_blank"; a.rel = "noopener"; tg.append(a); } else tg.append(el("span", null, b)); }); box.append(tg); }
-      $("looks").append(box);
+      const defs = OUTFITS[k] || [], used = new Set();
+      defs.forEach(d => { const mine = ps.filter(p => d.files.some(f => p.src.includes(f)) && !used.has(p)); mine.forEach(p => used.add(p)); if (mine.length) cards.push({ k, ps: mine, ...d }); });
+      const rest = ps.filter(p => !used.has(p));
+      if (rest.length) cards.push({ k, ps: rest, title: "", brands: (defs.find(d => d.files.includes("")) || {}).brands || [], story: "" });
     });
+  cards.forEach(cd => {
+    const ps = cd.ps, c = byId[ps[0].chapter], box = el("section", "look");
+    const h = el("h2"); const dot = el("i"); dot.style.background = c.bg; h.append(dot, cd.title || c.label); box.append(h);
+    const who = (ps[0].credit || "").replace(/\s*@\S+/, "");
+    box.append(el("div", "meta", [c.label, ps[0].date, who ? "photos " + who : ""].filter(Boolean).join(" · ")));
+    const g = el("div", "pics");
+    const faced = ps.filter(p => p.f), pool = (faced.length ? faced : ps).slice().sort((a, b) => (a.f ? a.f[2] : 1) - (b.f ? b.f[2] : 1));   /* smallest face first = most of the outfit */
+    pool.filter(dedupe).slice(0, 3).forEach(p => { const im = el("img"); im.alt = (cd.title || c.label) + " outfit"; im.loading = "lazy"; if (p.f) im.style.objectPosition = (p.f[0] * 100) + "% " + Math.min(100, p.f[1] * 100 + 25) + "%"; im.src = p.thumb || p.src; g.append(im); });
+    box.append(g);
+    if (cd.story) { const d = el("details", "story"); d.append(el("summary", null, "the story")); cd.story.split("\n\n").forEach(t => d.append(el("p", null, t))); box.append(d); }
+    if ((cd.brands || []).length) { const tg = el("div", "tags"); cd.brands.forEach(b => { if (BRANDS[b]) { const a = el("a", null, b); a.href = BRANDS[b]; a.target = "_blank"; a.rel = "noopener"; tg.append(a); } else tg.append(el("span", null, b)); }); box.append(tg); }
+    $("looks").append(box);
+  });
 });
 </script>
 <script src="egg.js"></script>

@@ -53,21 +53,24 @@ input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 
 <script>
 /* oldest chapter first; per chapter only the best photos (picked ones first), the face is kept at the same size */
 const ORDER = ["origin", "white", "baby-blue", "lavendel", "navy-blue", "grey", "vanilla", "vanilla-2", "ber", "ember", "red"];
-const PER = 3;
+const PER = 3;   /* at most this many per chapter, one per shoot */
 let pics = [], imgs = [], i = 0, timer = null;
 const ymd = s => s ? s.split(".").reverse().join("") : "99999999";   /* no date yet = newest (the Marla Pilz shoot came after Ronald Mitterer) */
-loadPhotos().then(list => {
+loadPhotos().then(async list => {
   list = list.filter(p => p.f && !p.nf && p.f[2] >= .06);
+  /* oldest chapter first; per chapter the best photo of each shoot (picked ones first, then the most in the chapter colour), so no two frames look alike */
   ORDER.forEach(id => {
-    const own = list.filter(p => p.chapter === id).sort((a, b) => (a.sel ? 0 : 1) - (b.sel ? 0 : 1) || (a.sel || 0) - (b.sel || 0) || (b.cm || 0) - (a.cm || 0) || b.f[2] - a.f[2]);   /* the best ones first: picked photos, then the ones most in the chapter colour */
-    const seen = new Set(), pick = [];
-    for (const p of own) { const k = p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""); if (pick.length < PER && !seen.has(k)) { seen.add(k); pick.push(p); } }
+    const own = list.filter(p => p.chapter === id).sort((a, b) => (a.sel ? 0 : 1) - (b.sel ? 0 : 1) || (a.sel || 0) - (b.sel || 0) || (b.cm || 0) - (a.cm || 0) || b.f[2] - a.f[2]);
+    const shoots = new Set(), pick = [];
+    for (const p of own) { const k = (p.credit || "") + "|" + (p.date || ""); if (pick.length < PER && !shoots.has(k)) { shoots.add(k); pick.push(p); } }
     pick.sort((a, b) => ymd(a.date) < ymd(b.date) ? -1 : 1);
     pics.push(...pick);
   });
-  const st = $("stage");
-  imgs = pics.map(p => { const im = new Image(); im.alt = byId[p.chapter].label + " photo"; im.decoding = "async"; st.append(im); return im; });
-  $("t").max = pics.length - 1;
+  /* every frame has to be loaded before it is shown: no empty squares with a date */
+  const loaded = await Promise.all(pics.map(p => new Promise(ok => { const im = new Image(); im.alt = byId[p.chapter].label + " photo"; im.decoding = "async"; im.onload = () => ok(im); im.onerror = () => ok(null); im.src = big(p); })));
+  pics = pics.filter((p, k) => loaded[k]); imgs = loaded.filter(Boolean);
+  const st = $("stage"); imgs.forEach(im => st.append(im));
+  $("t").max = Math.max(0, pics.length - 1);
   place(); show(0);
   addEventListener("resize", place);
 });
@@ -84,7 +87,6 @@ function place() {
 }
 function show(k) {
   i = k; const p = pics[k]; if (!p) return;
-  [k, k + 1, k + 2, k - 1].forEach(j => { const im = imgs[j]; if (im && !im.src) im.src = big(pics[j]); });
   imgs.forEach((im, j) => im.classList.toggle("on", j === k));
   const c = byId[p.chapter]; paint(c);
   $("t").style.background = `linear-gradient(90deg, ${ORDER.filter(id => pics.some(q => q.chapter === id)).map(id => byId[id].bg).join(", ")})`;
