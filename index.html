@@ -228,6 +228,8 @@ a.view { text-decoration: none; display: inline-block; }
 .cv { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); max-width: 720px; }
 .cvsec { display: grid; gap: 12px; }
 .cvsec h2 { margin: 0; font-size: 12px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.cvnote { margin: 0; font-size: 13px; color: var(--soft); }
+.cvnote a { color: var(--fg); }
 .cv .row { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 2px 16px; }
 .cv .when { font-size: 13px; color: var(--soft); font-variant-numeric: tabular-nums; padding-top: 2px; }
 .cv .what b { font-weight: 500; display: block; }
@@ -995,8 +997,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="cvsec">
     <h2>Persönliche Daten</h2>
     <div class="row"><div class="when">Name</div><div class="what"><b>Markus Nindl</b></div></div>
-    <div class="row"><div class="when">Geboren</div><div class="what"><b>26. August 2002 in Mittersill</b></div></div>
-    <div class="row"><div class="when">Wohnort</div><div class="what"><b>5741&nbsp;Neukirchen am Großvenediger</b></div></div>
+    <div class="row"><div class="when">Region</div><div class="what"><b>Pinzgau, Salzburg</b></div></div>
     <div class="row"><div class="when">E&#8209;Mail</div><div class="what"><b><a href="#" data-mail>booking<span>@</span>herrnindl.com</a></b></div></div>
     </div>
     <div class="cvsec">
@@ -1006,31 +1007,9 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="row"><div class="when">2024 – 2026</div><div class="what"><b>Presse</b><span>Platzhirsch (Mächtige Mähnen und Single des Monats, 2024 · Leserecho, 2025), Bezirkszeitung (2026)</span></div></div>
     </div>
     <div class="cvsec">
-    <h2>Berufserfahrung</h2>
-    <div class="row"><div class="when">ab 12/2026</div><div class="what"><a class="co" style="--c:#D04A25;--t:#FFFFFF" href="https://www.wildkogelresorts.at/de/sundaze" target="_blank" rel="noopener">Wildkogel Sundaze<i aria-hidden="true">↗</i></a><span>Gastronomie · Nebenjob am Wochenende</span></div></div>
-    <div class="row"><div class="when">07/2022 – heute</div><div class="what"><a class="co" style="--c:#FFDC00;--t:#1C1C14" href="https://www.post.at/" target="_blank" rel="noopener">Österreichische Post AG<i aria-hidden="true">↗</i></a><span>seit 11/2025 Stv. Standortleitung, Hollersbach, von Königsleiten bis Uttendorf</span></div></div>
-    <div class="row"><div class="when">06/2023 – 09/2023</div><div class="what"><a class="co" style="--c:#A4B244;--t:#1C1C14" href="https://www.rechtegg.com/" target="_blank" rel="noopener">Alpengasthof Rechtegg<i aria-hidden="true">↗</i></a><span>Küchengehilfe, geringfügig · Neukirchen am Großvenediger</span></div></div>
-    <div class="row"><div class="when">01/2023 – 04/2023</div><div class="what"><a class="co" style="--c:#FEDA32;--t:#1C1C14" href="https://www.sonnalm.net/" target="_blank" rel="noopener">Alpinlodge Sonnalm<i aria-hidden="true">↗</i></a><span>Küchengehilfe, geringfügig · Jochberg</span></div></div>
-    <div class="row"><div class="when">06/2022</div><div class="what"><b class="co" style="--c:#808080;--t:#1C1C14">Café &amp; Bar Chic OG</b><span>Kellner · Mittersill</span></div></div>
-    <div class="row"><div class="when">07/2021 – 05/2022</div><div class="what"><b class="co" style="--c:#3399FF;--t:#1C1C14">Weiszhaus</b><span>Küchengehilfe · Mittersill (02/2023 geringfügig)</span></div></div>
-    </div>
-    <div class="cvsec">
-    <h2>Berufsausbildung</h2>
-    <div class="row"><div class="when">08/2019 – 01/2020</div><div class="what"><a class="co" style="--c:#921A1D;--t:#FFFFFF" href="https://fliegerbichl.com/" target="_blank" rel="noopener">Restaurant Fliegerbichl<i aria-hidden="true">↗</i></a><span>Restaurantfachmann · Bramberg am Wildkogel</span></div></div>
-    <div class="row"><div class="when">06/2018 – 05/2019</div><div class="what"><a class="co" style="--c:#E30613;--t:#FFFFFF" href="https://www.bundesheer.at/" target="_blank" rel="noopener">Seminarzentrum Felbertal, Bundesheer<i aria-hidden="true">↗</i></a><span>Hotel- und Gastgewerbeassistent · Mittersill</span></div></div>
-    <div class="row"><div class="when">08/2017 – 09/2017</div><div class="what"><a class="co" style="--c:#FF0090;--t:#FFFFFF" href="https://www.dankl.net/" target="_blank" rel="noopener">Dankl.net GmbH<i aria-hidden="true">↗</i></a><span>Elektriker · Neukirchen am Großvenediger</span></div></div>
-    </div>
-    <div class="cvsec">
-    <h2>Schulbildung</h2>
-    <div class="row"><div class="when">09/2016 – 07/2017</div><div class="what"><a class="co" style="--c:#C10A25;--t:#FFFFFF" href="https://www.htlsaalfelden.at/" target="_blank" rel="noopener">Höhere Technische Bundeslehranstalt<i aria-hidden="true">↗</i></a><span>Bautechnik · Saalfelden</span></div></div>
-    <div class="row"><div class="when">09/2012 – 07/2016</div><div class="what"><a class="co" style="--c:#039147;--t:#FFFFFF" href="https://www.ms-bramberg.salzburg.at/" target="_blank" rel="noopener">Hauptschule<i aria-hidden="true">↗</i></a><span>Bramberg am Wildkogel</span></div></div>
-    <div class="row"><div class="when">09/2008 – 07/2012</div><div class="what"><a class="co" style="--c:#00B050;--t:#1C1C14" href="https://www.vs-bramberg.salzburg.at/" target="_blank" rel="noopener">Volksschule<i aria-hidden="true">↗</i></a><span>Bramberg am Wildkogel</span></div></div>
-    </div>
-    <div class="cvsec">
     <h2>Vereine</h2>
     <div class="row"><div class="when">seit 11/2022</div><div class="what"><a class="co" style="--c:#0E478F;--t:#FFFFFF" href="https://sbg.owr.at/mittersill/" target="_blank" rel="noopener">Österreichische Wasserrettung, Ortsstelle Mittersill<i aria-hidden="true">↗</i></a><span>Fließwasserretter (FW&#8209;R), absolviert am 19.05.2024 · aktive Einsatzkraft seit 10.03.2024 · Retterschein, absolviert am 18.06.2023</span></div></div>
     <a class="donate" href="https://sbg.owr.at/mittersill/services/spenden/" target="_blank" rel="noopener"><span class="dtxt"><small>WASSERRETTUNG MITTERSILL</small><b>support them<i>.</i></b></span><em>donate →</em></a>
-    <div class="row"><div class="when">2010 – 2016</div><div class="what"><a class="co" style="--c:#0DD5D5;--t:#1C1C14" href="https://www.taekwondo-bramberg.at/" target="_blank" rel="noopener">TaeKwonDo Club<i aria-hidden="true">↗</i></a><span>9. KUP · Bramberg am Wildkogel</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Sprachen</h2>
@@ -1038,6 +1017,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="row"><div class="when">Englisch</div><div class="what"><b>fließend</b></div></div>
     <div class="row"><div class="when">Italienisch, Französisch</div><div class="what"><b>Grundkenntnisse</b></div></div>
     </div>
+    <p class="cvnote">Vollständiger Lebenslauf auf Anfrage: <a href="#" data-mail>booking<span>@</span>herrnindl.com</a></p>
   </section>
 
   <section class="insp panel" id="inspirations" hidden>
