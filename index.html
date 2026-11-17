@@ -86,8 +86,8 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .place { font-size: 12px; letter-spacing: .24em; color: var(--soft); }
 .pill { font-size: 12px; letter-spacing: .14em; background: #FFF8BB; color: #3A3624; padding: 2px 10px; border-radius: 999px; }
 .mnlogo { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: 1.5em; letter-spacing: .06em; line-height: 1; vertical-align: -.08em; }
-.mnline { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .24em; color: var(--soft); }
-.mnline b { font-family: var(--serif); font-weight: 500; font-size: 22px; letter-spacing: .06em; line-height: 1; color: var(--fg); position: relative; top: .09em; }   /* the serif sits high in its box: nudged down to the middle of the small text */
+.mnline { display: inline-flex; align-items: baseline; gap: 8px; font-size: 13px; letter-spacing: .2em; color: var(--soft); }
+.mnline b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-spacing: .08em; line-height: 1; color: var(--fg); }   /* nearly the size of the text next to it, same baseline */
 
 .strip { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); margin-inline: calc(-1 * max(18px, env(safe-area-inset-left, 0px))); padding: 10px max(18px, env(safe-area-inset-left, 0px)); border-block: 1px solid var(--line); transition: background-color .5s ease; }
 .chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
@@ -2821,5 +2821,6 @@ if (document.documentElement.classList.contains("welcome")) {
   setTimeout(() => unlockWave(() => { document.documentElement.classList.remove("locked", "welcome"); window.scrollTo(0, 0); render(); launchMoment(); }), 650);
 } else if (!document.documentElement.classList.contains("locked")) { loadData(); launchMoment(); }
 </script>
+<script src="preview.js"></script>
 </body>
 </html>
