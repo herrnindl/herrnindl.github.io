@@ -688,7 +688,9 @@ footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-
 .gate { display: none; }
 html.locked body > :not(.gate):not(.wave) { display: none !important; }
 html.locked .gate { display: flex; }
-html.welcome .gate form, html.welcome .gate .msg, html.welcome .gate .gcount, html.welcome .gate .glinks { visibility: hidden; }
+html.welcome .gate form, html.welcome .gate .msg, html.welcome .gate .gcount, html.welcome .gate .glinks, html.welcome .gate .gspace { display: none !important; }
+/* the greeting: the row of dots sits exactly on the middle line of the screen, the logo above it */
+html.welcome .gate .gcenter { position: fixed; left: 0; right: 0; top: 50%; padding: 0; transform: translateY(calc(-100% + 5px)); }
 html.locked body { background: #FFF8BB; color: #1C1C14; }
 .gate { position: fixed; inset: 0; z-index: 30; overflow-y: auto; background: #FFF8BB; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; gap: 0; padding: calc(24px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
 .gate .gmark { font-family: var(--serif); font-weight: 500; font-size: 96px; letter-spacing: .06em; line-height: 1; }
@@ -2712,7 +2714,8 @@ function unlockWave(done) {
   const w = el("div", "wave"); document.body.append(w);
   const big = Math.hypot(innerWidth, innerHeight) * 2.2;
   const spots = dots.slice().reverse().map(d => { const r = d.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, c: getComputedStyle(d).backgroundColor, s: r.width }; });
-  spots.push({ x: innerWidth / 2, y: innerHeight / 2, c: "#FFF8BB", s: 10 });
+  const row = document.querySelector(".gate .gdots").getBoundingClientRect();
+  spots.push({ x: innerWidth / 2, y: row.top + row.height / 2, c: "#FFF8BB", s: 10 });   /* the last colour opens from the dots too */
   let last;
   spots.forEach((p, i) => {
     const c = el("i"); c.style.cssText = `left:${p.x}px;top:${p.y}px;width:${big}px;height:${big}px;background:${p.c}`;
