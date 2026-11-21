@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<script src="dark.js?v=5"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — ask me.</title>
+<!--LAUNCH-PREVIEW link preview: build.py switches these on from 01.12.2026
+<meta name="description" content="Markus Nindl. Model from Pinzgau, Austria. MN.: my life in colours.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MN.">
+<meta property="og:title" content="MN. — ask me.">
+<meta property="og:description" content="Markus Nindl. Model from Pinzgau, Austria. MN.: my life in colours.">
+<meta property="og:url" content="https://herrnindl.com/ask.html">
+<meta property="og:image" content="https://herrnindl.com/launch/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+LAUNCH-PREVIEW-->
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="extra.css?v=4">
+<script src="analytics.js"></script>
+<style>
+.qa { border-top: 1px solid var(--line); padding: 18px 0; }
+.qa .q { font-weight: 800; font-size: 22px; letter-spacing: -.035em; line-height: 1.1; margin: 0 0 8px; }
+.qa .a { margin: 0; }
+.qa .when { margin-top: 8px; }
+form { margin: 0 0 36px; }
+.count { text-align: right; }
+</style>
+<link rel="stylesheet" href="menu.css?v=3">
+</head>
+<body>
+<div class="wrap">
+  <header><a class="mark" href="./">MN.</a></header>
+  <nav class="more" aria-label="more"></nav>
+  <script src="new.js?v=3"></script><script src="menu.js?v=5"></script>
+  <h1>ask me.</h1>
+  <p class="sub">anything. no name needed.</p>
+  <p class="subnote">nothing goes online right away:<br>i read every question and answer the best ones here.</p>
+  <form id="f">
+    <textarea id="q" maxlength="300" placeholder="your question …" aria-label="your question"></textarea>
+    <div class="small count" id="n">0 / 300</div>
+    <div class="row"><button class="btn" id="send" type="submit">send.</button><span class="small" id="msg"></span></div>
+    <p class="note" id="info">only your question is saved, no name, no e-mail. details in the <a href="datenschutz.html">datenschutz</a>.</p>
+  </form>
+  <div class="small" style="margin-bottom:6px">ANSWERED</div>
+  <div id="list"></div>
+  <footer class="foot"></footer>
+</div>
+<script src="extra.js?v=4"></script>
+<script>
+/* ===== edit here: your answers, newest first ===== */
+const ANSWERS = [
+  // { q: "why colours?", a: "because every chapter of my life felt like one.", date: "01.12.2026" },
+];
+/* ================================================= */
+if (!ANSWERS.length) $("list").append(el("p", "sub", "no answers yet. be the first."));
+ANSWERS.forEach(x => { const d = el("div", "qa"); d.append(el("p", "q", x.q), el("p", "a", x.a)); if (x.date) d.append(el("div", "small when", x.date)); $("list").append(d); });
+$("q").addEventListener("input", () => $("n").textContent = $("q").value.length + " / 300");
+if (!API) { $("q").disabled = $("send").disabled = true; $("q").placeholder = "opens soon."; $("info").hidden = true; }
+$("f").onsubmit = async e => {
+  e.preventDefault();
+  const q = $("q").value.trim(); if (q.length < 3 || !API) return;
+  $("send").disabled = true; $("msg").textContent = "…";
+  try {
+    const r = await fetch(API.replace(/\/$/, "") + "/ask", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ q }) });
+    if (r.status === 429) { $("msg").textContent = "three a day. come back tomorrow."; return; }
+    if (!r.ok) throw 0;
+    $("q").value = ""; $("n").textContent = "0 / 300"; $("msg").textContent = "sent. if i answer it, it shows up below.";
+  } catch (err) { $("msg").textContent = "didn't work. try again later."; }
+  finally { $("send").disabled = false; }
+};
+</script>
+<script src="egg.js"></script>
+<script src="preview.js"></script>
+</body>
+</html>

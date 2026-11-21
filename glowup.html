@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<script src="dark.js?v=5"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — glow up.</title>
+<!--LAUNCH-PREVIEW link preview: build.py switches these on from 01.12.2026
+<meta name="description" content="Markus Nindl. Model from Pinzgau, Austria. MN.: my life in colours.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MN.">
+<meta property="og:title" content="MN. — glow up.">
+<meta property="og:description" content="Markus Nindl. Model from Pinzgau, Austria. MN.: my life in colours.">
+<meta property="og:url" content="https://herrnindl.com/glowup.html">
+<meta property="og:image" content="https://herrnindl.com/launch/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+LAUNCH-PREVIEW-->
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="extra.css?v=4">
+<script src="analytics.js"></script>
+<style>
+.stage { position: relative; width: 100%; aspect-ratio: 1; border-radius: 16px; overflow: hidden; background: var(--fg); margin-top: 8px; }
+.stage img { position: absolute; max-width: none; opacity: 0; transition: opacity .35s ease; user-select: none; -webkit-user-drag: none; }
+.stage img.on { opacity: 1; }
+.lab { display: flex; justify-content: space-between; align-items: baseline; margin: 14px 0 6px; }
+.lab b { font-weight: 800; font-size: 30px; letter-spacing: -.045em; }
+input[type=range] { -webkit-appearance: none; appearance: none; padding: 0; height: 8px; border: 0; border-radius: 4px; outline: none; margin: 16px 0 6px; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: var(--fg); border: 3px solid var(--bg); box-shadow: 0 0 0 1px var(--fg); }
+input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--fg); border: 3px solid var(--bg); }
+.ends { display: flex; justify-content: space-between; }
+</style>
+<link rel="stylesheet" href="menu.css?v=3">
+</head>
+<body>
+<div class="wrap">
+  <header><a class="mark" href="./">MN.</a></header>
+  <nav class="more" aria-label="more"></nav>
+  <script src="new.js?v=3"></script><script src="menu.js?v=5"></script>
+
+  <h1>glow up.</h1>
+  <p class="sub">from origin. to now. drag.</p>
+  <div class="stage" id="stage"></div>
+  <input type="range" id="t" min="0" max="0" value="0" aria-label="time">
+  <div class="ends small"><span>ORIGIN.</span><span>NOW.</span></div>
+  <div class="lab"><b id="lab"></b><span class="small" id="when"></span></div>
+  <div class="row"><button class="btn" id="play">play</button></div>
+  <footer class="foot"></footer>
+</div>
+<script src="extra.js?v=4"></script>
+<script>
+/* oldest chapter first; per chapter only the best photos (picked ones first), the face is kept at the same size */
+const ORDER = ["origin", "white", "baby-blue", "lavendel", "navy-blue", "grey", "vanilla", "vanilla-2", "ber", "ember"];
+const PER = 1;   /* one photo per chapter */
+/* chosen by hand: the photo shown for that chapter */
+const PICK = { origin: "photos/origin/platzhirsch-1.jpg" };
+let pics = [], imgs = [], i = 0, timer = null;
+const ymd = s => s ? s.split(".").reverse().join("") : "99999999";   /* no date yet = newest (the Marla Pilz shoot came after Ronald Mitterer) */
+loadPhotos().then(async list => {
+  list = list.filter(p => p.f && !p.nf && p.f[2] >= .06);
+  /* oldest chapter first; per chapter the best photo of each shoot (picked ones first, then the most in the chapter colour), so no two frames look alike */
+  ORDER.forEach(id => {
+    const own = list.filter(p => p.chapter === id).sort((a, b) => (a.sel ? 0 : 1) - (b.sel ? 0 : 1) || (a.sel || 0) - (b.sel || 0) || (b.cm || 0) - (a.cm || 0) || b.f[2] - a.f[2]);
+    const fixed = own.find(p => p.src === PICK[id]); if (fixed) { pics.push(fixed); return; }
+    const shoots = new Set(), pick = [];
+    for (const p of own) { const k = (p.credit || "") + "|" + (p.date || ""); if (pick.length < PER && !shoots.has(k)) { shoots.add(k); pick.push(p); } }
+    pick.sort((a, b) => ymd(a.date) < ymd(b.date) ? -1 : 1);
+    pics.push(...pick);
+  });
+  /* every frame has to be loaded before it is shown: no empty squares with a date */
+  const loaded = await Promise.all(pics.map(p => new Promise(ok => { const im = new Image(); im.alt = byId[p.chapter].label + " photo"; im.decoding = "async"; im.onload = () => ok(im); im.onerror = () => ok(null); im.src = big(p); })));
+  pics = pics.filter((p, k) => loaded[k]); imgs = loaded.filter(Boolean);
+  const st = $("stage"); imgs.forEach(im => st.append(im));
+  $("t").max = Math.max(0, pics.length - 1);
+  place(); show(0);
+  addEventListener("resize", place);
+});
+/* face in the middle, same size every time, image always covers the square */
+function place() {
+  const F = $("stage").getBoundingClientRect().width;
+  pics.forEach((p, k) => {
+    const im = imgs[k], ar = (p.w || 600) / (p.h || 800);
+    let h = .36 * F / p.f[2], w = h * ar;
+    if (w < F) { w = F; h = w / ar; } if (h < F) { h = F; w = h * ar; }
+    const left = Math.min(0, Math.max(F - w, F / 2 - p.f[0] * w)), top = Math.min(0, Math.max(F - h, F * .46 - p.f[1] * h));
+    Object.assign(im.style, { width: w + "px", height: h + "px", left: left + "px", top: top + "px" });
+  });
+}
+function show(k) {
+  i = k; const p = pics[k]; if (!p) return;
+  imgs.forEach((im, j) => im.classList.toggle("on", j === k));
+  const c = byId[p.chapter]; paint(c);
+  $("t").style.background = `linear-gradient(90deg, ${ORDER.filter(id => pics.some(q => q.chapter === id)).map(id => byId[id].bg).join(", ")})`;
+  $("lab").textContent = c.label; $("when").textContent = p.date || "";
+  $("t").value = k;
+}
+$("t").addEventListener("input", e => { stop(); show(+e.target.value); });
+/* drag sideways on the photo itself, not only on the thin slider; up and down still scrolls the page */
+(() => {
+  const st = $("stage"), t = $("t"); let x0 = null, y0 = 0, v0 = 0, on = false;
+  st.style.touchAction = "pan-y"; st.style.cursor = "ew-resize";
+  st.addEventListener("pointerdown", e => { x0 = e.clientX; y0 = e.clientY; v0 = +t.value; on = false; });
+  st.addEventListener("pointermove", e => {
+    if (x0 === null) return;
+    const dx = e.clientX - x0;
+    if (!on) { if (Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(e.clientY - y0)) return; on = true; try { st.setPointerCapture(e.pointerId); } catch (err) {} }
+    const k = Math.max(0, Math.min(+t.max, Math.round(v0 + dx / st.clientWidth * (+t.max + 1))));
+    if (k !== +t.value) { t.value = k; t.dispatchEvent(new Event("input")); }
+  });
+  const end = () => { x0 = null; on = false; };
+  st.addEventListener("pointerup", end); st.addEventListener("pointercancel", end);
+})();
+function stop() { clearInterval(timer); timer = null; $("play").textContent = "play"; }
+$("play").onclick = () => {
+  if (timer) return stop();
+  if (i >= pics.length - 1) show(0);
+  $("play").textContent = "pause";
+  timer = setInterval(() => { if (i >= pics.length - 1) return stop(); show(i + 1); }, 900);
+};
+</script>
+<script src="egg.js"></script>
+<script src="preview.js"></script>
+</body>
+</html>

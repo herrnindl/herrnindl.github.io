@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<script src="dark.js?v=5"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — wardrobe.</title>
+<!--LAUNCH-PREVIEW link preview: build.py switches these on from 01.12.2026
+<meta name="description" content="Markus Nindl. Model from Pinzgau, Austria. MN.: my life in colours.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MN.">
+<meta property="og:title" content="MN. — wardrobe.">
+<meta property="og:description" content="Markus Nindl. Model from Pinzgau, Austria. MN.: my life in colours.">
+<meta property="og:url" content="https://herrnindl.com/wardrobe.html">
+<meta property="og:image" content="https://herrnindl.com/launch/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+LAUNCH-PREVIEW-->
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="extra.css?v=4">
+<script src="analytics.js"></script>
+<style>
+.brands { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 30px; }
+.brands a, .tags a { color: inherit; text-decoration: none; }
+.brands a::after, .tags a::after { content: " ↗"; opacity: .5; font-size: .85em; }
+.brands a, .tags a, .tags span { border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 13px; }
+.look { margin: 0 0 22px; padding: 0 0 22px; border-bottom: 1px solid var(--line); }
+.look h2 { font-weight: 800; font-size: 34px; letter-spacing: -.05em; line-height: 1; margin: 0 0 6px; display: flex; align-items: center; gap: 10px; }
+.look h2 i { width: 14px; height: 14px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+.meta { font-size: 12px; letter-spacing: .16em; color: var(--soft); text-transform: uppercase; }
+details.story { margin: 4px 0 12px; }
+details.story summary { cursor: pointer; list-style: none; display: inline-block; border-bottom: 1px solid var(--fg); font-weight: 500; }
+details.story summary::-webkit-details-marker { display: none; }
+details.story p { margin: 10px 0 0; font-size: 15px; line-height: 1.5; }
+.pics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0 10px; }
+.pics img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; display: block; background: var(--line); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.look .meta a.ph { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 4px; }
+</style>
+<link rel="stylesheet" href="menu.css?v=3">
+</head>
+<body>
+<div class="wrap">
+  <header><a class="mark" href="./">MN.</a></header>
+  <nav class="more" aria-label="more"></nav>
+  <script src="new.js?v=3"></script><script src="menu.js?v=5"></script>
+  <h1>wardrobe.</h1>
+  <p class="sub">what i wore, chapter by chapter.</p>
+  <div class="small" style="margin-bottom:10px">BRANDS I'VE WORN</div>
+  <div class="brands" id="brands"></div>
+  <div id="looks"></div>
+  <footer class="foot"></footer>
+</div>
+<script src="extra.js?v=4"></script>
+<script>
+/* ===== edit here =====
+   One line per shoot: "chapter|photographer|date" (exactly as on the site) → brands you wore.
+   Shoots without a line still show, just without brand tags. */
+const BRANDS = {
+  "Calvin Klein": "https://www.calvinklein.com/",
+  "s.Oliver": "https://www.soliver.at/",
+  "Only & Sons": "https://www.onlyandsons.com/",
+  "Nautica": "https://www.nautica.com/",
+  "BRTLwear": "https://www.instagram.com/brtlwear/",
+  "Distorted People": "https://www.distortedpeople.com/",
+  "Peso": "https://pesoclo.com/",
+  "Cocoburry": "https://cocoburry.com/",
+  "Hidden Hills Watch": "https://www.instagram.com/hiddenhillswatch/",
+  "getdressedmittersill": "https://www.instagram.com/getdressedmittersill/",
+  "leder.ritsch": "https://www.leder.ritsch.at/",
+  "Schmuddelwedda": "https://www.instagram.com/schmuddelwedda_shop/",
+};
+/* One entry per shoot ("chapter|photographer|date"), then one block per outfit: title, the photos (part of the file name),
+   brands, and the story (blank line = new paragraph). Photos that match no outfit get a card of their own. */
+const OUTFITS = {
+  "Marla Pilz @marlapilzphotos|25.07.2026": [
+    { title: "white shirt, black pants", files: ["_054", "_046"], brands: ["s.Oliver"], story: "a basic white shirt. the pants are from s.Oliver." },
+    { title: "the tracht", files: ["_012", "_019", "_011"], brands: ["leder.ritsch"], story: "i bought my lederhosen in 2019 for my job as a waiter at the fliegerbichl. they're a bit too big now, because i've lost some weight since then, but i love them. maybe one day i'll take them to a tailor and have them taken in.\n\ni wore my first tracht, a grey one, to the oktoberfest in 2025. it hasn't been posted yet. i bought it at leder.ritsch, and in 2026 i wanted a new colour. together we decided that green suits me best. at first i wanted vanilla, but it's rare and gets dirty more easily. i told them it was for a photoshoot, and about a month later i offered them the photos to use.\n\nthe tracht has a special place in my heart. in 2026 i decided to wear it as often as possible, at every event. it makes you stand out, and you should always wear your best clothes whenever you can. it kind of became a meme." },
+    { title: "the black hoodie jacket", files: ["_062", "_072", "_073"], brands: [], story: "i went shopping at kik in mittersill for the first time in a long time and found this jacket for about 20 €. i looked so cool in it that i had to get it. i wear it a lot now, even though it's a bit too big for me.\n\nit also looks a bit like daniel rieder's jacket, the one i wore for the spontaneous shoot in the getreidegasse in salzburg. he gave me his jacket so we could get different shots." },
+  ],
+  "Ronald Mitterer @ronaldmitterer|08.07.2026": [
+    { title: "the s.Oliver tracksuit", files: ["photos/ber/"], brands: ["s.Oliver"], story: "a few days before the shoot with ronald mitterer on 08.07., i decided i needed one more outfit. i went into the local s.Oliver store in neukirchen and bought this tracksuit in 20 minutes.\n\nfunnily enough, s.Oliver then asked me to walk in their fashion show on 30.10.2026. after they asked, i posted the first picture from the shoot, before the show. a funny coincidence." },
+    { title: "brtlwear", files: ["_184", "_186", "_190", "_191", "_194", "_195", "_197"], brands: ["BRTLwear"], story: "supporting old local friends who started their own brand. the owner even brought my order over personally." },
+    { title: "the vanilla. II outfit", files: ["_033"], brands: ["Nautica", "Peso", "Hidden Hills Watch"], story: "the deer was a gift from a coworker at my little housewarming party in 2023, when i moved into my apartment. the platzhirsch has a bit of vanilla in the top left corner. and the hidden hills watch, as usual.\n\ni ordered the shirt and the shorts from nautica, and they came from england. the shipping cost about as much as the outfit itself, but it just looked so cool and fresh.\n\nthe shoes are from peso. i posted an instagram story so people could vote between two pairs. the other pair was green. vanilla won by far." },
+  ],
+  "navy-blue|Daniel Rieder @danielriederfotografie|30.10.2025": [
+    { title: "the black jacket", files: ["0V4A9193", "0V4A9213", "0V4A9240"], brands: ["Distorted People"], story: "this is my distorted people jacket. when i'm out wearing it, i get a lot of compliments. it has a rick grimes jacket vibe, just in black.\n\nthe fabric is so smooth, and i love wearing it. the only thing i don't like is that you can see every hair on the collar." },
+    { title: "the white calvin klein shirt", files: ["0V4A9271", "0V4A9285", "0V4A9312", "0V4A9322", "0V4A9324", "0V4A9328"], brands: ["Calvin Klein"], story: "a birthday present, just like the denim jacket from this shoot. i wanted this shoot to mean something to the person who gave them to me.\n\ni love the photos. but if i did this shoot again, i'd do it for me." },
+    { title: "the denim jacket", files: [""], brands: [], story: "also a birthday present, from the same person as the white calvin klein shirt. same shoot, same story.\n\nthe photos stay, because i love them. the reason behind them is one i'd choose differently today." },
+  ],
+  "white||29.03.2025": [
+    { title: "the sheriff", files: [""], brands: [], story: "i bought the beige hat in the centre of salzburg, the day after rupertikirtag, on our way home.\n\ni bought the jacket at takko in mittersill. i just had to get it, i'm a big fan of the walking dead.\n\nthe boots are from lachmayer in krimml. i got them for my job at the post in winter, because a lot of people don't shovel their snow.\n\ni got the bandanas for my job at rechtegg in the summer of 2023. my hair was already long enough to tie back, and i worked in the kitchen, so i had to tie it back with them. i got them in a few colours." },
+  ],
+  "white|Daniel Breuer @alpindis|23.02.2025": [
+    { title: "the black leather jacket", files: [""], brands: [], story: "i honestly don't remember where i got the leather jacket, probably at takko in mittersill.\n\nwhat stands out are the shoes: they're fake nike airs. at that point, i had already bought white nike airs twice, and i wore them so often that both pairs looked pretty bad in the end. so i decided to order fake ones on temu for about 20 € each.\n\nfor a very long time, i kept two pairs in their plastic bags and used them for photoshoots, up until the marla pilz shoot in salzburg. writing this, i realise i need some new “nike airs”." },
+  ],
+  "origin||11.01.2025": [
+    { title: "the overshirt", files: [""], brands: [], story: "i love overshirts and flannels. i have so many, all because i'm very inspired by jax teller from sons of anarchy. he's kind of my idol, and a lot of how i look comes from him. white sneakers, levi's jeans, a white shirt and a flannel. that really became my style.\n\ni was so excited at this shoot that i'm not even wearing the overshirt right. i didn't care, and i was very proud of the photos we took." },
+  ],
+  "origin||14.11.2024": [
+    { title: "the black denim jacket", files: [""], brands: [], photos: ["Platzhirsch", "https://www.platzhirsch.at/"], story: "i got it because of clay from sons of anarchy, and later noticed that 2pac wears one in his “hit 'em up” music video." },
+  ],
+  "navy-blue|Ronald Mitterer @ronaldmitterer|17.06.2025": [
+    { title: "the navy blue pullover", files: [""], brands: ["Cocoburry"], story: "same order, same shoot: i wore this pullover on 17.06.2025, together with the lavendel outfit.\n\nback then, i didn't even know navy blue would become a chapter, or that i'd combine these photos with the new pictures from daniel rieder months later. everything just came together. i went with it, and here we are." },
+  ],
+  "lavendel|Daniel Rieder @danielriederfotografie|23.08.2025": [
+    { title: "the borrowed jacket", files: [""], brands: ["Schmuddelwedda"], story: "i didn't have a jacket with me when we took these pictures. i wasn't really in the mood for photos, but it was an opportunity.\n\ni was in salzburg, celebrating my birthday three days early at genussdorf gmachl, and saw that daniel rieder was in salzburg too. we messaged on instagram and met the next day. after a few photos, we decided i should wear his jacket. he even tagged the brand on instagram later, and they replied.\n\nfunny how things come together." },
+  ],
+  "lavendel|Ronald Mitterer @ronaldmitterer|17.06.2025": [
+    { title: "the lavendel outfit", files: [""], brands: ["Cocoburry"], story: "when i ordered my first outfits from cocoburry, i first asked chatgpt which colours suit me best. this matters. i gave it the leather jacket photo, and it suggested lavendel, navy blue and a few other colours.\n\ni ordered this outfit and the navy blue pullover at the same time and wore both on the same shoot on 17.06.2025. this one became lavendel." },
+  ],
+  "baby-blue|@wekreat.studio|27.04.2025": [
+    { title: "the canadian tuxedo", files: [""], brands: [], story: "my first photoshoot far from home, at the wekreat studio in fürstenfeld. the studio closed on 19 november 2026, after four years.\n\nthey offered a free photoshoot for anyone who wanted to come, and about 80 people showed up. i needed some outfits, and someone gave me a few as a gift, including the canadian tuxedo. this person had a lot to do with where i am today and was the inspiration for the colour chapters. everything after that, i did myself." },
+  ],
+};
+/* ===================== */
+Object.entries(BRANDS).forEach(([b, u]) => { const a = el("a", null, b); a.href = u; a.target = "_blank"; a.rel = "noopener"; $("brands").append(a); });
+const ORDER = CHAPTERS.map(c => c.id);              /* newest chapter first */
+const ymd = s => s ? s.split(".").reverse().join("") : "99999999";   /* no date yet = newest (the Marla Pilz shoot came after Ronald Mitterer) */
+loadPhotos().then(list => {
+  const groups = new Map();
+  list.forEach(p => { let k = (p.credit || "") + "|" + (p.date || ""); if (!OUTFITS[k]) k = p.chapter + "|" + k;   /* outfits listed above can cover several chapter folders of one shoot */ if (!groups.has(k)) groups.set(k, []); groups.get(k).push(p); });
+  const dedupe = (p, i, arr) => i === arr.findIndex(q => q.src.replace(/(x?sw|swe|[abc])?\.\w+$/, "") === p.src.replace(/(x?sw|swe|[abc])?\.\w+$/, ""));
+  const cards = [];
+  [...groups.entries()]
+    .sort((a, b) => ORDER.indexOf(a[1][0].chapter) - ORDER.indexOf(b[1][0].chapter) || (ymd(b[1][0].date) > ymd(a[1][0].date) ? 1 : -1))   /* newest first */
+    .forEach(([k, ps]) => {
+      const defs = OUTFITS[k] || [], used = new Set();
+      defs.forEach(d => { const mine = ps.filter(p => d.files.some(f => p.src.includes(f)) && !used.has(p)); mine.forEach(p => used.add(p)); if (mine.length) cards.push({ k, ps: mine, ...d }); });
+      const rest = ps.filter(p => !used.has(p));
+      if (rest.length) cards.push({ k, ps: rest, title: "", brands: (defs.find(d => d.files.includes("")) || {}).brands || [], story: "" });
+    });
+  cards.forEach(cd => {
+    const ps = cd.ps, c = byId[ps[0].chapter], box = el("section", "look");
+    const h = el("h2"); const dot = el("i"); dot.style.background = c.bg; h.append(dot, (cd.title || c.label).replace(/\.?\s*$/, ".")); box.append(h);
+    const who = (ps[0].credit || "").replace(/\s*@\S+/, "");
+    const meta = el("div", "meta", [c.label, ps[0].date].filter(Boolean).join(" · "));
+    const ig = ((ps[0].credit || "").match(/@([\w.]+)/) || [])[1];
+    if (who || ig) {   /* photographer linked to their instagram */
+      meta.append(" · photos: ");
+      const a = el("a", "ph", who || "@" + ig);
+      if (ig) { a.href = "https://instagram.com/" + ig.replace(/\.$/, ""); a.target = "_blank"; a.rel = "noopener"; meta.append(a); } else meta.append(who);
+    }
+    if (!(who || ig) && cd.photos) {   /* credit set on the outfit itself: ["name", "link"] */
+      meta.append(" · photos: "); const a = el("a", "ph", cd.photos[0]); a.href = cd.photos[1]; a.target = "_blank"; a.rel = "noopener"; meta.append(a);
+    }
+    box.append(meta);
+    const g = el("div", "pics");
+    const faced = ps.filter(p => p.f), pool = (faced.length ? faced : ps).slice().sort((a, b) => (a.f ? a.f[2] : 1) - (b.f ? b.f[2] : 1));   /* smallest face first = most of the outfit */
+    pool.filter(dedupe).slice(0, 3).forEach(p => { const im = el("img"); im.alt = (cd.title || c.label) + " outfit"; im.loading = "lazy"; if (p.f) im.style.objectPosition = (p.f[0] * 100) + "% " + Math.min(100, p.f[1] * 100 + 25) + "%"; im.src = p.thumb || p.src; g.append(im); });
+    box.append(g);
+    if (cd.story) { const d = el("details", "story"); d.append(el("summary", null, "the story")); cd.story.split("\n\n").forEach(t => d.append(el("p", null, t))); box.append(d); }
+    if ((cd.brands || []).length) { const tg = el("div", "tags"); cd.brands.forEach(b => { if (BRANDS[b]) { const a = el("a", null, b); a.href = BRANDS[b]; a.target = "_blank"; a.rel = "noopener"; tg.append(a); } else tg.append(el("span", null, b)); }); box.append(tg); }
+    $("looks").append(box);
+  });
+});
+</script>
+<script src="egg.js"></script>
+<script src="preview.js"></script>
+</body>
+</html>

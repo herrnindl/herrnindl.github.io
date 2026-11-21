@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="gate.js"></script>
+<script src="dark.js?v=5"></script>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MN. — made by nindl.</title>
+<!--LAUNCH-PREVIEW link preview: build.py switches these on from 01.12.2026
+<meta name="description" content="How herrnindl.com was designed and built by hand, by Markus Nindl.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MN.">
+<meta property="og:title" content="MN. — made by nindl.">
+<meta property="og:description" content="How herrnindl.com was designed and built by hand, by Markus Nindl.">
+<meta property="og:url" content="https://herrnindl.com/web.html">
+<meta property="og:image" content="https://herrnindl.com/launch/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+LAUNCH-PREVIEW-->
+<meta name="theme-color" content="#FFF8BB">
+<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="extra.css?v=4">
+<script src="analytics.js"></script>
+<style>
+.case { border: 1px solid var(--line); border-radius: 16px; padding: 18px; margin: 0 0 26px; }
+.case .url { font-weight: 800; font-size: clamp(28px, 7vw, 40px); letter-spacing: -.045em; line-height: 1; text-decoration: none; }
+.case .bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; margin: 14px 0 12px; box-shadow: inset 0 0 0 1px var(--line); }
+.case .bar i { box-shadow: inset 0 1px 0 var(--line), inset 0 -1px 0 var(--line); }
+.case .bar i { flex: 1; }
+.facts { list-style: none; margin: 0; padding: 0; }
+.facts li { padding: 9px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 2.2em 1fr; }
+.facts li b { font-weight: 800; }
+</style>
+<link rel="stylesheet" href="menu.css?v=3">
+</head>
+<body>
+<div class="wrap">
+  <header><a class="mark" href="./">MN.</a></header>
+  <nav class="more" aria-label="more"></nav>
+  <script src="new.js?v=3"></script><script src="menu.js?v=5"></script>
+  <h1>made by nindl.</h1>
+  <p class="sub">no template, no website builder.</p>
+  <p class="subnote">every page, colour and game on this site is built by hand.</p>
+
+  <div class="small" style="margin-bottom:8px">THE SITE</div>
+  <div class="case">
+    <a class="url" href="./">herrnindl.com</a>
+    <div class="bar" id="bar" aria-hidden="true"></div>
+    <ul class="facts">
+      <li><span>01</span><span><b>10 chapters</b>, each with its own colour, song and place.</span></li>
+      <li><span>02</span><span><b>games</b> made from my own photos.</span></li>
+      <li><span>03</span><span><b>a guestbook and a question box</b>, no account needed.</span></li>
+      <li><span>04</span><span><b>sedcard, cv and booking</b> in one place.</span></li>
+      <li><span>05</span><span><b>fast on every phone</b>, and it updates itself when new photos come in.</span></li>
+    </ul>
+  </div>
+
+  <p class="note">designed and built by hand in pinzgau, 2026.</p>
+
+  <footer class="foot"></footer>
+</div>
+<script src="extra.js?v=4"></script>
+<script>
+/* the chapter colours as a small bar, newest first */
+CHAPTERS.forEach(c => { const i = el("i"); i.style.background = c.bg; $("bar").append(i); });
+</script>
+<script src="egg.js"></script>
+<script src="preview.js"></script>
+</body>
+</html>
