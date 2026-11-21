@@ -642,7 +642,25 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .tzmine { display: block; height: 380px; border-radius: 14px; overflow: hidden; }
 .tzmine img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .istory p { margin: 0; color: var(--soft); }
-@media (max-width: 599px) { .pair { grid-template-columns: minmax(0, 1fr); } .mntile, .stone, .nametile, .typetile { height: auto; aspect-ratio: 16 / 10; } }
+.istory p a { color: inherit; }
+/* 06: a plain highlights row (no content of hers), and vanilla. in bodoni */
+.hltile { height: 380px; border-radius: 14px; overflow: hidden; display: grid; place-content: center; justify-items: center; gap: 16px; background: #FFFFFF; color: #0F1419; text-decoration: none; box-shadow: inset 0 0 0 1px rgba(28,28,20,.1); }
+.hltile .rings { display: flex; gap: 12px; }
+.hltile .rings i { width: 54px; height: 54px; border-radius: 50%; background: #FAF6E8; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #D9D4C3; }
+.hltile b { font-weight: 600; font-size: 17px; letter-spacing: -.01em; }
+.hltile small { font-size: 10px; letter-spacing: .24em; color: #8A8574; }
+.vantile { background: #FFF8BB; color: #1C1C14; }
+.vantile span { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; letter-spacing: .06em; }
+/* 07: where the colours came from */
+.icard.solo { grid-template-columns: minmax(0, 1fr); }
+.origins { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 14px; }
+.origins li { display: grid; gap: 3px; padding-top: 12px; border-top: 1px solid var(--line); }
+.origins b { font-weight: 800; letter-spacing: -.02em; display: flex; flex-wrap: wrap; align-items: center; column-gap: 6px; row-gap: 4px; }
+.origins b i { width: 11px; height: 11px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 1px var(--line); box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent); flex: none; }   /* a thin ring in the text colour, so dark dots show on dark and light dots on light */
+.origins b i:not(:first-child) { margin-left: 8px; }
+.origins span { color: var(--soft); }
+.origins a { color: inherit; }
+@media (max-width: 599px) { .pair { grid-template-columns: minmax(0, 1fr); } .mntile, .stone, .nametile, .typetile, .hltile { height: auto; aspect-ratio: 16 / 10; } .hltile .rings i { width: 46px; height: 46px; } }
 @media (min-width: 900px) { .icard { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: 48px; align-items: center; } }
 /* booking form: fills in an email, nothing is sent from the site itself */
 .bform { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 16px; max-width: 620px; margin-top: 6px; }
@@ -1137,6 +1155,39 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
         <p>the last four singles by frank ocean inspired my teasers: dhl, in my room, dear april and cayendo.</p>
         <p>a shape, one word, a colour. SOON. TOMORROW. you see the outline and have to guess what&#x27;s coming, like &ldquo;who&#x27;s that pokémon?&rdquo; when we were kids.</p>
         <p>i started doing it in lavendel. the ones from ber. are in the chapter.</p>
+      </div>
+    </article>
+    <article class="icard">
+      <div class="pair">
+        <figure class="theirs">
+          <a class="hltile" href="https://www.instagram.com/prettybookplaces/" target="_blank" rel="noopener" aria-label="@prettybookplaces on Instagram"><span class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>@prettybookplaces</b><small>HIGHLIGHTS</small></a>
+          <figcaption>the inspiration</figcaption>
+        </figure>
+        <figure class="mine">
+          <div class="typetile vantile" aria-label="vanilla. in bodoni"><small>BODONI · VANILLA.</small><span>MN<i>.</i></span><em>#FFF8BB</em></div>
+          <figcaption>vanilla.</figcaption>
+        </figure>
+      </div>
+      <div class="istory">
+        <small>06 · the vanilla</small>
+        <h3>vanilla<i>.</i></h3>
+        <p>vanilla. comes from <a href="https://www.instagram.com/prettybookplaces/" target="_blank" rel="noopener">@prettybookplaces</a>. her highlights and the way she makes content were the inspiration for the whole chapter.</p>
+        <p>she&#x27;s also the reason bodoni stayed my main font.</p>
+      </div>
+    </article>
+    <article class="icard solo">
+      <div class="istory">
+        <small>07 · the colours</small>
+        <h3>the colours<i>.</i></h3>
+        <p>every chapter has its own colour. this is where they came from.</p>
+        <ul class="origins">
+          <li><b><i style="--c:#E9A283"></i>ember.</b><span>came after the announcement of the wildkogel sundaze instagram page.</span></li>
+          <li><b><i style="--c:#B8C98B"></i>ber.</b><span>explains itself: septem&middot;ber to decem&middot;ber. it&#x27;s also the colour of my eyes.</span></li>
+          <li><b><i style="--c:#FFF8BB"></i>vanilla.</b><span>came from @prettybookplaces.</span></li>
+          <li><b><i style="--c:#A9A9A9"></i>grey. <i style="--c:#FFFFFF"></i>white. <i style="--c:#000000"></i>origin.</b><span>came from the idea to make fewer story highlights and put them in order, a week or two before i started working on this website.</span></li>
+          <li><b><i style="--c:#343A4E"></i>navy blue. <i style="--c:#BAB6DE"></i>lavendel.</b><span>came from chatgpt. i gave it the first photo on my homepage, the one in my leather jacket, and asked which colours suit me best.</span></li>
+          <li><b><i style="--c:#91B2EB"></i>baby blue.</b><span>came from <a href="wardrobe.html">the canadian tuxedo</a>.</span></li>
+        </ul>
       </div>
     </article>
   </section>
