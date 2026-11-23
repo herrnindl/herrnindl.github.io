@@ -23,6 +23,7 @@ LAUNCH-PREVIEW-->
 <link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <script src="analytics.js"></script>
+<script src="film.js?v=1"></script>
 <style>
 @font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("fonts/inter-400.woff") format("woff"); }
 @font-face { font-family: "Inter"; font-weight: 500; font-display: swap; src: url("fonts/inter-500.woff") format("woff"); }
@@ -278,6 +279,8 @@ const ready = fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).th
 });
 
 /* ---------- navigation ---------- */
+/* the film (film.js) only starts on the overview, never in the middle of a game */
+window.mnFilmBlock = () => !$("v-home").classList.contains("on");
 function go(name) {
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + name));
   $("back").hidden = name === "home";

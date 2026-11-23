@@ -28,6 +28,7 @@ LAUNCH-PREVIEW-->
 <meta name="apple-mobile-web-app-title" content="MN.">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script src="analytics.js"></script>
+<script src="film.js?v=1"></script>
 <script src="mail.js" defer></script>
 <script>
 /* Coming-soon gate. Not real security: it keeps casual visitors out until launch. */
@@ -535,19 +536,6 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
   .wall .tile.tilt::after { opacity: 1; }
   .wall .tile:hover img { transform: none; }
 }
-/* the film: plays the chapters when nobody touches the start page */
-.film { position: fixed; inset: 0; z-index: 45; display: grid; place-items: center; background: var(--fb, #000); color: var(--ff, #fff); cursor: none; overflow: hidden; contain: strict; }
-.film .fwash { position: absolute; inset: 0; will-change: transform, opacity; }
-.film .fbomb { position: absolute; border-radius: 50%; will-change: transform; backface-visibility: hidden; }
-.film .fin { grid-area: 1 / 1; position: relative; z-index: 1; display: grid; justify-items: center; gap: 12px; text-align: center; padding: 24px; }
-.film .fph { width: min(54vw, 300px); aspect-ratio: 4 / 5; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); will-change: transform, opacity; }
-.film .fph img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.film .fdates { font-size: 12px; letter-spacing: .3em; opacity: .8; }
-.film b { font-weight: 800; font-size: clamp(56px, 16vw, 150px); letter-spacing: -.06em; line-height: .86; padding-bottom: .16em; white-space: nowrap; will-change: transform; }
-.film b .fc { display: inline-block; white-space: pre; font-style: normal; will-change: transform, opacity; }
-.film .fspark { position: absolute; border-radius: 50%; z-index: 2; pointer-events: none; box-shadow: 0 0 8px 1px rgba(255,220,140,.6); will-change: transform, opacity; }
-.film .fline { font-size: clamp(16px, 4vw, 22px); opacity: .85; }
-.film .fhint { z-index: 4; color: var(--ff); transition: color .9s ease; position: absolute; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center; font-size: 11px; letter-spacing: .24em; opacity: .55; }
 @media (prefers-reduced-motion: reduce) { .ticker .tr, .wpname { animation: none; } .wslide > *, .film .fin > * { animation: none; } }
 /* MN. in numbers */
 .nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 12px; max-width: 640px; }
@@ -1697,146 +1685,12 @@ if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
 }
 
 /* ---------- the film: when nobody touches the start page for a while, the chapters play ---------- */
-let filmTimer = 0, filmOn = null;
-function filmReady() { return view === "colours" && filter === "all" && !document.documentElement.classList.contains("locked") && $("lb").hidden && $("sheet").hidden && !document.querySelector(".wrapped, .launch, .egg") && document.visibilityState === "visible" && !calm(); }
-function armFilm() { clearTimeout(filmTimer); if (filmOn) return; filmTimer = setTimeout(() => { if (filmReady()) playFilm(); else armFilm(); }, 40000); }
-/* the best 3 of each chapter: the screensaver only shows these, and they open each chapter */
-const BEST = {"origin": ["origin-06.jpg", "origin-02.jpg", "origin-08.jpg"], "white": ["250223-Studioportrait-alpindis.at-0292-Bearbeitet.jpg", "lake-00275.jpg", "lake-00301.jpg"], "baby-blue": ["wekreat-01b.jpg", "wekreat-05b.jpg", "wekreat-07b.jpg"], "lavendel": ["0V4A0304.jpg", "2025-06-17_00009.jpg", "0V4A0231.jpg"], "navy-blue": ["0V4A9118x_1.jpg", "0V4A9324x_1.jpg", "0V4A9240x_1x.jpg"], "vanilla-2": ["2026-07-08_033.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_072.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_046.jpg"], "ber": ["2026-07-08_154.jpg", "MP_2026_Brand-Shootings_Markus-Nindl_012.jpg", "2026-07-08_178.jpg"]};
-const isBest = p => (BEST[p.chapter] || []).includes(p.src.split("/").pop());
-const lastFilm = {};
-/* The screensaver: one chapter after the other, and every handover means something.
-   dot   – the dot after the name takes on the next colour and grows until it is everything
-   fade  – one colour melts into the next            blind – the next colour comes down like a blind
-   dim   – the lights go down and come back up        morph – the word stays and becomes the next word
-   Everything moves with transform and opacity only, and the next photo is loaded before its turn, so nothing stutters or pops. */
-const FILM_TRANS = { "baby-blue>lavendel": "fade", "lavendel>navy-blue": "blind", "navy-blue>grey": "dim" };
-function playFilm() {
-  if (filmOn) return;
-  const f = el("div", "film"); f.setAttribute("role", "dialog"); f.setAttribute("aria-label", "my life in colours. — tap to stop");
-  const hint = el("div", "fhint", "TAP ANYWHERE TO GO BACK"); f.tabIndex = -1; f.append(hint); document.body.append(f); f.focus({ preventScroll: true });
-  let dead = false; const timers = new Set();
-  const wait = ms => new Promise(r => { const t = setTimeout(() => { timers.delete(t); r(); }, ms); timers.add(t); });
-  const fin = a => a.finished.catch(() => {});
-  const OUT = "cubic-bezier(.5,0,.8,.4)", IN = "cubic-bezier(.16,.84,.3,1)", MOVE = "cubic-bezier(.65,0,.2,1)";
-  const paint = c => { f.style.setProperty("--fb", c.bg); f.style.setProperty("--ff", c.fg); };
-
-  /* the photo for a chapter, loaded and decoded before it is needed */
-  const pick = c => {
-    const all = photos.filter(p => p.chapter === c.id && !p.video);
-    const inColour = all.filter(p => (p.cm || 0) >= .06).sort((a, b) => b.cm - a.cm).slice(0, 3);
-    const top = inColour.length ? inColour : all.filter(isBest);
-    let pics = top.length ? top : all; if (pics.length > 1) pics = pics.filter(p => p !== lastFilm[c.id]);
-    if (!pics.length) return Promise.resolve(null);
-    const p = pics[Math.floor(Math.random() * pics.length)]; lastFilm[c.id] = p;
-    const im = new Image(); im.alt = ""; facePos(im, p); im.src = p.thumb2 || p.thumb || p.src;
-    return Promise.race([im.decode().then(() => im, () => im), new Promise(r => setTimeout(() => r(im.complete && im.naturalWidth ? im : null), 2500))]);
-  };
-  /* a chapter's card: photo, dates, the name letter by letter, its line */
-  const card = (c, im) => {
-    const box = el("div", "fin"); box.style.color = c.fg;
-    const b = el("b"), toks = [], add = (ch, cls) => { const x = el(cls ? "i" : "span", "fc" + (cls ? " " + cls : ""), ch); b.append(x); toks.push(x); return x; };
-    [...c.name].forEach(ch => add(ch)); const dot = add(".", "fdot"); if (c.suffix) [...c.suffix].forEach(ch => add(ch));
-    const meta = [];
-    if (im) { const ph = el("div", "fph"); ph.append(im); box.append(ph); meta.push(ph); }
-    const dates = el("small", "fdates", c.dates.toUpperCase()), line = el("span", "fline", c.line);
-    box.append(dates, b, line); meta.splice(im ? 1 : 0, 0, dates); meta.push(line);
-    return { c, box, b, toks, dot, meta, im, str: c.name + "." + (c.suffix || "") };
-  };
-  /* letters rise in one after the other, the dot lands last, then the rest follows */
-  const enter = (k, at = 0, only) => {
-    const ls = only || k.toks.filter(t => t !== k.dot); let t = at;
-    ls.forEach((x, n) => x.animate([{ opacity: 0, transform: "translateY(.38em)" }, {}], { duration: 620, delay: t + n * 42, easing: IN, fill: "backwards" }));
-    t += ls.length * 42 + 180;
-    if (!only) k.dot.animate([{ opacity: 0, transform: "scale(0)" }, { opacity: 1, transform: "scale(1.35)", offset: .6 }, {}], { duration: 420, delay: t, easing: "ease-out", fill: "backwards" });
-    k.meta.forEach((x, n) => x.animate([{ opacity: 0, transform: "translateY(12px)" }, {}], { duration: 800, delay: at + 260 + n * 110, easing: IN, fill: "backwards" }));
-  };
-  /* where the ink of the dot really is: its exact centre and size, whatever the layout (photo or not, long name or short) */
-  const dotInk = k => {
-    const cs = getComputedStyle(k.b), fs = parseFloat(cs.fontSize), r = k.dot.getBoundingClientRect();
-    const probe = el("span"); probe.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline"; k.dot.before(probe);
-    const base = probe.getBoundingClientRect().bottom; probe.remove();
-    const cv = dotInk.cv || (dotInk.cv = document.createElement("canvas").getContext("2d")); cv.font = cs.fontWeight + " " + fs + "px " + cs.fontFamily;
-    const m = cv.measureText(".");
-    return { x: r.left + (m.actualBoundingBoxRight - m.actualBoundingBoxLeft) / 2, y: base + (m.actualBoundingBoxDescent - m.actualBoundingBoxAscent) / 2, d: m.actualBoundingBoxAscent + m.actualBoundingBoxDescent };
-  };
-  const leave = (els, ms = 460) => els.map((x, n) => x.animate([{}, { opacity: 0, transform: "translateY(-12px)" }], { duration: ms, delay: n * 40, easing: OUT, fill: "forwards" }));
-  const layer = (cls, bg, z) => { const w = el("div", cls); w.style.background = bg; w.style.zIndex = z; f.insertBefore(w, hint); return w; };
-
-  const handover = async (old, c, im) => {
-    const kind = FILM_TRANS[old.c.id + ">" + c.id] || ((c.name + "." + (c.suffix || "")).includes(old.str) ? "morph" : "dot");
-    const W = innerWidth, H = innerHeight, k = card(c, im);
-    const swap = w => { paint(c); old.box.remove(); if (w) w.remove(); };
-    if (kind === "dot") {
-      /* the dot turns into the next colour, takes a breath, and grows over everything */
-      const { x: ox, y: oy, d } = dotInk(old);   /* measured, so it sits exactly on the dot wherever the name stands */
-      const big = 2 * Math.hypot(Math.max(ox, W - ox), Math.max(oy, H - oy)) + 40, s0 = (d * 1.1 + 1) / big;   /* a hair bigger than the dot, so it covers it completely */
-      const w = layer("fbomb", c.bg, 3); w.style.cssText += `;left:${ox}px;top:${oy}px;width:${big}px;height:${big}px`;
-      const T = "translate(-50%,-50%) scale(";
-      await fin(w.animate([{ transform: T + s0 + ")", opacity: 0 }, { transform: T + s0 + ")", opacity: 1, offset: .14 }, { transform: T + s0 * 2.4 + ")", opacity: 1, offset: .36, easing: "cubic-bezier(.7,0,.25,1)" }, { transform: T + "1)", opacity: 1 }], { duration: 1500, fill: "forwards" }));
-      if (dead) return k; swap(w); f.insertBefore(k.box, hint); enter(k, 60);
-    } else if (kind === "blind") {
-      const w = layer("fwash", c.bg, 3);
-      await fin(w.animate([{ transform: "translateY(-101%)" }, { transform: "none" }], { duration: 1100, easing: MOVE, fill: "forwards" }));
-      if (dead) return k; swap(w); f.insertBefore(k.box, hint); enter(k, 60);
-    } else if (kind === "dim") {
-      /* the lights go down … */
-      leave(old.meta.concat(old.b), 700);
-      const w = layer("fwash", "#000", 3);
-      await fin(w.animate([{ opacity: 0 }, { opacity: .62 }], { duration: 760, easing: "ease-in", fill: "forwards" }));
-      if (dead) return k; paint(c); old.box.remove(); f.insertBefore(k.box, hint); enter(k, 420);
-      /* … and come back up in the next colour */
-      fin(w.animate([{ opacity: .62 }, { opacity: 0 }], { duration: 900, easing: "ease-out", fill: "forwards" })).then(() => w.remove());
-    } else if (kind === "fade") {
-      leave(old.meta.concat(old.b), 520);
-      const w = layer("fwash", c.bg, 0);
-      await fin(w.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1100, easing: "ease-in-out", fill: "forwards" }));
-      if (dead) return k; swap(w); f.insertBefore(k.box, hint); enter(k, 0);
-    } else if (kind === "morph") {
-      /* the word stays where it is, the colour changes around it, and the new letters join it */
-      const at = k.str.indexOf(old.str); f.insertBefore(k.box, hint);
-      const a0 = old.toks[0].getBoundingClientRect(), b0 = k.toks[at].getBoundingClientRect();
-      old.b.style.visibility = "hidden"; leave(old.meta);
-      const w = layer("fwash", c.bg, 0); w.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1200, easing: "ease-in-out", fill: "forwards" });
-      k.box.animate([{ color: old.c.fg }, {}], { duration: 1200, easing: "ease-in-out", fill: "backwards" });
-      k.b.animate([{ transform: `translate(${a0.left - b0.left}px, ${a0.top - b0.top}px)` }, { transform: "none" }], { duration: 1150, delay: 150, easing: MOVE, fill: "backwards" });
-      const fresh = k.toks.slice(0, at).reverse().concat(k.toks.slice(at + old.toks.length));   /* the letter next to the word comes first */
-      fresh.forEach((x, n) => x.animate([{ opacity: 0, transform: `translateX(${k.toks.indexOf(x) < at ? "-.3em" : ".3em"})` }, {}], { duration: 700, delay: 850 + n * 110, easing: IN, fill: "backwards" }));
-      k.meta.forEach((x, n) => x.animate([{ opacity: 0, transform: "translateY(12px)" }, {}], { duration: 800, delay: 1250 + n * 110, easing: IN, fill: "backwards" }));
-      await wait(1350); if (dead) return k; swap(w); await wait(700);
-    } else {   /* spark */
-      leave(old.meta);
-      old.toks.forEach((x, n) => x.animate([{ color: old.c.fg }, { color: "#FFE9B0", opacity: 1, transform: "none", offset: .4 }, { color: "#FFE9B0", opacity: 0, transform: "translateY(-.4em) scale(.86)" }], { duration: 700, delay: 150 + n * 95, easing: "ease-in", fill: "forwards" }));
-      const w = layer("fwash", c.bg, 0); w.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1500, delay: 350, easing: "ease-in-out", fill: "both" });
-      for (let n = 0; n < 34; n++) {   /* embers rise */
-        const sp = el("i", "fspark"), size = 2 + Math.random() * 4, far = H * (.35 + Math.random() * .6);
-        sp.style.cssText = `left:${Math.random() * W}px;top:${H * (.5 + Math.random() * .55)}px;width:${size}px;height:${size}px;background:${Math.random() < .5 ? "#FFF8BB" : "#F6C46A"}`;
-        f.insertBefore(sp, hint);
-        sp.animate([{ transform: "translate(0,0)", opacity: 0 }, { opacity: 1, offset: .18 }, { transform: `translate(${(Math.random() - .5) * 140}px, ${-far}px)`, opacity: 0 }], { duration: 1700 + Math.random() * 1500, delay: 200 + Math.random() * 1100, easing: "cubic-bezier(.2,.5,.3,1)", fill: "both" }).onfinish = () => sp.remove();
-      }
-      await wait(1500); if (dead) return k; swap(null); f.insertBefore(k.box, hint);
-      k.b.animate([{ transform: "scale(.9)" }, { transform: "none" }], { duration: 900, easing: IN });
-      enter(k, 0); await wait(420); w.remove();
-    }
-    return k;
-  };
-
-  (async () => {
-    let i = 0, c = CHAPTERS[0]; paint(c);
-    f.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, easing: "ease-out" });
-    let cur = card(c, await pick(c)); if (dead) return;
-    f.insertBefore(cur.box, hint); enter(cur, 350);
-    while (!dead) {
-      const nx = CHAPTERS[++i % CHAPTERS.length], im = pick(nx);
-      await wait(3900); if (dead) return;
-      cur = await handover(cur, nx, await im);
-    }
-  })();
-  const stop = () => { dead = true; timers.forEach(clearTimeout); ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => removeEventListener(ev, stop, true)); f.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 350, fill: "forwards" }).onfinish = () => f.remove(); filmOn = null; armFilm(); };
-  filmOn = stop;
-  setTimeout(() => ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => addEventListener(ev, stop, true)), 300);
-}
-["pointermove", "pointerdown", "keydown", "scroll", "wheel", "touchstart"].forEach(ev => addEventListener(ev, () => { if (!filmOn) armFilm(); }, { passive: true }));
-armFilm();
+/* the best 3 of each chapter: they open each chapter (the list lives in film.js) */
+const BEST = window.MN_BEST || {};
+/* The film (film.js) plays the chapters when nobody touches the site for a while.
+   Here it waits while a photo or a sheet is open, and on a chapter it begins with that chapter. */
+window.mnFilmBlock = () => !$("lb").hidden || !$("sheet").hidden;
+window.mnFilmFrom = () => view === "colours" && filter !== "all" ? filter : null;
 
 /* Lebenslauf: after launch its text lives in cv.html (kept out of Google) and is loaded when the tab opens */
 (function () {
