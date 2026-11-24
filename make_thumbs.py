@@ -51,6 +51,14 @@ if shutil.which("ffmpeg"):
             if not n.lower().endswith((".mp4", ".webm")):
                 continue
             src = os.path.join(root, n).replace(os.sep, "/")
+            # no music on the site: Instagram's music licence doesn't cover it, so every clip loses its sound
+            has_sound = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=codec_name",
+                                        "-of", "csv=p=0", src], capture_output=True, text=True).stdout.strip()
+            if has_sound:
+                tmp = src + ".silent.mp4"
+                if subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-map", "0:v", "-c", "copy", "-an",
+                                   "-movflags", "+faststart", tmp]).returncode == 0:
+                    os.replace(tmp, src)
             dst = os.path.join("thumbs", os.path.splitext(src)[0]) + "-poster.webp"
             if os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
                 continue
