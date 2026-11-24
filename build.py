@@ -330,7 +330,49 @@ for ch in CHAPTERS:
                 item.update(thumb(item["src"]))
                 sets["teasers"][ch].append(item)
 
-for group in ("recaps", "posts", "journal"):
+# trips/2026-04-16-france/   one folder per trip, named after the day it started.
+#   The photos (the ones that were posted, in the order they were posted) sit in the folder,
+#   the highlight stories in stories/ (photos and .mp4 clips, in the order they were posted).
+#   info.txt: title: france. · dates: 16.–19.04.26 · place: paris · caption: the story
+#   The trip shows on its chapter's timeline; chapter: only if the date picks the wrong one.
+sets["trips"] = []
+if os.path.isdir("trips"):
+    for name in sorted(os.listdir("trips"), reverse=True):
+        m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", name)
+        folder = os.path.join("trips", name)
+        if not m or not os.path.isdir(folder):
+            continue
+        day = datetime.date(int(m[1]), int(m[2]), int(m[3]))
+        s = read_set("trips", name, day)
+        info = read_info(folder)
+        if not s:   # a trip with stories only (nothing posted): the first story photo is the cover
+            sf = os.path.join(folder, "stories")
+            first = sorted(n for n in os.listdir(sf) if n.lower().endswith(EXT) and not n.lower().endswith(VIDEO)) if os.path.isdir(sf) else []
+            if not first:
+                continue
+            s = {"id": name, "chapter": info.get("chapter") or chapter_for(day), "cover": f"trips/{name}/stories/{first[0]}",
+                 "images": [], "title": info.get("title", ""), "big": "", "caption": info.get("caption", ""), "credit": info.get("credit", "")}
+        s["date"] = day.strftime("%d.%m.%y")
+        s["day"] = day.isoformat()
+        s["dates"] = info.get("dates", s["date"])
+        s["place"] = info.get("place", "")
+        def clip(src):
+            poster = "thumbs/" + os.path.splitext(src)[0] + "-poster.webp"
+            return {"src": src, "video": True, "poster": poster if os.path.exists(poster) else ""}
+        s["photos"] = [clip(p) if p.lower().endswith(VIDEO) else dict({"src": p}, **thumb(p)) for p in s["images"]]
+        s["stories"] = []
+        sfolder = os.path.join(folder, "stories")
+        if os.path.isdir(sfolder):
+            for n in sorted(x for x in os.listdir(sfolder) if x.lower().endswith(EXT)):
+                src = f"trips/{name}/stories/{n}"
+                if n.lower().endswith(VIDEO):
+                    poster = "thumbs/" + os.path.splitext(src)[0] + "-poster.webp"
+                    s["stories"].append({"src": src, "video": True, "poster": poster if os.path.exists(poster) else ""})
+                else:
+                    s["stories"].append(dict({"src": src}, **thumb(src)))
+        sets["trips"].append(s)
+
+for group in ("recaps", "posts", "journal", "trips"):
     for item in sets[group]:
         if item.get("cover"):
             item.update(thumb(item["cover"]))

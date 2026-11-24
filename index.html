@@ -876,6 +876,38 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .sig-about { width: 200px; margin-top: 4px; }
 @media (min-width: 900px) { .about.panel > .sig-about { grid-column: 1; } }
 @media (prefers-reduced-motion: reduce) { .sig path { animation: none; stroke-dashoffset: 0; transform: none; } }
+
+/* chapter timeline: trips and recaps of a chapter, newest first; a trip opens as a sheet */
+.chtl { margin-top: 22px; max-width: 720px; }
+.chtl .hofhead { margin: 0 0 8px; }
+.chtl ol { list-style: none; margin: 0; padding: 0; position: relative; }
+.chtl ol::before { content: ""; position: absolute; left: 76px; top: 14px; bottom: 14px; width: 1px; background: var(--line); }
+.chtl li button { display: grid; grid-template-columns: 64px 26px 1fr auto auto; align-items: center; width: 100%; padding: 9px 0; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.chtl .d { font-size: 12px; letter-spacing: .06em; color: var(--soft); font-variant-numeric: tabular-nums; }
+.chtl .o { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--fg); background: var(--bg, transparent); justify-self: center; position: relative; z-index: 1; }
+.chtl .trip .o { width: 13px; height: 13px; background: var(--fg); }
+.chtl .t { min-width: 0; }
+.chtl .t b { display: block; font-weight: 500; font-size: 17px; letter-spacing: -.01em; }
+.chtl .trip .t b { font-weight: 800; font-size: 26px; letter-spacing: -.04em; line-height: 1; }
+.chtl .t small { display: block; margin-top: 3px; font-size: 12px; color: var(--soft); }
+.chtl .cv { display: flex; gap: 4px; margin-left: 10px; }
+.chtl .cv img { width: 38px; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2px; display: block; }
+.chtl .go { margin-left: 10px; font-size: 18px; opacity: .55; }
+.chtl li button:hover .go { opacity: 1; }
+@media (max-width: 520px) { .chtl ol::before { left: 66px; } .chtl li button { grid-template-columns: 54px 26px 1fr auto auto; } .chtl .cv img:nth-child(n+3) { display: none; } .chtl .cv img { width: 32px; } }
+.sheet .imgs.trip { grid-template-columns: 1fr 1fr; gap: 6px; }
+.sheet .imgs.trip > :first-child:nth-last-child(odd) { grid-column: 1 / -1; }
+.sheet .imgs.trip > :first-child:nth-last-child(odd) img { max-height: 78vh; object-fit: cover; }
+.sheet .imgs.trip video { width: 100%; height: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; border-radius: 3px; }
+.sheet .place { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .65; margin-top: 10px; }
+.sheet .sthead { margin: 34px 0 10px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; opacity: .65; }
+.sheet .stories { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+.sheet .stories::-webkit-scrollbar { display: none; }
+.sheet .stories > * { flex: 0 0 min(30%, 170px); aspect-ratio: 9 / 16; padding: 0; border: 0; border-radius: 4px; overflow: hidden; background: rgba(0,0,0,.08); position: relative; scroll-snap-align: start; cursor: pointer; }
+.sheet .stories img, .sheet .stories video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sheet .stories .play { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-size: 26px; text-shadow: 0 1px 8px rgba(0,0,0,.5); pointer-events: none; }
+.sheet .stories .on .play { display: none; }
+.sheet .stnote { margin-top: 8px; font-size: 12px; opacity: .55; }
 </style>
 </head>
 <body>
@@ -938,6 +970,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="hof" id="hof" hidden></div>
   <div class="ticker" id="ticker" hidden aria-hidden="true"></div>
   <div class="hofhead sec whead" id="wallHead" hidden><h2><b>03</b>every photo.</h2><span class="wtools"><span class="sizes" id="sizes" role="group" aria-label="photo size"><button type="button" data-s="s" aria-label="small photos">S</button><button type="button" data-s="m" aria-label="medium photos">M</button><button type="button" data-s="l" aria-label="large photos">L</button><button type="button" data-s="1" aria-label="one photo at a time">1</button><button type="button" data-s="t" class="tbl" aria-label="table: prints to drag around">table</button></span><button class="shufbtn" id="shuf" type="button">shuffle.</button></span></div>
+  <div class="chtl" id="chTl" hidden></div>
   <div class="chrow" id="chRow"><div class="chrecaps" id="chRecaps" hidden></div><div class="chrecaps chteasers" id="chTeasers" hidden></div></div>
   <div class="wallbox"><div class="mnback" aria-hidden="true"><span>MN.</span></div><div class="wall" id="wall"></div></div>
   <div class="more" id="more" hidden></div>
@@ -1245,6 +1278,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <h2 id="sTitle"></h2>
     <p class="txt" id="sText"></p>
     <div class="imgs" id="sImgs"></div>
+    <div id="sExtra"></div>
   </div>
 </div>
 
@@ -1891,7 +1925,7 @@ function renderColours() {
   list = (filter === "all" ? (mixed.length === photos.length ? mixed : (mixed = shuffle(photos))) : chapterOrder(photos.filter(p => p.chapter === filter)));
   const wall = $("wall"); wall.textContent = "";
   const cur = byId[filter];
-  const nr = renderChRecaps() + renderChTeasers(); justifyChRow();
+  const nr = renderChTimeline() + renderChRecaps() + renderChTeasers(); justifyChRow();
   $("empty").textContent = cur ? cur.label + " photos are coming." : "photos are coming.";
   $("empty").hidden = list.length > 0 || nr > 0;
   const nx = $("nextch"); nx.textContent = ""; nx.hidden = !cur;
@@ -2283,6 +2317,68 @@ function renderChTeasers() {
   return ts.length;
 }
 
+/* ---------- chapter timeline: trips/ and recaps of this chapter, newest first ---------- */
+function renderChTimeline() {
+  const box = $("chTl"); box.textContent = "";
+  const cur = view === "colours" && byId[filter];
+  const trips = cur ? (sets.trips || []).filter(t => t.chapter === cur.id) : [];
+  box.hidden = !trips.length; if (!trips.length) return 0;   /* chapters without a trip keep their page as it is */
+  const recaps = recapMonths().filter(r => r.chapter === cur.id && !r.placeholder);
+  const rows = [
+    ...trips.map(t => ({ k: t.day, trip: t })),
+    ...recaps.map(r => ({ k: (r.id || "").slice(0, 7) + "-31", recap: r })),
+  ].sort((a, b) => b.k.localeCompare(a.k));
+  const ol = el("ol");
+  rows.forEach(r => {
+    const li = el("li"), b = el("button"); b.type = "button";
+    if (r.trip) {
+      const t = r.trip; li.className = "trip";
+      const tt = el("span", "t"); tt.append(el("b", null, t.title || t.id), el("small", null, [t.place !== (t.title || "").replace(/\.$/, "") ? t.place : "", t.photos.length ? t.photos.filter(p => !p.video).length + " photos" : "", t.stories.length ? t.stories.length + " stories" : ""].filter(Boolean).join(" · ")));
+      const cv = el("span", "cv"); (t.photos.some(p => !p.video) ? t.photos : t.stories).filter(p => !p.video).slice(0, 3).forEach(p => { const im = el("img"); im.src = p.thumb || p.src; im.alt = ""; im.loading = "lazy"; cv.append(im); });
+      b.append(el("span", "d", t.date.slice(0, 6)), el("span", "o"), tt, cv, el("span", "go", "→"));
+      b.setAttribute("aria-label", (t.title || "") + " " + t.dates);
+      b.onclick = () => openTrip(t);
+    } else {
+      const x = r.recap;
+      const tt = el("span", "t"); tt.append(el("b", null, x.title || "recap."), el("small", null, "the month in pictures"));
+      b.append(el("span", "d", x.number), el("span", "o"), tt, el("span", "cv"), el("span", "go", "→"));
+      b.onclick = () => openSet(x);
+    }
+    li.append(b); ol.append(li);
+  });
+  box.append(el("div", "hofhead", "the timeline."), ol);
+  return trips.length;
+}
+
+/* a trip: the story, the posted photos, then the highlight stories */
+function openTrip(t) {
+  openSet({ chapter: t.chapter, date: t.dates, title: t.title, caption: t.caption, images: [] });
+  const c = byId[t.chapter] || ALL;
+  const items = t.photos.filter(p => !p.video).map(p => ({ src: p.src, thumb: p.thumb, thumb2: p.thumb2, chapter: t.chapter, caption: t.title || "", date: t.dates, credit: t.credit || "" }));
+  const box = $("sImgs"); box.classList.add("trip");
+  const own = t.place && t.place !== (t.title || "").replace(/\.$/, "") ? t.place : "";
+  if (own || t.credit) { const pl = el("div", "place", [own, t.credit ? "photos " + t.credit : ""].filter(Boolean).join(" · ")); $("sTitle").after(pl); pl.dataset.trip = 1; }
+  t.photos.forEach(p => {
+    if (p.video) { const v = el("video", "clip"); v.src = p.src; v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true; v.preload = "metadata"; if (p.poster) v.poster = p.poster; v.setAttribute("aria-label", "clip"); const w = el("div"); w.append(v); box.append(w); return; }   /* clips from the posts: silent and looping, like on the wall */
+    const i = items.findIndex(x => x.src === p.src), b = el("button"), im = el("img"); im.src = p.thumb2 || p.src; im.loading = "lazy"; im.alt = (t.title || "") + " " + (i + 1); b.append(im); b.onclick = () => open(items, i, im); box.append(b); });
+  const ex = $("sExtra");
+  if (!t.stories.length) return;
+  ex.append(el("div", "sthead", "stories."));
+  const row = el("div", "stories"), still = t.stories.filter(s => !s.video).map(s => ({ src: s.src, thumb: s.thumb, thumb2: s.thumb2, chapter: t.chapter, caption: (t.title || "") + " · story", date: t.dates }));
+  t.stories.forEach(s => {
+    if (s.video) {
+      const w = el("div"), v = el("video"); v.src = s.src; v.playsInline = true; v.loop = true; v.preload = "none"; if (s.poster) v.poster = s.poster;
+      w.append(v, el("span", "play", "▶")); w.setAttribute("role", "button"); w.setAttribute("aria-label", "play story clip");
+      w.onclick = () => { if (v.paused) { row.querySelectorAll("video").forEach(o => { if (o !== v) { o.pause(); o.parentNode.classList.remove("on"); } }); try { hushSong(); } catch (e) {} v.play(); w.classList.add("on"); } else { v.pause(); w.classList.remove("on"); } };
+      row.append(w);
+    } else {
+      const b = el("button"), im = el("img"); b.type = "button"; im.src = s.thumb || s.src; im.loading = "lazy"; im.alt = "story";
+      const k = still.findIndex(x => x.src === s.src); b.append(im); b.onclick = () => open(still, k, im); row.append(b);
+    }
+  });
+  ex.append(row, el("p", "stnote", "from the " + c.label + " highlight."));
+}
+
 function justifyChRow() {
   const row = $("chRow"), boxes = [$("chRecaps"), $("chTeasers")].filter(b => !b.hidden), phone = matchMedia("(max-width: 899px)").matches, G = 8;
   const W = row.clientWidth || innerWidth - 32;
@@ -2375,7 +2471,7 @@ function render() {
   renderSubnav(); renderSelected(); renderDigitals(); renderFab(); renderBooking();
   $("strip").hidden = view !== "colours";
   $("wall").hidden = view !== "colours";
-  if (view !== "colours") { $("chRecaps").hidden = true; $("chTeasers").hidden = true; }
+  if (view !== "colours") { $("chRecaps").hidden = true; $("chTeasers").hidden = true; $("chTl").hidden = true; }
   if (view !== "colours") $("more").hidden = true;
   updTop();
   if (window.mnNew && sets.loaded) mnNew(sets, view === "recaps" ? "more" : ["journal", "posts"].includes(view) && !(view === "journal" && !jOpen()) ? view : null);
@@ -2436,7 +2532,8 @@ function openSet(s) {
   $("sTitle").textContent = s.title || ""; $("sTitle").hidden = !s.title;
   if (s.journal && s.title) jTitle($("sTitle"), s.title, c.dot || c.fg);
   $("sText").textContent = s.caption || ""; $("sText").hidden = !s.caption;
-  const box = $("sImgs"); box.textContent = "";
+  const box = $("sImgs"); box.textContent = ""; box.classList.remove("trip");
+  $("sExtra").querySelectorAll("video").forEach(v => v.pause()); $("sExtra").textContent = ""; document.querySelectorAll('.sheet .place[data-trip]').forEach(x => x.remove());
   const items = s.images.map(src => ({ src, chapter: s.chapter, caption: s.title || "", credit: s.credit || "" }));
   items.forEach((it, i) => {
     const b = el("button"); const img = el("img"); img.src = it.src; img.loading = "lazy"; img.alt = s.title || s.caption || "";
@@ -2444,7 +2541,7 @@ function openSet(s) {
   });
   sh.scrollTop = 0; sh.hidden = false; document.body.style.overflow = "hidden";
 }
-function closeSet() { $("sheet").hidden = true; document.body.style.overflow = ""; }
+function closeSet() { document.querySelectorAll("#sheet video").forEach(v => v.pause()); $("sheet").hidden = true; document.body.style.overflow = ""; }
 $("sClose").onclick = closeSet;
 
 function open(arr, i, from) {
@@ -2754,7 +2851,7 @@ let loaded = false;
 function loadData() {
   if (loaded) return; loaded = true;
   fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); digitals = d.filter(p => p.chapter === "digitals"); mixed = shuffle(photos); render(); }).catch(() => {});
-  fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [], journal_lock: d.journal_lock || null, teasers: d.teasers || {}, loaded: true }; render(); jAuto(); wirePress(d.press || {}); }).catch(() => {});
+  fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [], journal_lock: d.journal_lock || null, teasers: d.teasers || {}, trips: d.trips || [], loaded: true }; render(); jAuto(); wirePress(d.press || {}); }).catch(() => {});
 }
 if (document.documentElement.classList.contains("welcome")) {
   try { sessionStorage.setItem("mn-hello", "1"); } catch (e) {}
