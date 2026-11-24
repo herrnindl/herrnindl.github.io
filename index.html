@@ -877,37 +877,92 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 @media (min-width: 900px) { .about.panel > .sig-about { grid-column: 1; } }
 @media (prefers-reduced-motion: reduce) { .sig path { animation: none; stroke-dashoffset: 0; transform: none; } }
 
-/* chapter timeline: trips and recaps of a chapter, newest first; a trip opens as a sheet */
-.chtl { margin-top: 22px; max-width: 720px; }
-.chtl .hofhead { margin: 0 0 8px; }
+/* chapter timeline: the trips of a chapter, newest on top; each shows a strip of its city photos */
+.chtl { margin-top: 26px; max-width: 1000px; }
+.chtl .hofhead { margin: 0 0 6px; }
+.chtl .hofhead small { opacity: .6; letter-spacing: .04em; text-transform: none; }
 .chtl ol { list-style: none; margin: 0; padding: 0; position: relative; }
-.chtl ol::before { content: ""; position: absolute; left: 76px; top: 14px; bottom: 14px; width: 1px; background: var(--line); }
-.chtl li button { display: grid; grid-template-columns: 64px 26px 1fr auto auto; align-items: center; width: 100%; padding: 9px 0; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.chtl ol::before { content: ""; position: absolute; left: 83px; top: 26px; bottom: 30px; width: 1px; background: var(--fg); opacity: .22; transform-origin: top; }
+.chtl li { padding: 14px 0 16px; }
+.chtl .th { display: grid; grid-template-columns: 70px 28px 1fr auto auto; align-items: center; width: 100%; padding: 0; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .chtl .d { font-size: 12px; letter-spacing: .06em; color: var(--soft); font-variant-numeric: tabular-nums; }
-.chtl .o { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--fg); background: var(--bg, transparent); justify-self: center; position: relative; z-index: 1; }
-.chtl .trip .o { width: 13px; height: 13px; background: var(--fg); }
+.chtl .o { width: 13px; height: 13px; border-radius: 50%; background: var(--fg); justify-self: center; position: relative; z-index: 1; box-shadow: 0 0 0 5px var(--bg); }
 .chtl .t { min-width: 0; }
-.chtl .t b { display: block; font-weight: 500; font-size: 17px; letter-spacing: -.01em; }
-.chtl .trip .t b { font-weight: 800; font-size: 26px; letter-spacing: -.04em; line-height: 1; }
-.chtl .t small { display: block; margin-top: 3px; font-size: 12px; color: var(--soft); }
-.chtl .cv { display: flex; gap: 4px; margin-left: 10px; }
-.chtl .cv img { width: 38px; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2px; display: block; }
-.chtl .go { margin-left: 10px; font-size: 18px; opacity: .55; }
-.chtl li button:hover .go { opacity: 1; }
-@media (max-width: 520px) { .chtl ol::before { left: 66px; } .chtl li button { grid-template-columns: 54px 26px 1fr auto auto; } .chtl .cv img:nth-child(n+3) { display: none; } .chtl .cv img { width: 32px; } }
+.chtl .t b { display: block; font-weight: 800; font-size: clamp(26px, 6vw, 40px); letter-spacing: -.045em; line-height: .95; }
+.chtl .t small { display: block; margin-top: 5px; font-size: 12px; color: var(--soft); }
+.chtl .go { margin-left: 12px; font-size: 20px; opacity: .5; transition: transform .25s ease, opacity .25s ease; }
+.chtl .th:hover .go { opacity: 1; transform: translateX(4px); }
+.chtl .ring { width: 50px; height: 50px; margin-left: 10px; padding: 3px; border: 0; border-radius: 50%; cursor: pointer; background: conic-gradient(from 210deg, var(--fg), color-mix(in srgb, var(--fg) 35%, var(--bg)), var(--fg)); flex: none; }
+.chtl .ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 2px solid var(--bg); }
+.chtl .ring:hover { transform: scale(1.06); }
+.chtl .pv { display: flex; gap: 6px; margin: 12px 0 0 98px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity; }
+.chtl .pv::-webkit-scrollbar { display: none; }
+.chtl .pv > * { flex: 0 0 clamp(86px, 14vw, 150px); aspect-ratio: 3 / 4; padding: 0; border: 0; border-radius: 3px; overflow: hidden; background: var(--line); scroll-snap-align: start; cursor: pointer; position: relative; }
+.chtl .pv img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+.chtl .pv > :hover img { transform: scale(1.05); }
+.chtl .pv .all { display: grid; place-items: center; font-weight: 800; font-size: 20px; letter-spacing: -.03em; color: var(--fg); background: color-mix(in srgb, var(--fg) 8%, var(--bg)); }
+.chtl .pv .all small { display: block; font-size: 11px; font-weight: 400; letter-spacing: .1em; opacity: .6; }
+@media (max-width: 560px) { .chtl ol::before { left: 73px; } .chtl .th { grid-template-columns: 60px 28px 1fr auto auto; } .chtl .d { font-size: 11px; letter-spacing: .02em; } .chtl .pv { margin-left: 88px; } .chtl .pv > * { flex-basis: 27vw; } .chtl .ring { width: 44px; height: 44px; } .chtl .go { display: none; } }
+/* the timeline draws itself: line grows, dots pop, rows rise, photos slide in one after another */
+.chtl.anim ol::before { transform: scaleY(0); transition: transform 1.6s cubic-bezier(.2,.7,.2,1); }
+.chtl.anim ol.in::before { transform: none; }
+.chtl.anim li { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * 140ms); }
+.chtl.anim li.in { opacity: 1; transform: none; }
+.chtl.anim li .o { transform: scale(0); transition: transform .55s cubic-bezier(.3,1.7,.5,1) calc(var(--i) * 140ms + .3s); }
+.chtl.anim li.in .o { transform: none; }
+.chtl.anim .pv > * { opacity: 0; transform: translateX(18px); transition: opacity .5s ease, transform .7s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * 140ms + .35s + var(--k) * 70ms); }
+.chtl.anim li.in .pv > * { opacity: 1; transform: none; }
+/* recaps: small, at the end of the chapter; the count sits up by the title */
+.endrecaps { margin-top: 34px; }
+.endrecaps .row { overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.endrecaps .row::-webkit-scrollbar { display: none; }
+.endrecaps .row > * { flex: 0 0 clamp(88px, 22vw, 124px); }
+.endrecaps .set.light { outline: 1px solid rgba(0,0,0,.14); outline-offset: -1px; }
+.sheet .txt[hidden] + .imgs { margin-top: 26px; }
+.endrecaps .hofhead small { opacity: .6; letter-spacing: .04em; text-transform: none; }
+.rcpill { display: inline-flex; align-items: center; gap: 7px; padding: 4px 12px 4px 9px; border: 1px solid currentColor; border-radius: 999px; background: none; color: inherit; font: inherit; font-size: 13px; cursor: pointer; }
+.rcpill i { display: flex; }
+.rcpill img { width: 18px; height: 24px; object-fit: cover; border-radius: 2px; margin-right: -6px; box-shadow: 0 0 0 1.5px var(--bg); }
+.rcpill img:last-child { margin-right: 2px; }
+/* a trip page */
 .sheet .imgs.trip { grid-template-columns: 1fr 1fr; gap: 6px; }
 .sheet .imgs.trip > :first-child:nth-last-child(odd) { grid-column: 1 / -1; }
 .sheet .imgs.trip > :first-child:nth-last-child(odd) img { max-height: 78vh; object-fit: cover; }
-.sheet .imgs.trip video { width: 100%; height: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; border-radius: 3px; }
+.sheet .imgs.trip video, .sheet .imgs video { width: 100%; height: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; border-radius: 3px; }
 .sheet .place { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .65; margin-top: 10px; }
-.sheet .sthead { margin: 34px 0 10px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; opacity: .65; }
-.sheet .stories { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; scroll-snap-type: x mandatory; }
-.sheet .stories::-webkit-scrollbar { display: none; }
-.sheet .stories > * { flex: 0 0 min(30%, 170px); aspect-ratio: 9 / 16; padding: 0; border: 0; border-radius: 4px; overflow: hidden; background: rgba(0,0,0,.08); position: relative; scroll-snap-align: start; cursor: pointer; }
-.sheet .stories img, .sheet .stories video { width: 100%; height: 100%; object-fit: cover; display: block; }
-.sheet .stories .play { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-size: 26px; text-shadow: 0 1px 8px rgba(0,0,0,.5); pointer-events: none; }
-.sheet .stories .on .play { display: none; }
-.sheet .stnote { margin-top: 8px; font-size: 12px; opacity: .55; }
+.sheet .sthead { display: flex; align-items: baseline; justify-content: space-between; margin: 34px 0 10px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; opacity: .75; }
+.sheet .sthead button { padding: 6px 13px; border: 1px solid currentColor; border-radius: 999px; background: none; color: inherit; font: inherit; font-size: 12px; letter-spacing: .06em; text-transform: none; cursor: pointer; }
+/* stories drift by slowly; touch or hover stops them, a tap opens the story player */
+.sheet .drift { overflow: hidden; margin: 0 -18px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.sheet .drift .track { display: flex; width: max-content; animation: drift linear infinite; }
+.sheet .drift .grp { display: flex; gap: 8px; padding-right: 8px; }
+.sheet .drift:hover .track, .sheet .drift.hold .track { animation-play-state: paused; }
+@keyframes drift { to { transform: translateX(-50%); } }
+.sheet .drift .grp > * { flex: 0 0 clamp(112px, 30vw, 168px); aspect-ratio: 9 / 16; padding: 0; border: 0; border-radius: 6px; overflow: hidden; background: rgba(0,0,0,.1); position: relative; cursor: pointer; }
+.sheet .drift .grp > :nth-child(odd) { transform: translateY(10px) rotate(-.6deg); }
+.sheet .drift .grp > :nth-child(even) { transform: rotate(.6deg); }
+.sheet .drift img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sheet .drift .play { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-size: 24px; text-shadow: 0 1px 10px rgba(0,0,0,.5); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .sheet .drift .track { animation: none; } .sheet .drift { overflow-x: auto; } .sheet .drift .grp + .grp { display: none; } }
+.sheet .stnote { margin-top: 18px; font-size: 12px; opacity: .55; }
+/* story player: like on instagram, in the chapter colour */
+.sp { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: color-mix(in srgb, var(--sbg) 22%, #050505); }
+.sp[hidden] { display: none; }
+.spf { position: relative; height: min(100dvh, 177.7vw); aspect-ratio: 9 / 16; max-width: 100vw; overflow: hidden; background: #000; border-radius: 0; touch-action: none; user-select: none; -webkit-user-select: none; }
+@media (min-width: 600px) { .spf { height: min(92dvh, 860px); border-radius: 12px; box-shadow: 0 30px 80px rgba(0,0,0,.45); } }
+.spm, .spm img, .spm video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.spm img, .spm video { animation: spin .45s ease; }
+@keyframes spin { from { opacity: 0; transform: scale(1.04); } }
+.spb { position: absolute; left: 8px; right: 8px; top: calc(8px + env(safe-area-inset-top, 0px)); display: flex; gap: 3px; z-index: 2; }
+.spb i { flex: 1; height: 2.5px; border-radius: 2px; background: rgba(255,255,255,.35); overflow: hidden; }
+.spb b { display: block; height: 100%; width: 0; background: #fff; }
+.sph { position: absolute; left: 12px; right: 56px; top: calc(20px + env(safe-area-inset-top, 0px)); z-index: 2; display: flex; align-items: baseline; gap: 10px; color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.45); }
+.sph b { font-weight: 800; font-size: 17px; letter-spacing: -.02em; }
+.sph span { font-size: 12px; opacity: .8; }
+.spx { position: absolute; right: 8px; top: calc(14px + env(safe-area-inset-top, 0px)); z-index: 3; width: 40px; height: 40px; border: 0; background: none; color: #fff; font-size: 20px; text-shadow: 0 1px 8px rgba(0,0,0,.5); cursor: pointer; }
+.spl, .spr { position: absolute; top: 0; bottom: 0; z-index: 1; border: 0; background: none; cursor: pointer; }
+.spl { left: 0; width: 34%; } .spr { right: 0; width: 66%; }
+.spn { position: absolute; left: 0; right: 0; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 2; text-align: center; color: #fff; font-size: 11px; letter-spacing: .2em; opacity: .7; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
 </style>
 </head>
 <body>
@@ -971,9 +1026,10 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="ticker" id="ticker" hidden aria-hidden="true"></div>
   <div class="hofhead sec whead" id="wallHead" hidden><h2><b>03</b>every photo.</h2><span class="wtools"><span class="sizes" id="sizes" role="group" aria-label="photo size"><button type="button" data-s="s" aria-label="small photos">S</button><button type="button" data-s="m" aria-label="medium photos">M</button><button type="button" data-s="l" aria-label="large photos">L</button><button type="button" data-s="1" aria-label="one photo at a time">1</button><button type="button" data-s="t" class="tbl" aria-label="table: prints to drag around">table</button></span><button class="shufbtn" id="shuf" type="button">shuffle.</button></span></div>
   <div class="chtl" id="chTl" hidden></div>
-  <div class="chrow" id="chRow"><div class="chrecaps" id="chRecaps" hidden></div><div class="chrecaps chteasers" id="chTeasers" hidden></div></div>
+  <div class="chrow" id="chRow"><div class="chrecaps chteasers" id="chTeasers" hidden></div></div>
   <div class="wallbox"><div class="mnback" aria-hidden="true"><span>MN.</span></div><div class="wall" id="wall"></div></div>
   <div class="more" id="more" hidden></div>
+  <div class="chrecaps endrecaps" id="chRecaps" hidden></div>
   <h2 class="hofhead sec" id="gbHead" hidden><b>04</b>more.</h2>
   <nav class="moregrid" id="gb" aria-label="More pages" hidden>
     <a href="play.html"><small>PLAY.</small><b>five games<i>.</i></b><span>a new photo every day.</span></a>
@@ -1424,6 +1480,8 @@ function renderCard() {
   });
   if (c.id in SONGS && !SONGS[c.id]) { const s = el("span", "song soon", "song"); s.append(el("small", null, "soon")); meta.append(s); }   /* chosen later: shows "song · soon" */
   if ([].concat(SONGS[c.id] || []).some(x => x.id) && !soundOn) meta.append(el("span", "spotnote", "tap to play via spotify · spotify sets cookies"));
+  { const rc = recapMonths().filter(r => r.chapter === c.id && !r.placeholder);   /* how many recaps, at first sight; they sit at the end of the page */
+    if (rc.length) { const b = el("button", "rcpill"), i = el("i"); b.type = "button"; rc.slice(0, 3).forEach(r => { const im = el("img"); im.src = r.thumb || r.cover; im.alt = ""; i.append(im); }); b.append(i, rc.length + (rc.length > 1 ? " recaps" : " recap") + " ↓"); b.onclick = () => { const t = $("chRecaps"); if (t && !t.hidden) t.scrollIntoView({ behavior: calm() ? "auto" : "smooth", block: "center" }); }; meta.append(b); } }
   if (photos.some(p => p.chapter === c.id && !p.video)) { const w = el("button", "sharebtn walkbtn", "walk through."); w.type = "button"; w.setAttribute("aria-label", "walk through " + c.label + " like an exhibition"); w.onclick = () => openRoom(c); meta.append(w); }
   if (soundOn) { const first = [].concat(SONGS[c.id] || []).find(x => x.id); if (first) playSong(first); else hushSong(); }   /* a chapter without its own song is quiet */
 }
@@ -2294,7 +2352,9 @@ function renderChRecaps() {
   const mine = cur ? recapMonths().filter(r => r.chapter === cur.id) : [];   /* newest first, like everywhere */
   box.hidden = !mine.length; if (!mine.length) return 0;
   const row = el("div", "row"); mine.forEach(r => row.append(recapTile(r, true)));
-  box.append(el("div", "hofhead", "recaps."), row);
+  const real = mine.filter(r => !r.placeholder).length, h = el("div", "hofhead");
+  h.append("recaps.", el("small", null, "  " + (real ? real + (real > 1 ? " months" : " month") : "soon")));
+  box.append(h, row);
   return mine.length;
 }
 
@@ -2317,40 +2377,52 @@ function renderChTeasers() {
   return ts.length;
 }
 
-/* ---------- chapter timeline: trips/ and recaps of this chapter, newest first ---------- */
+/* ---------- chapter timeline: the trips of this chapter, newest on top ---------- */
 function renderChTimeline() {
-  const box = $("chTl"); box.textContent = "";
+  const box = $("chTl"); box.textContent = ""; box.classList.remove("anim");
   const cur = view === "colours" && byId[filter];
-  const trips = cur ? (sets.trips || []).filter(t => t.chapter === cur.id) : [];
+  const trips = cur ? (sets.trips || []).filter(t => t.chapter === cur.id).sort((a, b) => b.day.localeCompare(a.day)) : [];
   box.hidden = !trips.length; if (!trips.length) return 0;   /* chapters without a trip keep their page as it is */
-  const recaps = recapMonths().filter(r => r.chapter === cur.id && !r.placeholder);
-  const rows = [
-    ...trips.map(t => ({ k: t.day, trip: t })),
-    ...recaps.map(r => ({ k: (r.id || "").slice(0, 7) + "-31", recap: r })),
-  ].sort((a, b) => b.k.localeCompare(a.k));
+  const h = el("div", "hofhead"); h.append("the timeline.", el("small", null, "  " + trips.length + (trips.length > 1 ? " places" : " place")));
   const ol = el("ol");
-  rows.forEach(r => {
-    const li = el("li"), b = el("button"); b.type = "button";
-    if (r.trip) {
-      const t = r.trip; li.className = "trip";
-      const tt = el("span", "t"); tt.append(el("b", null, t.title || t.id), el("small", null, [t.place !== (t.title || "").replace(/\.$/, "") ? t.place : "", t.photos.length ? t.photos.filter(p => !p.video).length + " photos" : "", t.stories.length ? t.stories.length + " stories" : ""].filter(Boolean).join(" · ")));
-      const cv = el("span", "cv"); (t.photos.some(p => !p.video) ? t.photos : t.stories).filter(p => !p.video).slice(0, 3).forEach(p => { const im = el("img"); im.src = p.thumb || p.src; im.alt = ""; im.loading = "lazy"; cv.append(im); });
-      b.append(el("span", "d", t.date.slice(0, 6)), el("span", "o"), tt, cv, el("span", "go", "→"));
-      b.setAttribute("aria-label", (t.title || "") + " " + t.dates);
-      b.onclick = () => openTrip(t);
-    } else {
-      const x = r.recap;
-      const tt = el("span", "t"); tt.append(el("b", null, x.title || "recap."), el("small", null, "the month in pictures"));
-      b.append(el("span", "d", x.number), el("span", "o"), tt, el("span", "cv"), el("span", "go", "→"));
-      b.onclick = () => openSet(x);
+  trips.forEach((t, i) => {
+    const li = el("li"); li.style.setProperty("--i", i);
+    const own = t.place && t.place !== (t.title || "").replace(/\.$/, "") ? t.place : "";
+    const pics = t.photos.filter(p => !p.video);
+    const th = el("button", "th"); th.type = "button"; th.setAttribute("aria-label", (t.title || "") + " " + t.dates);
+    const tt = el("span", "t"); tt.append(el("b", null, t.title || t.id), el("small", null, [own, t.dates, pics.length ? pics.length + " photos" : "", t.stories.length ? t.stories.length + " stories" : ""].filter(Boolean).join(" · ")));
+    th.append(el("span", "d", t.date), el("span", "o"), tt);
+    const still = t.stories.find(s => !s.video && !s.plain) || t.stories.find(s => !s.video) || t.stories[0];
+    if (still) {   /* the round story ring, like on instagram: straight into the stories */
+      const r = el("span", "ring"), im = el("img"); r.setAttribute("role", "button"); r.tabIndex = 0; r.setAttribute("aria-label", "watch the " + (t.title || "") + " stories");
+      im.src = still.thumb || still.poster || still.src; im.alt = ""; im.loading = "lazy"; r.append(im);
+      r.onclick = e => { e.stopPropagation(); openStories(t, 0); };
+      r.onkeydown = e => { if (e.key === "Enter") { e.stopPropagation(); openStories(t, 0); } };
+      th.append(r);
+    } else th.append(el("span"));
+    th.append(el("span", "go", "→"));
+    th.onclick = () => openTrip(t);
+    li.append(th);
+    const src = pics.length ? pics : t.stories.filter(s => !s.video && !s.plain);
+    if (src.length) {
+      const pv = el("div", "pv"), L = src.map(p => ({ src: p.src, thumb: p.thumb, thumb2: p.thumb2, chapter: t.chapter, caption: t.title || "", date: t.dates, credit: t.credit || "" }));
+      const N = 7;
+      src.slice(0, N).forEach((p, k) => { const b = el("button"), im = el("img"); b.type = "button"; b.style.setProperty("--k", k); im.src = p.thumb || p.src; im.alt = (t.title || "") + " " + (k + 1); im.loading = "lazy"; im.decoding = "async"; b.append(im); b.onclick = () => open(L, k, im); pv.append(b); });
+      if (src.length > N) { const a = el("button", "all"); a.type = "button"; a.style.setProperty("--k", N); const s = el("span"); s.append("+" + (src.length - N), el("small", null, "all")); a.append(s); a.onclick = () => openTrip(t); pv.append(a); }
+      li.append(pv);
     }
-    li.append(b); ol.append(li);
+    ol.append(li);
   });
-  box.append(el("div", "hofhead", "the timeline."), ol);
+  box.append(h, ol);
+  if (!calm() && "IntersectionObserver" in window) {
+    box.classList.add("anim");
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12, rootMargin: "0px 0px -6% 0px" });
+    [ol, ...ol.children].forEach(x => io.observe(x));
+  }
   return trips.length;
 }
 
-/* a trip: the story, the posted photos, then the highlight stories */
+/* a trip: the story, the posted photos, then the highlight stories drifting by */
 function openTrip(t) {
   openSet({ chapter: t.chapter, date: t.dates, title: t.title, caption: t.caption, images: [] });
   const c = byId[t.chapter] || ALL;
@@ -2363,24 +2435,75 @@ function openTrip(t) {
     const i = items.findIndex(x => x.src === p.src), b = el("button"), im = el("img"); im.src = p.thumb2 || p.src; im.loading = "lazy"; im.alt = (t.title || "") + " " + (i + 1); b.append(im); b.onclick = () => open(items, i, im); box.append(b); });
   const ex = $("sExtra");
   if (!t.stories.length) return;
-  ex.append(el("div", "sthead", "stories."));
-  const row = el("div", "stories"), still = t.stories.filter(s => !s.video).map(s => ({ src: s.src, thumb: s.thumb, thumb2: s.thumb2, chapter: t.chapter, caption: (t.title || "") + " · story", date: t.dates }));
-  t.stories.forEach(s => {
-    if (s.video) {
-      const w = el("div"), v = el("video"); v.src = s.src; v.playsInline = true; v.loop = true; v.preload = "none"; if (s.poster) v.poster = s.poster;
-      w.append(v, el("span", "play", "▶")); w.setAttribute("role", "button"); w.setAttribute("aria-label", "play story clip");
-      w.onclick = () => { if (v.paused) { row.querySelectorAll("video").forEach(o => { if (o !== v) { o.pause(); o.parentNode.classList.remove("on"); } }); try { hushSong(); } catch (e) {} v.play(); w.classList.add("on"); } else { v.pause(); w.classList.remove("on"); } };
-      row.append(w);
-    } else {
-      const b = el("button"), im = el("img"); b.type = "button"; im.src = s.thumb || s.src; im.loading = "lazy"; im.alt = "story";
-      const k = still.findIndex(x => x.src === s.src); b.append(im); b.onclick = () => open(still, k, im); row.append(b);
-    }
+  const hd = el("div", "sthead"), w = el("button", null, "▶ watch all"); w.type = "button"; w.onclick = () => openStories(t, 0);
+  hd.append(el("span", null, "stories. " + t.stories.length), w); ex.append(hd);
+  const drift = el("div", "drift"), track = el("div", "track");
+  [0, 1].forEach(copy => {
+    const g = el("div", "grp"); if (copy) g.setAttribute("aria-hidden", "true");
+    t.stories.forEach((s, k) => {
+      const b = el("button"), im = el("img"); b.type = "button"; if (copy) b.tabIndex = -1;
+      im.src = s.video ? (s.poster || "") : (s.thumb || s.src); im.alt = copy ? "" : "story " + (k + 1); im.loading = "lazy";
+      b.append(im); if (s.video) b.append(el("span", "play", "▶"));
+      b.onclick = () => openStories(t, k); g.append(b);
+    });
+    track.append(g);
   });
-  ex.append(row, el("p", "stnote", "from the " + c.label + " highlight."));
+  track.style.animationDuration = Math.max(24, t.stories.length * 4.2) + "s";   /* slow: about four seconds per story */
+  let ht; const hold = () => { drift.classList.add("hold"); clearTimeout(ht); }, let_go = () => { clearTimeout(ht); ht = setTimeout(() => drift.classList.remove("hold"), 1600); };
+  drift.addEventListener("touchstart", hold, { passive: true }); drift.addEventListener("touchend", let_go);
+  drift.append(track);
+  ex.append(drift, el("p", "stnote", "from the " + c.label + " highlight."));
+}
+
+/* the story player: progress bars on top, tap right for the next one, left to go back, hold to pause */
+function openStories(t, start) {
+  const c = byId[t.chapter] || ALL, S = t.stories; if (!S.length) return;
+  try { hushSong(); } catch (e) {}
+  document.querySelectorAll("#sheet video").forEach(v => v.pause());
+  let sp = $("sp"); if (!sp) { sp = el("div", "sp"); sp.id = "sp"; sp.setAttribute("role", "dialog"); sp.setAttribute("aria-modal", "true"); document.body.append(sp); }
+  sp.textContent = ""; sp.style.setProperty("--sbg", c.bg); sp.setAttribute("aria-label", (t.title || "") + " stories");
+  const f = el("div", "spf"), m = el("div", "spm"), bars = el("div", "spb"), hd = el("div", "sph"), x = el("button", "spx", "✕"), pl = el("button", "spl"), pr = el("button", "spr"), n = el("div", "spn");
+  x.setAttribute("aria-label", "Close"); pl.setAttribute("aria-label", "Previous story"); pr.setAttribute("aria-label", "Next story");
+  S.forEach(() => { const i = el("i"); i.append(el("b")); bars.append(i); });
+  hd.append(el("b", null, t.title || ""), el("span", null, t.dates));
+  f.append(m, bars, hd, pl, pr, x, n); sp.append(f); sp.hidden = false; document.body.style.overflow = "hidden";
+  const IMG = 5200; let i = 0, t0 = 0, done = 0, paused = false, raf = 0, vid = null, down = 0;
+  const fill = k => [...bars.children].forEach((b, j) => b.firstChild.style.width = j < k ? "100%" : "0");
+  const tick = () => {
+    const b = bars.children[i] && bars.children[i].firstChild; if (!b) return;
+    let p;
+    if (vid) p = vid.duration ? vid.currentTime / vid.duration : 0;
+    else { if (!paused) done = performance.now() - t0; p = done / IMG; if (p >= 1) return go(1); }
+    b.style.width = Math.min(100, p * 100) + "%";
+    raf = requestAnimationFrame(tick);
+  };
+  const show = k => {
+    cancelAnimationFrame(raf); if (vid) { vid.pause(); vid = null; }
+    i = k; fill(i); m.textContent = ""; n.textContent = (i + 1) + " / " + S.length;
+    const s = S[i];
+    if (s.video) {
+      vid = el("video"); vid.src = s.src; vid.playsInline = true; if (s.poster) vid.poster = s.poster;
+      vid.onended = () => go(1); m.append(vid); vid.play().catch(() => { vid.muted = true; vid.play().catch(() => {}); });
+    } else { const im = el("img"); im.src = s.thumb2 || s.src; im.alt = "story " + (i + 1); m.append(im); done = 0; t0 = performance.now(); }
+    const nx = S[i + 1]; if (nx && !nx.video) { const pre = new Image(); pre.src = nx.thumb2 || nx.src; }
+    raf = requestAnimationFrame(tick);
+  };
+  const go = d => { const k = i + d; if (k < 0) return show(0); if (k >= S.length) return close(); show(k); };
+  const pause = on => { paused = on; if (vid) on ? vid.pause() : vid.play().catch(() => {}); if (!on && !vid) t0 = performance.now() - done; };
+  const key = e => { if (e.key === "Escape") close(); else if (e.key === "ArrowRight") go(1); else if (e.key === "ArrowLeft") go(-1); else if (e.key === " ") { e.preventDefault(); pause(!paused); } };
+  function close() { cancelAnimationFrame(raf); if (vid) vid.pause(); sp.hidden = true; sp.textContent = ""; document.removeEventListener("keydown", key); document.body.style.overflow = $("sheet").hidden ? "" : "hidden"; }
+  f.addEventListener("pointerdown", e => { if (e.target === x) return; down = performance.now(); pause(true); });
+  f.addEventListener("pointerup", () => pause(false)); f.addEventListener("pointercancel", () => pause(false));
+  pl.onclick = () => { if (performance.now() - down < 260) go(-1); };
+  pr.onclick = () => { if (performance.now() - down < 260) go(1); };
+  x.onclick = close; sp.onclick = e => { if (e.target === sp) close(); };
+  document.addEventListener("keydown", key);
+  show(Math.max(0, Math.min(start || 0, S.length - 1)));
+  x.focus({ preventScroll: true });
 }
 
 function justifyChRow() {
-  const row = $("chRow"), boxes = [$("chRecaps"), $("chTeasers")].filter(b => !b.hidden), phone = matchMedia("(max-width: 899px)").matches, G = 8;
+  const row = $("chRow"), boxes = [$("chTeasers")].filter(b => !b.hidden), phone = matchMedia("(max-width: 899px)").matches, G = 8;
   const W = row.clientWidth || innerWidth - 32;
   const sets = boxes.map(b => { const its = [...b.querySelectorAll(".row > *")]; return { b, its, ar: its.map(e => e.classList.contains("tz") ? 9 / 16 : .8) }; });
   const fit = (group, width, maxH) => {   /* one height for everything in the group, exactly filling the width */
@@ -2534,9 +2657,11 @@ function openSet(s) {
   $("sText").textContent = s.caption || ""; $("sText").hidden = !s.caption;
   const box = $("sImgs"); box.textContent = ""; box.classList.remove("trip");
   $("sExtra").querySelectorAll("video").forEach(v => v.pause()); $("sExtra").textContent = ""; document.querySelectorAll('.sheet .place[data-trip]').forEach(x => x.remove());
-  const items = s.images.map(src => ({ src, chapter: s.chapter, caption: s.title || "", credit: s.credit || "" }));
-  items.forEach((it, i) => {
-    const b = el("button"); const img = el("img"); img.src = it.src; img.loading = "lazy"; img.alt = s.title || s.caption || "";
+  const isV = src => /\.(mp4|webm)$/i.test(src);
+  const items = s.images.filter(src => !isV(src)).map(src => ({ src, chapter: s.chapter, caption: s.title || "", credit: s.credit || "" }));
+  s.images.forEach(src => {
+    if (isV(src)) { const v = el("video"); v.src = src; v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true; v.preload = "metadata"; v.poster = "thumbs/" + src.replace(/\.[^.]+$/, "") + "-poster.webp"; box.append(v); return; }   /* clips: silent and looping */
+    const i = items.findIndex(x => x.src === src), b = el("button"); const img = el("img"); img.src = src; img.loading = "lazy"; img.alt = s.title || s.caption || "";
     b.append(img); b.onclick = () => open(items, i); box.append(b);
   });
   sh.scrollTop = 0; sh.hidden = false; document.body.style.overflow = "hidden";

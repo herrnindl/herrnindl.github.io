@@ -335,6 +335,10 @@ for ch in CHAPTERS:
 #   the highlight stories in stories/ (photos and .mp4 clips, in the order they were posted).
 #   info.txt: title: france. · dates: 16.–19.04.26 · place: paris · caption: the story
 #   The trip shows on its chapter's timeline; chapter: only if the date picks the wrong one.
+PLAIN = set()
+if os.path.exists(os.path.join("thumbs", "plain.json")):
+    with open(os.path.join("thumbs", "plain.json")) as f:
+        PLAIN = set(json.load(f))
 sets["trips"] = []
 if os.path.isdir("trips"):
     for name in sorted(os.listdir("trips"), reverse=True):
@@ -369,7 +373,7 @@ if os.path.isdir("trips"):
                     poster = "thumbs/" + os.path.splitext(src)[0] + "-poster.webp"
                     s["stories"].append({"src": src, "video": True, "poster": poster if os.path.exists(poster) else ""})
                 else:
-                    s["stories"].append(dict({"src": src}, **thumb(src)))
+                    s["stories"].append(dict({"src": src}, **thumb(src), **({"plain": True} if src in PLAIN else {})))
         sets["trips"].append(s)
 
 for group in ("recaps", "posts", "journal", "trips"):
