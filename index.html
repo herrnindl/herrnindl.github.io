@@ -912,6 +912,24 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .chtl.anim li.in .o { transform: none; }
 .chtl.anim .pv > * { opacity: 0; transform: translateX(18px); transition: opacity .5s ease, transform .7s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * 140ms + .35s + var(--k) * 70ms); }
 .chtl.anim li.in .pv > * { opacity: 1; transform: none; }
+/* alive: story tiles that flip through the trip's stories, slow ken burns on the photos, a spinning story ring, the newest dot breathing */
+.chtl .pv > .live { flex-basis: calc(clamp(86px, 14vw, 150px) * .75); aspect-ratio: 9 / 16; background: #111; }
+.chtl .live img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.06); transition: opacity .9s ease, transform 3.2s ease; }
+.chtl .live img.on { opacity: 1; transform: scale(1); }
+.chtl .live .ltb { position: absolute; left: 5px; right: 5px; top: 5px; height: 2px; border-radius: 2px; background: rgba(255,255,255,.35); overflow: hidden; z-index: 1; }
+.chtl .live .ltb i { display: block; height: 100%; width: 0; background: #fff; }
+.chtl .live.run .ltb i { animation: lbar var(--dur, 2.8s) linear; }
+@keyframes lbar { to { width: 100%; } }
+.chtl .live small { position: absolute; left: 0; right: 0; bottom: 6px; z-index: 1; text-align: center; color: #fff; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+.chtl li.in .pv > :not(.live):not(.all) img { animation: kb 16s ease-in-out infinite alternate; animation-delay: calc(var(--k) * -2.3s); }
+@keyframes kb { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.09) translate(-2%, -1.5%); } }
+.chtl .ring { position: relative; background: none; isolation: isolate; }
+.chtl .ring::before { content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: -1; background: conic-gradient(from 0deg, var(--fg), color-mix(in srgb, var(--fg) 25%, var(--bg)), var(--fg), color-mix(in srgb, var(--fg) 25%, var(--bg)), var(--fg)); animation: rspin 7s linear infinite; }
+@keyframes rspin { to { transform: rotate(1turn); } }
+.chtl li:first-child .o::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--fg); animation: breathe 2.6s ease-out infinite; }
+@keyframes breathe { from { transform: scale(1); opacity: .45; } to { transform: scale(3.2); opacity: 0; } }
+@media (max-width: 560px) { .chtl .pv > .live { flex-basis: calc(27vw * .75); } }
+@media (prefers-reduced-motion: reduce) { .chtl li .pv img, .chtl .ring::before, .chtl li .o::after { animation: none !important; } .chtl .live img { transition: none; } }
 /* recaps: small, at the end of the chapter; the count sits up by the title */
 .endrecaps { margin-top: 34px; }
 .endrecaps .row { overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
@@ -2406,8 +2424,10 @@ function renderChTimeline() {
     const src = pics.length ? pics : t.stories.filter(s => !s.video && !s.plain);
     if (src.length) {
       const pv = el("div", "pv"), L = src.map(p => ({ src: p.src, thumb: p.thumb, thumb2: p.thumb2, chapter: t.chapter, caption: t.title || "", date: t.dates, credit: t.credit || "" }));
-      const N = 7;
-      src.slice(0, N).forEach((p, k) => { const b = el("button"), im = el("img"); b.type = "button"; b.style.setProperty("--k", k); im.src = p.thumb || p.src; im.alt = (t.title || "") + " " + (k + 1); im.loading = "lazy"; im.decoding = "async"; b.append(im); b.onclick = () => open(L, k, im); pv.append(b); });
+      const N = 7, stills = t.stories.map((x, j) => ({ j, plain: x.plain, src: x.video ? x.poster : (x.thumb2 || x.thumb || x.src) })).filter(x => x.src && !x.plain);
+      const lives = pics.length && stills.length > 2 ? [0, 1].filter(q => stills.length > 5 || q === 0) : [];   /* one or two living story tiles in front of the photos */
+      lives.forEach(q => pv.append(liveTile(t, stills.filter((x, j) => j % lives.length === q), q)));
+      src.slice(0, N).forEach((p, k) => { k += lives.length; const b = el("button"), im = el("img"); b.type = "button"; b.style.setProperty("--k", k); im.src = p.thumb || p.src; im.alt = (t.title || "") + " " + (k + 1); im.loading = "lazy"; im.decoding = "async"; b.append(im); b.onclick = () => open(L, k - lives.length, im); pv.append(b); });
       if (src.length > N) { const a = el("button", "all"); a.type = "button"; a.style.setProperty("--k", N); const s = el("span"); s.append("+" + (src.length - N), el("small", null, "all")); a.append(s); a.onclick = () => openTrip(t); pv.append(a); }
       li.append(pv);
     }
@@ -2420,6 +2440,40 @@ function renderChTimeline() {
     [ol, ...ol.children].forEach(x => io.observe(x));
   }
   return trips.length;
+}
+
+/* a living story tile: flips through some of the trip's stories while it is on screen; a tap opens the player there */
+const LIVE = new Set();
+function liveTile(t, list, q) {
+  const b = el("button", "live"), bar = el("span", "ltb"), A = el("img"), B = el("img"); b.type = "button"; b.style.setProperty("--k", q);
+  b.setAttribute("aria-label", "watch the " + (t.title || "") + " stories");
+  A.alt = B.alt = ""; A.decoding = B.decoding = "async"; bar.append(el("i")); b.append(A, B, bar, el("small", null, "stories"));
+  let n = 0, front = A; A.src = list[0].src; A.className = "on";
+  const st = { b, step() {
+    if (list.length < 2) return;
+    n = (n + 1) % list.length; const back = front === A ? B : A;
+    back.onload = () => { back.className = "on"; front.className = ""; front = back; };
+    back.src = list[n].src;
+    b.classList.remove("run"); void b.offsetWidth; b.classList.add("run");
+    const nx = new Image(); nx.src = list[(n + 1) % list.length].src;
+  } };
+  b.onclick = e => { e.stopPropagation(); openStories(t, list[n].j); };
+  LIVE.add(st);
+  return b;
+}
+{ /* one clock for all living tiles: each moves on every ~2.8 s, a little after the one before, only while visible */
+  let tick = 0, vis = new WeakSet();
+  const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? vis.add(e.target) : vis.delete(e.target)), { threshold: .3 }) : null;
+  setInterval(() => {
+    if (document.hidden || calm()) return; tick++;
+    let i = 0;
+    LIVE.forEach(st => {
+      if (!st.b.isConnected) { LIVE.delete(st); return; }
+      if (io && !st.watched) { io.observe(st.b); st.watched = true; }
+      const k = i++; if (io && !vis.has(st.b)) return;
+      if ((tick + k) % 2 === 0) st.step();
+    });
+  }, 1400);
 }
 
 /* a trip: the story, the posted photos, then the highlight stories drifting by */
