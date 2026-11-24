@@ -31,10 +31,22 @@ for top in ("photos", "recaps", "posts", "journal", "press", "trips"):
 with open(os.path.join("thumbs", "sizes.json"), "w") as f:
     json.dump(dims, f, separators=(",", ":"))
 
-# Story clips in trips/: a still from the first second as the cover (needs ffmpeg; skipped without it).
+# Story cards that are mostly one flat colour (a line of text on black): kept in the stories, left out of previews.
+from PIL import ImageStat
+plain = []
+for src in dims:
+    if src.startswith("trips/") and "/stories/" in src:
+        with Image.open(f"thumbs/{os.path.splitext(src)[0]}-600.webp") as t:
+            if max(ImageStat.Stat(t.convert("L")).stddev) < 14:
+                plain.append(src)
+with open(os.path.join("thumbs", "plain.json"), "w") as f:
+    json.dump(plain, f, separators=(",", ":"))
+
+# Clips in trips/ and recaps/: a still from the first second as the cover (needs ffmpeg; skipped without it).
 import shutil, subprocess
-if shutil.which("ffmpeg") and os.path.isdir("trips"):
-    for root, _, files in os.walk("trips"):
+if shutil.which("ffmpeg"):
+  for top in ("trips", "recaps"):
+    for root, _, files in os.walk(top):
         for n in files:
             if not n.lower().endswith((".mp4", ".webm")):
                 continue
