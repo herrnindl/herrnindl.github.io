@@ -8,7 +8,7 @@ EXT = (".jpg", ".jpeg", ".png", ".webp")
 SIZES = (600, 1200)
 made = 0
 dims = {}
-for top in ("photos", "recaps", "posts", "journal", "press"):
+for top in ("photos", "recaps", "posts", "journal", "press", "trips"):
     for root, _, files in os.walk(top):
         for n in files:
             if not n.lower().endswith(EXT):
@@ -30,6 +30,22 @@ for top in ("photos", "recaps", "posts", "journal", "press"):
                 dims[src] = t.size
 with open(os.path.join("thumbs", "sizes.json"), "w") as f:
     json.dump(dims, f, separators=(",", ":"))
+
+# Story clips in trips/: a still from the first second as the cover (needs ffmpeg; skipped without it).
+import shutil, subprocess
+if shutil.which("ffmpeg") and os.path.isdir("trips"):
+    for root, _, files in os.walk("trips"):
+        for n in files:
+            if not n.lower().endswith((".mp4", ".webm")):
+                continue
+            src = os.path.join(root, n).replace(os.sep, "/")
+            dst = os.path.join("thumbs", os.path.splitext(src)[0]) + "-poster.webp"
+            if os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
+                continue
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "0.5", "-i", src, "-frames:v", "1",
+                            "-vf", "scale=600:-2", "-quality", "74", dst], check=False)
+            made += 1
 
 # How much of each photo is in its chapter's colour (the screensaver shows the photos that match).
 COLOURS = {"origin": "#000000", "white": "#FFFFFF", "baby-blue": "#91B2EB", "lavendel": "#BAB6DE", "navy-blue": "#343A4E",
