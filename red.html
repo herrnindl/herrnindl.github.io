@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#B3202A">
+<title>MN.</title>
+<link rel="icon" href="icon-32.png">
+<style>
+@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("fonts/inter-400.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-display: swap; src: url("fonts/inter-500.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 800; font-display: swap; src: url("fonts/jost-700.woff?v=1") format("woff"); }
+@font-face { font-family: "Bodoni Moda"; font-weight: 500; font-display: swap; src: url("fonts/bodoni-500.woff") format("woff"); }
+* { box-sizing: border-box; min-width: 0; }
+html, body { margin: 0; background: #B3202A; color: #FFF8BB; font: 16px/1.5 "Inter", system-ui, sans-serif; overflow-x: clip; }
+.lock { min-height: 100dvh; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top)) 22px max(24px, env(safe-area-inset-bottom)); }
+.lock form { width: min(340px, 100%); display: grid; gap: 14px; text-align: center; }
+.lock .mn { font: 500 34px/1 "Bodoni Moda", "Didot", Georgia, serif; letter-spacing: .06em; }
+.lock b { font: 800 64px/.9 "Inter", sans-serif; letter-spacing: -.06em; }
+.lock input { font: inherit; font-size: 16px; text-align: center; padding: 13px 16px; min-height: 48px; border-radius: 99px; border: 1px solid rgba(255, 248, 187, .6); background: rgba(0, 0, 0, .14); color: inherit; outline: none; }
+.lock input:focus-visible { border-color: #FFF8BB; box-shadow: 0 0 0 3px rgba(255, 248, 187, .3); }
+.lock input::placeholder { color: rgba(255, 248, 187, .6); }
+.lock button { font: inherit; font-weight: 500; min-height: 48px; border-radius: 99px; border: 0; background: #FFF8BB; color: #B3202A; cursor: pointer; }
+.lock[hidden], #page[hidden] { display: none; }
+.lock p { margin: 0; min-height: 1.5em; font-size: 13px; opacity: .8; }
+.lock.shake form { animation: sh .35s; }
+@keyframes sh { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+@media (prefers-reduced-motion: reduce) { .lock.shake form { animation: none; } }
+</style>
+</head>
+<body>
+<main class="lock" id="lock">
+  <form id="f" autocomplete="off">
+    <span class="mn">MN.</span>
+    <b>red.</b>
+    <input id="pw" type="password" placeholder="password" aria-label="password" autocomplete="current-password" autofocus>
+    <button type="submit">open.</button>
+    <p id="msg" role="status"></p>
+  </form>
+</main>
+<div id="page" hidden></div>
+<script>
+{
+  /* red. stays secret: the page below is encrypted (red/red.lock.json, see red/lock.py).
+     The right password opens it here in the browser; the key is remembered on this device. */
+  const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const b64e = u => { let s = ""; u.forEach(x => { s += String.fromCharCode(x); }); return btoa(s); };
+  const K = "mn-red-key";
+  let L = null;
+  const getLock = async () => L || (L = await (await fetch("red/red.lock.json", { cache: "no-cache" })).json());
+  async function derive(pw) {
+    const l = await getLock();
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveBits"]);
+    return new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: b64(l.salt), iterations: l.iter }, base, 256));
+  }
+  async function open(raw) {
+    const l = await getLock();
+    try {
+      const k = await crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
+      const html = new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(l.iv) }, k, b64(l.data)));
+      const page = document.getElementById("page"); page.innerHTML = html; page.hidden = false;
+      document.getElementById("lock").hidden = true; document.title = "MN. — red.";
+      page.querySelectorAll("[data-lock]").forEach(b => b.onclick = () => { try { localStorage.removeItem(K); } catch (e) {} location.reload(); });
+      return true;
+    } catch (e) { return false; }
+  }
+  const f = document.getElementById("f"), pw = document.getElementById("pw"), msg = document.getElementById("msg"), box = document.getElementById("lock");
+  f.addEventListener("submit", async e => {
+    e.preventDefault(); const v = pw.value.trim().toLowerCase(); if (!v) return;
+    msg.textContent = "opening…";
+    const raw = await derive(v).catch(() => null);
+    if (raw && await open(raw)) { try { localStorage.setItem(K, b64e(raw)); } catch (e) {} return; }
+    msg.textContent = "not yet."; box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake"); pw.select();
+  });
+  (async () => { try { const s = localStorage.getItem(K); if (s && !(await open(b64(s)))) localStorage.removeItem(K); } catch (e) {} })();
+}
+</script>
+</body>
+</html>

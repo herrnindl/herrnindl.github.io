@@ -7,3 +7,5 @@ sets.json
 robots.txt
 sitemap.xml
 cv.html
+# red.: only the encrypted red/red.lock.json goes online (see red/lock.py)
+red/*.html
