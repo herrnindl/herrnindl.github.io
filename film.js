@@ -17,6 +17,7 @@ window.MN_BEST = {"origin": ["origin-06.jpg", "origin-02.jpg", "origin-08.jpg"],
     { id: "vanilla-2", name: "vanilla",    suffix: " II", bg: "#B8B05F", fg: "#24220F", dates: "23.06. – 31.08.26", line: "i mog di", place: "königsleiten · salzburg" },
     { id: "ber",       name: "ber",        bg: "#B8C98B", fg: "#234C3D", dates: "01.09. – 31.10.26", line: "septem·ber to decem·ber", vanilla: true },
     { id: "ember",     name: "ember",      bg: "#E9A283", fg: "#3A1E14", dates: "01.11. – 31.12.26", line: "the spark", place: "wildkogel", vanilla: true },
+    { id: "red",       name: "red",        bg: "#B3202A", fg: "#FFF8BB", dates: "01.01. – 31.12.27", line: "the fire", vanilla: true },
   ];
   const chapters = () => (typeof CHAPTERS !== "undefined" && CHAPTERS[0] && CHAPTERS[0].dates) ? CHAPTERS : OWN;
   const BEST = window.MN_BEST;

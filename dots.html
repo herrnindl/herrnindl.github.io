@@ -76,7 +76,7 @@ function choose(c) {
   $("cols").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.id === c.id)));
   $("picked").textContent = c.label; $("picked").append(el("span", null, c.line));
 }
-CHAPTERS.forEach(c => { const b = el("button"); b.type = "button"; b.dataset.id = c.id; b.style.setProperty("--c", c.bg); b.setAttribute("aria-label", c.label); b.onclick = () => choose(c); $("cols").append(b); });
+CHAPTERS.filter(c => c.id !== "red").forEach(c => { const b = el("button"); b.type = "button"; b.dataset.id = c.id; b.style.setProperty("--c", c.bg); b.setAttribute("aria-label", c.label); b.onclick = () => choose(c); $("cols").append(b); });
 choose(pick);
 /* dots that don't show on the wall: test dots, and colours that aren't on the site (yet) */
 const HIDE = new Set([Date.parse("2026-11-15T18:43:01.675Z")]);

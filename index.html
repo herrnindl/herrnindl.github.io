@@ -32,8 +32,7 @@ LAUNCH-PREVIEW-->
 <script src="mail.js" defer></script>
 <script>
 /* Coming-soon gate. Not real security: it keeps casual visitors out until launch. */
-window.MN_KEY = "7c362ae2f50e8da10d4c1c903cfb236edc7d09f40cc5eb2f749f9d0fb78aebd4";
-window.MN_KEY2 = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3";   /* second password */
+window.MN_KEY = "1e39f3691a7dcd34ef2e5d19e3fd1f640ed375443b8c539ddf54581276657502";   /* spaces and capitals in the password don't matter */
 if (location.hash === "#lock") {
   try { localStorage.removeItem("mn-key"); } catch (e) {}
   history.replaceState(null, "", location.pathname);
@@ -379,7 +378,7 @@ body::before { content: ""; position: fixed; inset: -50%; z-index: -1; pointer-e
 .more .all { font: inherit; font-size: 13px; padding: 8px 4px; letter-spacing: .14em; border: 0; background: none; color: var(--soft); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
 /* back to top: a dot that fills with the chapter colours as you scroll */
 .topdot { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 17; width: 48px; height: 48px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; display: grid; place-items: center;
-  background: conic-gradient(from -90deg, transparent calc(var(--p, 0) * 1turn), rgba(28,28,20,.14) 0), conic-gradient(from -90deg, #000 0 10%, #FFF 10% 20%, #91B2EB 20% 30%, #BAB6DE 30% 40%, #343A4E 40% 50%, #A9A9A9 50% 60%, #FFF8BB 60% 70%, #B8B05F 70% 80%, #B8C98B 80% 90%, #E9A283 90% 100%);   /* every chapter the same size */
+  background: conic-gradient(from -90deg, transparent calc(var(--p, 0) * 1turn), rgba(28,28,20,.14) 0), conic-gradient(from -90deg, #000 0 9.09%, #FFF 9.09% 18.18%, #91B2EB 18.18% 27.27%, #BAB6DE 27.27% 36.36%, #343A4E 36.36% 45.45%, #A9A9A9 45.45% 54.55%, #FFF8BB 54.55% 63.64%, #B8B05F 63.64% 72.73%, #B8C98B 72.73% 81.82%, #E9A283 81.82% 90.91%, #B3202A 90.91% 100%);   /* every chapter the same size */
   box-shadow: 0 10px 30px -10px rgba(0,0,0,.45); transition: opacity .3s ease, transform .3s cubic-bezier(.2,.7,.2,1); }
 .topdot::before { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: var(--fg); }
 .topdot span { position: relative; color: var(--bg); font-weight: 800; font-size: 18px; line-height: 1; }
@@ -882,6 +881,18 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .next { margin-top: 18px; }
 .next b i { font-style: normal; }
 @media (prefers-reduced-motion: reduce) { .hof button { transition: none; } }
+/* red. takeover: the first visit on a device turns the screen red */
+.redtk { position: fixed; inset: 0; z-index: 60; background: #B3202A; color: #FFF8BB; display: grid; place-items: center; text-align: center; padding: max(28px, env(safe-area-inset-top, 0px)) 24px max(28px, env(safe-area-inset-bottom, 0px)); cursor: pointer; }
+.redtk .in { display: grid; gap: 14px; justify-items: center; }
+.redtk small { font-size: 12px; letter-spacing: .3em; opacity: .8; }
+.redtk .mn { font: 500 30px/1 "Bodoni Moda", "Didot", Georgia, serif; letter-spacing: .06em; }
+.redtk b { font: 800 clamp(110px, 34vw, 300px)/.8 var(--sans); letter-spacing: -.06em; }
+.redtk p { margin: 6px 0 0; font-size: clamp(17px, 3.6vw, 22px); }
+.redtk .row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
+.redtk .row a, .redtk .row button { font: inherit; font-weight: 500; font-size: 15px; min-height: 46px; padding: 0 22px; border-radius: 99px; display: inline-flex; align-items: center; text-decoration: none; cursor: pointer; }
+.redtk .row a { background: #FFF8BB; color: #B3202A; border: 0; }
+.redtk .row button { background: none; color: #FFF8BB; border: 1px solid #FFF8BB; }
+.redgo { margin-bottom: 10px; text-decoration: none; }
 .nextbtn { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 28px 24px; border: 0; border-radius: 4px; background: var(--c); text-align: left; }
 .nextbtn small { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .7; }
 .nextbtn b { font-weight: 800; font-size: clamp(32px, 7vw, 64px); letter-spacing: -.05em; line-height: 1; }
@@ -1015,7 +1026,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="gspace" aria-hidden="true"></div>
   <div class="gcenter">
   <div class="gmark">MN.</div>
-  <div class="gdots" aria-hidden="true"><i style="background:#E9A283;animation-delay:1.08s"></i><i style="background:#B8C98B;animation-delay:0.96s"></i><i style="background:#B8B05F;animation-delay:0.84s"></i><i style="background:#FFF8BB;animation-delay:0.72s"></i><i style="background:#A9A9A9;animation-delay:0.60s"></i><i style="background:#343A4E;animation-delay:0.48s"></i><i style="background:#BAB6DE;animation-delay:0.36s"></i><i style="background:#91B2EB;animation-delay:0.24s"></i><i style="background:#FFFFFF;animation-delay:0.12s"></i><i style="background:#000000;animation-delay:0.00s"></i></div>
+  <div class="gdots" aria-hidden="true"><i style="background:#B3202A;animation-delay:1.20s"></i><i style="background:#E9A283;animation-delay:1.08s"></i><i style="background:#B8C98B;animation-delay:0.96s"></i><i style="background:#B8B05F;animation-delay:0.84s"></i><i style="background:#FFF8BB;animation-delay:0.72s"></i><i style="background:#A9A9A9;animation-delay:0.60s"></i><i style="background:#343A4E;animation-delay:0.48s"></i><i style="background:#BAB6DE;animation-delay:0.36s"></i><i style="background:#91B2EB;animation-delay:0.24s"></i><i style="background:#FFFFFF;animation-delay:0.12s"></i><i style="background:#000000;animation-delay:0.00s"></i></div>
   <form id="gateForm" autocomplete="off">
     <input id="gatePw" type="password" placeholder="password" aria-label="Password" autocapitalize="none" spellcheck="false">
     <button type="submit">enter</button>
@@ -1325,6 +1336,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
         <h3>the colours<i>.</i></h3>
         <p>every chapter has its own colour. this is where they came from.</p>
         <ul class="origins">
+          <li><b><i style="--c:#B3202A"></i>red.</b><span>&ldquo;ber&rdquo; mirrored is &ldquo;red&rdquo;. ember is the spark, red is the fire.</span></li>
           <li><b><i style="--c:#E9A283"></i>ember.</b><span>came after the announcement of the wildkogel sundaze instagram page.</span></li>
           <li><b><i style="--c:#B8C98B"></i>ber.</b><span>explains itself: septem&middot;ber to decem&middot;ber. it&#x27;s also the colour of my eyes.</span></li>
           <li><b><i style="--c:#FFF8BB"></i>vanilla.</b><span>came from @prettybookplaces.</span></li>
@@ -1427,6 +1439,7 @@ const CHAPTERS = [
   { id: "vanilla-2", name: "vanilla",    suffix: " II", bg: "#B8B05F", fg: "#24220F", dates: "23.06. – 31.08.26", line: "i mog di", place: "königsleiten · salzburg" },
   { id: "ber",       name: "ber",        bg: "#B8C98B", fg: "#234C3D", dates: "01.09. – 31.10.26", line: "septem·ber to decem·ber", vanilla: true },
   { id: "ember",     name: "ember",      bg: "#E9A283", fg: "#3A1E14", dates: "01.11. – 31.12.26", line: "the spark", place: "wildkogel", vanilla: true },
+  { id: "red",       name: "red",        bg: "#B3202A", fg: "#FFF8BB", dates: "01.01. – 31.12.27", line: "the fire", vanilla: true },
 ];
 /* The dot after each name is the colour of the next chapter, as in the video. */
 CHAPTERS.forEach((c, i) => { c.dot = c.fg;   /* every dot has the colour of the text */ c.label = c.name + (c.suffix ? "." + c.suffix : "."); });
@@ -1445,7 +1458,8 @@ const SONGS = {
   vanilla: { t: "Dreams — Fleetwood Mac", id: "0ofHAoxe9vBkTCp2UQIavz" },
   "vanilla-2": { t: "I Want Things to Be Beautiful — Devi McCallion", id: "4LJed63I60W8FpsKFyFl1h" },
   ber: { t: "Coming Up Roses — Harry Styles", id: "0QPdjsMOUhwouq1NS3HwfQ" },
-  ember: null
+  ember: null,
+  red: null
 };
 /* "next." on the start page. Change the text when the next thing changes. */
 /* wildkogel sundaze opening weekend 18.–20.12.2026: "next." before, "now." during, gone after */
@@ -1585,8 +1599,8 @@ function renderChips() {
 }
 
 /* the timeline: every chapter as wide as it lasted, from 26.08.2024 on */
-const TL = [["origin","2024-08-26"],["white","2025-03-03"],["baby-blue","2025-05-23"],["lavendel","2025-07-07"],["navy-blue","2025-10-21"],["grey","2026-01-01"],["vanilla","2026-04-01"],["vanilla-2","2026-06-23"],["ber","2026-09-01"],["ember","2026-11-01"]];
-const TL_END = "2027-01-01";
+const TL = [["origin","2024-08-26"],["white","2025-03-03"],["baby-blue","2025-05-23"],["lavendel","2025-07-07"],["navy-blue","2025-10-21"],["grey","2026-01-01"],["vanilla","2026-04-01"],["vanilla-2","2026-06-23"],["ber","2026-09-01"],["ember","2026-11-01"],["red","2027-01-01"]];
+const TL_END = "2028-01-01";
 function renderTimeline() {
   const t = $("tl"); t.textContent = "";
   const d = x => new Date(x + "T00:00:00").getTime(), a = d(TL[0][1]), z = d(TL_END), pos = v => (v - a) / (z - a) * 100;
@@ -1600,7 +1614,7 @@ function renderTimeline() {
     bar.append(b);
   });
   t.append(bar);
-  ["2025", "2026"].forEach(y => { const l = el("span", "yr", y); l.style.left = pos(d(y + "-01-01")) + "%"; t.append(l); });
+  ["2025", "2026", "2027"].forEach(y => { const l = el("span", "yr", y); l.style.left = pos(d(y + "-01-01")) + "%"; t.append(l); });
   if (now < z) { const m = el("div", "now"); m.style.left = pos(now) + "%"; m.append(el("span", null, "now")); t.append(m); }
 }
 
@@ -2133,6 +2147,11 @@ function renderColours() {
   $("empty").textContent = cur ? cur.label + " photos are coming." : "photos are coming.";
   $("empty").hidden = list.length > 0 || nr > 0;
   const nx = $("nextch"); nx.textContent = ""; nx.hidden = !cur;
+  if (cur && cur.id === "red") {   /* red. has its own page until its photos come in */
+    $("empty").textContent = "red. starts on 01.01.27.";
+    const go = el("a", "nextbtn redgo"); go.href = "red.html"; go.style.setProperty("--c", "#FFF8BB"); go.style.color = "#B3202A";
+    go.append(el("small", null, "the chapter"), el("b", null, "open red. →")); nx.append(go);
+  }
   if (cur) {
     const i = CHAPTERS.indexOf(cur), n = CHAPTERS[(i + 1) % CHAPTERS.length];
     const a = el("button", "nextbtn"); a.style.setProperty("--c", n.bg); a.style.color = n.fg; if (n.id === "white" || n.id === "vanilla") a.style.boxShadow = "inset 0 0 0 1px rgba(0,0,0,.12)";
@@ -2986,7 +3005,23 @@ function enterChapter(c, e, stay) {
   };
 }
 
-function launchMoment() {}
+/* red. takeover: once per device, the first time the site is opened (after the password, from 01.12. for everyone) */
+function launchMoment() {
+  try { if (localStorage.getItem("mn-red-seen")) return; localStorage.setItem("mn-red-seen", "1"); } catch (e) { return; }
+  const t = el("div", "redtk"); t.setAttribute("role", "dialog"); t.setAttribute("aria-label", "red.");
+  const box = el("div", "in");
+  const row = el("div", "row"), see = el("a", null, "see red."), go = el("button", null, "enter MN.");
+  see.href = "red.html"; go.type = "button"; row.append(see, go);
+  box.append(el("span", "mn", "MN."), el("small", null, "THE NEXT CHAPTER"), el("b", null, "red."), el("p", null, "01.01.27 \u00b7 two years of MN."), row);
+  t.append(box); document.body.append(t);
+  const m = document.querySelector('meta[name="theme-color"]'), was = m && m.content; if (m) m.content = "#B3202A";
+  const close = () => { if (m) m.content = was; if (calm() || !t.animate) { t.remove(); return; } t.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, fill: "forwards" }).onfinish = () => t.remove(); };
+  t.onclick = e => { if (!e.target.closest("a")) close(); };
+  document.addEventListener("keydown", function k(e) { if (e.key === "Escape") { close(); document.removeEventListener("keydown", k); } });
+  if (!calm() && t.animate) { t.animate([{ clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)" }], { duration: 700, easing: "cubic-bezier(.6,0,.3,1)" });
+    box.animate([{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], { duration: 500, delay: 450, easing: "cubic-bezier(.2,.7,.2,1)", fill: "both" }); }
+  go.focus({ preventScroll: true });
+}
 
 /* Easter egg: type "bananaleclerc", or tap the MN. logo five times quickly. */
 function bananaRain() {
@@ -3127,8 +3162,8 @@ $("gateForm").addEventListener("submit", async e => {
   const v = $("gatePw").value.trim().toLowerCase().replace(/\s+/g, "");
   let h = "";
   try { h = await sha256(v); } catch (err) {}
-  if (h === window.MN_KEY || h === window.MN_KEY2) {
-    try { localStorage.setItem("mn-key", window.MN_KEY); } catch (err) {}   /* both passwords open the same site */
+  if (h === window.MN_KEY) {
+    try { localStorage.setItem("mn-key", window.MN_KEY); } catch (err) {}
     $("gatePw").blur();
     loadData();
     unlockWave(() => { document.documentElement.classList.remove("locked"); window.scrollTo(0, 0); render(); launchMoment(); });

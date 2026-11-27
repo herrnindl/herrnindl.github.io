@@ -5,7 +5,7 @@
   const st = document.createElement("style");
   st.textContent = ".egg{position:fixed;inset:0;z-index:55;pointer-events:none;overflow:hidden}.egg i{position:absolute;top:-30px;border-radius:50%}.egg p{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);margin:0;padding:12px 20px;border-radius:999px;background:#1C1C14;color:#FFE135;font-weight:500;letter-spacing:-.01em;white-space:nowrap}.eggnote{display:block;flex-basis:100%;margin-top:6px;font-size:11px;letter-spacing:.14em;opacity:.6}";
   document.head.append(st);
-  const COLS = ["#FFE135", "#E9A283", "#B8C98B", "#B8B05F", "#FFF8BB", "#A9A9A9", "#343A4E", "#BAB6DE", "#91B2EB"];
+  const COLS = ["#FFE135", "#B3202A", "#E9A283", "#B8C98B", "#B8B05F", "#FFF8BB", "#A9A9A9", "#343A4E", "#BAB6DE", "#91B2EB"];
   const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   function rain() {
     if (document.querySelector(".egg")) return;

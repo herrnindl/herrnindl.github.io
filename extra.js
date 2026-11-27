@@ -1,5 +1,6 @@
 /* shared bits for the small pages: chapters (same as index.html), page colour, menu and footer */
 const CHAPTERS = [
+  { id: "red",       label: "red.",        bg: "#B3202A", fg: "#FFF8BB", line: "the fire" },
   { id: "ember",     label: "ember.",      bg: "#E9A283", fg: "#3A1E14", line: "the spark" },
   { id: "ber",       label: "ber.",        bg: "#B8C98B", fg: "#234C3D", line: "septem·ber to decem·ber" },
   { id: "vanilla-2", label: "vanilla. II", bg: "#B8B05F", fg: "#24220F", line: "i mog di" },
