@@ -428,7 +428,7 @@ print(f"{len(sets['recaps'])} recaps, {len(sets['posts'])} posts, {len(sets['jou
 # and writes robots.txt + sitemap.xml. The Lebenslauf and the 404 page stay hidden from Google.
 import datetime, glob
 LAUNCH = datetime.datetime(2026, 12, 1, tzinfo=datetime.timezone(datetime.timedelta(hours=1)))
-HIDDEN = {"lebenslauf.html", "404.html"}
+HIDDEN = {"lebenslauf.html", "404.html", "red.html"}
 # only on GitHub: run locally, this part would rewrite the page files in the repo itself
 if os.environ.get("GITHUB_ACTIONS") == "true" and datetime.datetime.now(datetime.timezone.utc) >= LAUNCH:
     # the CV stays on the site but out of Google: its text moves to cv.html (blocked in robots.txt)
