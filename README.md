@@ -34,3 +34,10 @@ New photos without a line still work, they are just cropped from the middle and 
 - `wardrobe.html` — brands per shoot in LOOKS at the top.
 - `ask.html` — your answers in ANSWERS at the top.
 - `ask.html` switches on when the worker address is set in `extra.js` (API) — the same worker as the guestbook (`cloudflare/guestbook-worker.js`).
+
+## Highlight stories (highlights/)
+
+Every story from the Instagram highlights, one folder per chapter (`highlights/vanilla/`, `highlights/ember/` …), and nothing that isn't in a highlight.
+File names are the moment the story went up (`2026-04-15_144121.jpg`), so they sort by time and "on this day" knows their date.
+Updated on the 1st of every month from a fresh Instagram export; put the date in `highlights/info.txt` (`updated: 01.12.26`).
+Trips take their stories from here: `stories: vanilla 2026-04-15_144121 – 2026-04-23_173007` in the trip's info.txt.

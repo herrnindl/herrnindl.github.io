@@ -8,7 +8,7 @@ EXT = (".jpg", ".jpeg", ".png", ".webp")
 SIZES = (600, 1200)
 made = 0
 dims = {}
-for top in ("photos", "recaps", "posts", "journal", "press", "trips"):
+for top in ("photos", "recaps", "posts", "journal", "press", "trips", "highlights"):
     for root, _, files in os.walk(top):
         for n in files:
             if not n.lower().endswith(EXT):
@@ -16,7 +16,7 @@ for top in ("photos", "recaps", "posts", "journal", "press", "trips"):
             src = os.path.join(root, n).replace(os.sep, "/")
             base = os.path.join("thumbs", os.path.splitext(src)[0])
             im = None
-            for s in SIZES:
+            for s in (SIZES[:1] if top == "highlights" else SIZES):   # stories: the player shows the original, one small preview is enough
                 dst = f"{base}-{s}.webp"
                 if os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
                     continue
@@ -35,7 +35,7 @@ with open(os.path.join("thumbs", "sizes.json"), "w") as f:
 from PIL import ImageStat
 plain = []
 for src in dims:
-    if src.startswith("trips/") and "/stories/" in src:
+    if (src.startswith("trips/") and "/stories/" in src) or src.startswith("highlights/"):
         with Image.open(f"thumbs/{os.path.splitext(src)[0]}-600.webp") as t:
             if max(ImageStat.Stat(t.convert("L")).stddev) < 14:
                 plain.append(src)
@@ -45,7 +45,7 @@ with open(os.path.join("thumbs", "plain.json"), "w") as f:
 # Clips in trips/ and recaps/: a still from the first second as the cover (needs ffmpeg; skipped without it).
 import shutil, subprocess
 if shutil.which("ffmpeg"):
-  for top in ("trips", "recaps"):
+  for top in ("trips", "recaps", "highlights"):
     for root, _, files in os.walk(top):
         for n in files:
             if not n.lower().endswith((".mp4", ".webm")):

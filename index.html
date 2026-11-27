@@ -566,8 +566,35 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .istory h3.serif { font-family: "Bodoni Moda", "Bodoni 72", Didot, serif; font-weight: 500; letter-spacing: .04em; }
 .reveal-btn b.mnlogo { font-family: "Bodoni Moda", "Bodoni 72", Didot, serif; font-weight: 500; letter-spacing: .04em; font-size: clamp(44px, 11vw, 72px); line-height: 1; }
 /* on this day */
-.otd { margin-top: 0; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; max-width: 520px; padding: 10px; border-radius: 14px; border: 1px solid var(--line); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; width: 100%; }
-.otd img { width: 96px; height: 120px; object-fit: cover; border-radius: 8px; display: block; }
+.otd { margin-top: 0; display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; align-items: center; max-width: 520px; padding: 12px 14px 12px 10px; border-radius: 14px; border: 1px solid var(--line); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; width: 100%; }
+.otd[hidden] { display: none; }
+.ofan { position: relative; height: 128px; display: block; }
+.ofan .oc { position: absolute; left: 50%; top: 50%; width: 78px; height: 112px; margin: -56px 0 0 -39px; border-radius: 8px; overflow: hidden; background: var(--line); box-shadow: 0 6px 16px rgba(0,0,0,.18); transform: translateX(calc(var(--k) * 18px)) rotate(calc(var(--k) * 8deg)); transition: transform .35s cubic-bezier(.2,.7,.2,1); display: grid; place-items: center; }
+.ofan .oc img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ofan .oc.txt b { font-size: 13px; font-weight: 800; letter-spacing: -.02em; padding: 6px; text-align: center; line-height: 1.1; }
+.otd:hover .oc, .otd:focus-visible .oc { transform: translateX(calc(var(--k) * 26px)) rotate(calc(var(--k) * 12deg)); }
+.ocount { position: absolute; right: -2px; bottom: 0; z-index: 2; min-width: 24px; height: 24px; padding: 0 7px; border-radius: 99px; background: var(--fg, #1C1C14); color: var(--bg, #FFF8BB); font-style: normal; font-size: 12px; font-weight: 700; display: grid; place-items: center; }
+.otd .otx { display: block; }
+.otd .otx > * { display: block; }
+.otd .okinds { margin-top: 4px; color: inherit !important; opacity: .85; }
+.sptxt { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 0 10%; animation: spin .45s ease; }
+.sptxt small { font-size: 12px; letter-spacing: .22em; opacity: .75; }
+.sptxt b { font-size: clamp(34px, 11vw, 56px); font-weight: 800; letter-spacing: -.05em; line-height: .95; }
+.sptxt span { font-size: 16px; opacity: .85; }
+.spcap { position: absolute; left: 16px; right: 16px; bottom: calc(28px + env(safe-area-inset-bottom, 0px)); margin: 0; z-index: 1; color: #fff; font-weight: 700; font-size: 18px; letter-spacing: -.02em; text-shadow: 0 1px 10px rgba(0,0,0,.6); }
+/* the chapter's highlight: a big round cover under the chapter name, like on the profile */
+.hlring { display: flex; align-items: center; gap: 16px; margin: 22px 0 4px; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.hlr { position: relative; flex: none; width: 96px; height: 96px; border-radius: 50%; padding: 5px; }
+.hlr::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: repeating-conic-gradient(currentColor 0 12deg, transparent 12deg 15deg); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px)); animation: hlspin 14s linear infinite; }
+.hlr img { position: relative; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 3px solid var(--bg); background: var(--bg); }
+.hlt { display: grid; gap: 1px; }
+.hlt b { font-size: 22px; font-weight: 800; letter-spacing: -.04em; }
+.hlt span { font-size: 14px; }
+.hlt small { font-size: 12px; opacity: .7; }
+.hlring:hover .hlr img, .hlring:focus-visible .hlr img { transform: scale(1.04); transition: transform .3s; }
+@keyframes hlspin { to { transform: rotate(1turn); } }
+@media (min-width: 900px) { .card { position: relative; } .hlring { position: absolute; right: max(4vw, 24px); top: clamp(52px, 9vw, 100px); flex-direction: column; text-align: center; gap: 12px; margin: 0; } .hlr { width: 168px; height: 168px; padding: 7px; } .hlr img { border-width: 5px; } .hlt { justify-items: center; } }
+@media (prefers-reduced-motion: reduce) { .hlr::before { animation: none; } .ofan .oc { transition: none; } }
 .otd small { font-size: 11px; letter-spacing: .22em; color: var(--soft); }
 .otd b { display: block; font-weight: 800; font-size: 24px; letter-spacing: -.04em; margin-top: 2px; }
 .otd span { font-size: 13px; color: var(--soft); }
@@ -1128,7 +1155,8 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="cvsec">
     <h2>Persönliche Daten</h2>
     <div class="row"><div class="when">Name</div><div class="what"><b>Markus Nindl</b></div></div>
-    <div class="row"><div class="when">Region</div><div class="what"><b>Pinzgau, Salzburg</b></div></div>
+    <div class="row"><div class="when">Geboren</div><div class="what"><b>26. August 2002 in Mittersill</b></div></div>
+    <div class="row"><div class="when">Wohnort</div><div class="what"><b>5741&nbsp;Neukirchen am Großvenediger</b></div></div>
     <div class="row"><div class="when">E&#8209;Mail</div><div class="what"><b><a href="#" data-mail>booking<span>@</span>herrnindl.com</a></b></div></div>
     </div>
     <div class="cvsec">
@@ -1138,9 +1166,31 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="row"><div class="when">2024 – 2026</div><div class="what"><b>Presse</b><span>Platzhirsch (Mächtige Mähnen und Single des Monats, 2024 · Leserecho, 2025), Bezirkszeitung (2026)</span></div></div>
     </div>
     <div class="cvsec">
+    <h2>Berufserfahrung</h2>
+    <div class="row"><div class="when">ab 12/2026</div><div class="what"><a class="co" style="--c:#D04A25;--t:#FFFFFF" href="https://www.wildkogelresorts.at/de/sundaze" target="_blank" rel="noopener">Wildkogel Sundaze<i aria-hidden="true">↗</i></a><span>Gastronomie · Nebenjob am Wochenende</span></div></div>
+    <div class="row"><div class="when">07/2022 – heute</div><div class="what"><a class="co" style="--c:#FFDC00;--t:#1C1C14" href="https://www.post.at/" target="_blank" rel="noopener">Österreichische Post AG<i aria-hidden="true">↗</i></a><span>seit 11/2025 Stv. Standortleitung, Hollersbach, von Königsleiten bis Uttendorf</span></div></div>
+    <div class="row"><div class="when">06/2023 – 09/2023</div><div class="what"><a class="co" style="--c:#A4B244;--t:#1C1C14" href="https://www.rechtegg.com/" target="_blank" rel="noopener">Alpengasthof Rechtegg<i aria-hidden="true">↗</i></a><span>Küchengehilfe, geringfügig · Neukirchen am Großvenediger</span></div></div>
+    <div class="row"><div class="when">01/2023 – 04/2023</div><div class="what"><a class="co" style="--c:#FEDA32;--t:#1C1C14" href="https://www.sonnalm.net/" target="_blank" rel="noopener">Alpinlodge Sonnalm<i aria-hidden="true">↗</i></a><span>Küchengehilfe, geringfügig · Jochberg</span></div></div>
+    <div class="row"><div class="when">06/2022</div><div class="what"><b class="co" style="--c:#808080;--t:#1C1C14">Café &amp; Bar Chic OG</b><span>Kellner · Mittersill</span></div></div>
+    <div class="row"><div class="when">07/2021 – 05/2022</div><div class="what"><b class="co" style="--c:#3399FF;--t:#1C1C14">Weiszhaus</b><span>Küchengehilfe · Mittersill (02/2023 geringfügig)</span></div></div>
+    </div>
+    <div class="cvsec">
+    <h2>Berufsausbildung</h2>
+    <div class="row"><div class="when">08/2019 – 01/2020</div><div class="what"><a class="co" style="--c:#921A1D;--t:#FFFFFF" href="https://fliegerbichl.com/" target="_blank" rel="noopener">Restaurant Fliegerbichl<i aria-hidden="true">↗</i></a><span>Restaurantfachmann · Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">06/2018 – 05/2019</div><div class="what"><a class="co" style="--c:#E30613;--t:#FFFFFF" href="https://www.bundesheer.at/" target="_blank" rel="noopener">Seminarzentrum Felbertal, Bundesheer<i aria-hidden="true">↗</i></a><span>Hotel- und Gastgewerbeassistent · Mittersill</span></div></div>
+    <div class="row"><div class="when">08/2017 – 09/2017</div><div class="what"><a class="co" style="--c:#FF0090;--t:#FFFFFF" href="https://www.dankl.net/" target="_blank" rel="noopener">Dankl.net GmbH<i aria-hidden="true">↗</i></a><span>Elektriker · Neukirchen am Großvenediger</span></div></div>
+    </div>
+    <div class="cvsec">
+    <h2>Schulbildung</h2>
+    <div class="row"><div class="when">09/2016 – 07/2017</div><div class="what"><a class="co" style="--c:#C10A25;--t:#FFFFFF" href="https://www.htlsaalfelden.at/" target="_blank" rel="noopener">Höhere Technische Bundeslehranstalt<i aria-hidden="true">↗</i></a><span>Bautechnik · Saalfelden</span></div></div>
+    <div class="row"><div class="when">09/2012 – 07/2016</div><div class="what"><a class="co" style="--c:#039147;--t:#FFFFFF" href="https://www.ms-bramberg.salzburg.at/" target="_blank" rel="noopener">Hauptschule<i aria-hidden="true">↗</i></a><span>Bramberg am Wildkogel</span></div></div>
+    <div class="row"><div class="when">09/2008 – 07/2012</div><div class="what"><a class="co" style="--c:#00B050;--t:#1C1C14" href="https://www.vs-bramberg.salzburg.at/" target="_blank" rel="noopener">Volksschule<i aria-hidden="true">↗</i></a><span>Bramberg am Wildkogel</span></div></div>
+    </div>
+    <div class="cvsec">
     <h2>Vereine</h2>
     <div class="row"><div class="when">seit 11/2022</div><div class="what"><a class="co" style="--c:#0E478F;--t:#FFFFFF" href="https://sbg.owr.at/mittersill/" target="_blank" rel="noopener">Österreichische Wasserrettung, Ortsstelle Mittersill<i aria-hidden="true">↗</i></a><span>Fließwasserretter (FW&#8209;R), absolviert am 19.05.2024 · aktive Einsatzkraft seit 10.03.2024 · Retterschein, absolviert am 18.06.2023</span></div></div>
     <a class="donate" href="https://sbg.owr.at/mittersill/services/spenden/" target="_blank" rel="noopener"><span class="dtxt"><small>WASSERRETTUNG MITTERSILL</small><b>support them<i>.</i></b></span><em>donate →</em></a>
+    <div class="row"><div class="when">2010 – 2016</div><div class="what"><a class="co" style="--c:#0DD5D5;--t:#1C1C14" href="https://www.taekwondo-bramberg.at/" target="_blank" rel="noopener">TaeKwonDo Club<i aria-hidden="true">↗</i></a><span>9. KUP · Bramberg am Wildkogel</span></div></div>
     </div>
     <div class="cvsec">
     <h2>Sprachen</h2>
@@ -1148,7 +1198,6 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="row"><div class="when">Englisch</div><div class="what"><b>fließend</b></div></div>
     <div class="row"><div class="when">Italienisch, Französisch</div><div class="what"><b>Grundkenntnisse</b></div></div>
     </div>
-    <p class="cvnote">Vollständiger Lebenslauf auf Anfrage: <a href="#" data-mail>booking<span>@</span>herrnindl.com</a></p>
   </section>
 
   <section class="insp panel" id="inspirations" hidden>
@@ -1459,6 +1508,7 @@ window.addEventListener("mn-dark", () => { if (lastTheme) setTheme(lastTheme); }
 function renderCard() {
   const title = $("title"), meta = $("meta");
   title.textContent = ""; meta.textContent = ""; $("dates").textContent = ""; $("player").textContent = "";
+  { const r = $("hlRing"); if (r) r.remove(); }
   const dot = () => el("span", "dot", ".");
   if (view === "recaps") { setTheme(ALL); title.append("recaps", dot()); $("line").textContent = "month by month."; return; }
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
@@ -1500,6 +1550,17 @@ function renderCard() {
   if ([].concat(SONGS[c.id] || []).some(x => x.id) && !soundOn) meta.append(el("span", "spotnote", "tap to play via spotify · spotify sets cookies"));
   { const rc = recapMonths().filter(r => r.chapter === c.id && !r.placeholder);   /* how many recaps, at first sight; they sit at the end of the page */
     if (rc.length) { const b = el("button", "rcpill"), i = el("i"); b.type = "button"; rc.slice(0, 3).forEach(r => { const im = el("img"); im.src = r.thumb || r.cover; im.alt = ""; i.append(im); }); b.append(i, rc.length + (rc.length > 1 ? " recaps" : " recap") + " ↓"); b.onclick = () => { const t = $("chRecaps"); if (t && !t.hidden) t.scrollIntoView({ behavior: calm() ? "auto" : "smooth", block: "center" }); }; meta.append(b); } }
+  { const H = (sets.highlights || {})[c.id] || [];   /* the chapter's instagram highlight: every story, in the story player */
+    const old = $("hlRing"); if (old) old.remove();
+    if (H.length) {
+      const b = el("button", "hlring"), r = el("span", "hlr"), im = el("img"), tx = el("span", "hlt");
+      b.type = "button"; b.id = "hlRing"; b.setAttribute("aria-label", "watch the " + c.label + " highlight, " + H.length + " stories");
+      const still = H.filter(x => !x.video && !x.plain), pick = still[Math.floor(still.length * .62)] || H.find(x => x.poster) || H[0];
+      im.src = pick.thumb || pick.poster || pick.src; im.alt = ""; im.decoding = "async"; r.append(im);
+      tx.append(el("b", null, "highlight."), el("span", null, H.length + " stories"), el("small", null, "updated monthly · next " + nextUpdate()));
+      b.append(r, tx); b.onclick = () => openStories({ chapter: c.id, title: c.label, dates: c.dates, stories: H }, 0);
+      $("line").after(b);
+    } }
   if (photos.some(p => p.chapter === c.id && !p.video)) { const w = el("button", "sharebtn walkbtn", "walk through."); w.type = "button"; w.setAttribute("aria-label", "walk through " + c.label + " like an exhibition"); w.onclick = () => openRoom(c); meta.append(w); }
   if (soundOn) { const first = [].concat(SONGS[c.id] || []).find(x => x.id); if (first) playSong(first); else hushSong(); }   /* a chapter without its own song is quiet */
 }
@@ -1641,17 +1702,84 @@ function renderPlaces() {
 }
 function renderAboutExtras() { if (view !== "about") return; renderNums(); renderPhotographers(); renderPlaces(); }
 
-/* ---------- start page: on this day ---------- */
+/* ---------- stories: updated on the 1st of every month ---------- */
+function nextUpdate() { const d = new Date(); return "01." + String((d.getMonth() + 1) % 12 + 1).padStart(2, "0") + "."; }
+
+/* ---------- start page: on this day ----------
+   everything on the site with a date: posted photos, highlight stories, trips, the start of a chapter,
+   journal entries, press and the dates from the lebenslauf. one day can hold many things:
+   then the card fans them out, and a tap plays the whole day as stories. */
+const CV_DAYS = [
+  ["2002-08-26", "born.", "mittersill. the very first day."],
+  ["2023-06-18", "retterschein.", "wasserrettung mittersill."],
+  ["2024-03-10", "aktive einsatzkraft.", "wasserrettung mittersill."],
+  ["2024-05-19", "fließwasserretter.", "the exam, passed."],
+];
+function moments() {
+  const M = [], iso = d => d.slice(6, 10) + "-" + d.slice(3, 5) + "-" + d.slice(0, 2);
+  photos.forEach(p => { if (p.date && p.date.length === 10 && !p.video) M.push({ day: iso(p.date), kind: "a photo", ch: p.chapter, src: p.src, thumb: p.thumb, thumb2: p.thumb2 }); });
+  Object.entries(sets.highlights || {}).forEach(([ch, H]) => H.forEach(h => { if (h.day) M.push(Object.assign({ kind: "a story", ch }, h)); }));
+  (sets.trips || []).forEach(t => M.push({ day: t.day, kind: "a trip", ch: t.chapter, src: t.cover, thumb: t.thumb, thumb2: t.thumb2, cap: "the first day of " + (t.title || "a trip"), trip: t }));
+  CHAPTERS.forEach(c => { const m = c.dates.match(/^(\d\d)\.(\d\d)\.(\d\d)?/), y = (m && (m[3] || c.dates.slice(-2))); if (m) M.push({ day: "20" + y + "-" + m[2] + "-" + m[1], kind: "a new chapter", ch: c.id, text: c.label, kicker: "A NEW CHAPTER", sub: c.line }); });
+  (sets.journal || []).forEach(j => { if (/^\d{4}-\d\d-\d\d/.test(j.id)) M.push({ day: j.id.slice(0, 10), kind: "a journal entry", ch: j.chapter, text: "journal. " + String(j.n || "").padStart(2, "0"), kicker: "JOURNAL", sub: "notes on getting better." }); });
+  CV_DAYS.forEach(([d, t, sub]) => M.push({ day: d, kind: "a milestone", ch: null, text: t, kicker: "LEBENSLAUF", sub }));
+  return M;
+}
+function otdPick(now) {
+  const M = moments(), md = d => d.slice(5), pad = n => String(n).padStart(2, "0");
+  const today = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+  const past = M.filter(m => m.day < today.slice(0, 4) + "-00");   /* only earlier years */
+  let hits = past.filter(m => md(m.day) === md(today)), mode = "day";
+  if (!hits.length) {   /* nothing on this exact day: the nearest day around it, one year ago first */
+    const ago = new Date(now); ago.setFullYear(now.getFullYear() - 1);
+    /* within a week: the most recent year wins, then the closest day. otherwise simply the closest day */
+    const dist = m => { const d = new Date(m.day + "T12:00"); let best = 1e9; for (let y = 1; y <= 30; y++) { const a = new Date(now); a.setFullYear(now.getFullYear() - y); a.setHours(12, 0, 0, 0); const n = Math.round(Math.abs(d - a) / 864e5); best = Math.min(best, n <= 7 ? y * 100 + n : 1e4 + n + y * .01); } return best; };
+    let bestD = 1e9; past.forEach(m => { m._d = dist(m); if (m._d < bestD) bestD = m._d; });
+    const day = past.filter(m => m._d === bestD)[0]; if (!day) return null;
+    hits = past.filter(m => m.day === day.day); mode = bestD < 1e4 ? "week" : "time";
+  }
+  const order = { "a new chapter": 0, "a trip": 1, "a photo": 2, "a story": 3 };
+  hits.sort((a, b) => b.day.localeCompare(a.day) || (order[a.kind] ?? -1) - (order[b.kind] ?? -1));
+  return { hits, mode, now };
+}
 function renderOtd() {
-  const box = $("otd"), show = view === "colours" && filter === "all";
-  const now = new Date(), dd = String(now.getDate()).padStart(2, "0") + "." + String(now.getMonth() + 1).padStart(2, "0") + ".";
-  const hits = show ? photos.filter(p => p.date && p.date.startsWith(dd) && +p.date.slice(6) < now.getFullYear()) : [];
-  box.hidden = !hits.length; if (!hits.length) return;
-  const p = hits[Math.floor(now.getDate() * 7 % hits.length)], yrs = now.getFullYear() - +p.date.slice(6);
-  box.textContent = ""; const b = el("button", "otd"); box.replaceWith(b); b.id = "otd";
-  const img = el("img"); setImg(img, p, "96px"); img.alt = "";
-  const t = el("div"); t.append(el("small", null, "ON THIS DAY"), el("b", null, yrs === 1 ? "one year ago." : yrs + " years ago."), el("span", null, p.date + " · " + byId[p.chapter].label));
-  b.append(img, t); b.onclick = () => open(hits, hits.indexOf(p));
+  const old = $("otd"), show = view === "colours" && filter === "all";
+  const P = show && (photos.length || sets.loaded) ? otdPick(new Date()) : null;
+  const b = el("button", "otd"); b.type = "button"; b.id = "otd"; old.replaceWith(b);
+  b.hidden = !P; if (!P) return;
+  const { hits, mode, now } = P, first = hits[0], yrs = now.getFullYear() - +first.day.slice(0, 4);
+  const years = [...new Set(hits.map(h => h.day.slice(0, 4)))];
+  const word = n => ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][n] || n;
+  const head = mode === "day" ? (yrs === 1 ? "one year ago." : word(yrs) + " years ago.") : mode === "week" ? "this week, " + (yrs === 1 ? "a year" : word(yrs) + " years") + " ago." : "around now, " + (yrs === 1 ? "a year" : word(yrs) + " years") + " ago.";
+  const kinds = {}; hits.forEach(h => kinds[h.kind] = (kinds[h.kind] || 0) + 1);
+  const said = Object.entries(kinds).map(([k, n]) => n > 1 ? n + " " + k.replace(/^an? /, "").replace(/y$/, "ie") + "s" : k);
+  const list = said.length > 1 ? said.slice(0, -1).join(", ") + " and " + said[said.length - 1] : said[0];
+  const fmt = d => d.slice(8, 10) + "." + d.slice(5, 7) + "." + d.slice(2, 4);
+  const chOf = h => byId[h.ch] || CHAPTERS.find(c => { const m = c.dates.match(/(\d\d)\.(\d\d)\.(\d\d)?\s*–\s*(\d\d)\.(\d\d)\.(\d\d)/); if (!m) return false; const a = "20" + (m[3] || m[6]) + "-" + m[2] + "-" + m[1], z = "20" + m[6] + "-" + m[5] + "-" + m[4]; return h.day >= a && h.day <= z; });
+  /* the fan: up to three of the day's moments, a picture where there is one */
+  const fan = el("span", "ofan"), show3 = hits.filter(h => (h.thumb || h.poster) && !h.plain).slice(0, 3);
+  const deck = show3.concat(hits.filter(h => h.text)).slice(0, 3);   /* pictures first, then the cards without one */
+  if (!deck.length) deck.push(hits[0]);
+  deck.forEach((h, k) => {
+    const card = el("span", "oc"); card.style.setProperty("--k", k - (deck.length - 1) / 2);
+    if (h.thumb || h.poster) { const im = el("img"); im.src = h.thumb || h.poster; im.alt = ""; im.decoding = "async"; card.append(im); }
+    else { const c = chOf(h) || ALL; card.classList.add("txt"); card.style.background = c.bg; card.style.color = c.fg; card.append(el("b", null, h.text)); }
+    fan.append(card);
+  });
+  if (hits.length > 1) fan.append(el("em", "ocount", hits.length + ""));
+  const t = el("span", "otx"), ch = chOf(first);
+  t.append(el("small", null, "ON THIS DAY"), el("b", null, head), el("span", null, fmt(first.day) + (ch ? " · " + ch.label : "") + (years.length > 1 ? " · and " + (years.length - 1) + " more year" + (years.length > 2 ? "s" : "") : "")));
+  t.append(el("span", "okinds", hits.length > 1 ? list + ". tap to play the day." : (first.text ? first.text : list + ".")));
+  b.append(fan, t);
+  b.setAttribute("aria-label", "on this day, " + head + " " + list);
+  /* the whole day as stories: pictures as they are, everything else as a card in its chapter's colour */
+  const S = hits.map(h => {
+    const c = chOf(h) || ALL, base = { day: h.day, bg: c.bg, fg: c.fg, head: h.kind.replace(/^a /, "") + "." };
+    if (h.text) return Object.assign(base, { text: h.text, kicker: h.kicker, sub: h.sub });
+    if (h.video) return Object.assign(base, { src: h.src, video: true, poster: h.poster });
+    return Object.assign(base, { src: h.src, thumb: h.thumb, thumb2: h.thumb2, cap: h.cap || "" });
+  });
+  b.onclick = () => openStories({ chapter: (ch || ALL).id, title: head, dates: fmt(first.day), stories: S }, 0);
 }
 
 /* ---------- chapter quotes: one sentence per chapter, shown between the photos ---------- */
@@ -2518,27 +2646,35 @@ function openStories(t, start) {
   sp.textContent = ""; sp.style.setProperty("--sbg", c.bg); sp.setAttribute("aria-label", (t.title || "") + " stories");
   const f = el("div", "spf"), m = el("div", "spm"), bars = el("div", "spb"), hd = el("div", "sph"), x = el("button", "spx", "✕"), pl = el("button", "spl"), pr = el("button", "spr"), n = el("div", "spn");
   x.setAttribute("aria-label", "Close"); pl.setAttribute("aria-label", "Previous story"); pr.setAttribute("aria-label", "Next story");
-  S.forEach(() => { const i = el("i"); i.append(el("b")); bars.append(i); });
-  hd.append(el("b", null, t.title || ""), el("span", null, t.dates));
+  const many = S.length > 30;   /* a whole highlight: one long bar and a counter instead of 80 slivers */
+  (many ? [0] : S).forEach(() => { const i = el("i"); i.append(el("b")); bars.append(i); });
+  const hT = el("b", null, t.title || ""), hD = el("span", null, t.dates); hd.append(hT, hD);
+  const fmtDay = d => d.slice(8, 10) + "." + d.slice(5, 7) + "." + d.slice(2, 4);
   f.append(m, bars, hd, pl, pr, x, n); sp.append(f); sp.hidden = false; document.body.style.overflow = "hidden";
   const IMG = 5200; let i = 0, t0 = 0, done = 0, paused = false, raf = 0, vid = null, down = 0;
-  const fill = k => [...bars.children].forEach((b, j) => b.firstChild.style.width = j < k ? "100%" : "0");
+  const fill = k => [...bars.children].forEach((b, j) => b.firstChild.style.width = many ? (k / S.length * 100) + "%" : j < k ? "100%" : "0");
   const tick = () => {
-    const b = bars.children[i] && bars.children[i].firstChild; if (!b) return;
+    const b = bars.children[many ? 0 : i] && bars.children[many ? 0 : i].firstChild; if (!b) return;
     let p;
     if (vid) p = vid.duration ? vid.currentTime / vid.duration : 0;
     else { if (!paused) done = performance.now() - t0; p = done / IMG; if (p >= 1) return go(1); }
-    b.style.width = Math.min(100, p * 100) + "%";
+    b.style.width = many ? ((i + Math.min(1, p)) / S.length * 100) + "%" : Math.min(100, p * 100) + "%";
     raf = requestAnimationFrame(tick);
   };
   const show = k => {
     cancelAnimationFrame(raf); if (vid) { vid.pause(); vid = null; }
     i = k; fill(i); m.textContent = ""; n.textContent = (i + 1) + " / " + S.length;
     const s = S[i];
-    if (s.video) {
+    hT.textContent = s.head || t.title || ""; hD.textContent = s.when || (s.day ? fmtDay(s.day) : t.dates);
+    sp.style.setProperty("--sbg", s.bg || c.bg);
+    if (s.text) {   /* a moment without a picture: a card in its colour */
+      const c2 = el("div", "sptxt"); c2.style.background = s.bg || c.bg; c2.style.color = s.fg || c.fg;
+      c2.append(el("small", null, s.kicker || ""), el("b", null, s.text), el("span", null, s.sub || "")); m.append(c2); done = 0; t0 = performance.now();
+    } else if (s.video) {
       vid = el("video"); vid.src = s.src; vid.playsInline = true; if (s.poster) vid.poster = s.poster;
       vid.onended = () => go(1); m.append(vid); vid.play().catch(() => { vid.muted = true; vid.play().catch(() => {}); });
     } else { const im = el("img"); im.src = s.thumb2 || s.src; im.alt = "story " + (i + 1); m.append(im); done = 0; t0 = performance.now(); }
+    if (s.cap) m.append(el("p", "spcap", s.cap));
     const nx = S[i + 1]; if (nx && !nx.video) { const pre = new Image(); pre.src = nx.thumb2 || nx.src; }
     raf = requestAnimationFrame(tick);
   };
@@ -3030,7 +3166,7 @@ let loaded = false;
 function loadData() {
   if (loaded) return; loaded = true;
   fetch("photos.json", { cache: "no-cache" }).then(r => r.json()).then(d => { photos = d.filter(p => byId[p.chapter]); digitals = d.filter(p => p.chapter === "digitals"); mixed = shuffle(photos); render(); }).catch(() => {});
-  fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [], journal_lock: d.journal_lock || null, teasers: d.teasers || {}, trips: d.trips || [], loaded: true }; render(); jAuto(); wirePress(d.press || {}); }).catch(() => {});
+  fetch("sets.json", { cache: "no-cache" }).then(r => r.json()).then(d => { sets = { recaps: d.recaps || [], posts: d.posts || [], journal: d.journal || [], journal_lock: d.journal_lock || null, teasers: d.teasers || {}, trips: d.trips || [], highlights: d.highlights || {}, highlights_info: d.highlights_info || {}, press: d.press || {}, loaded: true }; render(); jAuto(); wirePress(d.press || {}); }).catch(() => {});
 }
 if (document.documentElement.classList.contains("welcome")) {
   try { sessionStorage.setItem("mn-hello", "1"); } catch (e) {}

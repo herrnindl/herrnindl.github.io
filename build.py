@@ -83,7 +83,10 @@ if os.path.exists(os.path.join("thumbs", "sizes.json")):
 def thumb(path):
     base = "thumbs/" + os.path.splitext(path)[0]
     if path in SIZES and os.path.exists(base + "-600.webp"):
-        return {"thumb": base + "-600.webp", "thumb2": base + "-1200.webp", "w": SIZES[path][0], "h": SIZES[path][1]}
+        r = {"thumb": base + "-600.webp", "w": SIZES[path][0], "h": SIZES[path][1]}
+        if os.path.exists(base + "-1200.webp"):
+            r["thumb2"] = base + "-1200.webp"
+        return r
     return {"thumb": path}
 
 
@@ -339,6 +342,33 @@ PLAIN = set()
 if os.path.exists(os.path.join("thumbs", "plain.json")):
     with open(os.path.join("thumbs", "plain.json")) as f:
         PLAIN = set(json.load(f))
+# highlights/<chapter>/   every story of that chapter's instagram highlight, nothing else.
+#   file names are the moment the story was posted (2026-04-15_144121.jpg), so they sort by time
+#   and the site knows the day of each one. clips are .mp4 (silent). highlights/info.txt: updated: 27.11.26
+sets["highlights"] = {}
+if os.path.isdir("highlights"):
+    for ch in CHAPTERS:
+        folder = os.path.join("highlights", ch)
+        if not os.path.isdir(folder):
+            continue
+        items = []
+        for n in sorted(x for x in os.listdir(folder) if x.lower().endswith(EXT)):
+            m = re.match(r"^(\d{4})-(\d{2})-(\d{2})_(\d{2})(\d{2})", n)
+            src = f"highlights/{ch}/{n}"
+            if n.lower().endswith(VIDEO):
+                poster = "thumbs/" + os.path.splitext(src)[0] + "-poster.webp"
+                it = {"src": src, "video": True, "poster": poster if os.path.exists(poster) else ""}
+            else:
+                it = dict({"src": src}, **thumb(src), **({"plain": True} if src in PLAIN else {}))
+            if m:
+                it["day"] = f"{m[1]}-{m[2]}-{m[3]}"; it["time"] = f"{m[4]}:{m[5]}"
+            it["stem"] = os.path.splitext(n)[0]
+            items.append(it)
+        if items:
+            sets["highlights"][ch] = items
+    if os.path.exists(os.path.join("highlights", "info.txt")):
+        sets["highlights_info"] = read_info("highlights")
+
 sets["trips"] = []
 if os.path.isdir("trips"):
     for name in sorted(os.listdir("trips"), reverse=True):
@@ -351,10 +381,13 @@ if os.path.isdir("trips"):
         info = read_info(folder)
         if not s:   # a trip with stories only (nothing posted): the first story photo is the cover
             sf = os.path.join(folder, "stories")
-            first = sorted(n for n in os.listdir(sf) if n.lower().endswith(EXT) and not n.lower().endswith(VIDEO)) if os.path.isdir(sf) else []
+            first = [f"trips/{name}/stories/{n}" for n in sorted(n for n in os.listdir(sf) if n.lower().endswith(EXT) and not n.lower().endswith(VIDEO))] if os.path.isdir(sf) else []
+            rng = re.match(r"^\s*(\S+)\s+(\S+)\s*[–-]\s*(\S+)\s*$", info.get("stories", ""))
+            if rng:
+                first = [x["src"] for x in sets["highlights"].get(rng[1], []) if rng[2] <= x["stem"] <= rng[3] and not x.get("video")]
             if not first:
                 continue
-            s = {"id": name, "chapter": info.get("chapter") or chapter_for(day), "cover": f"trips/{name}/stories/{first[0]}",
+            s = {"id": name, "chapter": info.get("chapter") or chapter_for(day), "cover": first[0],
                  "images": [], "title": info.get("title", ""), "big": "", "caption": info.get("caption", ""), "credit": info.get("credit", "")}
         s["date"] = day.strftime("%d.%m.%y")
         s["day"] = day.isoformat()
@@ -366,7 +399,10 @@ if os.path.isdir("trips"):
         s["photos"] = [clip(p) if p.lower().endswith(VIDEO) else dict({"src": p}, **thumb(p)) for p in s["images"]]
         s["stories"] = []
         sfolder = os.path.join(folder, "stories")
-        if os.path.isdir(sfolder):
+        rng = re.match(r"^\s*(\S+)\s+(\S+)\s*[–-]\s*(\S+)\s*$", info.get("stories", ""))
+        if rng:   # stories: vanilla 2026-04-15_144121 – 2026-04-23_173007  (taken from the chapter's highlight)
+            s["stories"] = [{k: v for k, v in x.items() if k != "stem"} for x in sets["highlights"].get(rng[1], []) if rng[2] <= x["stem"] <= rng[3]]
+        elif os.path.isdir(sfolder):
             for n in sorted(x for x in os.listdir(sfolder) if x.lower().endswith(EXT)):
                 src = f"trips/{name}/stories/{n}"
                 if n.lower().endswith(VIDEO):
