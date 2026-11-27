@@ -2,3 +2,4 @@ title: nürnberg.
 dates: 24.–26.04.26
 place: nürnberg
 caption: next stop after france. one weekend, one match.
+stories: vanilla 2026-04-24_100826 – 2026-04-26_180010
