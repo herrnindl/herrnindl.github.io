@@ -3,5 +3,6 @@
 (function () {
   var a = ["booking", "herrnindl.com"].join("@");
   function go() { document.querySelectorAll("a[data-mail]").forEach(function (l) { l.href = "mailto:" + a; }); }
+  window.mnMail = go;
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", go); else go();
 })();

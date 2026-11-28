@@ -53,7 +53,7 @@ catch (e) { document.documentElement.classList.add("locked"); }
 :root {
   --bg: #FFF8BB;   /* vanilla. */
   --fg: #1C1C14;
-  --soft: rgba(28,28,20,.7);
+  --soft: rgba(28,28,20,.76);
   --line: rgba(28,28,20,.16);
   --dot: #B8C98B;
   --sans: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif;
@@ -78,7 +78,7 @@ a { color: inherit; }
 
 header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-block: 22px 8px; }
 .mark { font-family: var(--serif); font-weight: 500; font-size: 30px; letter-spacing: .06em; text-decoration: none; }
-.name { font-size: 10px; letter-spacing: .5em; color: var(--soft); white-space: nowrap; }
+.name { font-size: 12px; letter-spacing: .5em; color: var(--soft); white-space: nowrap; }
 
 .card { padding-block: clamp(44px, 8vw, 88px) clamp(28px, 5vw, 56px); }
 .dates { font-size: 12px; letter-spacing: .28em; color: var(--soft); margin-bottom: 10px; min-height: 1em; }
@@ -99,7 +99,7 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .chip { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px 6px 9px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 13px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
 .chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 .sw { width: 11px; height: 11px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
-.count { font-size: 11px; opacity: .6; }
+.count { font-size: 12px; opacity: .6; }
 
 .wall { --wg: 10px; display: flex; align-items: flex-start; gap: var(--wg); margin-top: 18px; }
 .wall .col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--wg); }
@@ -107,7 +107,7 @@ header { display: flex; align-items: baseline; justify-content: space-between; g
 .tile img { display: block; width: 100%; height: auto; background: color-mix(in srgb, var(--fg) 9%, var(--bg)); transition: transform .5s ease; }
 .tile.fit img, .tile.fit video { height: 100%; object-fit: cover; object-position: 50% 28%; }
 .tile:hover img { transform: scale(1.02); }
-.tag { position: absolute; left: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.86); color: #1C1C14; font-size: 11px; font-weight: 500; padding: 3px 9px 3px 6px; border-radius: 999px; }
+.tag { position: absolute; left: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.86); color: #1C1C14; font-size: 12px; font-weight: 500; padding: 3px 9px 3px 6px; border-radius: 999px; }
 .tag .sw { width: 9px; height: 9px; }
 .empty { margin-top: 28px; padding: 36px 0 8px; font-weight: 800; font-size: clamp(26px, 6vw, 40px); letter-spacing: -.045em; line-height: 1; color: var(--fg); }
 
@@ -151,7 +151,7 @@ a.view { text-decoration: none; display: inline-block; }
 .chrecaps { margin-top: 18px; }
 /* recaps: always full rows — 2 per row on phones, 4 on tablets, 6 on computers */
 .rgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 900px; margin-inline: auto; }   /* 12 months: 4 rows of 3, centred */
-.rgrid .rtag { left: 7px; bottom: 7px; font-size: 11px; padding: 3px 8px 3px 6px; gap: 5px; }
+.rgrid .rtag { left: 7px; bottom: 7px; font-size: 12px; padding: 3px 8px 3px 6px; gap: 5px; }
 .rgrid .rtag i { width: 8px; height: 8px; }
 .chrecaps .hofhead { margin: 0 0 10px; }
 /* recaps + teasers on a chapter page: one justified row, every cover the same height, edge to edge */
@@ -196,7 +196,7 @@ a.view { text-decoration: none; display: inline-block; }
 .donate { width: fit-content; justify-self: start; display: inline-flex; align-items: center; gap: 14px; margin: 14px 0 6px; padding: 9px 10px 9px 16px; border-radius: 999px; background: #0E478F; color: #FFFFFF; text-decoration: none; }
 .donate .dtxt { display: grid; gap: 1px; }
 .donate em { font-style: normal; font-weight: 700; font-size: 13px; padding: 8px 14px; border-radius: 999px; background: #FFF8BB; color: #0E478F; white-space: nowrap; }
-.donate small { font-size: 9px; letter-spacing: .22em; opacity: .75; }
+.donate small { font-size: 11px; letter-spacing: .22em; opacity: .75; }
 .donate b { font-weight: 800; font-size: 19px; letter-spacing: -.045em; line-height: 1; }
 .donate b i { font-style: normal; color: inherit; }
 .donate span { font-size: 13px; opacity: .85; }
@@ -215,7 +215,7 @@ a.view { text-decoration: none; display: inline-block; }
 .stats { margin: 6px 0 0; width: 100%; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 14px 18px; max-width: 640px; }
 .stats div { display: grid; gap: 2px; align-content: start; min-width: 0; }
 .stats .wide { grid-column: span 2; }
-.stats dt { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--soft); }
+.stats dt { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--soft); }
 .stats dd { margin: 0; font-weight: 800; font-size: 18px; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .sedrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 6px; }
 .sedrow .sedcard { margin-top: 0; }
@@ -223,7 +223,7 @@ a.view { text-decoration: none; display: inline-block; }
 .sedcard { justify-self: start; width: fit-content; display: inline-flex; align-items: center; gap: 10px; margin-top: 6px; padding: 10px 18px; border-radius: 999px; background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 800; letter-spacing: -.02em; }
 .docs { display: flex; flex-wrap: wrap; gap: 8px; }
 .sedcard.ghost { background: transparent; color: var(--fg); border: 1px solid var(--fg); }
-.sedcard small { font-weight: 400; font-size: 11px; letter-spacing: .2em; opacity: .75; }
+.sedcard small { font-weight: 400; font-size: 12px; letter-spacing: .2em; opacity: .75; }
 .panel { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; }
 .panel > h2 { display: none; }
 .sedcard-panel { display: grid; gap: 22px; grid-template-columns: minmax(0, 1fr); }
@@ -274,7 +274,7 @@ a.view { text-decoration: none; display: inline-block; }
 .contacts { display: flex; flex-wrap: wrap; gap: 10px; }
 .contact { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--fg); text-decoration: none; font-weight: 500; letter-spacing: -.01em; }
 .contact.primary { background: var(--fg); color: var(--bg); }
-.contact small { font-size: 11px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
+.contact small { font-size: 12px; letter-spacing: .2em; opacity: .7; font-weight: 400; }
 
 /* chapter rooms */
 html.roomopen { overflow: hidden; }
@@ -332,10 +332,10 @@ body::before { content: ""; position: fixed; inset: -50%; z-index: -1; pointer-e
 /* "table": prints scattered on a table, drag them around */
 .wall.mt { display: block; }
 .table { position: relative; height: clamp(620px, 130vh, 1250px); border-radius: 6px; overflow: hidden; touch-action: pan-y; }
-.table .hint { position: absolute; left: 50%; top: 14px; transform: translateX(-50%); z-index: 999; font-size: 11px; letter-spacing: .22em; color: var(--soft); background: var(--bg); padding: 4px 10px; border-radius: 999px; pointer-events: none; }
+.table .hint { position: absolute; left: 50%; top: 14px; transform: translateX(-50%); z-index: 999; font-size: 12px; letter-spacing: .22em; color: var(--soft); background: var(--bg); padding: 4px 10px; border-radius: 999px; pointer-events: none; }
 .print { position: absolute; width: var(--w); padding: 7px 7px 26px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 14px 30px -14px rgba(0,0,0,.45); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; transition: box-shadow .2s ease; }
 .print img { display: block; width: 100%; height: auto; pointer-events: none; -webkit-user-drag: none; }
-.print span { position: absolute; left: 9px; bottom: 6px; font-size: 10px; letter-spacing: .12em; color: #6b6a55; }
+.print span { position: absolute; left: 9px; bottom: 6px; font-size: 12px; letter-spacing: .12em; color: #6b6a55; }
 .print.drag { cursor: grabbing; box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 30px 50px -18px rgba(0,0,0,.55); }
 /* booking: availability + rates */
 .avail { display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 500; letter-spacing: -.01em; justify-self: start; }
@@ -408,7 +408,7 @@ body.mini .topdot { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .selgrid .skel { aspect-ratio: 4 / 5; border-radius: 3px; background: var(--line); animation: skel 1.4s ease-in-out infinite alternate; }
 @keyframes skel { to { opacity: .45; } }
 .selgrid .hero img { position: absolute; inset: 0; object-position: 50% 22%; }
-.selgrid .num { position: absolute; left: 8px; top: 7px; font-size: 10px; letter-spacing: .2em; color: #fff; mix-blend-mode: difference; }
+.selgrid .num { position: absolute; left: 8px; top: 7px; font-size: 12px; letter-spacing: .2em; color: #fff; mix-blend-mode: difference; }
 .selgrid .all { display: grid; place-content: center; text-align: center; gap: 4px; background: var(--fg); color: var(--bg); font: inherit; }
 .selgrid .all b { font-weight: 800; font-size: clamp(30px, 7vw, 54px); letter-spacing: -.05em; line-height: .9; }
 .selgrid .all span { font-size: 12px; letter-spacing: .16em; }
@@ -421,7 +421,7 @@ body.mini .topdot { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 @media (min-width: 800px) { .digigrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .digigrid button { padding: 0; border: 0; background: var(--line); border-radius: 3px; overflow: hidden; position: relative; cursor: pointer; aspect-ratio: 3 / 4; }
 .digigrid img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.digigrid span { position: absolute; left: 8px; bottom: 8px; font-size: 11px; letter-spacing: .16em; background: rgba(255,255,255,.88); color: #1C1C14; padding: 3px 8px; border-radius: 999px; }
+.digigrid span { position: absolute; left: 8px; bottom: 8px; font-size: 12px; letter-spacing: .16em; background: rgba(255,255,255,.88); color: #1C1C14; padding: 3px 8px; border-radius: 999px; }
 /* video tiles */
 .tile video { display: block; width: 100%; height: auto; background: #000; }
 /* floating book button */
@@ -435,6 +435,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .seen a { color: inherit; text-decoration: none; }
 .seen i { font-style: normal; font-size: 22px; line-height: 1; }
 /* photo size switch */
+@media (max-width: 639px) { .sizes { display: none; } }   /* photo sizes: computers only */
 .wtools { display: inline-flex; align-items: center; gap: 10px; }
 .sizes { display: inline-flex; border: 1px solid var(--fg); border-radius: 999px; overflow: hidden; }
 .sizes button { font: inherit; font-size: 12px; font-weight: 500; text-transform: none; letter-spacing: .04em; width: 30px; padding: 5px 0; border: 0; background: none; color: var(--fg); cursor: pointer; }
@@ -461,7 +462,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .wdots i { width: 9px; height: 9px; border-radius: 50%; transition: transform .35s cubic-bezier(.2,.7,.2,1); box-shadow: 0 0 0 1px rgba(255,248,187,.18); }
 .wdots i.on { transform: scale(1.5); }
 @keyframes wstripe { to { background-position: 0 -192px; } }
-.wtxt small { font-size: 10px; letter-spacing: .26em; opacity: .7; }
+.wtxt small { font-size: 12px; letter-spacing: .26em; opacity: .7; }
 .wtxt b { display: block; font-weight: 800; font-size: 40px; letter-spacing: -.055em; line-height: .95; }
 .wtxt b i { font-style: normal; color: inherit; }
 .wtxt em { font-style: normal; font-size: 13px; opacity: .8; }
@@ -497,7 +498,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .wslide .wembed iframe { width: 100%; height: 100%; border: 0; display: block; }
 .wslide .wplay { width: 100%; height: 100%; border: 0; background: none; color: inherit; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; cursor: pointer; font: inherit; }
 .wslide .wplay span { padding: 9px 18px; border-radius: 999px; background: var(--wf); color: var(--wb); font-weight: 800; letter-spacing: -.02em; }
-.wslide .wplay small { font-size: 10px; letter-spacing: .08em; opacity: .6; }
+.wslide .wplay small { font-size: 12px; letter-spacing: .08em; opacity: .6; }
 .wslide .wcovers img, .wslide .wcovers span { width: 30%; max-width: 150px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; display: block; }
 .wslide .big { font-weight: 800; font-size: clamp(90px, 30vw, 220px); letter-spacing: -.07em; line-height: .8; font-variant-numeric: tabular-nums; }
 .wslide > * { animation: wIn .55s cubic-bezier(.2,.7,.2,1) both; }
@@ -543,7 +544,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 12px; max-width: 640px; }
 .nums div { display: grid; gap: 2px; }
 .nums b { font-weight: 800; font-size: clamp(34px, 8vw, 54px); letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
-.nums span { font-size: 11px; letter-spacing: .18em; color: var(--soft); }
+.nums span { font-size: 12px; letter-spacing: .18em; color: var(--soft); }
 /* photographers, built from the credits */
 .phgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 10px; max-width: 900px; }
 .ph { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: center; padding: 8px; border-radius: 12px; border: 1px solid var(--line); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
@@ -597,7 +598,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 @keyframes hlspin { to { transform: rotate(1turn); } }
 @media (min-width: 900px) { .card { position: relative; } .hlring { position: absolute; right: max(4vw, 24px); top: clamp(52px, 9vw, 100px); flex-direction: column; text-align: center; gap: 12px; margin: 0; } .hlr { width: 168px; height: 168px; padding: 7px; } .hlr img { border-width: 5px; } .hlt { justify-items: center; } }
 @media (prefers-reduced-motion: reduce) { .hlr::before { animation: none; } .ofan .oc { transition: none; } }
-.otd small { font-size: 11px; letter-spacing: .22em; color: var(--soft); }
+.otd small { font-size: 12px; letter-spacing: .22em; color: var(--soft); }
 .otd b { display: block; font-weight: 800; font-size: 24px; letter-spacing: -.04em; margin-top: 2px; }
 .otd span { font-size: 13px; color: var(--soft); }
 /* chapter quote between the photos */
@@ -609,20 +610,20 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .gb { margin-top: 12px; display: grid; gap: 14px; }
 .gbwall { display: flex; flex-wrap: wrap; gap: 6px; min-height: 22px; }
 .gbwall i { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); position: relative; }
-.gbwall i:hover::after { content: attr(data-n); position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: var(--fg); color: var(--bg); }
+.gbwall i:hover::after { content: attr(data-n); position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 12px; padding: 3px 8px; border-radius: 999px; background: var(--fg); color: var(--bg); }
 .gbform { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .gbform .cols { display: flex; gap: 6px; }
 .gbform .cols button { width: 26px; height: 26px; border-radius: 50%; border: 0; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); cursor: pointer; padding: 0; }
 .gbform .cols button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--fg); }
 .gbform input { font: inherit; font-size: 16px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); width: 11em; }
 .gbform .go { padding: 9px 16px; border-radius: 999px; border: 0; background: var(--fg); color: var(--bg); font: inherit; font-weight: 500; cursor: pointer; }
-.gbnote { font-size: 11px; color: var(--soft); margin: 0; }
+.gbnote { font-size: 12px; color: var(--soft); margin: 0; }
 /* inspirations: theirs next to mine */
 .insp { display: grid; gap: 40px; }
 .icard { display: grid; gap: 22px; }
 .pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin: 0; }
 .pair figure { margin: 0; display: grid; gap: 8px; }
-.pair figcaption { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--soft); }
+.pair figcaption { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--soft); }
 .embed, .mntile { height: 380px; border-radius: 14px; overflow: hidden; }
 .embed { position: relative; background: #1C1C14; }
 .embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
@@ -632,7 +633,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .reveal-btn .singles { display: flex; flex-wrap: wrap; gap: 2px 14px; }
 .reveal-btn .singles i { font-style: normal; white-space: nowrap; }
 .reveal-btn em { font-style: normal; margin-top: 14px; padding: 7px 14px; border-radius: 999px; background: #FFF8BB; color: #1C1C14; font-size: 13px; font-weight: 500; }
-.reveal-btn small { font-size: 10px; letter-spacing: .08em; opacity: .5; margin-top: 4px; }
+.reveal-btn small { font-size: 12px; letter-spacing: .08em; opacity: .5; margin-top: 4px; }
 .mntile { background: var(--fg); color: var(--bg); display: grid; place-items: center; }
 .mntile span { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; font-size: clamp(54px, 15vw, 120px); letter-spacing: .06em; line-height: 1; }
 .mntile i { font-style: normal; color: inherit; }
@@ -648,13 +649,13 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .nametile span { font-weight: 800; font-size: clamp(30px, 7vw, 52px); letter-spacing: -.035em; }
 .nametile i, .dotonly i { font-style: normal; color: inherit; }
 .dotonly span { font-size: clamp(54px, 15vw, 120px); }
-.istory small { font-size: 11px; letter-spacing: .22em; color: var(--soft); text-transform: uppercase; }
+.istory small { font-size: 12px; letter-spacing: .22em; color: var(--soft); text-transform: uppercase; }
 .istory h3 { margin: 0; font-weight: 800; font-size: clamp(30px, 6vw, 48px); letter-spacing: -.05em; line-height: .95; }
 .istory h3 i { font-style: normal; color: inherit; }
 .typetile { position: relative; height: 380px; border-radius: 14px; overflow: hidden; background: #FFFFFF; color: #1C1C14; box-shadow: inset 0 0 0 1px rgba(28,28,20,.1); display: grid; place-items: center; box-sizing: border-box; }
 .typetile span { font-weight: 800; font-size: clamp(54px, 15vw, 120px); letter-spacing: -.045em; line-height: 1; }
 .typetile i { font-style: normal; color: inherit; }
-.typetile small, .typetile em { position: absolute; left: 0; right: 0; text-align: center; font-style: normal; font-size: 11px; letter-spacing: .24em; opacity: .55; }
+.typetile small, .typetile em { position: absolute; left: 0; right: 0; text-align: center; font-style: normal; font-size: 12px; letter-spacing: .24em; opacity: .55; }
 .typetile small { top: 20px; } .typetile em { bottom: 20px; font-weight: 800; letter-spacing: .12em; font-size: 14px; }
 .tzmine { display: block; height: 380px; border-radius: 14px; overflow: hidden; }
 .tzmine img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -665,7 +666,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .hltile .rings { display: flex; gap: 12px; }
 .hltile .rings i { width: 54px; height: 54px; border-radius: 50%; background: #FAF6E8; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #D9D4C3; }
 .hltile b { font-weight: 600; font-size: 17px; letter-spacing: -.01em; }
-.hltile small { font-size: 10px; letter-spacing: .24em; color: #8A8574; }
+.hltile small { font-size: 12px; letter-spacing: .24em; color: #8A8574; }
 .vantile { background: #FFF8BB; color: #1C1C14; }
 .vantile span { font-family: "Bodoni Moda", "Didot", Georgia, serif; font-weight: 500; letter-spacing: .06em; }
 /* 07: where the colours came from */
@@ -681,7 +682,7 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 @media (min-width: 900px) { .icard { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: 48px; align-items: center; } }
 /* booking form: fills in an email, nothing is sent from the site itself */
 .bform { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 16px; max-width: 620px; margin-top: 6px; }
-.bform label { display: grid; gap: 4px; font-size: 11px; letter-spacing: .2em; color: var(--soft); }
+.bform label { display: grid; gap: 4px; font-size: 12px; letter-spacing: .2em; color: var(--soft); }
 .bform .wide { grid-column: 1 / -1; }
 .bform input, .bform select, .bform textarea { font: inherit; font-size: 16px; letter-spacing: -.01em; color: var(--fg); background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 6px 0 8px; width: 100%; min-width: 0; -webkit-appearance: none; appearance: none; }
 .bform select { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.4'/%3E%3C/svg%3E") right 2px center no-repeat; padding-right: 18px; }
@@ -697,8 +698,8 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .tl .bar button:hover { filter: brightness(1.08); }
 .tl .bar button.future { background: repeating-linear-gradient(-45deg, var(--c) 0 5px, color-mix(in srgb, var(--c) 45%, transparent) 5px 10px); }
 .tl .now { position: absolute; top: -6px; height: 38px; width: 2px; margin-left: -1px; background: var(--fg); border-radius: 2px; pointer-events: none; }
-.tl .now span { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: .2em; white-space: nowrap; }
-.tl .yr { position: absolute; bottom: 0; font-size: 10px; letter-spacing: .14em; color: var(--soft); transform: translateX(-1px); font-variant-numeric: tabular-nums; }
+.tl .now span { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 12px; letter-spacing: .2em; white-space: nowrap; }
+.tl .yr { position: absolute; bottom: 0; font-size: 12px; letter-spacing: .14em; color: var(--soft); transform: translateX(-1px); font-variant-numeric: tabular-nums; }
 .tl .yr::before { content: ""; position: absolute; left: 0; top: -9px; width: 1px; height: 6px; background: var(--line); }
 #tlHead { margin-top: 34px; }
 /* chapter opening: name and line show for a moment while the colour floods in */
@@ -706,11 +707,11 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .intro b { display: block; font-weight: 800; font-size: clamp(48px, 13vw, 128px); letter-spacing: -.055em; line-height: .9; }
 .intro span { display: block; margin-top: 14px; font-size: clamp(14px, 2.4vw, 18px); letter-spacing: .16em; opacity: .8; }
 /* easter egg */
-.eggnote { display: block; flex-basis: 100%; font-size: 11px; letter-spacing: .14em; opacity: .6; }
+.eggnote { display: block; flex-basis: 100%; font-size: 12px; letter-spacing: .14em; opacity: .6; }
 .egg { position: fixed; inset: 0; z-index: 55; pointer-events: none; overflow: hidden; }
 .egg i { position: absolute; top: -30px; border-radius: 50%; }
 .egg p { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); margin: 0; padding: 12px 20px; border-radius: 999px; background: #1C1C14; color: #FFE135; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
-footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px 16px; font-size: 11px; letter-spacing: .24em; line-height: 2; color: var(--soft); }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px 16px; font-size: 12px; letter-spacing: .24em; line-height: 2; color: var(--soft); }
 /* every footer link (and dark mode.) with the same underline, all on one line */
 footer a, footer .darkbtn { display: inline; padding: 0; border: 0; text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 5px; }
 footer b { font-family: var(--serif); font-weight: 500; font-size: 15px; letter-spacing: .06em; color: var(--fg); }
@@ -753,9 +754,9 @@ html.locked body { background: #FFF8BB; color: #1C1C14; }
 .song { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; text-decoration: none; padding: 3px 12px 3px 10px; border-radius: 999px; border: 1px solid var(--line); }
 .song::before { content: "\266A"; font-size: 12px; }
 button.song { background: none; color: inherit; font: inherit; font-size: 13px; cursor: pointer; }
-.song small { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; opacity: .65; margin-left: 2px; }
+.song small { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; opacity: .65; margin-left: 2px; }
 .song.soon { opacity: .6; cursor: default; }
-.spotnote { font-size: 11px; letter-spacing: .06em; color: var(--soft); }
+.spotnote { font-size: 12px; letter-spacing: .06em; color: var(--soft); }
 .player:empty { display: none; }
 .player { margin-top: 14px; max-width: 520px; }
 .spot { display: block; width: 100%; height: 80px; border: 0; border-radius: 12px; }
@@ -801,7 +802,9 @@ button.song { background: none; color: inherit; font: inherit; font-size: 13px; 
 
 /* sound switch + mini player */
 .hright { display: flex; align-items: baseline; gap: 14px; min-width: 0; }
-.sound { background: none; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font-size: 11px; letter-spacing: .14em; color: var(--soft); }
+.sound { background: none; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font-size: 12px; letter-spacing: .14em; color: var(--soft); }
+.site-lang { padding: 2px; align-self: center; }
+.site-lang button { font-size: 12px; padding: 4px 10px; min-height: 30px; }
 .sound b { font-weight: 800; color: var(--fg); letter-spacing: .06em; }
 .sound[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 .sound[aria-pressed="true"] b { color: var(--bg); }
@@ -820,7 +823,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 /* about portrait */
 .aboutpic { margin: 0; display: grid; gap: 6px; max-width: 420px; }
 .aboutpic img { width: 100%; height: auto; border-radius: 3px; display: block; background: var(--line); }
-.aboutpic figcaption { font-size: 11px; letter-spacing: .14em; color: var(--soft); }
+.aboutpic figcaption { font-size: 12px; letter-spacing: .14em; color: var(--soft); }
 @media (min-width: 900px) {
   .about.panel { grid-template-columns: minmax(0, 1fr) 380px; column-gap: 56px; align-items: start; }
   .about.panel > :not(.aboutpic):not(h2) { grid-column: 1; }
@@ -831,18 +834,18 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 /* hall of fame: every chapter as a tile in its colour */
 .hof { display: grid; gap: 18px; margin-top: 18px; }   /* one row per year, newest on top */
 .hof .yrow { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; align-items: stretch; }
-.hof .ylab { font-size: 11px; letter-spacing: .12em; white-space: nowrap; color: var(--soft); font-variant-numeric: tabular-nums; padding-top: 6px; }
+.hof .ylab { font-size: 12px; letter-spacing: .12em; white-space: nowrap; color: var(--soft); font-variant-numeric: tabular-nums; padding-top: 6px; }
 .hof .ycards { display: flex; gap: 10px; }
 .hof .ycards button { flex: 1 1 0; min-width: 0; aspect-ratio: auto; min-height: clamp(120px, 15vw, 190px); }
 .hof button { position: relative; aspect-ratio: 1; border: 0; border-radius: 10px; padding: 10px; background: var(--c); color: var(--t); display: flex; flex-direction: column; justify-content: space-between; text-align: left; font: inherit; cursor: pointer; overflow: hidden; transition: transform .2s ease; }
 .hof button.light { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
 .hof button:hover { transform: translateY(-3px); }
 .hof button:active { transform: scale(.97); }
-.hof small { font-size: 9px; letter-spacing: .12em; opacity: .7; font-variant-numeric: tabular-nums; }
+.hof small { font-size: 11px; letter-spacing: .12em; opacity: .7; font-variant-numeric: tabular-nums; }
 .hof b { font-weight: 800; font-size: clamp(17px, 4.6vw, 24px); letter-spacing: -.045em; line-height: .95; }
 .hof b i { font-style: normal; color: var(--d); }
-.hof em { font-style: normal; font-size: 10px; letter-spacing: .14em; opacity: .75; }
-.hof .nowtag { position: absolute; bottom: 9px; right: 9px; font-size: 9px; letter-spacing: .16em; font-weight: 500; padding: 2px 7px; border-radius: 999px; background: var(--t); color: var(--c); }
+.hof em { font-style: normal; font-size: 12px; letter-spacing: .14em; opacity: .75; }
+.hof .nowtag { position: absolute; bottom: 9px; right: 9px; font-size: 11px; letter-spacing: .16em; font-weight: 500; padding: 2px 7px; border-radius: 999px; background: var(--t); color: var(--c); }
 .hof button.locked { opacity: .9; }
 
 .hof button.wide { grid-column: span 2; aspect-ratio: auto; }
@@ -852,33 +855,33 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   .hof button { aspect-ratio: 3 / 4; padding: 7px; border-radius: 8px; justify-content: flex-end; }
   .hof button > small, .hof em { display: none; }
   .hof b { font-size: clamp(12px, 3.5vw, 17px); letter-spacing: -.03em; }
-  .hof .nowtag { top: 6px; right: 6px; bottom: auto; font-size: 7px; padding: 1px 5px; letter-spacing: .1em; }
+  .hof .nowtag { top: 6px; right: 6px; bottom: auto; font-size: 9px; padding: 1px 5px; letter-spacing: .1em; }
   .hof { gap: 14px; }
   .hof .yrow { grid-template-columns: minmax(0, 1fr); gap: 6px; }
   .hof .ylab { padding: 0; }
   .hof .ycards { gap: 6px; }
   .hof .ycards button { min-height: 104px; }
 }
-.hofhead { margin-top: 26px; font-size: 11px; font-weight: 400; letter-spacing: .24em; color: var(--soft); text-transform: uppercase; }
+.hofhead { margin-top: 26px; font-size: 12px; font-weight: 400; letter-spacing: .24em; color: var(--soft); text-transform: uppercase; }
 /* section heads: numbered like a magazine, one rhythm down the page */
 .hofhead.sec { display: flex; align-items: baseline; gap: 14px; margin: 72px 0 16px; padding-top: 14px; border-top: 1px solid var(--line); }
-.hofhead.sec b, .hofhead.sec h2 b { font-weight: 800; font-size: 11px; color: var(--fg); letter-spacing: .1em; }
+.hofhead.sec b, .hofhead.sec h2 b { font-weight: 800; font-size: 12px; color: var(--fg); letter-spacing: .1em; }
 .whead h2 { margin: 0; font: inherit; letter-spacing: inherit; display: flex; gap: 14px; align-items: baseline; }
 #tlHead { display: none !important; }
 /* start page: link to the games (play.html) */
 .moregrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 12px; max-width: 720px; }
 .moregrid a { display: grid; gap: 2px; align-content: center; justify-items: center; text-align: center; min-height: 72px; padding: 10px 4px; border-radius: 12px; border: 1px solid var(--line); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
 .moregrid a:hover { border-color: var(--fg); transform: translateY(-2px); }
-.moregrid small { font-size: 8px; letter-spacing: .12em; color: var(--soft); }
+.moregrid small { font-size: 10px; letter-spacing: .12em; color: var(--soft); }
 .moregrid b { font-weight: 800; font-size: clamp(12px, 3.4vw, 17px); letter-spacing: -.04em; line-height: 1.05; }
 .moregrid b i { font-style: normal; color: inherit; }
 .moregrid span, .moregrid .mgdots { display: none; }
-@media (min-width: 700px) { .moregrid { max-width: none; gap: 10px; } .moregrid a { min-height: 92px; padding: 14px 8px; } .moregrid small { font-size: 10px; } .moregrid span { display: block; font-size: 12px; color: var(--soft); } }
+@media (min-width: 700px) { .moregrid { max-width: none; gap: 10px; } .moregrid a { min-height: 92px; padding: 14px 8px; } .moregrid small { font-size: 12px; } .moregrid span { display: block; font-size: 12px; color: var(--soft); } }
 .mgdots { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; font-style: normal; }
 .mgdots i { width: 10px; height: 10px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); }
 .playcard { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; max-width: 520px; padding: 10px; border-radius: 14px; border: 1px solid var(--line); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .3s cubic-bezier(.2,.7,.2,1); }
 .playcard:hover { border-color: var(--fg); transform: translateY(-2px); }
-.playcard small { font-size: 11px; letter-spacing: .22em; color: var(--soft); }
+.playcard small { font-size: 12px; letter-spacing: .22em; color: var(--soft); }
 .playcard b { display: block; font-weight: 800; font-size: 24px; letter-spacing: -.04em; line-height: 1.05; margin-top: 2px; }
 .playcard em { font-style: normal; font-size: 13px; color: var(--soft); }
 .pdots { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 96px; height: 96px; padding: 14px; border-radius: 8px; background: var(--fg); }
@@ -893,29 +896,40 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .next { margin-top: 18px; }
 .next b i { font-style: normal; }
 @media (prefers-reduced-motion: reduce) { .hof button { transition: none; } }
-/* journal: every entry is a card in its mood colour; the key above explains the moods and filters by them */
-.jlist { gap: 10px; }
-.jentry.mood { background: var(--jb); color: var(--jf); border: 0; border-radius: 14px; padding: 18px 18px 20px; }
+/* journal: every entry is a card in its mood: the colour sets the scene, the mood word sits big behind the text */
+.jlist { gap: 14px; }
+.jentry.mood { position: relative; overflow: hidden; isolation: isolate; align-content: end; min-height: 190px; border: 0; border-radius: 18px; padding: 24px 22px 26px; color: var(--jf);
+  background: radial-gradient(140% 120% at 100% 0%, color-mix(in srgb, var(--jb) 60%, #fff) 0%, var(--jb) 48%, color-mix(in srgb, var(--jb) 80%, #000) 100%);
+  box-shadow: 0 22px 44px -30px color-mix(in srgb, var(--jb) 60%, #000); transition: transform .4s cubic-bezier(.2,.7,.2,1); }
 .jentry.mood:last-child { border-bottom: 0; }
-.jentry.mood .jmood i { display: none; }
-.jentry.mood.light { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.jentry.mood.light { box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 22px 44px -30px rgba(0,0,0,.4); }
+.jentry.mood:hover { transform: translateY(-3px) rotate(-.4deg); }
+.jentry.mood .mw { position: absolute; z-index: -1; right: -.04em; top: -.14em; font: italic 500 clamp(70px, 18vw, 156px)/.9 var(--serif); letter-spacing: -.02em; color: var(--jf); opacity: .17; white-space: nowrap; pointer-events: none; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.jentry.mood:hover .mw { transform: translateX(-14px); }
+.jentry.mood b { font-size: clamp(24px, 5.4vw, 34px); margin: 6px 0 8px; }
 .jentry.mood small, .jentry.mood p { color: var(--js); }
 .jentry.mood b .jdot { color: inherit !important; }
-.jentry.mood:hover { transform: translateY(-2px); }
-.jentry.mood { transition: transform .2s; }
-.moods { margin: 0 0 6px; max-width: 720px; }
-.moods > p { margin: 0 0 12px; color: var(--soft); font-size: 14px; }
-.moods .mrow { display: flex; flex-wrap: wrap; gap: 6px; }
-.moods button { display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 13px; color: var(--fg); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px 6px 8px; cursor: pointer; }
-.moods button i { width: 14px; height: 14px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
-.moods button small { opacity: .55; font-size: 11px; font-variant-numeric: tabular-nums; }
-.moods button.none { opacity: .45; }
+.moods { margin: 6px 0 22px; max-width: 720px; }
+.mintro { margin: 0 0 14px; font-size: 16px; line-height: 1.45; color: var(--soft); }
+.mintro b { color: var(--fg); font-weight: 800; }
+.moods .mrow { display: flex; flex-wrap: wrap; gap: 7px; }
+.moods button { display: inline-flex; align-items: center; gap: 8px; font: inherit; color: var(--fg); background: color-mix(in srgb, var(--c) 20%, transparent); border: 1px solid color-mix(in srgb, var(--c) 70%, var(--fg) 10%); border-radius: 999px; padding: 6px 13px 6px 7px; cursor: pointer; transition: transform .2s, background .2s; }
+.moods button:hover { transform: translateY(-2px); }
+.moods button i { width: 16px; height: 16px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.moods button .w { font: italic 500 16px/1 var(--serif); }
+.moods button small { font-size: 12px; opacity: .6; font-variant-numeric: tabular-nums; }
+.moods button.none { opacity: .7; }
 .moods button[aria-pressed="true"] { background: var(--c); color: var(--t); border-color: transparent; }
-.moods .mline { min-height: 1.6em; margin: 14px 0 0; font: 500 clamp(22px, 5vw, 30px)/1.15 var(--serif); }
+.moods .mline { min-height: 3.4em; margin: 16px 0 0; }
+.moods .mline b { display: inline-block; font: italic 500 clamp(28px, 6vw, 40px)/1 var(--serif); text-decoration: underline; text-decoration-color: var(--mc); text-decoration-thickness: 5px; text-underline-offset: 6px; margin-right: 12px; }
+.moods .mline span { font-size: 16px; color: var(--soft); }
+.moods .mline small { display: block; margin-top: 6px; font-size: 13px; color: var(--soft); }
+.sheet.jsheet::before { content: attr(data-mood); position: fixed; right: -.04em; bottom: -.12em; font: italic 500 clamp(90px, 26vw, 260px)/1 var(--serif); color: var(--sfg); opacity: .1; pointer-events: none; white-space: nowrap; }
+.explain { margin: 0 0 18px; font-size: clamp(16px, 2.2vw, 19px); line-height: 1.45; max-width: 34ch; color: var(--fg); }
 .jmood i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.14); }
 /* red. — its own chapter page, like ember. or ber.: what it is made of, the word, the twelve months */
 .chred { margin-top: 26px; display: grid; gap: clamp(40px, 7vw, 80px); }
-.chred .k { margin: 0 0 10px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); }
+.chred .k { margin: 0 0 10px; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); }
 .chred h3 { margin: 0 0 18px; font: 800 clamp(32px, 7vw, 56px)/.95 var(--sans); letter-spacing: -.05em; }
 .chred .flame { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: center; }
 .chred .fig { position: relative; aspect-ratio: 3 / 4; max-height: 460px; width: 100%; max-width: 220px; margin-inline: auto; }
@@ -991,8 +1005,8 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .chtl .pv img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
 .chtl .pv > :hover img { transform: scale(1.05); }
 .chtl .pv .all { display: grid; place-items: center; font-weight: 800; font-size: 20px; letter-spacing: -.03em; color: var(--fg); background: color-mix(in srgb, var(--fg) 8%, var(--bg)); }
-.chtl .pv .all small { display: block; font-size: 11px; font-weight: 400; letter-spacing: .1em; opacity: .6; }
-@media (max-width: 560px) { .chtl ol::before { left: 73px; } .chtl .th { grid-template-columns: 60px 28px 1fr auto auto; } .chtl .d { font-size: 11px; letter-spacing: .02em; } .chtl .pv { margin-left: 88px; } .chtl .pv > * { flex-basis: 27vw; } .chtl .ring { width: 44px; height: 44px; } .chtl .go { display: none; } }
+.chtl .pv .all small { display: block; font-size: 12px; font-weight: 400; letter-spacing: .1em; opacity: .6; }
+@media (max-width: 560px) { .chtl ol::before { left: 73px; } .chtl .th { grid-template-columns: 60px 28px 1fr auto auto; } .chtl .d { font-size: 12px; letter-spacing: .02em; } .chtl .pv { margin-left: 88px; } .chtl .pv > * { flex-basis: 27vw; } .chtl .ring { width: 44px; height: 44px; } .chtl .go { display: none; } }
 /* the timeline draws itself: line grows, dots pop, rows rise, photos slide in one after another */
 .chtl.anim ol::before { transform: scaleY(0); transition: transform 1.6s cubic-bezier(.2,.7,.2,1); }
 .chtl.anim ol.in::before { transform: none; }
@@ -1010,7 +1024,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .chtl .live .ltb i { display: block; height: 100%; width: 0; background: #fff; }
 .chtl .live.run .ltb i { animation: lbar var(--dur, 2.8s) linear; }
 @keyframes lbar { to { width: 100%; } }
-.chtl .live small { position: absolute; left: 0; right: 0; bottom: 6px; z-index: 1; text-align: center; color: #fff; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+.chtl .live small { position: absolute; left: 0; right: 0; bottom: 6px; z-index: 1; text-align: center; color: #fff; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
 .chtl li.in .pv > :not(.live):not(.all) img { animation: kb 16s ease-in-out infinite alternate; animation-delay: calc(var(--k) * -2.3s); }
 @keyframes kb { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.09) translate(-2%, -1.5%); } }
 .chtl .ring { position: relative; background: none; isolation: isolate; }
@@ -1038,7 +1052,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .sheet .imgs.trip > :first-child:nth-last-child(odd) img { max-height: 78vh; object-fit: cover; }
 .sheet .imgs.trip video, .sheet .imgs video { width: 100%; height: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; border-radius: 3px; }
 .sheet .place { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .65; margin-top: 10px; }
-.sheet .sthead { display: flex; align-items: baseline; justify-content: space-between; margin: 34px 0 10px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; opacity: .75; }
+.sheet .sthead { display: flex; align-items: baseline; justify-content: space-between; margin: 34px 0 10px; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .75; }
 .sheet .sthead button { padding: 6px 13px; border: 1px solid currentColor; border-radius: 999px; background: none; color: inherit; font: inherit; font-size: 12px; letter-spacing: .06em; text-transform: none; cursor: pointer; }
 /* stories drift by slowly; touch or hover stops them, a tap opens the story player */
 .sheet .drift { overflow: hidden; margin: 0 -18px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
@@ -1070,7 +1084,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .spx { position: absolute; right: 8px; top: calc(14px + env(safe-area-inset-top, 0px)); z-index: 3; width: 40px; height: 40px; border: 0; background: none; color: #fff; font-size: 20px; text-shadow: 0 1px 8px rgba(0,0,0,.5); cursor: pointer; }
 .spl, .spr { position: absolute; top: 0; bottom: 0; z-index: 1; border: 0; background: none; cursor: pointer; }
 .spl { left: 0; width: 34%; } .spr { right: 0; width: 66%; }
-.spn { position: absolute; left: 0; right: 0; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 2; text-align: center; color: #fff; font-size: 11px; letter-spacing: .2em; opacity: .7; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+.spn { position: absolute; left: 0; right: 0; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 2; text-align: center; color: #fff; font-size: 12px; letter-spacing: .2em; opacity: .7; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
 </style>
 </head>
 <body>
@@ -1092,7 +1106,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 <div class="wrap">
   <header>
     <a class="mark" href="#" id="home">MN.</a>
-    <span class="hright"><span class="name">M A R K U S&nbsp;&nbsp;N I N D L</span><button class="sound" id="sound" aria-pressed="false" title="Music on or off">sound <b>off</b></button></span>
+    <span class="hright"><span class="name">M A R K U S&nbsp;&nbsp;N I N D L</span><span class="lang site-lang" role="group" aria-label="Sprache / language"><button type="button" data-l="de">de</button><button type="button" data-l="en">en</button></span><button class="sound" id="sound" aria-pressed="false" title="Music on or off">♪ music <b>off</b></button></span>
   </header>
 
   <nav class="views" aria-label="Sections">
@@ -1419,7 +1433,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
       <details class="q"><summary>why are you based in pinzgau?</summary><div class="a"><p>my best friend told me i belong in the city. maybe. but i like doing something new in a place where nobody else does it.</p><p>this is home. you don&#x27;t need a big city to start something.</p></div></details>
       <details class="q"><summary>why is your instagram account private?</summary><div class="a"><p>because MN. is still a geheimtipp, an insider tip. it stays private until 1,000 followers. if you found this page, you&#x27;re early.</p></div></details>
       <details class="q"><summary>what are your goals as a model?</summary><div class="a"><p>i was single des monats in the platzhirsch at the end of 2024. next up: model des monats.</p></div></details>
-      <details class="q"><summary>how can i book you?</summary><div class="a"><p>yes. shootings, campaigns, fashion shows and collaborations. write to <a href="#" data-mail>booking<span>@</span>herrnindl.com</a> with a short idea, date and place.</p><p>unpaid or tfp shoots? yes, if the photographer is cool or good. send me your work and your idea.</p></div></details>
+      <details class="q"><summary>how can i book you?</summary><div class="a"><p>shootings, campaigns, fashion shows and collaborations. write to <a href="#" data-mail>booking<span>@</span>herrnindl.com</a> with a short idea, date and place.</p><p>unpaid or tfp shoots? yes, if the photographer is cool or good. send me your work and your idea.</p></div></details>
       <details class="q"><summary>what&#x27;s next for MN.?</summary><div class="a"><p>red. starts on 01.01.27, two years of MN. and something after it is already in the works.</p></div></details>
     </div>
   </section>
@@ -1567,7 +1581,7 @@ function setTheme(c) {
   if (c === ALL && window.mnDark && window.mnDark()) c = ALL_DARK;
   const r = document.documentElement.style;
   r.setProperty("--bg", c.bg); r.setProperty("--fg", c.fg); r.setProperty("--dot", c.dot);
-  r.setProperty("--soft", soften(c.fg, .62)); r.setProperty("--line", soften(c.fg, .16));
+  r.setProperty("--soft", soften(c.fg, .74)); r.setProperty("--line", soften(c.fg, .16));
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = c.bg;
 }
 /* dark mode switched: the vanilla pages follow right away */
@@ -1597,7 +1611,7 @@ function renderCard() {
   if (view === "posts") { setTheme(ALL); title.append("posts", dot()); $("line").textContent = "straight from the grid."; return; }
   if (view === "journal") { setTheme(ALL); title.append("journal", dot()); $("line").textContent = "notes on getting better."; return; }
   if (INFO[view]) { setTheme(ALL); title.append(view, dot()); $("line").textContent = INFO[view]; return; }
-  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); const g = fillSig(el("span", "sig")); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(g);
+  if (filter === "all") { setTheme(ALL); title.append("my life"); $("line").textContent = "in colours."; meta.append(el("span", "place", "model from pinzgau, austria")); const g = fillSig(el("span", "sig")); g.setAttribute("role", "img"); g.setAttribute("aria-label", "Markus Nindl signature"); $("player").textContent = ""; $("player").append(el("p", "explain", "every colour is a chapter of my life. tap one to step in."), g);
     if (NEXT) { const n = el("p", "now next"); const b = el("b", null, NEXT_LABEL); b.append(el("i", null, ".")); const nl = el("a", null, NEXT); nl.href = "https://www.wildkogelresorts.at/de/sundaze"; nl.target = "_blank"; nl.rel = "noopener"; nl.style.color = "inherit"; n.append(b, nl); $("player").append(n); }
     return; }
   const c = byId[filter];
@@ -2448,7 +2462,7 @@ function bkApply() {
   const a = $("avail"); a.textContent = ""; a.append(el("i"), (de ? BK_DE.available : BOOKING.available) + ".");
   const r = $("rates"); r.textContent = ""; (de ? BK_DE.rates : BOOKING.rates).forEach(([k, v]) => { const d = el("div"); d.append(el("dt", null, k), el("dd", null, v)); r.append(d); });
 }
-document.querySelectorAll("#booking .lang button").forEach(b => b.onclick = () => { bkLang = b.dataset.lang; try { localStorage.setItem("mn-bk-lang", bkLang); } catch (e) {} bkApply(); });
+document.querySelectorAll("#booking .lang button").forEach(b => b.onclick = () => setLang(b.dataset.lang));   /* the booking switch is the same as the one at the top */
 function renderBooking() {
   if (view === "booking") bkApply();
   if (view === "sedcard") { $("skillsRow").hidden = !SKILLS.length; $("skills").textContent = SKILLS.join(" · "); }
@@ -2911,25 +2925,42 @@ $("jlock").addEventListener("submit", async e => {
   if (ok) { $("jlockMsg").textContent = ""; $("jlockPw").value = ""; $("jlockPw").blur(); render(); }
   else { $("jlockMsg").textContent = "not yet."; const f = $("jlock"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake"); }
 });
-/* moods: every journal entry feels like one of the chapters. one line each, tap to see only those entries */
-const MOODS = { origin: "where it started.", white: "a blank page.", "baby-blue": "beginnings and endings.", lavendel: "love.", "navy-blue": "letting go.", grey: "the hard part.", vanilla: "trying it anyway.", "vanilla-2": "i mog di.", ber: "finding my colour.", ember: "the spark.", red: "the fire." };
+/* moods: every journal entry has a mood. a mood is a colour from my life, with one word that works both ways:
+   as a feeling ("that was a full circle. moment") and as a time ("the studio closing, full circle."). */
+const MOODS = {
+  origin:      { w: "roots.",       de: "Wurzeln.",       en: "the time before. who i was before anyone was watching.",        dl: "Die Zeit davor. Wer ich war, bevor jemand zugeschaut hat." },
+  white:       { w: "unknown.",     de: "Neuland.",       en: "trying something new, on ground i don't know yet.",           dl: "Etwas Neues wagen, auf unbekanntem Boden." },
+  "baby-blue": { w: "full circle.", de: "Kreislauf.",     en: "beginnings and endings. life, death, and the time it all happened in.", dl: "Anfänge und Enden. Leben, Tod und die Zeit, in der alles passiert ist." },
+  lavendel:    { w: "love.",        de: "Liebe.",         en: "love. for myself, and for someone else.",                     dl: "Liebe. Zu mir selbst und zu jemand anderem." },
+  "navy-blue": { w: "closure.",     de: "Abschluss.",     en: "letting go, ending things, and doing it properly.",           dl: "Loslassen, Dinge beenden, und das mit Haltung." },
+  grey:        { w: "shadow.",      de: "Schatten.",      en: "a dark space. pulling back.",                                 dl: "Ein dunkler Raum. Sich zurückziehen." },
+  vanilla:     { w: "true self.",   de: "Ich.",           en: "me, without trying to be anything else.",                     dl: "Ich, ohne etwas anderes sein zu wollen." },
+  "vanilla-2": { w: "self-care.",   de: "Auf mi schaun.", en: "taking care of myself. i mog di.",                            dl: "Auf mich selbst schauen. I mog di." },
+  ber:         { w: "soul.",        de: "Seele.",         en: "the colour of my eyes. what's underneath.",                   dl: "Die Farbe meiner Augen. Was darunter liegt." },
+  ember:       { w: "spark.",       de: "Funke.",         en: "now. making things on my own.",                               dl: "Jetzt. Dinge selbst erschaffen." },
+  red:         { w: "balance.",     de: "Balance.",       en: "two jobs, modelling, and finding out how it all fits.",       dl: "Zwei Jobs, Modeln, und herausfinden, wie alles zusammenpasst." }
+};
+const moodWord = id => MOODS[id] ? (LANG === "de" ? MOODS[id].de : MOODS[id].w) : "";
+const moodLine = id => MOODS[id] ? (LANG === "de" ? MOODS[id].dl : MOODS[id].en) : "";
 let moodPick = null;
 function renderMoods() {
   const box = $("moods"); box.textContent = ""; box.hidden = view !== "journal" || !jOpen(); if (box.hidden) return;
   const n = {}; JENTRIES.forEach(j => n[j.chapter] = (n[j.chapter] || 0) + 1);
-  box.append(el("p", null, "every entry has a mood: the colour of the chapter it feels like."));
+  const intro = el("p", "mintro"); intro.append(el("b", null, "every entry has a mood."), " ", el("span", null, "each mood is a colour from my life. tap one."));
   const row = el("div", "mrow"), line = el("p", "mline");
+  const show = id => { line.textContent = ""; if (!id) return; const w = el("b", null, moodWord(id)); w.style.setProperty("--mc", byId[id].bg); line.append(w, el("span", null, moodLine(id))); };
   [...CHAPTERS].reverse().forEach(c => {
     const b = el("button"); b.type = "button"; b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg);
-    b.append(el("i"), c.label); if (n[c.id]) b.append(el("small", null, n[c.id])); else b.classList.add("none");
-    b.setAttribute("aria-pressed", String(moodPick === c.id)); b.title = c.label + " " + MOODS[c.id];
+    const w = el("span", "w", moodWord(c.id)); w.dataset.notr = "";
+    b.append(el("i"), w); if (n[c.id]) b.append(el("small", null, n[c.id])); else b.classList.add("none");
+    b.setAttribute("aria-pressed", String(moodPick === c.id)); b.title = moodLine(c.id);
     b.onclick = () => { moodPick = moodPick === c.id ? null : c.id; renderJournal(); };
-    b.onmouseenter = () => { if (!moodPick) line.textContent = c.label + " " + MOODS[c.id]; };
-    b.onmouseleave = () => { if (!moodPick) line.textContent = ""; };
+    b.onmouseenter = b.onfocus = () => { if (!moodPick) show(c.id); };
+    b.onmouseleave = b.onblur = () => { if (!moodPick) show(null); };
     row.append(b);
   });
-  if (moodPick) { const c = byId[moodPick]; line.textContent = c.label + " " + MOODS[c.id]; if (!n[moodPick]) line.append(el("small", null, "  no entry yet.")); }
-  box.append(row, line);
+  if (moodPick) { show(moodPick); if (!n[moodPick]) line.append(el("small", null, "no entry yet.")); }
+  box.append(intro, row, line);
 }
 
 function renderJournal() {
@@ -2941,10 +2972,10 @@ function renderJournal() {
   renderMoods();
   JENTRIES.filter(j => !moodPick || j.chapter === moodPick).forEach(j => {
     const b = el("button", "jentry");
-    { const mc = byId[j.chapter]; if (mc) { b.classList.add("mood"); if (mc.id === "white" || mc.id === "vanilla") b.classList.add("light"); b.style.setProperty("--jb", mc.bg); b.style.setProperty("--jf", mc.fg); b.style.setProperty("--js", soften(mc.fg, .78)); } }
+    { const mc = byId[j.chapter]; if (mc) { b.classList.add("mood"); if (mc.id === "white" || mc.id === "vanilla") b.classList.add("light"); b.style.setProperty("--jb", mc.bg); b.style.setProperty("--jf", mc.fg); b.style.setProperty("--js", soften(mc.fg, .8));
+      const mw = el("span", "mw", moodWord(mc.id)); mw.dataset.notr = ""; mw.setAttribute("aria-hidden", "true"); b.append(mw); b.setAttribute("aria-label", moodWord(mc.id) + " " + (j.title || "")); } }
     if (j.cover) { const th = el("div", "th"); const i = el("img"); setImg(i, j, "88px"); i.loading = "lazy"; i.alt = ""; th.append(i); b.append(th); } else b.classList.add("noimg");
-    const t = el("div"); const mc = byId[j.chapter], meta = el("small", "jmood", "ENTRY " + String(j.n || (JENTRIES.length - JENTRIES.indexOf(j))).padStart(2, "0") + " · " + j.date);   /* the mood: a chapter colour */
-    if (mc) { const d = el("i"); d.style.background = mc.bg; meta.prepend(d); meta.append(" · " + mc.label.toUpperCase()); }
+    const t = el("div"); const meta = el("small", "jmood"); meta.append(el("span", null, "ENTRY"), " " + String(j.n || (JENTRIES.length - JENTRIES.indexOf(j))).padStart(2, "0") + " · " + j.date);
     t.append(meta, jTitle(el("b"), j.title, (byId[j.chapter] || ALL).bg)); if (j.caption) t.append(el("p", null, j.caption)); b.append(t);
     b.onclick = () => openSet(Object.assign({}, j, { number: j.date, journal: true }));
     g.append(b);
@@ -3021,6 +3052,8 @@ function openSet(s) {
   $("sNum").textContent = s.number || s.date || "";
   const sc = $("sChap"); sc.hidden = !byId[s.chapter];
   if (byId[s.chapter]) { sc.textContent = "→ " + c.label; sc.onclick = () => { closeSet(); select(c.id); window.scrollTo({ top: 0 }); }; }
+  if (s.journal) { sc.hidden = true; $("sNum").textContent = (s.date || "") + "  ·  " + moodWord(s.chapter); }   /* a journal entry shows its mood, not a chapter */
+  sh.classList.toggle("jsheet", !!s.journal); sh.dataset.mood = s.journal ? moodWord(s.chapter) : "";
   $("sBig").textContent = s.big || ""; $("sBig").hidden = !s.big;
   $("sTitle").textContent = s.title || ""; $("sTitle").hidden = !s.title;
   if (s.journal && s.title) jTitle($("sTitle"), s.title, c.dot || c.fg);
@@ -3315,6 +3348,137 @@ $("gateForm").addEventListener("submit", async e => {
     const f = $("gateForm"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
   }
 });
+
+/* ---------- language: english or german (deutsch) ----------
+   German turns on by itself when the phone or computer is set to German; the de | en switch at the top changes it
+   and is remembered. Names (chapters, brands, places) stay as they are. The journal, the lebenslauf (already german)
+   and the inspirations stories stay in their own words. To translate something new: add "english text": "deutscher text" below. */
+const DE = {
+  /* menu, header, footer */
+  "colours.": "Fotos.", "posts.": "Beiträge.", "about.": "Über mich.", "for brands.": "Für Firmen.", "book.": "Anfragen.",
+  "journal.": "Tagebuch.", "more.": "Mehr.", "leave a dot.": "Gästebuch.", "music": "Musik", "off": "aus", "on": "an",
+  "skip to the photos": "Direkt zu den Fotos", "designed & built by": "gestaltet & gebaut von",
+  "tap the MN. logo 5 times. something will happen.": "Tipp 5-mal auf das MN.-Logo. Dann passiert etwas.",
+  "book": "Anfragen", "43.5 (43/44)": "43,5 (43/44)", "play.": "Spiele.", "wardrobe.": "Outfits.", "glow up.": "Glow-up.", "ask me.": "Frag mich.",
+  "PLAY.": "SPIELE.", "WARDROBE.": "OUTFITS.", "GLOW UP.": "GLOW-UP.", "ASK ME.": "FRAG MICH.", "LEAVE A DOT.": "GÄSTEBUCH.", "♪ music": "♪ Musik", "next": "als Nächstes", "inspirations.": "Inspiration.", "faq.": "Fragen.", "sedcard.": "Sedcard.",
+  "digitals.": "Digitals.", "lebenslauf.": "Lebenslauf.", "inspirations": "Inspiration", "lebenslauf": "Lebenslauf",
+  /* start page */
+  "my life": "Mein Leben", "in colours.": "in Farben.", "model from pinzgau, austria": "Model aus dem Pinzgau, Österreich",
+  "every colour is a chapter of my life. tap one to step in.": "Jede Farbe ist ein Abschnitt meines Lebens. Tipp eine an und schau hinein.",
+  "next.": "Als Nächstes.", "now.": "Jetzt.", "selected.": "Ausgewählt.", "the chapters.": "Die Kapitel.", "the timeline.": "Der Zeitstrahl.",
+  "every photo.": "Alle Fotos.", "shuffle.": "Mischen.", "table": "Tisch", "show more.": "Mehr zeigen.", "show more": "Mehr zeigen",
+  "my year in colours. tap to play.": "Mein Jahr in Farben. Zum Abspielen tippen.", "WRAPPED": "RÜCKBLICK",
+  "the daily dot.": "Der tägliche Punkt.", "a new photo every day. and four more games.": "Jeden Tag ein neues Foto. Und vier weitere Spiele.",
+  "five games": "Fünf Spiele", "a new photo every day.": "Jeden Tag ein neues Foto.", "what i wore": "Was ich trug",
+  "brands, chapter by chapter.": "Marken, Kapitel für Kapitel.", "origin. to now": "Von origin. bis heute",
+  "drag through every chapter.": "Durch alle Kapitel ziehen.", "anything": "Alles", "i answer the best ones.": "Die besten beantworte ich.",
+  "one colour": "Eine Farbe", "one a day. no name.": "Eine am Tag. Ohne Namen.",
+  "ON THIS DAY": "AN DIESEM TAG", "one year ago.": "vor einem Jahr.", "ALL PHOTOS ↓": "ALLE FOTOS ↓",
+  "photos are coming.": "Die Fotos kommen bald.", "DRAG THE PRINTS · TAP TO OPEN": "FOTOS VERSCHIEBEN · ZUM ÖFFNEN TIPPEN",
+  "photos, one at a time. use the arrow keys.": "Ein Foto nach dem anderen. Mit den Pfeiltasten weiter.",
+  "now": "jetzt", "all": "alle",
+  /* chapter pages */
+  "the fire": "das Feuer", "the spark": "der Funke", "septem·ber to decem·ber": "Septem·ber bis Decem·ber", "i mog di": "i mog di",
+  "a new colour": "eine neue Farbe", "searching for vanilla": "auf der Suche nach Vanilla", "the end?": "das Ende?", "the end": "das Ende",
+  "love": "Liebe", "the beginning": "der Anfang", "my first photoshoot": "mein erstes Fotoshooting", "my 22nd birthday": "mein 22. Geburtstag",
+  "instagram opened": "Instagram eröffnet", "3 platzhirsch articles": "3 Platzhirsch-Artikel", "the first pictures": "die ersten Bilder",
+  "with vanilla": "mit Vanilla", "song": "Lied", "soon": "bald", "highlight.": "Highlight.", "walk through.": "Durchgehen.",
+  "tap to play via spotify · spotify sets cookies": "Abspielen über Spotify · Spotify setzt Cookies",
+  "loads spotify · spotify sets cookies": "lädt Spotify · Spotify setzt Cookies",
+  "next chapter": "nächstes Kapitel", "back to the start": "zurück zum Anfang", "recaps.": "Rückblicke.", "teasers.": "Teaser.",
+  "who's that?": "Wer ist das?", "starts on 01.01.27": "beginnt am 01.01.27", "three colours, one fire": "drei Farben, ein Feuer",
+  "what red. is made of.": "Woraus red. besteht.", "modeling. the part you see first.": "Modeln. Der Teil, den man zuerst sieht.",
+  "sundaze. the weekends, back in hospitality.": "Sundaze. Die Wochenenden, zurück in der Gastronomie.",
+  "the post. every day, the base everything stands on.": "Die Post. Jeden Tag, das Fundament für alles.",
+  "the word for red.": "Das Wort für red.", "making it look easy.": "es leicht aussehen lassen.",
+  "trips, posts, stories and recaps fill in here month by month, like in every other chapter.": "Reisen, Beiträge, Storys und Rückblicke kommen hier Monat für Monat dazu, wie in jedem Kapitel.",
+  "01.01. – 31.12.27 · two years of MN.": "01.01. – 31.12.27 · zwei Jahre MN.", "orange.": "Orange.", "vanilla.": "vanilla.",
+  "scroll →": "scrollen →", "close ✕": "schließen ✕", "next room": "nächster Raum", "close.": "schließen.",
+  /* section lines */
+  "who i am.": "Wer ich bin.", "where MN. comes from.": "Woher MN. kommt.", "as i am today.": "So wie ich heute bin.",
+  "the numbers.": "Die Maße.", "the whole story.": "Die ganze Geschichte.", "you asked.": "Ihr habt gefragt.", "let's work.": "Lass uns arbeiten.",
+  "month by month.": "Monat für Monat.", "straight from the grid.": "Direkt vom Profil.", "notes on getting better.": "Notizen übers Besserwerden.",
+  "about": "Über mich", "sedcard": "Sedcard", "digitals": "Digitals", "faq": "Fragen", "recaps": "Rückblicke", "posts": "Beiträge", "journal": "Tagebuch",
+  "No journal posts yet.": "Noch keine Einträge.", "No posts yet.": "Noch keine Beiträge.", "No recaps yet.": "Noch keine Rückblicke.",
+  /* about */
+  "model from pinzgau, austria. MN. started on 01.01.2025, and since then it's been shoots, a first runway with s.Oliver, a few pages in print, and a life told in colours.":
+    "Model aus dem Pinzgau, Österreich. MN. hat am 01.01.2025 begonnen. Seitdem gab es Shootings, den ersten Laufsteg mit s.Oliver, ein paar Seiten in der Zeitung und ein Leben, erzählt in Farben.",
+  "based in pinzgau": "zu Hause im Pinzgau", "german · english": "Deutsch · Englisch", "MN. IN NUMBERS": "MN. IN ZAHLEN", "SO FAR": "BIS JETZT",
+  "shot wearing": "getragen von", "print": "Presse", "off duty": "in der Freizeit", "swift water rescuer with the": "Fließwasserretter bei der",
+  "support them": "unterstützen", "donate →": "spenden →", "SEEN IN": "GESEHEN IN", "PRESS": "PRESSE", "PLACES": "ORTE", "THE SOUNDTRACK": "DER SOUNDTRACK",
+  "colours, memories and moments. the sound behind the name.": "Farben, Erinnerungen und Momente. Der Klang hinter dem Namen.",
+  "tap to load the playlist": "Tippen, um die Playlist zu laden", "read ›": "lesen ›", "worn in front of the camera so far.": "bisher vor der Kamera getragen.",
+  "thank you to every one of them.": "Danke an jede und jeden von ihnen.",
+  /* sedcard */
+  "height": "Größe", "weight": "Gewicht", "chest": "Brust", "waist": "Taille", "hips": "Hüfte", "size": "Konfektion", "age": "Alter", "hair": "Haare",
+  "eyes": "Augen", "skin": "Haut", "shoes": "Schuhe", "languages": "Sprachen", "skills": "Fähigkeiten", "dark blonde": "dunkelblond",
+  "green · blue · grey · yellow": "grün · blau · grau · gelb", "fair": "hell", "download sedcard.": "Sedcard herunterladen.", "share.": "teilen.",
+  "link copied.": "Link kopiert.", "no styling, no editing. natural light, as i look right now.": "Kein Styling, keine Bearbeitung. Tageslicht, so wie ich gerade aussehe.",
+  /* journal */
+  "every entry has a mood.": "Jeder Eintrag hat eine Stimmung.", "each mood is a colour from my life. tap one.": "Jede Stimmung ist eine Farbe aus meinem Leben. Tipp eine an.",
+  "moods.": "Stimmungen.", "ENTRY": "EINTRAG", "no entry yet.": "noch kein Eintrag.", "all moods": "alle Stimmungen",
+  "the journal is private for now.": "Das Tagebuch ist gerade privat.", "open": "öffnen", "stories": "Storys", "close": "schließen"
+};
+/* the faq in german: question and answer, in the same order as on the page */
+const DE_FAQ = [
+  ["Was bedeutet es für dich, Model zu sein?", "<p>Es heißt, dass ich aufgehört habe, auf eine Erlaubnis zu warten. Bei MN. geht es nicht darum, besser zu sein als andere, sondern darum, eine bessere Version von mir selbst zu werden und zu zeigen, dass du das auch kannst.</p><p>Ich habe nicht angefangen, weil ich mich perfekt fand. Ich habe angefangen, weil ich mir nicht sicher war und das ändern wollte. MN. ist, wie ich an mir arbeite, öffentlich, eine Farbe nach der anderen. Wenn das einer Person hilft, sich selbst ein bisschen mehr zu mögen, hat es sich gelohnt.</p>"],
+  ["Was treibt dich an?", "<p>Wachsen, und zeigen, dass man von überall aus anfangen kann.</p><p>Und meine Oma. Sie war am Anfang noch da und hat die baby blue.-Fotos gesehen, bevor sie jemals gepostet wurden. Sie war stolz auf mich. Das nehme ich in jedes Kapitel mit.</p>"],
+  ["Wofür stehen die Farbkapitel?", "<p>Jeder Abschnitt meines Lebens bekommt eine Farbe. Jede steht für eine Zeit, einen Ort und eine Version von mir, von origin. bis heute. Die Farben erzählen die Geschichte, ich muss nicht jedes Detail erklären.</p>"],
+  ["Was heißt „i mog di“?", "<p>Pinzgauerisch für „ich mag dich“, mit einer zweiten Bedeutung.</p><p>„Mog“ kommt aus der Looksmaxxing-Szene, wo „mogging“ heißt, besser auszusehen als jemand anderer. Beim Looksmaxxing geht es darum, das Beste aus sich herauszuholen: Haut, Fitness, Stil, Schlaf, Auftreten. Das hat mich inspiriert. Ich vergleiche mich nicht mit anderen. Der Einzige, den ich „moggen“ will, ist der, der ich gestern war.</p><p>„I mog di“ heißt also beides: Mag dich selbst, und arbeite weiter an dir. Und wenn ich dabei jemandem mit seinen Unsicherheiten helfen kann, umso besser.</p>"],
+  ["Ist Modeln dein Hauptberuf?", "<p>Nein. Ich arbeite Vollzeit bei der Österreichischen Post AG als stellvertretender Standortleiter. MN. passiert davor, danach und dazwischen, und das gehört zur Geschichte.</p>"],
+  ["Warum im Pinzgau?", "<p>Mein bester Freund sagt, ich gehöre in die Stadt. Vielleicht. Aber ich mache gern etwas Neues an einem Ort, wo es sonst keiner macht.</p><p>Das ist meine Heimat. Man braucht keine Großstadt, um etwas anzufangen.</p>"],
+  ["Warum ist dein Instagram privat?", "<p>Weil MN. noch ein Geheimtipp ist. Das Profil bleibt privat bis 1.000 Follower. Wenn du diese Seite gefunden hast, bist du früh dran.</p>"],
+  ["Was sind deine Ziele als Model?", "<p>Ende 2024 war ich Single des Monats im Platzhirsch. Als Nächstes: Model des Monats.</p>"],
+  ["Wie kann man dich buchen?", "<p>Für Shootings, Kampagnen, Modenschauen und Kooperationen: Schreib an <a href=\"#\" data-mail>booking<span>@</span>herrnindl.com</a> mit einer kurzen Idee, Datum und Ort. Oder tipp oben auf „Anfragen.“.</p><p>Unbezahlte oder TFP-Shootings? Gerne, wenn die Fotografin oder der Fotograf cool oder gut ist. Schick mir deine Arbeiten und deine Idee.</p>"],
+  ["Wie geht es mit MN. weiter?", "<p>red. beginnt am 01.01.27, zwei Jahre MN. Und danach ist schon etwas in Arbeit.</p>"]
+];
+const DE_RULES = [
+  [/^(\d+) stories$/, "$1 Storys"], [/^(\d+) photos$/, "$1 Fotos"], [/^SHOW ALL (\d+)$/, "ALLE $1 ZEIGEN"], [/^show all (\d+)$/, "alle $1 zeigen"],
+  [/^updated monthly · next (.+)$/, "monatlich neu · nächstes Mal $1"], [/^(\d+) months?$/, (m, n) => n + (n === "1" ? " Monat" : " Monate")],
+  [/^(\d+) places?$/, (m, n) => n + (n === "1" ? " Ort" : " Orte")], [/^(\d+) recaps? ↓$/, (m, n) => n + (n === "1" ? " Rückblick ↓" : " Rückblicke ↓")],
+  [/^(\S+) photos are coming\.$/, "Die $1-Fotos kommen bald."], [/^(\d+) photos\. thank you for walking through\.$/, "$1 Fotos. Danke fürs Durchgehen."]
+];
+let LANG = "en";
+try { LANG = localStorage.getItem("mn-lang") || localStorage.getItem("mn-bk-lang") || ((navigator.language || "").toLowerCase().startsWith("de") ? "de" : "en"); } catch (e) {}
+const tr = t => LANG === "de" && DE[t] != null ? DE[t] : t;   /* for text the code writes itself */
+const NOTR = "#lebenslauf, #inspirations, #booking, #journalList p, #journalList b, #sText, #sTitle, #faq, script, style, .ticker, .site-lang, [data-notr], .gate, #chips, .hof, #tl, .nextbtn b, .rintro h2";
+const orig = new WeakMap();
+function trNode(n) {
+  const p = n.parentElement; if (!p || p.closest(NOTR)) return;
+  const raw = n.nodeValue, key = raw.trim(); if (!key) return;
+  let en = orig.get(n);
+  if (en == null || (raw !== en && raw !== n._de)) { en = raw; orig.set(n, en); }   /* the page wrote new english text */
+  if (LANG !== "de") { if (raw !== en) n.nodeValue = en; return; }
+  const k = en.trim(); let de = DE[k];
+  if (de == null) for (const [re, to] of DE_RULES) if (re.test(k)) { de = k.replace(re, to); break; }
+  if (de == null) return;
+  const out = en.replace(k, de); n._de = out; if (raw !== out) n.nodeValue = out;
+}
+function trTree(root) { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) trNode(n); }
+function trFaq() {
+  const qs = document.querySelectorAll("#faq details.q");
+  qs.forEach((d, i) => {
+    const s = d.querySelector("summary"), a = d.querySelector(".a");
+    if (!d.dataset.en) { d.dataset.en = "1"; s.dataset.en = s.innerHTML; a.dataset.en = a.innerHTML; }
+    const de = LANG === "de" && DE_FAQ[i];
+    s.innerHTML = de ? de[0] : s.dataset.en; a.innerHTML = de ? de[1] : a.dataset.en;
+  });
+  if (window.mnMail) window.mnMail();
+}
+function setLang(l) {
+  LANG = l; try { localStorage.setItem("mn-lang", l); localStorage.setItem("mn-bk-lang", l); } catch (e) {}
+  document.documentElement.lang = l;
+  document.querySelectorAll(".site-lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === l)));
+  if (typeof bkLang !== "undefined") { bkLang = l; bkApply(); }
+  trFaq(); render(); trTree(document.body);
+}
+new MutationObserver(ms => { if (LANG !== "de" && !ms.some(m => m.type === "characterData")) return;
+  ms.forEach(m => { if (m.type === "characterData") trNode(m.target); else m.addedNodes.forEach(x => x.nodeType === 3 ? trNode(x) : x.nodeType === 1 && trTree(x)); }); })
+  .observe(document.body, { childList: true, subtree: true, characterData: true });
+document.querySelectorAll(".site-lang button").forEach(b => b.onclick = () => setLang(b.dataset.l));
+document.documentElement.lang = LANG;
+document.querySelectorAll(".site-lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === LANG)));
+if (LANG === "de") { trFaq(); trTree(document.body); }
 
 render();
 /* Press entries with scans in press/<id>/ become tappable and open the pages. */

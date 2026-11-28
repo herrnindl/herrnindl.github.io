@@ -5,6 +5,12 @@
   var MAIN = [["./", "colours."], ["./#posts", "posts.", "posts"], ["./#about", "about."], ["./#sedcard", "for brands."],
               ["./#booking", "book."], ["./#journal", "journal.", "journal"], ["play.html", "more.", "more"], ["dots.html", "leave a dot."]];
   var SUB = [["play.html", "play."], ["wardrobe.html", "wardrobe."], ["./#recaps", "recaps."], ["glowup.html", "glow up."], ["ask.html", "ask me."]];
+  /* german, like the start page (same switch, remembered on this device) */
+  var de = false; try { de = (localStorage.getItem("mn-lang") || localStorage.getItem("mn-bk-lang") || ((navigator.language || "").toLowerCase().indexOf("de") === 0 ? "de" : "en")) === "de"; } catch (e) {}
+  var DE = { "colours.": "Fotos.", "posts.": "Beiträge.", "about.": "Über mich.", "for brands.": "Für Firmen.", "book.": "Anfragen.", "journal.": "Tagebuch.",
+    "more.": "Mehr.", "leave a dot.": "Gästebuch.", "play.": "Spiele.", "wardrobe.": "Outfits.", "recaps.": "Rückblicke.", "glow up.": "Glow-up.", "ask me.": "Frag mich." };
+  var L = function (t) { return de && DE[t] ? DE[t] : t; };
+  if (de) document.documentElement.lang = "de";
   var inSub = SUB.some(function (s) { return s[0] === here; });
   var mainHere = inSub ? "play.html" : (here === "dots.html" ? "dots.html" : "");
 
@@ -22,7 +28,7 @@
   var old = document.querySelector("nav.more");
   var nav = document.createElement("nav"); nav.className = "mn-views"; nav.setAttribute("aria-label", "Sections");
   MAIN.forEach(function (m) {
-    var a = document.createElement("a"); a.href = m[0]; a.textContent = m[1];
+    var a = document.createElement("a"); a.href = m[0]; a.textContent = L(m[1]);
     if (m[0] === mainHere) a.setAttribute("aria-current", "page");
     if (m[2]) a.dataset.new = m[2];
     if (m[1] === "posts.") { a.hidden = true; a.dataset.posts = "1"; }   /* like the start page: only once there is a post */
@@ -34,7 +40,7 @@
   if (inSub) {
     var sub = document.createElement("nav"); sub.className = "mn-sub"; sub.setAttribute("aria-label", "more");
     SUB.forEach(function (s) {
-      var a = document.createElement("a"); a.href = s[0]; a.textContent = s[1];
+      var a = document.createElement("a"); a.href = s[0]; a.textContent = L(s[1]);
       if (s[0] === here) a.setAttribute("aria-current", "page");
       sub.appendChild(a);
     });
@@ -56,9 +62,9 @@
     var f = document.querySelector("footer.foot"); if (!f || f.dataset.mn) return; f.dataset.mn = "1";
     var dk = f.querySelector(".darkbtn");   /* dark mode. (from dark.js) stays */
     f.innerHTML = '<span><b>MN.</b>&nbsp; EST. 01.01.2025</span>' +
-      '<span>© 2026 MN. · <a href="web.html">designed &amp; built by <span style="white-space:nowrap">M A R K U S&nbsp;&nbsp;N I N D L</span></a></span>' +
+      '<span>© 2026 MN. · <a href="web.html">' + (de ? "gestaltet &amp; gebaut von" : "designed &amp; built by") + ' <span style="white-space:nowrap">M A R K U S&nbsp;&nbsp;N I N D L</span></a></span>' +
       '<span><a href="https://instagram.com/herrnindl" target="_blank" rel="noopener">instagram</a> · <a href="https://www.tiktok.com/@herrnindl" target="_blank" rel="noopener">tiktok</a> · <a href="links.html">links</a> · <a href="impressum.html">impressum</a> · <a href="datenschutz.html">datenschutz</a></span>' +
-      '<span class="eggnote">tap the MN. logo 5 times. something will happen.</span>';
+      '<span class="eggnote">' + (de ? "Tipp 5-mal auf das MN.-Logo. Dann passiert etwas." : "tap the MN. logo 5 times. something will happen.") + '</span>';
     if (dk) { var row = f.children[2]; row.appendChild(document.createTextNode(" · ")); row.appendChild(dk); }
   };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fill); else fill();
