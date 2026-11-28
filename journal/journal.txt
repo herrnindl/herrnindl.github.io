@@ -1,0 +1,39 @@
+# MN. journal
+#
+# Write your posts below. Newest at the top.
+# Each post starts with a line: date | title | mood
+# The mood is a chapter colour: origin, white, baby-blue, lavendel, navy-blue, grey,
+# vanilla, vanilla-2, ber, ember or red. Leave it out and the entry takes the chapter of its date.
+# Then your text. Separate posts with a line of three dashes: ---
+# Lines starting with # are notes like this one and never show on the site.
+#
+# Photos (optional): make a folder in "journal" named after the date,
+# for example 2026-11-20, and put the photos inside.
+#
+# Example:
+# 20.11.2026 | sleep is the cheapest skincare.
+# seven to eight hours, same time every night.
+# your face will thank you.
+# ---
+
+20.11.2026 | the end of an era. | baby-blue
+the wekreat studio in fürstenfeld closed yesterday, after four years.
+it was my first photoshoot far from home, and the start of baby blue.
+
+baby blue stands for beginnings and endings. back then, it was a beginning for me.
+now it's an ending for them, with a new chapter ahead.
+
+thank you for everything, wekreat.
+---
+
+19.11.2026 | gta 6. | lavendel
+i played gta 6 for about two hours today, right after it came out at midnight.
+while playing, i got a lot of far cry 5 vibes. it felt like they could have done something similar.
+
+i think the whole situation is funny. when i was a kid, gaming was new, and if you played a lot, you were weird or a nerd. now everyone thinks it's cool, while i'm sitting here thinking: you guys are so embarrassing.
+
+you don't usually do that shit, and all of a sudden you jump on the hype train.
+---
+
+11.11.2026 | hi. | ember
+---

@@ -1,6 +1,3 @@
-# the journal text stays private: only journal/journal.lock.json goes online (see journal/lock.py)
-journal/journal.txt
-journal/*.txt
 # made by build.py on every publish, never committed
 photos.json
 sets.json

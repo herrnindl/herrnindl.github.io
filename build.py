@@ -300,11 +300,13 @@ for cand in (() if os.path.exists(jlock) else (jfile, jfile + ".txt")):
             if not m:
                 continue
             day = datetime.date(int(m[3]), int(m[2]), int(m[1]))
+            head = [x.strip() for x in m[4].split("|")]
+            mood = head[1] if len(head) > 1 and head[1] in CHAPTERS else ""   # date | title | mood (a chapter colour)
             folder = os.path.join("journal", day.isoformat())
             imgs = sorted(n for n in os.listdir(folder) if n.lower().endswith(EXT)) if os.path.isdir(folder) else []
             sets["journal"].append({
-                "id": day.isoformat(), "chapter": chapter_for(day), "date": day.strftime("%d.%m.%y"),
-                "title": m[4].strip() or "journal.", "caption": "\n".join(lines[1:]).strip(),
+                "id": day.isoformat(), "chapter": mood or chapter_for(day), "date": day.strftime("%d.%m.%y"),
+                "title": head[0] or "journal.", "caption": "\n".join(lines[1:]).strip(),
                 "cover": f"journal/{day.isoformat()}/{imgs[0]}" if imgs else "",
                 "images": [f"journal/{day.isoformat()}/{n}" for n in imgs],
                 "credit": "", "big": "",
@@ -459,7 +461,7 @@ if os.environ.get("GITHUB_ACTIONS") == "true" and datetime.datetime.now(datetime
         public.append("https://herrnindl.com/" + ("" if page == "index.html" else page))
     with open("robots.txt", "w") as f:
         # also kept out of Google: the journal text (sets.json holds it too), the build scripts and the worker code
-        f.write("User-agent: *\nDisallow: /lebenslauf.html\nDisallow: /cv.html\nDisallow: /journal/\nDisallow: /sets.json\n"
+        f.write("User-agent: *\nDisallow: /lebenslauf.html\nDisallow: /cv.html\n"
                 "Disallow: /README.md\nDisallow: /build.py\nDisallow: /make_thumbs.py\nDisallow: /cloudflare/\n\nSitemap: https://herrnindl.com/sitemap.xml\n")
     with open("sitemap.xml", "w") as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
