@@ -20,7 +20,7 @@ IMG_1234.jpg | Caption text | Photographer
 
 ## Chapter folders
 
-ember · ber · vanilla-2 · vanilla · grey · navy-blue · lavendel · baby-blue · white · origin
+red · ember · ber · vanilla-2 · vanilla · grey · navy-blue · lavendel · baby-blue · white · origin
 
 ## Faces (photos/faces.json)
 

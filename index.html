@@ -881,18 +881,42 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .next { margin-top: 18px; }
 .next b i { font-style: normal; }
 @media (prefers-reduced-motion: reduce) { .hof button { transition: none; } }
-/* red. takeover: the first visit on a device turns the screen red */
-.redtk { position: fixed; inset: 0; z-index: 60; background: #B3202A; color: #FFF8BB; display: grid; place-items: center; text-align: center; padding: max(28px, env(safe-area-inset-top, 0px)) 24px max(28px, env(safe-area-inset-bottom, 0px)); cursor: pointer; }
-.redtk .in { display: grid; gap: 14px; justify-items: center; }
-.redtk small { font-size: 12px; letter-spacing: .3em; opacity: .8; }
-.redtk .mn { font: 500 30px/1 "Bodoni Moda", "Didot", Georgia, serif; letter-spacing: .06em; }
-.redtk b { font: 800 clamp(110px, 34vw, 300px)/.8 var(--sans); letter-spacing: -.06em; }
-.redtk p { margin: 6px 0 0; font-size: clamp(17px, 3.6vw, 22px); }
-.redtk .row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
-.redtk .row a, .redtk .row button { font: inherit; font-weight: 500; font-size: 15px; min-height: 46px; padding: 0 22px; border-radius: 99px; display: inline-flex; align-items: center; text-decoration: none; cursor: pointer; }
-.redtk .row a { background: #FFF8BB; color: #B3202A; border: 0; }
-.redtk .row button { background: none; color: #FFF8BB; border: 1px solid #FFF8BB; }
-.redgo { margin-bottom: 10px; text-decoration: none; }
+/* red. — its own chapter page, like ember. or ber.: what it is made of, the word, the twelve months */
+.chred { margin-top: 26px; display: grid; gap: clamp(40px, 7vw, 80px); }
+.chred .k { margin: 0 0 10px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); }
+.chred h3 { margin: 0 0 18px; font: 800 clamp(32px, 7vw, 56px)/.95 var(--sans); letter-spacing: -.05em; }
+.chred .flame { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: center; }
+.chred .fig { position: relative; aspect-ratio: 3 / 4; max-height: 460px; width: 100%; max-width: 220px; margin-inline: auto; }
+.chred .fig svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.chred .fl { transform-origin: 50% 100%; transform-box: fill-box; animation: rfl 3.2s ease-in-out infinite; }
+.chred .fl.o { animation-duration: 2.6s; animation-delay: -.8s; }
+.chred .fl.v { animation-duration: 2.1s; animation-delay: -1.3s; }
+@keyframes rfl { 0%, 100% { transform: scale(1, 1) skewX(0); } 35% { transform: scale(.97, 1.04) skewX(-2deg); } 70% { transform: scale(1.02, .98) skewX(1.5deg); } }
+.chred .three { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.chred .three li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; padding: 16px; border-radius: 14px; background: rgba(42,10,13,.22); }
+.chred .three .sw { width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 0 0 2px var(--fg); }
+.chred .three b { display: block; font-size: 22px; letter-spacing: -.04em; font-weight: 800; }
+.chred .three .tx > span { display: block; opacity: .85; }
+.chred .three small { display: block; margin-top: 4px; font-size: 12px; letter-spacing: .08em; opacity: .65; font-variant-numeric: tabular-nums; }
+.chred .word { text-align: center; padding-block: clamp(8px, 4vw, 40px); }
+.chred .word b { display: block; font: 500 clamp(44px, 12vw, 120px)/1 var(--serif); letter-spacing: .01em; }
+.chred .word span { display: block; margin-top: 12px; font-size: 17px; opacity: .85; }
+.chred .months { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.chred .months div { position: relative; aspect-ratio: 4 / 5; border-radius: 10px; border: 1px dashed rgba(255,248,187,.45); display: grid; place-items: center; font: 500 clamp(13px, 2.6vw, 20px) var(--serif); }
+.chred .months div.on { border-style: solid; background: var(--fg); color: var(--bg); }
+.chred .months div.north { border-style: solid; border-color: var(--fg); }
+.chred .months div small { position: absolute; left: 0; right: 0; bottom: 9%; text-align: center; font: 500 clamp(9px, 1.6vw, 11px) var(--sans); letter-spacing: .14em; opacity: .8; }
+.chred .nline { margin: 18px 0 0; font: 500 clamp(22px, 5vw, 34px)/1.1 var(--serif); }
+.chred .nline span { display: block; margin-top: 6px; font: 400 13px var(--sans); letter-spacing: .08em; opacity: .7; }
+.chred .note { font-size: 13px; opacity: .7; margin: 14px 0 0; }
+.hlring.soonring { cursor: default; }
+.hlring.soonring .hlr { display: grid; place-items: center; background: var(--fg); color: var(--bg); font: 800 30px/1 var(--sans); letter-spacing: -.04em; }
+@media (min-width: 860px) {
+  .chred .flame { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px; }
+  .chred .fig { max-width: none; }
+  .chred .months { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) { .chred .fl { animation: none; } }
 .nextbtn { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 28px 24px; border: 0; border-radius: 4px; background: var(--c); text-align: left; }
 .nextbtn small { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .7; }
 .nextbtn b { font-weight: 800; font-size: clamp(32px, 7vw, 64px); letter-spacing: -.05em; line-height: 1; }
@@ -1081,6 +1105,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <div class="hof" id="hof" hidden></div>
   <div class="ticker" id="ticker" hidden aria-hidden="true"></div>
   <div class="hofhead sec whead" id="wallHead" hidden><h2><b>03</b>every photo.</h2><span class="wtools"><span class="sizes" id="sizes" role="group" aria-label="photo size"><button type="button" data-s="s" aria-label="small photos">S</button><button type="button" data-s="m" aria-label="medium photos">M</button><button type="button" data-s="l" aria-label="large photos">L</button><button type="button" data-s="1" aria-label="one photo at a time">1</button><button type="button" data-s="t" class="tbl" aria-label="table: prints to drag around">table</button></span><button class="shufbtn" id="shuf" type="button">shuffle.</button></span></div>
+  <div class="chred" id="chRed" hidden></div>
   <div class="chtl" id="chTl" hidden></div>
   <div class="chrow" id="chRow"><div class="chrecaps chteasers" id="chTeasers" hidden></div></div>
   <div class="wallbox"><div class="mnback" aria-hidden="true"><span>MN.</span></div><div class="wall" id="wall"></div></div>
@@ -1574,6 +1599,10 @@ function renderCard() {
       tx.append(el("b", null, "highlight."), el("span", null, H.length + " stories"), el("small", null, "updated monthly · next " + nextUpdate()));
       b.append(r, tx); b.onclick = () => openStories({ chapter: c.id, title: c.label, dates: c.dates, stories: H }, 0);
       $("line").after(b);
+    } else if (c.id === "red") {   /* red.'s highlight starts on 01.01.27 */
+      const b = el("div", "hlring soonring"), r = el("span", "hlr", "27"), tx = el("span", "hlt");
+      b.id = "hlRing"; tx.append(el("b", null, "highlight."), el("span", null, "starts on 01.01.27"));
+      b.append(r, tx); $("line").after(b);
     } }
   if (photos.some(p => p.chapter === c.id && !p.video)) { const w = el("button", "sharebtn walkbtn", "walk through."); w.type = "button"; w.setAttribute("aria-label", "walk through " + c.label + " like an exhibition"); w.onclick = () => openRoom(c); meta.append(w); }
   if (soundOn) { const first = [].concat(SONGS[c.id] || []).find(x => x.id); if (first) playSong(first); else hushSong(); }   /* a chapter without its own song is quiet */
@@ -2143,15 +2172,10 @@ function renderColours() {
   list = (filter === "all" ? (mixed.length === photos.length ? mixed : (mixed = shuffle(photos))) : chapterOrder(photos.filter(p => p.chapter === filter)));
   const wall = $("wall"); wall.textContent = "";
   const cur = byId[filter];
-  const nr = renderChTimeline() + renderChRecaps() + renderChTeasers(); justifyChRow();
+  const nr = renderChRed() + renderChTimeline() + renderChRecaps() + renderChTeasers(); justifyChRow();
   $("empty").textContent = cur ? cur.label + " photos are coming." : "photos are coming.";
   $("empty").hidden = list.length > 0 || nr > 0;
   const nx = $("nextch"); nx.textContent = ""; nx.hidden = !cur;
-  if (cur && cur.id === "red") {   /* red. has its own page until its photos come in */
-    $("empty").textContent = "red. starts on 01.01.27.";
-    const go = el("a", "nextbtn redgo"); go.href = "red.html"; go.style.setProperty("--c", "#FFF8BB"); go.style.color = "#B3202A";
-    go.append(el("small", null, "the chapter"), el("b", null, "open red. →")); nx.append(go);
-  }
   if (cur) {
     const i = CHAPTERS.indexOf(cur), n = CHAPTERS[(i + 1) % CHAPTERS.length];
     const a = el("button", "nextbtn"); a.style.setProperty("--c", n.bg); a.style.color = n.fg; if (n.id === "white" || n.id === "vanilla") a.style.boxShadow = "inset 0 0 0 1px rgba(0,0,0,.12)";
@@ -2540,6 +2564,42 @@ function renderChTeasers() {
   const h = el("div", "hofhead"); h.append("teasers.", el("small", null, " who's that?"));
   box.append(h, row);
   return ts.length;
+}
+
+/* ---------- red.: its own chapter page (no separate page). Photos, stories and trips fill in below from 01.01.27 ---------- */
+const RED_FLAME = '<svg viewBox="0 0 300 400" aria-hidden="true"><defs><radialGradient id="rgv" cx="50%" cy="80%" r="60%"><stop offset="0" stop-color="#FFFDF0"/><stop offset="1" stop-color="#FFF8BB"/></radialGradient></defs>'
+  + '<ellipse cx="150" cy="392" rx="96" ry="8" fill="#2A0A0D" opacity=".25"/>'
+  + '<path class="fl r" fill="#7E1119" opacity=".55" d="M150 6 C 182 74 268 132 264 248 C 260 338 210 390 150 390 C 90 390 40 338 36 248 C 32 170 94 140 112 70 C 126 108 134 124 150 6 Z"/>'
+  + '<path class="fl r" fill="#B3202A" stroke="#FFF8BB" stroke-opacity=".25" stroke-width="2" d="M150 22 C 178 86 252 140 248 250 C 244 330 202 382 150 382 C 98 382 56 330 52 250 C 48 176 104 148 120 88 C 132 122 140 132 150 22 Z"/>'
+  + '<path class="fl o" fill="#D04A25" d="M150 118 C 170 168 214 204 210 272 C 207 332 182 366 150 366 C 118 366 93 332 90 272 C 88 228 118 206 128 168 C 136 190 142 196 150 118 Z"/>'
+  + '<path class="fl v" fill="url(#rgv)" d="M150 214 C 162 246 186 268 184 308 C 182 342 168 356 150 356 C 132 356 118 342 116 308 C 115 284 134 268 140 248 C 144 258 147 262 150 214 Z"/></svg>';
+function renderChRed() {
+  const box = $("chRed"); box.textContent = "";
+  const on = view === "colours" && filter === "red";
+  box.hidden = !on; if (!on) return 0;
+  /* what red. is made of */
+  const fl = el("section", "flame"), fig = el("div", "fig"); fig.setAttribute("role", "img"); fig.setAttribute("aria-label", "a flame: vanilla at the base, orange in the middle, red at the tips"); fig.innerHTML = RED_FLAME;
+  const txt = el("div"), h = el("h3", null, "what red. is made of."), ol = el("ol", "three");
+  [["#B3202A", "red.", "modeling. the part you see first."], ["#D04A25", "orange.", "sundaze. the weekends, back in hospitality."], ["#FFF8BB", "vanilla.", "the post. every day, the base everything stands on."]].forEach(([c, n, t]) => {
+    const li = el("li"), sw = el("span", "sw"), tx = el("span", "tx"); sw.style.background = c;
+    tx.append(el("b", null, n), el("span", null, t), el("small", null, c)); li.append(sw, tx); ol.append(li);
+  });
+  txt.append(el("p", "k", "three colours, one fire"), h, ol); fl.append(fig, txt);
+  /* the word */
+  const w = el("section", "word"); w.append(el("p", "k", "the word for red."), el("b", null, "sprezzatura."), el("span", null, "making it look easy."));
+  /* the twelve months: filled in as they happen */
+  const tl = el("section"), ms = el("div", "months"), now = new Date();
+  ms.setAttribute("aria-label", "twelve months of red.; july and august: somewhere north");
+  for (let m = 1; m <= 12; m++) {
+    const d = el("div", null, m === 1 ? "01/27" : String(m).padStart(2, "0"));
+    if (now >= new Date(2027, m - 1, 1)) d.classList.add("on");
+    else if (m === 7 || m === 8) { d.classList.add("north"); d.append(el("small", null, "north.")); }
+    ms.append(d);
+  }
+  const nl = el("p", "nline", "summer 27. somewhere north."); nl.append(el("span", null, "after the winter season · hoppípolla."));
+  tl.append(el("p", "k", "01.01. – 31.12.27 · two years of MN."), el("h3", null, "the timeline."), ms, nl, el("p", "note", "trips, posts, stories and recaps fill in here month by month, like in every other chapter."));
+  box.append(fl, w, tl);
+  return 1;
 }
 
 /* ---------- chapter timeline: the trips of this chapter, newest on top ---------- */
@@ -3005,24 +3065,6 @@ function enterChapter(c, e, stay) {
   };
 }
 
-/* red. takeover: once per device, the first time the site is opened (after the password, from 01.12. for everyone) */
-function launchMoment() {
-  try { if (localStorage.getItem("mn-red-seen")) return; localStorage.setItem("mn-red-seen", "1"); } catch (e) { return; }
-  const t = el("div", "redtk"); t.setAttribute("role", "dialog"); t.setAttribute("aria-label", "red.");
-  const box = el("div", "in");
-  const row = el("div", "row"), see = el("a", null, "see red."), go = el("button", null, "enter MN.");
-  see.href = "red.html"; go.type = "button"; row.append(see, go);
-  box.append(el("span", "mn", "MN."), el("small", null, "THE NEXT CHAPTER"), el("b", null, "red."), el("p", null, "01.01.27 \u00b7 two years of MN."), row);
-  t.append(box); document.body.append(t);
-  const m = document.querySelector('meta[name="theme-color"]'), was = m && m.content; if (m) m.content = "#B3202A";
-  const close = () => { if (m) m.content = was; if (calm() || !t.animate) { t.remove(); return; } t.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, fill: "forwards" }).onfinish = () => t.remove(); };
-  t.onclick = e => { if (!e.target.closest("a")) close(); };
-  document.addEventListener("keydown", function k(e) { if (e.key === "Escape") { close(); document.removeEventListener("keydown", k); } });
-  if (!calm() && t.animate) { t.animate([{ clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)" }], { duration: 700, easing: "cubic-bezier(.6,0,.3,1)" });
-    box.animate([{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], { duration: 500, delay: 450, easing: "cubic-bezier(.2,.7,.2,1)", fill: "both" }); }
-  go.focus({ preventScroll: true });
-}
-
 /* Easter egg: type "bananaleclerc", or tap the MN. logo five times quickly. */
 function bananaRain() {
   if (document.querySelector(".egg")) return;
@@ -3166,7 +3208,7 @@ $("gateForm").addEventListener("submit", async e => {
     try { localStorage.setItem("mn-key", window.MN_KEY); } catch (err) {}
     $("gatePw").blur();
     loadData();
-    unlockWave(() => { document.documentElement.classList.remove("locked"); window.scrollTo(0, 0); render(); launchMoment(); });
+    unlockWave(() => { document.documentElement.classList.remove("locked"); window.scrollTo(0, 0); render(); });
   } else {
     $("gateMsg").textContent = "not yet.";
     const f = $("gateForm"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
@@ -3206,8 +3248,8 @@ function loadData() {
 if (document.documentElement.classList.contains("welcome")) {
   try { sessionStorage.setItem("mn-hello", "1"); } catch (e) {}
   loadData();
-  setTimeout(() => unlockWave(() => { document.documentElement.classList.remove("locked", "welcome"); window.scrollTo(0, 0); render(); launchMoment(); }), 650);
-} else if (!document.documentElement.classList.contains("locked")) { loadData(); launchMoment(); }
+  setTimeout(() => unlockWave(() => { document.documentElement.classList.remove("locked", "welcome"); window.scrollTo(0, 0); render(); }), 650);
+} else if (!document.documentElement.classList.contains("locked")) { loadData(); }
 </script>
 <script src="new.js?v=3"></script>
 <script src="preview.js"></script>

@@ -14,7 +14,7 @@ import fnmatch
 import json
 import os
 
-CHAPTERS = ["ember", "ber", "vanilla-2", "vanilla", "grey",
+CHAPTERS = ["red", "ember", "ber", "vanilla-2", "vanilla", "grey",
             "navy-blue", "lavendel", "baby-blue", "white", "origin", "digitals"]
 VIDEO = (".mp4", ".webm")
 EXT = (".jpg", ".jpeg", ".png", ".webp", ".gif") + VIDEO
