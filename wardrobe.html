@@ -120,7 +120,7 @@ const OUTFITS = {
   ],
 };
 /* ===================== */
-Object.entries(BRANDS).forEach(([b, u]) => { const a = el("a", null, b); a.href = u; a.target = "_blank"; a.rel = "noopener"; $("brands").append(a); });
+Object.entries(BRANDS).sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" })).forEach(([b, u]) => { const a = el("a", null, b); a.href = u; a.target = "_blank"; a.rel = "noopener"; $("brands").append(a); });
 const ORDER = CHAPTERS.map(c => c.id);              /* newest chapter first */
 const ymd = s => s ? s.split(".").reverse().join("") : "99999999";   /* no date yet = newest (the Marla Pilz shoot came after Ronald Mitterer) */
 loadPhotos().then(list => {
@@ -156,7 +156,7 @@ loadPhotos().then(list => {
     pool.filter(dedupe).slice(0, 3).forEach(p => { const im = el("img"); im.alt = (cd.title || c.label) + " outfit"; im.loading = "lazy"; if (p.f) im.style.objectPosition = (p.f[0] * 100) + "% " + Math.min(100, p.f[1] * 100 + 25) + "%"; im.src = p.thumb || p.src; g.append(im); });
     box.append(g);
     if (cd.story) { const d = el("details", "story"); d.append(el("summary", null, "the story")); cd.story.split("\n\n").forEach(t => d.append(el("p", null, t))); box.append(d); }
-    if ((cd.brands || []).length) { const tg = el("div", "tags"); cd.brands.forEach(b => { if (BRANDS[b]) { const a = el("a", null, b); a.href = BRANDS[b]; a.target = "_blank"; a.rel = "noopener"; tg.append(a); } else tg.append(el("span", null, b)); }); box.append(tg); }
+    if ((cd.brands || []).length) { const tg = el("div", "tags"); cd.brands.slice().sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" })).forEach(b => { if (BRANDS[b]) { const a = el("a", null, b); a.href = BRANDS[b]; a.target = "_blank"; a.rel = "noopener"; tg.append(a); } else tg.append(el("span", null, b)); }); box.append(tg); }
     $("looks").append(box);
   });
 });

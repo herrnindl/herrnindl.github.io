@@ -514,6 +514,9 @@ body.mini .bookfab { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .ticker .tr { display: flex; width: max-content; backface-visibility: hidden; will-change: transform; animation: tick 46s linear infinite reverse; }
 .ticker .tape.b .tr { animation-duration: 60s; animation-direction: normal; }
 .ticker:hover .tr { animation-play-state: paused; }
+.ticker .tape.a { cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.ticker .tape.a.drag { cursor: grabbing; }
+.ticker .tape.a .tr.js { animation: none; }
 .ticker .blk { display: inline-flex; align-items: baseline; white-space: nowrap; font-weight: 800; font-size: clamp(28px, 5.4vw, 52px); letter-spacing: -.05em; padding: .32em .7em .38em; background: var(--c); color: var(--t); cursor: pointer; transition: filter .2s ease; margin-right: -1px; box-shadow: 3px 0 0 var(--c); }
 .ticker .blk:hover { filter: brightness(1.06); }
 .ticker .blk i { font-style: normal; color: var(--d); }
@@ -826,7 +829,11 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 /* next chapter */
 .nextch { margin-top: 28px; }
 /* hall of fame: every chapter as a tile in its colour */
-.hof { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }   /* 10 chapters: 5 and 5 */
+.hof { display: grid; gap: 18px; margin-top: 18px; }   /* one row per year, newest on top */
+.hof .yrow { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; align-items: stretch; }
+.hof .ylab { font-size: 11px; letter-spacing: .12em; white-space: nowrap; color: var(--soft); font-variant-numeric: tabular-nums; padding-top: 6px; }
+.hof .ycards { display: flex; gap: 10px; }
+.hof .ycards button { flex: 1 1 0; min-width: 0; aspect-ratio: auto; min-height: clamp(120px, 15vw, 190px); }
 .hof button { position: relative; aspect-ratio: 1; border: 0; border-radius: 10px; padding: 10px; background: var(--c); color: var(--t); display: flex; flex-direction: column; justify-content: space-between; text-align: left; font: inherit; cursor: pointer; overflow: hidden; transition: transform .2s ease; }
 .hof button.light { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
 .hof button:hover { transform: translateY(-3px); }
@@ -846,6 +853,11 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   .hof button > small, .hof em { display: none; }
   .hof b { font-size: clamp(12px, 3.5vw, 17px); letter-spacing: -.03em; }
   .hof .nowtag { top: 6px; right: 6px; bottom: auto; font-size: 7px; padding: 1px 5px; letter-spacing: .1em; }
+  .hof { gap: 14px; }
+  .hof .yrow { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .hof .ylab { padding: 0; }
+  .hof .ycards { gap: 6px; }
+  .hof .ycards button { min-height: 104px; }
 }
 .hofhead { margin-top: 26px; font-size: 11px; font-weight: 400; letter-spacing: .24em; color: var(--soft); text-transform: uppercase; }
 /* section heads: numbered like a magazine, one rhythm down the page */
@@ -1143,7 +1155,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
     <div class="phgrid" id="phgrid"></div>
     <div class="worked">
       <div><span>runway</span><p><a href="https://www.soliver.at/" target="_blank" rel="noopener" onclick="event.stopPropagation()">s.Oliver</a> × <a href="https://www.intersportrent.at/skirent-neukirchen/intersport-harms_12765" target="_blank" rel="noopener" onclick="event.stopPropagation()">INTERSPORT Harms</a></p></div>
-      <div><span>shot wearing</span><p class="brandlist"><a href="https://www.soliver.at/" target="_blank" rel="noopener" onclick="event.stopPropagation()">s.Oliver</a><a href="https://www.calvinklein.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Calvin Klein</a><a href="https://www.nautica.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Nautica</a><a href="https://www.onlyandsons.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Only &amp; Sons</a><a href="https://www.instagram.com/hiddenhillswatch/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Hidden Hills Watch</a><a href="https://cocoburry.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Cocoburry</a><a href="https://www.distortedpeople.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Distorted People</a><a href="https://pesoclo.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Peso</a><a href="https://www.instagram.com/brtlwear/" target="_blank" rel="noopener" onclick="event.stopPropagation()">BRTLwear</a><a href="https://www.leder.ritsch.at/" target="_blank" rel="noopener" onclick="event.stopPropagation()">leder.ritsch</a><a href="https://www.instagram.com/getdressedmittersill/" target="_blank" rel="noopener" onclick="event.stopPropagation()">getdressedmittersill</a><a href="https://www.instagram.com/schmuddelwedda_shop/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Schmuddelwedda</a></p></div>
+      <div><span>shot wearing</span><p class="brandlist"><a href="https://www.instagram.com/brtlwear/" target="_blank" rel="noopener" onclick="event.stopPropagation()">BRTLwear</a><a href="https://www.calvinklein.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Calvin Klein</a><a href="https://cocoburry.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Cocoburry</a><a href="https://www.distortedpeople.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Distorted People</a><a href="https://www.instagram.com/getdressedmittersill/" target="_blank" rel="noopener" onclick="event.stopPropagation()">getdressedmittersill</a><a href="https://www.instagram.com/hiddenhillswatch/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Hidden Hills Watch</a><a href="https://www.leder.ritsch.at/" target="_blank" rel="noopener" onclick="event.stopPropagation()">leder.ritsch</a><a href="https://www.nautica.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Nautica</a><a href="https://www.onlyandsons.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Only &amp; Sons</a><a href="https://pesoclo.com/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Peso</a><a href="https://www.soliver.at/" target="_blank" rel="noopener" onclick="event.stopPropagation()">s.Oliver</a><a href="https://www.instagram.com/schmuddelwedda_shop/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Schmuddelwedda</a></p></div>
       <div><span>print</span><p><a href="https://www.platzhirsch.at/" target="_blank" rel="noopener" onclick="event.stopPropagation()">Platzhirsch</a> · <a href="https://www.meinbezirk.at/pinzgau" target="_blank" rel="noopener" onclick="event.stopPropagation()">Bezirkszeitung</a></p></div>
       <div><span>off duty</span><p>swift water rescuer with the <a href="https://sbg.owr.at/mittersill/" target="_blank" rel="noopener">Wasserrettung Mittersill</a></p></div>
     </div>
@@ -1304,7 +1316,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
           <figcaption>the inspiration</figcaption>
         </figure>
         <figure class="mine">
-          <div class="typetile" aria-label="the font: Jost Bold, example word nindl."><small>JOST · BOLD</small><span>nindl<i>.</i></span><em>aa bb cc · 0 1 2 3</em></div>
+          <div class="typetile" aria-label="the font: Jost Bold, example word colours."><small>JOST · BOLD</small><span>colours<i>.</i></span><em>aa bb cc · 0 1 2 3</em></div>
           <figcaption>the font</figcaption>
         </figure>
       </div>
@@ -1313,7 +1325,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
         <h3>blonde<i>.</i></h3>
         <p>blonde by frank ocean. the cover is just a photo with one small word in the corner. no big logo, nothing loud. it doesn&#x27;t need more.</p>
         <p>his music does something to me that&#x27;s hard to explain. it&#x27;s quiet and honest, it doesn&#x27;t try to impress anyone, and it still hits harder than most loud things. that&#x27;s how i want MN. to feel.</p>
-        <p>that&#x27;s where my second logo comes from: nindl. small, lowercase, in the corner of a photo. the big words on this site use the same clean, round font. less noise, more feeling.</p>
+        <p>that&#x27;s why the big words on this site are small, lowercase and in one clean, round font. less noise, more feeling.</p>
       </div>
     </article>
     <article class="icard">
@@ -1382,16 +1394,16 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   <section class="faq panel" id="faq" hidden>
     <h2>faq<span class="dot">.</span></h2>
     <div class="qs">
-      <details class="q"><summary>you call yourself a model. you must be arrogant and think highly of yourself.</summary><div class="a"><p>no. i just stopped waiting for permission. MN. isn&#x27;t about thinking i&#x27;m better than anyone, it&#x27;s about becoming a better version of me, and showing that you can do it too.</p><p>i didn&#x27;t start because i thought i was perfect. i started because i wasn&#x27;t sure of myself, and i wanted to change that. MN. is me working on myself, in public, one colour at a time. calling yourself something is the first step to becoming it. if that helps one person like themselves a bit more, it was worth it.</p></div></details>
-      <details class="q"><summary>why do you do this?</summary><div class="a"><p>to grow, and to show that you can start from wherever you are.</p><p>and for my grandma. she was still here at the beginning and saw the baby blue. photos before they were ever posted. she was proud of me. that&#x27;s something i carry into every chapter.</p></div></details>
-      <details class="q"><summary>what are the colours about?</summary><div class="a"><p>every chapter of my life gets a colour. each one is a time, a place and a version of me, from origin. to now. the colours tell the story, so you don&#x27;t need me to explain every detail.</p></div></details>
+      <details class="q"><summary>what does being a model mean to you?</summary><div class="a"><p>it means i stopped waiting for permission. MN. isn&#x27;t about thinking i&#x27;m better than anyone, it&#x27;s about becoming a better version of me, and showing that you can do it too.</p><p>i didn&#x27;t start because i thought i was perfect. i started because i wasn&#x27;t sure of myself, and i wanted to change that. MN. is me working on myself, in public, one colour at a time. calling yourself something is the first step to becoming it. if that helps one person like themselves a bit more, it was worth it.</p></div></details>
+      <details class="q"><summary>what motivates you?</summary><div class="a"><p>to grow, and to show that you can start from wherever you are.</p><p>and for my grandma. she was still here at the beginning and saw the baby blue. photos before they were ever posted. she was proud of me. that&#x27;s something i carry into every chapter.</p></div></details>
+      <details class="q"><summary>what do the colour chapters stand for?</summary><div class="a"><p>every chapter of my life gets a colour. each one is a time, a place and a version of me, from origin. to now. the colours tell the story, so you don&#x27;t need me to explain every detail.</p></div></details>
       <details class="q"><summary>what does “i mog di” mean?</summary><div class="a"><p>it&#x27;s pinzgau dialect for “i like you”, with a second meaning.</p><p>“mog” comes from the looksmaxxing scene, where “mogging” means looking better than someone. looksmaxxing is about getting the most out of yourself: skin, fitness, style, sleep, how you carry yourself. that inspired me. i don&#x27;t compare myself to others. the only person i try to mog is who i was yesterday.</p><p>so “i mog di” means both: like yourself, and keep working on yourself. and if i can help someone deal with their insecurities along the way, even better.</p></div></details>
-      <details class="q"><summary>do you do this full-time?</summary><div class="a"><p>no. i work full-time at the österreichische post ag, where i&#x27;m the deputy site manager (stellvertretender standortleiter). MN. happens before, after and in between, and that&#x27;s part of the story.</p></div></details>
-      <details class="q"><summary>why pinzgau and not vienna or munich?</summary><div class="a"><p>my best friend told me i belong in the city. maybe. but i like doing something new in a place where nobody else does it.</p><p>this is home. you don&#x27;t need a big city to start something.</p></div></details>
-      <details class="q"><summary>why is your instagram private?</summary><div class="a"><p>because MN. is still a geheimtipp, an insider tip. it stays private until 1,000 followers. if you found this page, you&#x27;re early.</p></div></details>
-      <details class="q"><summary>what&#x27;s your goal?</summary><div class="a"><p>i was single des monats in the platzhirsch at the end of 2024. next up: model des monats.</p></div></details>
-      <details class="q"><summary>can i book you?</summary><div class="a"><p>yes. shootings, campaigns, fashion shows and collaborations. write to <a href="#" data-mail>booking<span>@</span>herrnindl.com</a> with a short idea, date and place.</p><p>unpaid or tfp shoots? yes, if the photographer is cool or good. send me your work and your idea.</p></div></details>
-      <details class="q"><summary>what&#x27;s next?</summary><div class="a"><p>something is already in the works.</p></div></details>
+      <details class="q"><summary>is modeling your full-time job?</summary><div class="a"><p>no. i work full-time at the österreichische post ag, where i&#x27;m the deputy site manager (stellvertretender standortleiter). MN. happens before, after and in between, and that&#x27;s part of the story.</p></div></details>
+      <details class="q"><summary>why are you based in pinzgau?</summary><div class="a"><p>my best friend told me i belong in the city. maybe. but i like doing something new in a place where nobody else does it.</p><p>this is home. you don&#x27;t need a big city to start something.</p></div></details>
+      <details class="q"><summary>why is your instagram account private?</summary><div class="a"><p>because MN. is still a geheimtipp, an insider tip. it stays private until 1,000 followers. if you found this page, you&#x27;re early.</p></div></details>
+      <details class="q"><summary>what are your goals as a model?</summary><div class="a"><p>i was single des monats in the platzhirsch at the end of 2024. next up: model des monats.</p></div></details>
+      <details class="q"><summary>how can i book you?</summary><div class="a"><p>yes. shootings, campaigns, fashion shows and collaborations. write to <a href="#" data-mail>booking<span>@</span>herrnindl.com</a> with a short idea, date and place.</p><p>unpaid or tfp shoots? yes, if the photographer is cool or good. send me your work and your idea.</p></div></details>
+      <details class="q"><summary>what&#x27;s next for MN.?</summary><div class="a"><p>red. starts on 01.01.27, two years of MN. and something after it is already in the works.</p></div></details>
     </div>
   </section>
 
@@ -1483,7 +1495,7 @@ const SONGS = {
   vanilla: { t: "Dreams — Fleetwood Mac", id: "0ofHAoxe9vBkTCp2UQIavz" },
   "vanilla-2": { t: "I Want Things to Be Beautiful — Devi McCallion", id: "4LJed63I60W8FpsKFyFl1h" },
   ber: { t: "Coming Up Roses — Harry Styles", id: "0QPdjsMOUhwouq1NS3HwfQ" },
-  ember: null,
+  ember: { t: "Violent Crimes — Kanye West" },
   red: null
 };
 /* "next." on the start page. Change the text when the next thing changes. */
@@ -1544,6 +1556,21 @@ function setTheme(c) {
 /* dark mode switched: the vanilla pages follow right away */
 window.addEventListener("mn-dark", () => { if (lastTheme) setTheme(lastTheme); });
 
+/* a line that ends in "?" (navy blue.: "the end?") starts as a dot, then the dot turns into the question mark */
+function setLine(e, text, wait) {
+  e.textContent = "";
+  if (!/\?$/.test(text || "")) { e.textContent = text || ""; return e; }
+  const q = el("span", "qd", calm() ? "?" : "."); q.style.display = "inline-block";
+  e.append(text.slice(0, -1), q);
+  if (!calm() && q.animate) setTimeout(() => {
+    q.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(.15em) scale(.6)" }], { duration: 220, easing: "ease-in", fill: "forwards" }).onfinish = () => {
+      q.textContent = "?";
+      q.animate([{ opacity: 0, transform: "translateY(-.25em) rotate(-14deg)" }, { opacity: 1, transform: "none" }], { duration: 380, easing: "cubic-bezier(.2,.7,.2,1.4)", fill: "forwards" });
+    };
+  }, wait || 900);
+  return e;
+}
+
 function renderCard() {
   const title = $("title"), meta = $("meta");
   title.textContent = ""; meta.textContent = ""; $("dates").textContent = ""; $("player").textContent = "";
@@ -1561,7 +1588,7 @@ function renderCard() {
   $("dates").textContent = c.dates;
   title.append(c.name, dot());
   if (c.suffix) title.append(c.suffix);
-  $("line").textContent = c.line;
+  setLine($("line"), c.line, 1100);
   if (c.place) meta.append(el("span", "place", c.place));
   if (c.vanilla) meta.append(el("span", "pill", "with vanilla"));
   if (c.notes) c.notes.forEach(n => meta.append(el("span", "place", n)));
@@ -1594,8 +1621,15 @@ function renderCard() {
     if (H.length) {
       const b = el("button", "hlring"), r = el("span", "hlr"), im = el("img"), tx = el("span", "hlt");
       b.type = "button"; b.id = "hlRing"; b.setAttribute("aria-label", "watch the " + c.label + " highlight, " + H.length + " stories");
-      const still = H.filter(x => !x.video && !x.plain), pick = still[Math.floor(still.length * .62)] || H.find(x => x.poster) || H[0];
-      im.src = pick.thumb || pick.poster || pick.src; im.alt = ""; im.decoding = "async"; r.append(im);
+      const still = H.filter(x => !x.video && !x.plain), pool = still.length ? still : H.filter(x => x.thumb || x.poster || !x.video);
+      const srcOf = x => x.thumb || x.poster || x.src, rnd = () => pool[Math.floor(Math.random() * pool.length)] || H[0];
+      im.src = srcOf(rnd()); im.alt = ""; im.decoding = "async"; r.append(im);
+      clearInterval(window.hlTimer);   /* a new random story every few seconds */
+      if (pool.length > 1 && !calm()) window.hlTimer = setInterval(() => {
+        if (!im.isConnected) { clearInterval(window.hlTimer); return; }
+        let n = srcOf(rnd()); for (let k = 0; k < 4 && n === im.getAttribute("src"); k++) n = srcOf(rnd());
+        const pre = new Image(); pre.onload = () => { if (!im.animate) { im.src = n; return; } im.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250 }).onfinish = () => { im.src = n; im.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350 }); }; }; pre.src = n;
+      }, 3200);
       tx.append(el("b", null, "highlight."), el("span", null, H.length + " stories"), el("small", null, "updated monthly · next " + nextUpdate()));
       b.append(r, tx); b.onclick = () => openStories({ chapter: c.id, title: c.label, dates: c.dates, stories: H }, 0);
       $("line").after(b);
@@ -1918,6 +1952,30 @@ const shotBase = p => p.src.split("/").pop().replace(/\.[a-z0-9]+$/i, "").replac
 /* ===================== going full on ===================== */
 
 /* ---------- ticker: the chapters, endlessly ---------- */
+/* the front tape runs by itself; grab it (mouse or finger) to move it left or right, let go and it runs on */
+function dragTape(tape, tr) {
+  tr.classList.add("js");
+  let x = 0, half = 0, last = performance.now(), down = null, moved = 0, hover = false;
+  const speed = calm() ? 0 : -.05;   /* px per ms; the same direction the tape always ran */
+  const wrap = () => { half = tr.scrollWidth / 2 || 1; while (x <= -half) x += half; while (x > 0) x -= half; };
+  const loop = t => { const dt = Math.min(64, t - last); last = t; if (!down && !hover) x -= speed * dt; wrap(); tr.style.transform = `translate3d(${x}px,0,0)`; requestAnimationFrame(loop); };
+  x = -(tr.scrollWidth / 2) / 3; requestAnimationFrame(loop);
+  tape.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") hover = true; });
+  tape.addEventListener("pointerleave", () => { hover = false; });
+  tape.addEventListener("pointerdown", e => { down = { px: e.clientX, py: e.clientY, x }; moved = 0; });
+  addEventListener("pointermove", e => {
+    if (!down) return;
+    const dx = e.clientX - down.px, dy = e.clientY - down.py;
+    if (!moved && Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 6) { down = null; return; }   /* scrolling the page, not the tape */
+    moved = Math.max(moved, Math.abs(dx)); if (moved > 4) tape.classList.add("drag");
+    x = down.x + dx;
+  });
+  const up = () => { down = null; tape.classList.remove("drag"); };
+  addEventListener("pointerup", up); addEventListener("pointercancel", up);
+  tape.addEventListener("click", e => { if (moved > 6) { e.stopPropagation(); e.preventDefault(); moved = 0; } }, true);   /* a drag is not a tap */
+  tape.addEventListener("wheel", e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) { e.preventDefault(); x -= e.deltaX; } }, { passive: false });
+}
+
 function renderTicker() {
   const t = $("ticker"), show = view === "colours" && filter === "all";
   t.hidden = !show; if (!show || t.dataset.done) return; t.dataset.done = 1;
@@ -1929,6 +1987,7 @@ function renderTicker() {
     b.onclick = e => enterChapter(c, e); ta.append(b);
   });
   a.append(ta);
+  dragTape(a, ta);
   /* back tape: dark, running the other way */
   const bt = el("div", "tape b"), tb = el("div", "tr");
   for (let k = 0; k < 8; k++) { const sp = el("span"); const em = el("em"); [...CHAPTERS].reverse().forEach(c => { const d = el("i"); d.style.background = c.bg; em.append(d); }); sp.append(el("b", null, "MN."), "MY LIFE IN COLOURS", em); tb.append(sp); }
@@ -2121,6 +2180,8 @@ function renderHof() {
   g.textContent = "";
   const counts = {}; photos.forEach(p => counts[p.chapter] = (counts[p.chapter] || 0) + 1);
   const cur = nowId();
+  const rows = [["2027", ["red"]], ["2026", ["ember", "ber", "vanilla-2", "vanilla", "grey"]], ["2024 \u2013 25", ["navy-blue", "lavendel", "baby-blue", "white", "origin"]]];
+  const rowOf = {}; rows.forEach(([y, ids]) => { const r = el("div", "yrow"), cs = el("div", "ycards"); r.append(el("span", "ylab", y), cs); g.append(r); ids.forEach(id => rowOf[id] = cs); });
   [...CHAPTERS].reverse().forEach(c => {
     const b = el("button"); b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg); b.style.setProperty("--d", c.dot === c.bg ? c.fg : c.dot);
     if (c.id === "white" || c.id === "vanilla") b.classList.add("light");
@@ -2133,7 +2194,7 @@ function renderHof() {
     if (c.id === cur) b.append(el("span", "nowtag", "now"));
     b.setAttribute("aria-label", c.label + " " + c.dates);
     b.onclick = e => enterChapter(c, e);
-    g.append(b);
+    (rowOf[c.id] || g).append(b);
   });
 }
 
@@ -2589,14 +2650,13 @@ function renderChRed() {
   const w = el("section", "word"); w.append(el("p", "k", "the word for red."), el("b", null, "sprezzatura."), el("span", null, "making it look easy."));
   /* the twelve months: filled in as they happen */
   const tl = el("section"), ms = el("div", "months"), now = new Date();
-  ms.setAttribute("aria-label", "twelve months of red.; july and august: somewhere north");
+  ms.setAttribute("aria-label", "twelve months of red.");
   for (let m = 1; m <= 12; m++) {
     const d = el("div", null, m === 1 ? "01/27" : String(m).padStart(2, "0"));
     if (now >= new Date(2027, m - 1, 1)) d.classList.add("on");
-    else if (m === 7 || m === 8) { d.classList.add("north"); d.append(el("small", null, "north.")); }
     ms.append(d);
   }
-  const nl = el("p", "nline", "summer 27. somewhere north."); nl.append(el("span", null, "after the winter season · hoppípolla."));
+  const nl = el("p", "nline", "somewhere north. sometime in 27."); nl.append(el("span", null, "after the winter season · hoppípolla."));
   tl.append(el("p", "k", "01.01. – 31.12.27 · two years of MN."), el("h3", null, "the timeline."), ms, nl, el("p", "note", "trips, posts, stories and recaps fill in here month by month, like in every other chapter."));
   box.append(fl, w, tl);
   return 1;
@@ -3054,7 +3114,7 @@ function enterChapter(c, e, stay) {
   const f = el("div", "flood"); f.style.cssText = `left:${x}px;top:${y}px;width:${big}px;height:${big}px;background:${c.bg}`; document.body.append(f); sfx("whoosh");
   const t = el("div", "intro"); t.style.color = c.fg;
   const nm = el("b", null, c.name); const dt = el("i", null, "."); dt.style.cssText = "font-style:normal;color:" + c.dot; nm.append(dt); if (c.suffix) nm.append(c.suffix);
-  t.append(nm, el("span", null, c.line)); t.style.opacity = 0; document.body.append(t);
+  t.append(nm, setLine(el("span"), c.line, 450)); t.style.opacity = 0; document.body.append(t);
   f.animate([{ transform: "translate(-50%,-50%) scale(.01)" }, { transform: "translate(-50%,-50%) scale(1)" }], { duration: 480, easing: "cubic-bezier(.6,0,.3,1)", fill: "forwards" }).onfinish = () => {
     go();
     t.animate([{ opacity: 0, transform: "translateY(14px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.2,.7,.2,1)", fill: "forwards" });
