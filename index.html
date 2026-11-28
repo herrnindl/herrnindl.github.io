@@ -893,6 +893,25 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
 .next { margin-top: 18px; }
 .next b i { font-style: normal; }
 @media (prefers-reduced-motion: reduce) { .hof button { transition: none; } }
+/* journal: every entry is a card in its mood colour; the key above explains the moods and filters by them */
+.jlist { gap: 10px; }
+.jentry.mood { background: var(--jb); color: var(--jf); border: 0; border-radius: 14px; padding: 18px 18px 20px; }
+.jentry.mood:last-child { border-bottom: 0; }
+.jentry.mood .jmood i { display: none; }
+.jentry.mood.light { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.jentry.mood small, .jentry.mood p { color: var(--js); }
+.jentry.mood b .jdot { color: inherit !important; }
+.jentry.mood:hover { transform: translateY(-2px); }
+.jentry.mood { transition: transform .2s; }
+.moods { margin: 0 0 6px; max-width: 720px; }
+.moods > p { margin: 0 0 12px; color: var(--soft); font-size: 14px; }
+.moods .mrow { display: flex; flex-wrap: wrap; gap: 6px; }
+.moods button { display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 13px; color: var(--fg); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px 6px 8px; cursor: pointer; }
+.moods button i { width: 14px; height: 14px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.moods button small { opacity: .55; font-size: 11px; font-variant-numeric: tabular-nums; }
+.moods button.none { opacity: .45; }
+.moods button[aria-pressed="true"] { background: var(--c); color: var(--t); border-color: transparent; }
+.moods .mline { min-height: 1.6em; margin: 14px 0 0; font: 500 clamp(22px, 5vw, 30px)/1.15 var(--serif); }
 .jmood i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.14); }
 /* red. — its own chapter page, like ember. or ber.: what it is made of, the word, the twelve months */
 .chred { margin-top: 26px; display: grid; gap: clamp(40px, 7vw, 80px); }
@@ -1130,6 +1149,7 @@ body:has(.minibar:not([hidden])) { padding-bottom: calc(150px + env(safe-area-in
   </nav>
   <div class="grid2 rgrid" id="recapGrid" hidden></div>
   <div class="grid3" id="postGrid" hidden></div>
+  <div class="moods" id="moods" hidden></div>
   <div class="jlist" id="journalList" hidden></div>
   <form class="jlock" id="jlock" autocomplete="off" hidden>
     <p>the journal is private for now.</p>
@@ -2649,7 +2669,7 @@ function renderChRed() {
   const tl = el("section"), ms = el("div", "months"), now = new Date();
   ms.setAttribute("aria-label", "twelve months of red.");
   for (let m = 1; m <= 12; m++) {
-    const d = el("div", null, m === 1 ? "01/27" : String(m).padStart(2, "0"));
+    const d = el("div", null, String(m).padStart(2, "0") + "/27");
     if (now >= new Date(2027, m - 1, 1)) d.classList.add("on");
     ms.append(d);
   }
@@ -2891,14 +2911,37 @@ $("jlock").addEventListener("submit", async e => {
   if (ok) { $("jlockMsg").textContent = ""; $("jlockPw").value = ""; $("jlockPw").blur(); render(); }
   else { $("jlockMsg").textContent = "not yet."; const f = $("jlock"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake"); }
 });
+/* moods: every journal entry feels like one of the chapters. one line each, tap to see only those entries */
+const MOODS = { origin: "where it started.", white: "a blank page.", "baby-blue": "beginnings and endings.", lavendel: "love.", "navy-blue": "letting go.", grey: "the hard part.", vanilla: "trying it anyway.", "vanilla-2": "i mog di.", ber: "finding my colour.", ember: "the spark.", red: "the fire." };
+let moodPick = null;
+function renderMoods() {
+  const box = $("moods"); box.textContent = ""; box.hidden = view !== "journal" || !jOpen(); if (box.hidden) return;
+  const n = {}; JENTRIES.forEach(j => n[j.chapter] = (n[j.chapter] || 0) + 1);
+  box.append(el("p", null, "every entry has a mood: the colour of the chapter it feels like."));
+  const row = el("div", "mrow"), line = el("p", "mline");
+  [...CHAPTERS].reverse().forEach(c => {
+    const b = el("button"); b.type = "button"; b.style.setProperty("--c", c.bg); b.style.setProperty("--t", c.fg);
+    b.append(el("i"), c.label); if (n[c.id]) b.append(el("small", null, n[c.id])); else b.classList.add("none");
+    b.setAttribute("aria-pressed", String(moodPick === c.id)); b.title = c.label + " " + MOODS[c.id];
+    b.onclick = () => { moodPick = moodPick === c.id ? null : c.id; renderJournal(); };
+    b.onmouseenter = () => { if (!moodPick) line.textContent = c.label + " " + MOODS[c.id]; };
+    b.onmouseleave = () => { if (!moodPick) line.textContent = ""; };
+    row.append(b);
+  });
+  if (moodPick) { const c = byId[moodPick]; line.textContent = c.label + " " + MOODS[c.id]; if (!n[moodPick]) line.append(el("small", null, "  no entry yet.")); }
+  box.append(row, line);
+}
+
 function renderJournal() {
   const g = $("journalList"); g.textContent = "";
   const lock = !jOpen(); $("jlock").hidden = !lock;
   if (lock) { g.hidden = true; $("empty").hidden = true; return; }
   $("empty").textContent = "No journal posts yet.";
   $("empty").hidden = JENTRIES.length > 0;
-  JENTRIES.forEach(j => {
+  renderMoods();
+  JENTRIES.filter(j => !moodPick || j.chapter === moodPick).forEach(j => {
     const b = el("button", "jentry");
+    { const mc = byId[j.chapter]; if (mc) { b.classList.add("mood"); if (mc.id === "white" || mc.id === "vanilla") b.classList.add("light"); b.style.setProperty("--jb", mc.bg); b.style.setProperty("--jf", mc.fg); b.style.setProperty("--js", soften(mc.fg, .78)); } }
     if (j.cover) { const th = el("div", "th"); const i = el("img"); setImg(i, j, "88px"); i.loading = "lazy"; i.alt = ""; th.append(i); b.append(th); } else b.classList.add("noimg");
     const t = el("div"); const mc = byId[j.chapter], meta = el("small", "jmood", "ENTRY " + String(j.n || (JENTRIES.length - JENTRIES.indexOf(j))).padStart(2, "0") + " · " + j.date);   /* the mood: a chapter colour */
     if (mc) { const d = el("i"); d.style.background = mc.bg; meta.prepend(d); meta.append(" · " + mc.label.toUpperCase()); }
@@ -2929,7 +2972,7 @@ function render() {
   document.querySelector('.view[data-view="posts"]').hidden = !sets.posts.length;
   $("recapGrid").hidden = view !== "recaps";
   $("postGrid").hidden = view !== "posts";
-  $("journalList").hidden = view !== "journal";
+  $("journalList").hidden = view !== "journal"; $("moods").hidden = view !== "journal";
   if (view !== "colours") $("nextch").hidden = true;
   $("empty").hidden = true;
   Object.keys(INFO).forEach(k => { $(k).hidden = view !== k; });
